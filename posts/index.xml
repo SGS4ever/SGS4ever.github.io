@@ -47,13 +47,13 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
       
       <guid>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/</guid>
       <description>当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
-本博客，部署于Gitee，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
+本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
 如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
 Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
 但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac x）。
 我们去到下面的这个网址：
  (https://github.com/gohugoio/hugo/releases)
- 在里面你可以下载Windows系统下的Hugo，注意是Hugo而不是hugo_extend，我也不知道后者是干什么用的。
+ 在里面你可以下载Windows系统下的Hugo，注意是Hugo_extend而不是hugo，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。
 将下载的压缩包解压，得到一个文件夹，里面有hugo.exe。接下来将这个文件夹的位置添加到系统环境变量中，就跟你配置java或者是python完全一样，还需要我再讲吗？
 好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
  右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
@@ -62,13 +62,13 @@ Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工
 hugo new site [yourSiteName]
 就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
 如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
-下图是我的操作：
  选择主题   “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
 你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
 当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
 就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
  配置页面   现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
-回到你的网站上吧，看看效果。</description>
+回到你的网站上吧，看看效果。
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。</description>
     </item>
     
   </channel>
