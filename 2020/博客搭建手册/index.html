@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  
+  <link rel="next" href="https://SGS4ever.github.io/2020/injectiontime/" />
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           博客搭建手册 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="博客搭建手册 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="博客搭建手册"/>
+<meta name="twitter:description" content="当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+本博客，部署于Gitee，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
+如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
+Then, let&rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac x）。
+我们去到下面的这个网址：
+ (https://github.com/gohugoio/hugo/releases)
+ 在里面你可以下载Windows系统下的Hugo，注意是Hugo而不是hugo_extend，我也不知道后者是干什么用的。
+将下载的压缩包解压，得到一个文件夹，里面有hugo.exe。接下来将这个文件夹的位置添加到系统环境变量中，就跟你配置java或者是python完全一样，还需要我再讲吗？
+好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
+ 右键我的电脑 &ndash;&gt; 属性 &ndash;&gt; 高级系统设置（在左边栏里） &ndash;&gt; 环境变量（在弹出的窗口的右下角） &ndash;&gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
+ 接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
+ 新建站点   用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+hugo new site [yourSiteName]
+就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
+如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
+下图是我的操作：
+ 选择主题   “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
+当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
+就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
+ 配置页面   现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+回到你的网站上吧，看看效果。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "博客搭建手册",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "others",
+  "wordcount":  122 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C\/",
+  "datePublished": "2020-09-18T00:00:00\u002b00:00",
+  "dateModified": "2020-09-18T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io/">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io/">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">博客搭建手册</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io/" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=2020-09-18 >18 September 2020</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://SGS4ever.github.io/categories/others/"> others </a>
+                        
+                </span>
+                <i class="iconfont icon-timer"></i>
+                1 min
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <h5 id="当你见到这篇文章的时候意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了">当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。</h5>
+<p>搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。</p>
+<p>本博客，部署于Gitee，属于静态网页，使用Hugo搭建，使用现成的主题<!-- raw HTML omitted --><a href="https://themes.gohugo.io/keepit/">https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted -->。</p>
+<p>如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。</p>
+<h4 id="then-lets-go">Then, let&rsquo;s go!</h4>
+<ol>
+<li>下载Hugo</li>
+</ol>
+<blockquote>
+<p>Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。</p>
+<p>但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac x）。</p>
+<p>我们去到下面的这个网址：</p>
+<blockquote>
+<p>(<a href="https://github.com/gohugoio/hugo/releases">https://github.com/gohugoio/hugo/releases</a>)</p>
+</blockquote>
+<p>在里面你可以下载Windows系统下的Hugo，注意是<code>Hugo</code>而不是<code>hugo_extend</code>，我也不知道后者是干什么用的。</p>
+<p>将下载的压缩包解压，得到一个文件夹，里面有<code>hugo.exe</code>。接下来将这个文件夹的位置添加到<strong>系统环境变量</strong>中，就跟你配置<em>java</em>或者是<em>python</em>完全一样，还需要我再讲吗？</p>
+<p>好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：</p>
+<blockquote>
+<p>右键<code>我的电脑</code> &ndash;&gt; 属性 &ndash;&gt; 高级系统设置（在左边栏里） &ndash;&gt; 环境变量（在弹出的窗口的右下角） &ndash;&gt; 在<code>系统变量</code>中找到<code>path</code>这一栏，把你放置Hugo.exe的文件夹路径写进去。</p>
+</blockquote>
+<p>接下来打开你的命令行窗口，试着执行<code>hugo version</code>，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！</p>
+</blockquote>
+<ol start="2">
+<li>新建站点</li>
+</ol>
+<blockquote>
+<p>用hugo新建站点实在是<strong>非常简单</strong>。在你电脑上某个位置打开你的命令行，敲上命令：</p>
+<p><code>hugo new site [yourSiteName]</code></p>
+<p>就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！</p>
+<p>如果顺利的话，你将会得到一个名字为<em>yourSiteName</em>的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用<code>ls</code>查看它们。</p>
+<p>下图是我的操作：</p>
+<p><!-- raw HTML omitted --></p>
+</blockquote>
+<ol start="3">
+<li>选择主题</li>
+</ol>
+<blockquote>
+<p>“一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德</p>
+<p>你现在浏览的——也就是我的博客——主题是：<!-- raw HTML omitted --><a href="https://themes.gohugo.io/keepit/">https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted --></p>
+<p>实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ</p>
+<p>当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是<strong>安装</strong>指南o(╥﹏╥)o）。</p>
+<p>就以这款<em>KeepIt</em>主题为例，我们的网站根目录下有一个<code>themes</code>文件夹，你只需要进入这个文件夹，使用命令<code>git clone https://github.com/Fastbyte01/KeepIt.git</code>，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。</p>
+</blockquote>
+<ol start="4">
+<li>配置页面</li>
+</ol>
+<blockquote>
+<p>现在让你的命令行回到网站的根目录下，写下命令<code>hugo server --theme=keepit -D</code>，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将<code>--theme</code>这个参数指定为你想用的主题的名字，就问你简单不？</p>
+<p>回到你的网站上吧，看看效果。</p>
+<p>什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。</p>
+<p>打开你刚才下载的主题文件夹，一般来讲，里面都有一个<code>exampleSite</code>文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。</p>
+<p>现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。</p>
+<p>OK，一步一步来。首先，根目录底下有一个文件<code>config.toml</code>，打开它，以keepit主题为例，里面是一系列参数名称和数值。</p>
+<p>从上往下看，在第四行有个<code>title = xxx</code>，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。</p>
+<p>继续往下看，你可以找到一个用中括号括起来的<code>[menu]</code>字段，在底下你看到了什么？yes，你现在可以配置顶栏了！比如，我将底下第一个<code>[[menu.main]]</code>的<code>name</code>字段由<code>post</code>改为<code>博文</code>，在网页对应的位置，<code>post</code>也变成了<code>博文</code>！</p>
+<p>继续往下看，你可以看到一个<code>[params]</code>字段，这是适用于整个站点的一些参数。里面有个<code>avatar</code>参数，它用于配置你的主页面上的那个头像，你可以把它注释掉，然后启用下方几行的<code>[params.gravatar]</code>字段，它会将你的主页图片替换为你独有的gravatar，当然，如果你不知道什么是gravatar，百度之。</p>
+<p>主页的底下有四个链接按钮，你在<code>[params.social]</code>字段下可以找到对应的配置。比如我，就把里面的<code>Github</code>、<code>Instagram</code>、<code>Linkedin</code>都注释掉了，只保留了<code>Twitter</code>，所以你在我的主页上只能找到我的Twitter链接。</p>
+<p>继续往下，就是一些无关紧要的参数了，你可以暂且忽略它们。当你走到这里，你的网站已经初步具有你的个人特色了，但我还要带你继续配置你的网站。</p>
+</blockquote>
+<ol start="5">
+<li>进一步配置页面</li>
+</ol>
+<blockquote>
+<p>从你的主页上点击头像或者右上角进入<code>post</code>，你会发现里面的文章都是一些别人已经写好的东西，你一定会希望把它们换掉，但是它们在哪里？</p>
+<p>打开网站的根目录，进入<code>content</code>，你会看到一个<code>posts</code>文件夹和一个<code>projects</code>文件夹，还有一个<code>aboutme.md</code>文件，它们是什么？</p>
+<p>进入<code>posts</code>文件夹，所有的博文都存在这里。你可以把里面的文件删掉，换成你自己的Markdown文件，但是不要急，先打开别人的文件，看看hugo解析文件时需要的特定的格式：</p>
+<p>比如我打开了<code>hugoisforlovers.md</code>，在里面，头几行的位置我们能看到这些东西：</p>
+<hr>
+<p>title = &ldquo;Getting Started with Hugo&rdquo;
+description = &quot;&quot;
+type = [&ldquo;posts&rdquo;,&ldquo;post&rdquo;]
+tags = [
+&ldquo;go&rdquo;,
+&ldquo;golang&rdquo;,
+&ldquo;hugo&rdquo;,
+&ldquo;development&rdquo;,
+]
+date = &ldquo;2014-04-02&rdquo;
+categories = [
+&ldquo;Development&rdquo;,
+&ldquo;golang&rdquo;,
+]
+series = [&ldquo;Hugo 101&rdquo;]
+[ author ]
+name = &ldquo;Hugo Authors&rdquo;</p>
+<hr>
+<p>它们是一个文件被解析时需要的一些参数。比如文件标题<code>title</code>，比如文件类型<code>tags</code>和<code>caterogies</code>，你自己写Markdown文件时也需要在头部附上这些东西，否则它在你的网站上就无法体现出相关的信息。具体的做法是使用两行<code>---</code>把你的这些信息夹起来，然后hugo就能进行识别了。如果是智能一点的Markdown编辑器，可能直接弹出一个非常明显的提示，告知你这里是输入头部信息的地方。在此强烈推荐Typora！！</p>
+<p>会修改你的博文之后，你可以顺便改一改<code>about.md</code>，它是这个主题里面自我介绍的那一页。</p>
+<p>一切都完事之后，你的网站已经是一个承载着你个人信息、存放着你个人博文的站点了。你可以直接进入发布环节，也可以再进行更精细的配置——修改网页源码。</p>
+<p>我们的网站页面都在你的主题文件夹里面。进入你的主题文件夹，能看到一个<code>layouts</code>的文件夹，点进去，里面是一些模板HTML。有些主题里，你可以从<code>index.html</code>文件修改一些信息，但是在我们的keepit主题，这个文件并没有什么价值，你需要再进入<code>partials</code>文件内，这里的文件们才是你需要阅读与修改的。</p>
+<p>你可以看到一个<code>home_profile.html</code>文件，这是默认情况下你的主页。仔细阅读，你应该可以悟到这里使用了很多配置文件中的参数，比如<code>{{ .Site.Params.avatar}}</code>，就是你在配置文件中定义的图像！</p>
+<p>换一个文件，比如<code>footer.html</code>，你应该可以悟到这一页掌管着主页下方的版权说明！如果你不满意主页底下的copyright，不妨对其进行修改。</p>
+<p>这里的文件不可能逐一讲解，自己去阅读它们，时刻牢记你配置文件里的东西，你完全可以配置一个很漂亮的页面。</p>
+</blockquote>
+<ol start="6">
+<li>将页面部署到Gitee上</li>
+</ol>
+<blockquote>
+<p>对于页面的配置，我目前讲的完全是够用了（主要是其他的操作我也不会 x）。如果之后有更多的需求，完全可以新开一篇博文，在此就不多赘述了。</p>
+<p>我们现在需要将页面部署到Gitee上。为啥不用GitHub？因为我永远支持国家的战略（Gitee访问速度快多了）。</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words:</span>
+                   <span>122</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E5%258D%259A%25E5%25AE%25A2%25E6%2590%25AD%25E5%25BB%25BA%25E6%2589%258B%25E5%2586%258C%2f&amp;text=%e5%8d%9a%e5%ae%a2%e6%90%ad%e5%bb%ba%e6%89%8b%e5%86%8c&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/others/">
+                    #others</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+         
+        
+        <a href="https://SGS4ever.github.io/2020/injectiontime/" class="next" rel="next" title="CTFLearn-Inj3ctionTime">CTFLearn-Inj3ctionTime&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-09-18 00:00:00 \u002b0000 UTC',
+              title: '博客搭建手册',
+              clientID: '',
+              clientSecret: '',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io/">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

