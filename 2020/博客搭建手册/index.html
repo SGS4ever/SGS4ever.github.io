@@ -24,10 +24,10 @@
   <title>
        
        
-           博客搭建手册 | XR_G&#39;s Blog
+           博客搭建指南——1 | XR_G&#39;s Blog
        
   </title>
-  <meta name="title" content="博客搭建手册 | XR_G&#39;s Blog">
+  <meta name="title" content="博客搭建指南——1 | XR_G&#39;s Blog">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -35,15 +35,15 @@
 
 
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="博客搭建手册"/>
+<meta name="twitter:title" content="博客搭建指南——1"/>
 <meta name="twitter:description" content="当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
 本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
 如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
 Then, let&rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
 但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac x）。
 我们去到下面的这个网址：
- (https://github.com/gohugoio/hugo/releases)
- 在里面你可以下载Windows系统下的Hugo，注意是Hugo_extend而不是hugo，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。
+(https://github.com/gohugoio/hugo/releases)
+在里面你可以下载Windows系统下的Hugo，注意是Hugo_extend而不是hugo，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。
 将下载的压缩包解压，得到一个文件夹，里面有hugo.exe。接下来将这个文件夹的位置添加到系统环境变量中，就跟你配置java或者是python完全一样，还需要我再讲吗？
 好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
  右键我的电脑 &ndash;&gt; 属性 &ndash;&gt; 高级系统设置（在左边栏里） &ndash;&gt; 环境变量（在弹出的窗口的右下角） &ndash;&gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
@@ -58,13 +58,15 @@ hugo new site [yourSiteName]
 就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
  配置页面   现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
 回到你的网站上吧，看看效果。
-什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。"/>
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
+打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
+现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。"/>
 
   <script type="application/ld+json">
 {
   "@context": "http://schema.org",
   "@type": "BlogPosting",
-  "headline": "博客搭建手册",
+  "headline": "博客搭建指南——1",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https:\/\/SGS4ever.github.io\/2020\/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C\/"
@@ -152,7 +154,7 @@ hugo new site [yourSiteName]
       		
 <article class="post-warp">
     <header class="post-header">
-        <h1 class="post-title">博客搭建手册</h1>
+        <h1 class="post-title">博客搭建指南——1</h1>
         <div class="post-meta">
             Written by <a href="https://SGS4ever.github.io/" rel="author">XR_G</a> with ♥ 
                 <span class="post-time">
@@ -161,7 +163,7 @@ hugo new site [yourSiteName]
                 in
                 <i class="iconfont icon-folder"></i>
                 <span class="post-category">
-                        <a href="https://SGS4ever.github.io/categories/others/"> others </a>
+                        <a href="https://SGS4ever.github.io/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/"> 博客搭建手册 </a>
                         
                 </span>
                 <i class="iconfont icon-timer"></i>
@@ -196,9 +198,7 @@ hugo new site [yourSiteName]
 <p>Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。</p>
 <p>但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac x）。</p>
 <p>我们去到下面的这个网址：</p>
-<blockquote>
-<p>(<a href="https://github.com/gohugoio/hugo/releases">https://github.com/gohugoio/hugo/releases</a>)</p>
-</blockquote>
+<p><code>(https://github.com/gohugoio/hugo/releases)</code></p>
 <p>在里面你可以下载Windows系统下的Hugo，注意是<code>Hugo_extend</code>而不是<code>hugo</code>，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。</p>
 <p>将下载的压缩包解压，得到一个文件夹，里面有<code>hugo.exe</code>。接下来将这个文件夹的位置添加到<strong>系统环境变量</strong>中，就跟你配置<em>java</em>或者是<em>python</em>完全一样，还需要我再讲吗？</p>
 <p>好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：</p>
@@ -215,6 +215,7 @@ hugo new site [yourSiteName]
 <p><code>hugo new site [yourSiteName]</code></p>
 <p>就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！</p>
 <p>如果顺利的话，你将会得到一个名字为<em>yourSiteName</em>的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用<code>ls</code>查看它们。</p>
+<p><!-- raw HTML omitted --></p>
 </blockquote>
 <ol start="3">
 <li>选择主题</li>
@@ -239,7 +240,7 @@ hugo new site [yourSiteName]
 <p>从上往下看，在第四行有个<code>title = xxx</code>，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。</p>
 <p>继续往下看，你可以找到一个用中括号括起来的<code>[menu]</code>字段，在底下你看到了什么？yes，你现在可以配置顶栏了！比如，我将底下第一个<code>[[menu.main]]</code>的<code>name</code>字段由<code>post</code>改为<code>博文</code>，在网页对应的位置，<code>post</code>也变成了<code>博文</code>！</p>
 <p>继续往下看，你可以看到一个<code>[params]</code>字段，这是适用于整个站点的一些参数。里面有个<code>avatar</code>参数，它用于配置你的主页面上的那个头像，你可以把它注释掉，然后启用下方几行的<code>[params.gravatar]</code>字段，它会将你的主页图片替换为你独有的gravatar，当然，如果你不知道什么是gravatar，百度之。</p>
-<p>主页的底下有四个链接按钮，你在<code>[params.social]</code>字段下可以找到对应的配置。比如我，就把里面的<code>Github</code>、<code>Instagram</code>、<code>Linkedin</code>都注释掉了，只保留了<code>Twitter</code>，所以你在我的主页上只能找到我的Twitter链接。</p>
+<p>主页的底下有四个链接按钮，你在<code>[params.social]</code>字段下可以找到对应的配置。比如我，就把里面的<code>Instagram</code>、<code>Linkedin</code>都注释掉了，只保留了<code>Twitter</code>和<code>Github</code>，所以你在我的主页上只能找到这两个链接。</p>
 <p>继续往下，就是一些无关紧要的参数了，你可以暂且忽略它们。当你走到这里，你的网站已经初步具有你的个人特色了，但我还要带你继续配置你的网站。</p>
 </blockquote>
 <ol start="5">
@@ -287,13 +288,13 @@ name = &ldquo;Hugo Authors&rdquo;</p>
 <p>如果你成功在Gitee上部署了自己的博客，欢迎联系我，我非常乐意学习，并将自己的博客迁移到Gitee上。</p>
 <p>回到主题，首先要在GitHub上建立一个仓库，这个仓库的名字非常特殊，它必须是<code>username.github.io</code>，其中的<code>username</code>就是你的GitHub用户名。比如我的用户名是<code>SGS4ever</code>，那么我的仓库就是<code>SGS4ever.github.io</code>。</p>
 <p>建立完成后，在站点根目录下使用命令<code>hugo --theme=keepit --baseUrl=&quot;https://SGS4ever.github.io -D&quot;</code>你就会得到一个文件夹<code>public</code>，进入它，在里面打开GitBash，进行一系列操作：</p>
-<pre><code>git init
-git add .
-git commit -m &quot;Your comment&quot;
-git remotr add origin https://xxxxxxxxxxx
-# 注意，这里的https://xxxxxx 是你刚创建的仓库的地址，也就是当你进入仓库页面，你的浏览器上方地址栏里面的东西。
-git push -u origin master
-</code></pre><p>这些操作之后，你的GitHub仓库里就多了很多东西了，完全不需要任何操作，直接打开浏览器访问<code>https://username.github.io</code>吧！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">git init
+git add <span style="color:#f92672">.</span>
+git commit <span style="color:#f92672">-</span>m <span style="color:#e6db74">&#34;Your comment&#34;</span>
+git remotr add origin https:<span style="color:#f92672">//</span>xxxxxxxxxxx
+<span style="color:#75715e"># 注意，这里的https://xxxxxx 是你刚创建的仓库的地址，也就是当你进入仓库页面，你的浏览器上方地址栏里面的东西。</span>
+git push <span style="color:#f92672">-</span>u origin master
+</code></pre></div><p>这些操作之后，你的GitHub仓库里就多了很多东西了，完全不需要任何操作，直接打开浏览器访问<code>https://username.github.io</code>吧！</p>
 </blockquote>
 <ol start="7">
 <li>写在最后</li>
@@ -324,7 +325,7 @@ git push -u origin master
                 <span>
 
       
-        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E5%258D%259A%25E5%25AE%25A2%25E6%2590%25AD%25E5%25BB%25BA%25E6%2589%258B%25E5%2586%258C%2f&amp;text=%e5%8d%9a%e5%ae%a2%e6%90%ad%e5%bb%ba%e6%89%8b%e5%86%8c&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E5%258D%259A%25E5%25AE%25A2%25E6%2590%25AD%25E5%25BB%25BA%25E6%2589%258B%25E5%2586%258C%2f&amp;text=%e5%8d%9a%e5%ae%a2%e6%90%ad%e5%bb%ba%e6%8c%87%e5%8d%97%e2%80%94%e2%80%941&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
           <i class="iconfont icon-twitter"></i>
         </a>
         
@@ -393,7 +394,7 @@ git push -u origin master
       <script type="text/javascript">
           var gitalk = new Gitalk({
               id: '2020-09-18 00:00:00 \u002b0000 UTC',
-              title: '博客搭建手册',
+              title: '博客搭建指南——1',
               clientID: '60cf432a89bc92763c12',
               clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
               repo: 'BlogComments',

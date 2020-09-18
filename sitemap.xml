@@ -100,20 +100,6 @@
     </url>
   
     <url>
-      <loc>https://SGS4ever.github.io/categories/others/</loc>
-      
-      <lastmod>2020-09-18T00:00:00+00:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
       <loc>https://SGS4ever.github.io/posts/</loc>
       
       <lastmod>2020-09-18T00:00:00+00:00</lastmod>
@@ -171,6 +157,20 @@
   
     <url>
       <loc>https://SGS4ever.github.io/</loc>
+      
+      <lastmod>2020-09-18T00:00:00+00:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://SGS4ever.github.io/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/</loc>
       
       <lastmod>2020-09-18T00:00:00+00:00</lastmod>
       
