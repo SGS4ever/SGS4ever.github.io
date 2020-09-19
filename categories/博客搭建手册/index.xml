@@ -9,10 +9,10 @@
     <lastBuildDate>Sat, 19 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>博客搭建指南--2</title>
-      <link>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2/</link>
+      <link>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-2/</link>
       <pubDate>Sat, 19 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2/</guid>
+      <guid>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-2/</guid>
       <description>初生的博客，更新就是频繁。 如果你看到这篇博文，应该能注意到这篇博文的背景有了一点小变化。
 没错，在这篇文章里，我要记录一款强大的JS插件particles.js的使用方法，这款应用能让你的网页背景看起来不那么单调（简直非常适合我现在的博客主题）。
 你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
@@ -39,7 +39,7 @@ p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很
  巧妙地获取路径   如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
 我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&amp;quot;/js/app.js&amp;quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了：（
 正确的获取路径的姿势，你可以直接使用绝对路径，也就是https://yourWeb.github.io/js/app.js这样的方式。
-底下是我的代码，绝对路径的方法理论上适用于所有主题：
+底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：
 &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;  代码的最终样式及推送   经过一系列的修改后，你的页面的代码就多了如下的东西：</description>
     </item>
     
