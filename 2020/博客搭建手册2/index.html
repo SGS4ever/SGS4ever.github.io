@@ -44,18 +44,26 @@
  下载这款插件   你可以直接使用git clone或者从网页上下载它。
 解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
  在源码中为插件留出位置   在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
-在你的页面中为插件留出位置，这个操作非常简单。打开你的index.html，找一个合适的位置（最好是最外层），加上一个标签：
+在你的页面中为插件留出位置，这个操作非常简单。打开你的footer.html，找一个合适的位置（最好是最外层），加上一个标签：
 &lt;div id=&quot;particles-js&quot;&gt;&lt;/div&gt;
 然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
+p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
  引入插件   你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
 我们要在第二步的div底下写入插件。
 为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
 我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&lt;script&gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&lt;div&gt;之前写入几条&lt;script&gt;标签。
 以上方法全部失败。
 因此，你不要小看这篇博文的分量，它可能可以帮助你节省几个小时的试错时间。
-言归正传，我们还是需要把插件的文件引入到源码中，具体也就只有两条语句：
+言归正传，我们还是需要把插件的JS文件引入到源码中。要想插件能够工作，你只需要使用两个文件：particles.js和app.js，他们分别在第一步那个项目的根目录里，还有Demo文件夹里。particles.js是发挥功能的文件，而app.js是配置文件，具体能配置些什么，后面再说，总之，先使用别人帮你写好的东西吧。
+接下来的一步很重要：把这两个文件放入public/js文件夹中!
+你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，public文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。
+将两个JS文件引入，记得放在第二步的div后面：
 &lt;script src=&#34;xxxxx/app.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;xxxxx/particles.js&#34;&gt;&lt;/script&gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
- "/>
+ 巧妙地获取路径   如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
+我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&quot;/js/app.js&quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了：（
+正确的获取路径的姿势，你可以在partials/js.html这个文件中找，里面有Keepit主题帮你写好的一些JS文件的引入方法，学习之，大有裨益。
+有些主题应该是没有这个文件的，因此我将最终的引入JS文件的方式写下来，理论上适用于所有主题：
+{{ $cdn_url := .Scratch.Get &#34;cdn_url&#34; }} {{ $app := resources.Get &#34;/js/app.js&#34; }} {{ $particles := resources."/>
 
   <script type="application/ld+json">
 {
@@ -74,7 +82,7 @@
   },
   "genre": "posts",
   "keywords": "博客搭建",
-  "wordcount":  30 ,
+  "wordcount":  134 ,
   "url": "https:\/\/SGS4ever.github.io\/2020\/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2\/",
   "datePublished": "2020-09-19T00:00:00\u002b00:00",
   "dateModified": "2020-09-19T00:00:00\u002b00:00",
@@ -200,9 +208,10 @@
 </ol>
 <blockquote>
 <p>在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。</p>
-<p>在你的页面中为插件留出位置，这个操作非常简单。打开你的<code>index.html</code>，找一个合适的位置（最好是最外层），加上一个标签：</p>
+<p>在你的页面中为插件留出位置，这个操作非常简单。打开你的<code>footer.html</code>，找一个合适的位置（最好是最外层），加上一个标签：</p>
 <p><code>&lt;div id=&quot;particles-js&quot;&gt;&lt;/div&gt;</code></p>
 <p>然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！</p>
+<p>p.s <code>footer.html</code>在文件夹<code>partials</code>里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题<strong>没有footer.html文件</strong>，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。</p>
 </blockquote>
 <ol start="3">
 <li>引入插件</li>
@@ -214,11 +223,58 @@
 <p>我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在<code>/asset/js</code>文件夹中放入相应的JS文件；在<code>partials</code>文件夹中写一个<code>custom_js.html</code>文件，里面是几条简单的<code>&lt;script&gt;</code>标签；修改<code>partials</code>文件夹中的<code>head.html</code>文件，在头部就引入插件；在第二步的<code>&lt;div&gt;</code>之前写入几条<code>&lt;script&gt;</code>标签。</p>
 <p>以上方法全部失败。</p>
 <p>因此，你不要小看这篇博文的分量，它可能可以帮助你节省几个小时的试错时间。</p>
-<p>言归正传，我们还是需要把插件的文件引入到源码中，具体也就只有两条语句：</p>
+<p>言归正传，我们还是需要把插件的JS文件引入到源码中。要想插件能够工作，你只需要使用两个文件：<code>particles.js</code>和<code>app.js</code>，他们分别在第一步那个项目的根目录里，还有Demo文件夹里。<code>particles.js</code>是发挥功能的文件，而<code>app.js</code>是配置文件，具体能配置些什么，后面再说，总之，先使用别人帮你写好的东西吧。</p>
+<p>接下来的一步很重要：<strong>把这两个文件放入<code>public/js</code>文件夹中!</strong></p>
+<p>你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，<code>public</code>文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。</p>
+<p>将两个JS文件引入，记得放在第二步的div后面：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxx/app.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
 &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxx/particles.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
 </code></pre></div><p>这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。</p>
 </blockquote>
+<ol start="4">
+<li>巧妙地获取路径</li>
+</ol>
+<blockquote>
+<p>如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的<em>404 Not Found</em>。</p>
+<p>我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用<code>src=&quot;/js/app.js&quot;</code>这样的语句，当你打开网站的主页，它会找到<code>https://yourWeb.github.io/js/app.js</code>，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找<code>https://yourWeb.github.io/post/article1/js/app.js</code>，必然是失败的，于是你的博文就不能有漂亮的背景了：（</p>
+<p>正确的获取路径的姿势，你可以在<code>partials/js.html</code>这个文件中找，里面有Keepit主题帮你写好的一些JS文件的引入方法，学习之，大有裨益。</p>
+<p>有些主题应该是没有这个文件的，因此我将最终的引入JS文件的方式写下来，理论上适用于所有主题：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"> {{ $cdn_url := .Scratch.Get &#34;cdn_url&#34; }}
+ {{ $app := resources.Get &#34;/js/app.js&#34; }}
+ {{ $particles := resources.Get &#34;/js/particles.js&#34; }}
+ &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ printf &#34;</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">&#34;</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">cdn_url</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">particles</span> <span style="color:#960050;background-color:#1e0010">}}&#34;</span> <span style="color:#a6e22e">async</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> &gt;&lt;/<span style="color:#f92672">script</span>&gt;
+ &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ printf &#34;</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">&#34;</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">cdn_url</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">app</span> <span style="color:#960050;background-color:#1e0010">}}&#34;</span> <span style="color:#a6e22e">async</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> &gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</code></pre></div></blockquote>
+<ol start="5">
+<li>代码的最终样式及推送</li>
+</ol>
+<blockquote>
+<p>经过一系列的修改后，你的页面的代码就多了如下的东西：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;particles-js&#34;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+{{ $cdn_url := .Scratch.Get &#34;cdn_url&#34; }}
+{{ $app := resources.Get &#34;/js/app.js&#34; }}
+{{ $particles := resources.Get &#34;/js/particles.js&#34; }}
+&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ printf &#34;</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">&#34;</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">cdn_url</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">particles</span> <span style="color:#960050;background-color:#1e0010">}}&#34;</span> <span style="color:#a6e22e">async</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> &gt;&lt;/<span style="color:#f92672">script</span>&gt;
+&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ printf &#34;</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">%</span><span style="color:#a6e22e">s</span><span style="color:#960050;background-color:#1e0010">&#34;</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">cdn_url</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">app</span> <span style="color:#960050;background-color:#1e0010">}}&#34;</span> <span style="color:#a6e22e">async</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> &gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</code></pre></div><p>此外，你的<code>public/js</code>文件夹中还多了两个文件<code>app.js</code>和<code>particles.js</code>。</p>
+<p>现在，在你的网站根目录下用hugo生成静态界面，然后进入public文件将最新的成果提交到你的远程仓库吧！</p>
+<p><!-- raw HTML omitted --></p>
+</blockquote>
+<ol start="6">
+<li>背景样式的修改</li>
+</ol>
+<blockquote>
+<p>如果一切顺利，你的背景已经很不错了。现在你可以通过配置<code>app.js</code>的方法进一步修改它。</p>
+<p><code>app.js</code>文件是配置背景的文件，它可以改变背景中每个粒子的形状、颜色、移动方式等等。</p>
+<p>下面这个链接将每一个字段的取值和含义写得非常清楚：</p>
+<hr>
+<p>(<a href="https://www.jb51.net/article/123594.htm">https://www.jb51.net/article/123594.htm</a>)</p>
+<hr>
+<p>仅以我现在使用的背景的部分键值为例：</p>
+<p>我的<code>particles.color.value = &quot;random&quot;</code>，这是为了在白色主题的情况下也可以看到背景特效；</p>
+<p>我的<code>particles.interactivity.events.onclick.mode = &quot;repulse&quot;</code>，当你点击鼠标的时候聚集在一起的星星会被弹开。</p>
+</blockquote>
+<p>以上，是本篇的全部内容。</p>
 
     </div>
 
@@ -232,7 +288,7 @@
            
             <p class="copyright-item">
                     <span>Words: </span>
-                   <span>30</span>
+                   <span>134</span>
             </p>
             
             <p class="copyright-item">
@@ -330,6 +386,12 @@
           </div>
 		   </main>
       <footer class="footer">
+    <div id="particles-js"></div>
+    
+    
+    
+    <script src="js/particles.js" async="" ></script>
+    <script src="js/app.js" async="" ></script>
     <div class="copyright">
         &copy;
         
