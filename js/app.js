@@ -70,10 +70,10 @@ particlesJS('particles-js',
       "move": {
         "enable": true,
         "speed": 3,
-        "direction": "bottom",
+        "direction": "none",
         "random": false,
         "straight": false,
-        "out_mode": "out",
+        "out_mode": "bounce",
         "attract": {
           "enable": false,
           "rotateX": 600,
@@ -89,7 +89,7 @@ particlesJS('particles-js',
           "mode": "grab"
         },
         "onclick": {
-          "enable": true,
+          "enable": false,
           "mode": "repulse"
         },
         "resize": true
@@ -109,7 +109,7 @@ particlesJS('particles-js',
           "speed": 3
         },
         "repulse": {
-          "distance": 300
+          "distance": 200
         },
         "push": {
           "particles_nb": 4
