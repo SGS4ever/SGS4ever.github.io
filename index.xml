@@ -5,8 +5,17 @@
     <description>Recent content in XR_G&#39;s Blog on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 18 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 19 Sep 2020 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://SGS4ever.github.io/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Posts</title>
+      <link>https://SGS4ever.github.io/posts/</link>
+      <pubDate>Sat, 19 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://SGS4ever.github.io/posts/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>About Me</title>
@@ -24,15 +33,6 @@
 &lt;p&gt;初建于2020&amp;ndash;09-18，始于兴趣，不知所终。&lt;/p&gt;
 &lt;p&gt;希望它成为我记录所学和所想的平台，也希望来访此站的有缘人能有所收获。&lt;/p&gt;
 </description>
-    </item>
-    
-    <item>
-      <title>Posts</title>
-      <link>https://SGS4ever.github.io/posts/</link>
-      <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://SGS4ever.github.io/posts/</guid>
-      <description></description>
     </item>
     
   </channel>

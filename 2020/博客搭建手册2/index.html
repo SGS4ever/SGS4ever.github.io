@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://SGS4ever.github.io/2020/07601/" />
+  
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           博客搭建指南--2 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="博客搭建指南--2 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="博客搭建指南--2"/>
+<meta name="twitter:description" content="初生的博客，更新就是频繁。 如果你看到这篇博文，应该能注意到这篇博文的背景有了一点小变化。
+没错，在这篇文章里，我要记录一款强大的JS插件particles.js的使用方法，这款应用能让你的网页背景看起来不那么单调（简直非常适合我现在的博客主题）。
+你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
+ (https://github.com/VincentGarreau/particles.js)
+ 话不多说，let&rsquo;s go!
+ 下载这款插件   你可以直接使用git clone或者从网页上下载它。
+解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
+ 在源码中为插件留出位置   在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在你的页面中为插件留出位置，这个操作非常简单。打开你的index.html，找一个合适的位置（最好是最外层），加上一个标签：
+&lt;div id=&quot;particles-js&quot;&gt;&lt;/div&gt;
+然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
+ 引入插件   你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+我们要在第二步的div底下写入插件。
+为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
+我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&lt;script&gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&lt;div&gt;之前写入几条&lt;script&gt;标签。
+以上方法全部失败。
+因此，你不要小看这篇博文的分量，它可能可以帮助你节省几个小时的试错时间。
+言归正传，我们还是需要把插件的文件引入到源码中，具体也就只有两条语句：
+&lt;script src=&#34;xxxxx/app.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;xxxxx/particles.js&#34;&gt;&lt;/script&gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
+ "/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "博客搭建指南--2",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "博客搭建",
+  "wordcount":  30 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2\/",
+  "datePublished": "2020-09-19T00:00:00\u002b00:00",
+  "dateModified": "2020-09-19T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io/">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io/">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">博客搭建指南--2</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io/" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=19190-09-09 >19 September 2020</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <h5 id="初生的博客更新就是频繁">初生的博客，更新就是频繁。</h5>
+<p>如果你看到这篇博文，应该能注意到这篇博文的背景有了一点小变化。</p>
+<p>没错，在这篇文章里，我要记录一款强大的JS插件<code>particles.js</code>的使用方法，这款应用能让你的网页背景看起来不那么单调（简直非常适合我现在的博客主题）。</p>
+<p>你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。</p>
+<hr>
+<p>(<a href="https://github.com/VincentGarreau/particles.js">https://github.com/VincentGarreau/particles.js</a>)</p>
+<hr>
+<p>话不多说，let&rsquo;s go!</p>
+<ol>
+<li>下载这款插件</li>
+</ol>
+<blockquote>
+<p>你可以直接使用<code>git clone</code>或者从网页上下载它。</p>
+<p>解压完成之后，你可以看到一个<code>Demo</code>文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。</p>
+</blockquote>
+<ol start="2">
+<li>在源码中为插件留出位置</li>
+</ol>
+<blockquote>
+<p>在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。</p>
+<p>在你的页面中为插件留出位置，这个操作非常简单。打开你的<code>index.html</code>，找一个合适的位置（最好是最外层），加上一个标签：</p>
+<p><code>&lt;div id=&quot;particles-js&quot;&gt;&lt;/div&gt;</code></p>
+<p>然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！</p>
+</blockquote>
+<ol start="3">
+<li>引入插件</li>
+</ol>
+<blockquote>
+<p>你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。</p>
+<p><strong>我们要在第二步的div底下写入插件</strong>。</p>
+<p>为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将<strong>无法实现应有的功能</strong>！</p>
+<p>我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在<code>/asset/js</code>文件夹中放入相应的JS文件；在<code>partials</code>文件夹中写一个<code>custom_js.html</code>文件，里面是几条简单的<code>&lt;script&gt;</code>标签；修改<code>partials</code>文件夹中的<code>head.html</code>文件，在头部就引入插件；在第二步的<code>&lt;div&gt;</code>之前写入几条<code>&lt;script&gt;</code>标签。</p>
+<p>以上方法全部失败。</p>
+<p>因此，你不要小看这篇博文的分量，它可能可以帮助你节省几个小时的试错时间。</p>
+<p>言归正传，我们还是需要把插件的文件引入到源码中，具体也就只有两条语句：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxx/app.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxx/particles.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</code></pre></div><p>这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words: </span>
+                   <span>30</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E5%258D%259A%25E5%25AE%25A2%25E6%2590%25AD%25E5%25BB%25BA%25E6%2589%258B%25E5%2586%258C2%2f&amp;text=%e5%8d%9a%e5%ae%a2%e6%90%ad%e5%bb%ba%e6%8c%87%e5%8d%97--2&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E5%258D%259A%25E5%25AE%25A2%25E6%2590%25AD%25E5%25BB%25BA%25E6%2589%258B%25E5%2586%258C2%2f&amp;appkey=&amp;title=%e5%8d%9a%e5%ae%a2%e6%90%ad%e5%bb%ba%e6%8c%87%e5%8d%97--2" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">
+                    #博客搭建</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://SGS4ever.github.io/2020/07601/" class="prev" rel="prev" title="CTFLearn-07601"><i class="iconfont icon-dajiantou"></i>&nbsp;CTFLearn-07601</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-09-19 00:00:00 \u002b0000 UTC',
+              title: '博客搭建指南--2',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io/">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

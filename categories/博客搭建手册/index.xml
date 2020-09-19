@@ -6,13 +6,41 @@
     <description>Recent content in 博客搭建手册 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 18 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 19 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>博客搭建指南--2</title>
+      <link>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2/</link>
+      <pubDate>Sat, 19 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C2/</guid>
+      <description>初生的博客，更新就是频繁。 如果你看到这篇博文，应该能注意到这篇博文的背景有了一点小变化。
+没错，在这篇文章里，我要记录一款强大的JS插件particles.js的使用方法，这款应用能让你的网页背景看起来不那么单调（简直非常适合我现在的博客主题）。
+你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
+ (https://github.com/VincentGarreau/particles.js)
+ 话不多说，let&amp;rsquo;s go!
+ 下载这款插件   你可以直接使用git clone或者从网页上下载它。
+解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
+ 在源码中为插件留出位置   在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在你的页面中为插件留出位置，这个操作非常简单。打开你的index.html，找一个合适的位置（最好是最外层），加上一个标签：
+&amp;lt;div id=&amp;quot;particles-js&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
+ 引入插件   你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+我们要在第二步的div底下写入插件。
+为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
+我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&amp;lt;script&amp;gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&amp;lt;div&amp;gt;之前写入几条&amp;lt;script&amp;gt;标签。
+以上方法全部失败。
+因此，你不要小看这篇博文的分量，它可能可以帮助你节省几个小时的试错时间。
+言归正传，我们还是需要把插件的文件引入到源码中，具体也就只有两条语句：
+&amp;lt;script src=&amp;#34;xxxxx/app.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;xxxxx/particles.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
+ </description>
+    </item>
+    
     <item>
       <title>博客搭建指南——1</title>
-      <link>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/</link>
+      <link>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-1/</link>
       <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/</guid>
+      <guid>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-1/</guid>
       <description>当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
 本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
 如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
