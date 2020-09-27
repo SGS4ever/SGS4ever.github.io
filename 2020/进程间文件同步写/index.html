@@ -316,9 +316,9 @@ memset(<span style="color:#f92672">&amp;</span>overlapped, <span style="color:#a
 <li>在第一个进程窗口按下任意键，它将释放文件锁，并关闭文件句柄；</li>
 <li>观察第二个进程输出，发现它已经得到文件锁，并在文件中写入了对应信息。</li>
 </ul>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex1.png" alt="image-20200927163253214" class="lazyload"><figcaption class="image-caption">image-20200927163253214</figcaption></figure></p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex2.png" alt="image-20200927163553684" class="lazyload"><figcaption class="image-caption">image-20200927163553684</figcaption></figure></p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex3.png" alt="image-20200927163641980" class="lazyload"><figcaption class="image-caption">image-20200927163641980</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex1.png" alt="先后打开两个进程" class="lazyload"><figcaption class="image-caption">先后打开两个进程</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex2.png" alt="第一个进程释放锁" class="lazyload"><figcaption class="image-caption">第一个进程释放锁</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex3.png" alt="文件内容实现同步" class="lazyload"><figcaption class="image-caption">文件内容实现同步</figcaption></figure></p>
 </blockquote>
 
     </div>
