@@ -4,7 +4,7 @@
     <url>
       <loc>https://SGS4ever.github.io/categories/</loc>
       
-      <lastmod>2020-09-20T00:00:00+00:00</lastmod>
+      <lastmod>2020-09-27T00:00:00+00:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -18,7 +18,7 @@
     <url>
       <loc>https://SGS4ever.github.io/posts/</loc>
       
-      <lastmod>2020-09-20T00:00:00+00:00</lastmod>
+      <lastmod>2020-09-27T00:00:00+00:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -32,7 +32,7 @@
     <url>
       <loc>https://SGS4ever.github.io/tags/</loc>
       
-      <lastmod>2020-09-20T00:00:00+00:00</lastmod>
+      <lastmod>2020-09-27T00:00:00+00:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -46,7 +46,7 @@
     <url>
       <loc>https://SGS4ever.github.io/</loc>
       
-      <lastmod>2020-09-20T00:00:00+00:00</lastmod>
+      <lastmod>2020-09-27T00:00:00+00:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -58,23 +58,9 @@
     </url>
   
     <url>
-      <loc>https://SGS4ever.github.io/2020/%E8%BF%8E%E6%96%B0%E5%BF%97%E6%84%BF%E5%90%8E%E8%AE%B0/</loc>
+      <loc>https://SGS4ever.github.io/tags/%E6%8A%80%E6%9C%AF/</loc>
       
-      <lastmod>2020-09-20T00:00:00+00:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://SGS4ever.github.io/tags/%E9%9A%8F%E7%AC%94/</loc>
-      
-      <lastmod>2020-09-20T00:00:00+00:00</lastmod>
+      <lastmod>2020-09-27T00:00:00+00:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -86,9 +72,23 @@
     </url>
   
     <url>
-      <loc>https://SGS4ever.github.io/categories/%E9%9A%8F%E7%AC%94/</loc>
+      <loc>https://SGS4ever.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
       
-      <lastmod>2020-09-20T00:00:00+00:00</lastmod>
+      <lastmod>2020-09-27T00:00:00+00:00</lastmod>
+      
+      
+      <changefreq>monthly</changefreq>
+      
+      
+      <priority>0.5</priority>
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://SGS4ever.github.io/2020/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/</loc>
+      
+      <lastmod>2020-09-27T00:00:00+00:00</lastmod>
       
       
       <changefreq>monthly</changefreq>
@@ -156,34 +156,6 @@
     </url>
   
     <url>
-      <loc>https://SGS4ever.github.io/tags/ctf/</loc>
-      
-      <lastmod>2020-09-18T00:00:00+00:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://SGS4ever.github.io/categories/ctf/</loc>
-      
-      <lastmod>2020-09-18T00:00:00+00:00</lastmod>
-      
-      
-      <changefreq>monthly</changefreq>
-      
-      
-      <priority>0.5</priority>
-      
-      
-    </url>
-  
-    <url>
       <loc>https://SGS4ever.github.io/2020/07601/</loc>
       
       <lastmod>2020-09-18T00:00:00+00:00</lastmod>
@@ -212,7 +184,7 @@
     </url>
   
     <url>
-      <loc>https://SGS4ever.github.io/tags/write-up/</loc>
+      <loc>https://SGS4ever.github.io/tags/ctfwrite-up/</loc>
       
       <lastmod>2020-09-18T00:00:00+00:00</lastmod>
       
@@ -226,7 +198,7 @@
     </url>
   
     <url>
-      <loc>https://SGS4ever.github.io/categories/write-up/</loc>
+      <loc>https://SGS4ever.github.io/categories/ctfwrite-up/</loc>
       
       <lastmod>2020-09-18T00:00:00+00:00</lastmod>
       

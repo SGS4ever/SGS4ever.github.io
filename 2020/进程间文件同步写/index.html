@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-2/" />
+  
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           进程间文件同步写 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="进程间文件同步写 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="进程间文件同步写"/>
+<meta name="twitter:description" content="这段期间没学到任何完整的、值得记录的东西，因此好久没有更新博客了，凑巧中午一边喝大红袍一边搞出了一点东西，虽然不太完整，也不妨一记。
+最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
+由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
+答案就是文件锁。
+ 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&hellip;50,101,102&hellip;
+显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
+于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
+本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
+这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
+ 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
+首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
+既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
+在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
+该API详见此文档我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
+const char* logPath = &#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&#34;; HANDLE hFile = ::CreateFileA(logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
+ 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+OVERLAPPED overlapped; memset(&amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;overlapped)) { DWORD err = GetLastError(); printf(&#34;Error %i\n&#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "进程间文件同步写",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "技术",
+  "wordcount":  294 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99\/",
+  "datePublished": "2020-09-27T00:00:00\u002b00:00",
+  "dateModified": "2020-09-27T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script src="https://sgs4ever.github.io/js/particles.js" async="" ></script>
+        <script src="https://sgs4ever.github.io/js/app.js" async="" ></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">进程间文件同步写</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=27270-09-09 >27 September 2020</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>这段期间没学到任何完整的、值得记录的东西，因此好久没有更新博客了，凑巧中午一边喝大红袍一边搞出了一点东西，虽然不太完整，也不妨一记。</p>
+<p>最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。</p>
+<p>由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？</p>
+<p>答案就是<strong>文件锁</strong>。</p>
+<ol>
+<li>锁</li>
+</ol>
+<blockquote>
+<p><strong>互斥锁</strong>是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望<strong>进程1写完之后再让进程2写</strong>，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&hellip;50,101,102&hellip;</p>
+<p>显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。</p>
+<p>于是操作系统为我们提供了<strong>互斥锁</strong>，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。</p>
+<p>本篇中的<strong>文件锁</strong>其实就是<em>作用在文件上的互斥锁</em>。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为<strong>无法获得文件锁</strong>而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。</p>
+<p>这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。</p>
+</blockquote>
+<ol start="2">
+<li>创建文件</li>
+</ol>
+<blockquote>
+<p>初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以<code>C++</code>为主体，但是<strong>核心部分完全兼容C语言</strong>。</p>
+<p>首先要明确一点，<strong>C++的文件流操作无法实现文件锁</strong>。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。</p>
+<p>既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。</p>
+<p>在这里，由于WindowsAPI提供的文件锁函数需要一个<code>HANDLE</code>类型作为参数，我们只能使用<code>CreateFile</code>函数去创建文件了。</p>
+<p>该API详见<!-- raw HTML omitted -->此文档<!-- raw HTML omitted --></p>
+<p>我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> logPath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;C:</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Users</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Administrator</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Desktop</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">recLog.txt&#34;</span>;
+HANDLE hFile <span style="color:#f92672">=</span> <span style="color:#f92672">::</span>CreateFileA(logPath, GENERIC_WRITE, FILE_SHARE_WRITE, <span style="color:#ae81ff">0</span>, OPEN_ALWAYS, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+</code></pre></div><p>值得注意的是CreateFileA的参数<code>OPEN_ALWAYS</code>，该参数指定了文件的打开方式：<strong>当文件不存在时，创建它；当文件存在时，打开它。</strong></p>
+</blockquote>
+<ol start="3">
+<li>文件上锁</li>
+</ol>
+<blockquote>
+<p>文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，<strong>为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁</strong>。这里使用Windows提供的一个关键函数<code>LockFileEx()</code>。</p>
+<p>该API详见<!-- raw HTML omitted -->此文档<!-- raw HTML omitted --></p>
+<p>我们使用以下几句话为文件上了个锁，这里的<code>overlapped</code>变量是API要求我们传入的，没有很大的用处，将其置零即可。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++">OVERLAPPED overlapped;
+memset(<span style="color:#f92672">&amp;</span>overlapped, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(overlapped));
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> lockSize <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>;	<span style="color:#75715e">// 上锁的字节数，没有很大的意义，非零即可。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped))
+{
+	DWORD err <span style="color:#f92672">=</span> GetLastError();
+	printf(<span style="color:#e6db74">&#34;Error %i</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, err);
+}
+</code></pre></div><p>当文件上锁失败，<code>if</code>判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被<strong>阻塞</strong>而非直接报错。在我的试验中，进入这个分支的情况是<strong>第一步CreateFile的时候得到了一个无效的句柄</strong>，而非无法获取当前文件的锁。</p>
+<p><code>LickFileEx()</code>函数的第二个参数比较关键，当它被指定为<code>LOCKFILE_FAIL_IMMEDIATELY</code> 的时候会直接返回失败，而不是阻塞当前进程。在这里，我们当然不选这个参数。</p>
+<p>文件上锁成功之后，就可以进行文件的写入了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">else</span>
+{
+	std<span style="color:#f92672">::</span>string str(<span style="color:#e6db74">&#34;&#34;</span>);
+	str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;[+] Process 1 locked the file. [+]</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+	SetFilePointer(hFile, <span style="color:#ae81ff">0</span>, NULL, FILE_END);		<span style="color:#75715e">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span style="color:#75715e"></span>	<span style="color:#f92672">::</span>WriteFile(hFile, str.c_str(), str.length(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+	getchar();	<span style="color:#75715e">// 在此处停止，先不释放文件锁
+</span><span style="color:#75715e"></span>	UnlockFileEx(hFile, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped);
+	CloseHandle(hFile);
+	std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Unlock file.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+}
+</code></pre></div><p>将以上的三个部分结合起来，就是第一个进程的代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> logPath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;C:</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Users</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Administrator</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Desktop</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">recLog.txt&#34;</span>;
+	HANDLE hFile <span style="color:#f92672">=</span> <span style="color:#f92672">::</span>CreateFileA(logPath, GENERIC_WRITE, FILE_SHARE_WRITE, <span style="color:#ae81ff">0</span>,
+		OPEN_ALWAYS, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+	OVERLAPPED overlapped;
+	memset(<span style="color:#f92672">&amp;</span>overlapped, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(overlapped));
+	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> lockSize <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>;
+	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped))
+	{
+		DWORD err <span style="color:#f92672">=</span> GetLastError();
+		printf(<span style="color:#e6db74">&#34;Error %i</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, err);
+	}
+	<span style="color:#66d9ef">else</span>
+	{
+		std<span style="color:#f92672">::</span>string str(<span style="color:#e6db74">&#34;&#34;</span>);
+		str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;[+] Process 1 locked the file. [+]</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+		SetFilePointer(hFile, <span style="color:#ae81ff">0</span>, NULL, FILE_END);		<span style="color:#75715e">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span style="color:#75715e"></span>		<span style="color:#f92672">::</span>WriteFile(hFile, str.c_str(), str.length(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+		getchar();	<span style="color:#75715e">// 在此处停止，先不释放文件锁
+</span><span style="color:#75715e"></span>		UnlockFileEx(hFile, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped);
+		CloseHandle(hFile);
+		std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Unlock file.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+	}
+	system(<span style="color:#e6db74">&#34;pause&#34;</span>);
+
+	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div></blockquote>
+<ol start="4">
+<li>第二个进程</li>
+</ol>
+<blockquote>
+<p>第二个进程被我们用来验证这个锁的可行性，即当第一个进程为文件上了锁，且还没释放的时候，第二个进程究竟能否对文件进行写入。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> logPath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;C:</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Users</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Administrator</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Desktop</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">recLog.txt&#34;</span>;
+	HANDLE hFile <span style="color:#f92672">=</span> <span style="color:#f92672">::</span>CreateFileA(logPath, GENERIC_WRITE, FILE_SHARE_WRITE, <span style="color:#ae81ff">0</span>,
+		OPEN_ALWAYS, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+	OVERLAPPED overlapped;
+	memset(<span style="color:#f92672">&amp;</span>overlapped, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(overlapped));
+	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> lockSize <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>;
+	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped))
+	{
+		DWORD err <span style="color:#f92672">=</span> GetLastError();
+		printf(<span style="color:#e6db74">&#34;Error %i</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, err);
+	}
+	<span style="color:#66d9ef">else</span>
+	{
+		std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Get lock.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+		std<span style="color:#f92672">::</span>string str(<span style="color:#e6db74">&#34;&#34;</span>);
+		str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;[+] Process 2 locked the file. [+]</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+		SetFilePointer(hFile, <span style="color:#ae81ff">0</span>, NULL, FILE_END);		<span style="color:#75715e">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span style="color:#75715e"></span>		<span style="color:#f92672">::</span>WriteFile(hFile, str.c_str(), str.length(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+		<span style="color:#75715e">// getchar();	// 在此处停止，先不释放文件锁
+</span><span style="color:#75715e"></span>		UnlockFileEx(hFile, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped);
+		CloseHandle(hFile);
+		std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Unlock file.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+	}
+	system(<span style="color:#e6db74">&#34;pause&#34;</span>);
+	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+
+</code></pre></div></blockquote>
+<ol start="5">
+<li>验证</li>
+</ol>
+<blockquote>
+<ul>
+<li>首先运行第一个进程，它将在<code>getchar()</code>函数部分停止，此时还没有释放文件锁；</li>
+<li>转为运行第二个进程，此时它无法对文件进行上锁操作；</li>
+<li>在第一个进程窗口按下任意键，它将释放文件锁，并关闭文件句柄；</li>
+<li>观察第二个进程输出，发现它已经得到文件锁，并在文件中写入了对应信息。</li>
+</ul>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex1.png" alt="image-20200927163253214" class="lazyload"><figcaption class="image-caption">image-20200927163253214</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex2.png" alt="image-20200927163553684" class="lazyload"><figcaption class="image-caption">image-20200927163553684</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/mutex3.png" alt="image-20200927163641980" class="lazyload"><figcaption class="image-caption">image-20200927163641980</figcaption></figure></p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words: </span>
+                   <span>294</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E8%25BF%259B%25E7%25A8%258B%25E9%2597%25B4%25E6%2596%2587%25E4%25BB%25B6%25E5%2590%258C%25E6%25AD%25A5%25E5%2586%2599%2f&amp;text=%e8%bf%9b%e7%a8%8b%e9%97%b4%e6%96%87%e4%bb%b6%e5%90%8c%e6%ad%a5%e5%86%99&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E8%25BF%259B%25E7%25A8%258B%25E9%2597%25B4%25E6%2596%2587%25E4%25BB%25B6%25E5%2590%258C%25E6%25AD%25A5%25E5%2586%2599%2f&amp;appkey=&amp;title=%e8%bf%9b%e7%a8%8b%e9%97%b4%e6%96%87%e4%bb%b6%e5%90%8c%e6%ad%a5%e5%86%99" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/%E6%8A%80%E6%9C%AF/">
+                    #技术</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-2/" class="prev" rel="prev" title="博客搭建指南——2"><i class="iconfont icon-dajiantou"></i>&nbsp;博客搭建指南——2</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-09-27 00:00:00 \u002b0000 UTC',
+              title: '进程间文件同步写',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
