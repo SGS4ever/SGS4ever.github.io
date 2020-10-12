@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://SGS4ever.github.io/2020/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/" />
+  
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/oauth2.0%E6%B5%85%E6%9E%90/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           OAuth2.0浅析 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="OAuth2.0浅析 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OAuth2.0浅析"/>
+<meta name="twitter:description" content="本文将介绍开放授权协议的概念，OAuth协议解决的问题以及OAuth协议的设计方案与应用情况。
+1. 背景  在生活中，我们接触的各种网络服务通常需要使用我们的个人资源。例如，我们使用网易云音乐，但是选择QQ登录，这时网易云需要获取我们的QQ账号信息，如果双方之间没有一个有效的授权机制，就会对我们的隐私安全造成威胁。试想：网易云音乐如何获取我们的QQ账号信息呢？无非是让我们给出我们的账号密码吧。但是这样做有如下严重的缺点：
+ 我们需要把QQ账号密码告诉网易云音乐，增加了泄露的风险； 网易云音乐拥有了对你的QQ账号的操作权限——想想都头皮发麻； 需要收回网易云音乐对QQ的访问权限时，只能通过修改密码的方式，但是这样做会使其他使用同样方式访问QQ的应用全部失效。  基于此，开放授权（Open Authorization）希望能够使得第三方无需知道用户的账号及密码，就可以获取用户的授权信息。
+如果是你，你会怎么实现它？
+ 2. 设计方案  OAuth2.0主要涉及四种角色，分别是：
+ 用户，即资源所有者。 资源服务器，即服务提供商。用来存放受保护的用户资源。在上面的例子中，资源服务器就是QQ服务器。 客户端，向资源服务器进行资源请求的第三方应用程序。在上面的例子中，客户端就是网易云音乐服务器。 认证服务器，在验证资源所有者并取得所有者的授权后，将访问令牌发给客户端。当我们想使用QQ登录网易云音乐，首先就是要证明我们的号主身份，这就是认证服务器的工作——证明身份、取得授权、允许第三方访问。  显然，资源服务和认证服务的提供者都是QQ，因此它们可以运行在同一台服务器上。
+OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：授权码（Authorization Code）模式、简化模式、密码模式和客户端模式。下面就重点一起看一下授权码模式的工作流程。
+ 3. 授权码模式  授权码是认证服务器提供的一串序列，客户端可以凭借授权码向认证服务器索要访问令牌（Access Token），进而实现相应资源的访问。没看懂？举个例子——
+ 还是使用QQ授权登录网易云音乐，我们需要经历如下的流程：
+ 打开网易云音乐，点击“使用QQ登录”； 网易云音乐跟我们说：想使用QQ登录？行，但是我现在没有访问QQ账号的权限，给你张纸条，上面写了我要访问你账号哪些信息，你去找QQ让他同意我访问； 于是我们来到QQ认证界面。QQ首先要我们登录账号，然后跟我们说：网易云音乐想要你的昵称信息、头像信息等等等等，你同意不？ 我们选择同意。于是QQ给了我们一张纸条，跟我们说：这个纸条上写了访问你昵称头像信息的授权码，你拿去给网易云音乐，他拿着这个条子来找我，我就让他访问； 于是我们把写着授权码的条子给了网易云音乐，他拿着这个条子去找QQ了，QQ的认证服务器根据这张条子给网易云音乐开出了一个访问令牌（Access Token），网易云拿到了这张令牌，并凭借它成功访问了我们的QQ账号信息。 网易云音乐拿到这个账号信息，在自己数据库里面一查，发现这个QQ账号已经跟某个网易云音乐账号绑定了，于是我们成功使用自己的QQ账号登录了网易云音乐。   这就是非常具象的授权码模式，是不是非常简单？
+但是，这里还有一些细节需要思考：
+ QQ会说，我这么没牌面的吗？谁想从我这请求资源我就给他？ 在上面的例子中，我们从网易云音乐去找QQ，拿到授权码之后回去找网易云音乐。但是，在真实的浏览器和Web服务器交互的过程中，我们的浏览器可没这么聪明，我们要给它规划好路线才行。  针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。
+而针对第二个问题，我们在向QQ请求授权码的时候，需要提供redirect_uri（或callback_uri）字段，表明浏览器拿到授权码之后要交给谁。于是，授权码模式的完整交互流程如下：
+ 4. 简化模式  看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：
+在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。
+这样的模式对一些纯前端的网络服务比较友好，因为它不需要资源请求者与资源提供者进行认证交互，直接拿着访问令牌找上门就好了。
+但是它叫简化模式，就是因为它存在安全问题。试想：重要的访问令牌就这样在浏览器和资源提供方之间传递，假设攻击者截获了访问令牌，就能够获取到你的资源。
+ 5. 密码模式  在密码模式中，用户向客户端提供自己的用户名和密码。客户端使用这些信息向资源服务器索要授权。这就是我们开头讲过的模式，它要求用户提供自己的用户名和密码，但是客户端不得存储这些信息。显然该模式建立在用户对客户端的高度信任上，通常这里的客户端属于操作系统的一部分，或者由著名的公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才考虑使用这种模式。
+ 6. 客户端模式  客户端以自己的名义，而不是用户的名义，向服务提供商进行认证。严格地说，这种模式并不属于OAuth框架所要解决的问题。在这种模式中，用户直接向客户端注册，客户端以自己的名义要求服务提供商提供服务，其实不存在授权问题。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "OAuth2.0浅析",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/oauth2.0%E6%B5%85%E6%9E%90\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "技术",
+  "wordcount":  72 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/oauth2.0%E6%B5%85%E6%9E%90\/",
+  "datePublished": "2020-10-12T00:00:00\u002b00:00",
+  "dateModified": "2020-10-12T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script src="https://sgs4ever.github.io/js/particles.js" async="false" ></script>
+        <script src="https://sgs4ever.github.io/js/app.js" async="false" ></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">OAuth2.0浅析</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=12120-10-10 >12 October 2020</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>本文将介绍开放授权协议的概念，OAuth协议解决的问题以及OAuth协议的设计方案与应用情况。</p>
+<h5 id="1-背景">1. 背景</h5>
+<blockquote>
+<p>在生活中，我们接触的各种网络服务通常需要使用我们的个人资源。例如，我们使用网易云音乐，但是选择QQ登录，这时网易云需要获取我们的QQ账号信息，如果双方之间没有一个有效的授权机制，就会对我们的隐私安全造成威胁。试想：网易云音乐如何获取我们的QQ账号信息呢？无非是让我们给出我们的账号密码吧。但是这样做有如下严重的缺点：</p>
+<ul>
+<li>我们需要把QQ账号密码告诉网易云音乐，增加了泄露的风险；</li>
+<li>网易云音乐拥有了对你的QQ账号的操作权限——想想都头皮发麻；</li>
+<li>需要收回网易云音乐对QQ的访问权限时，只能通过修改密码的方式，但是这样做会使其他使用同样方式访问QQ的应用全部失效。</li>
+</ul>
+<p>基于此，开放授权（Open  Authorization）希望能够使得第三方无需知道用户的账号及密码，就可以获取用户的授权信息。</p>
+<p>如果是你，你会怎么实现它？</p>
+</blockquote>
+<h5 id="2-设计方案">2. 设计方案</h5>
+<blockquote>
+<p>OAuth2.0主要涉及四种角色，分别是：</p>
+<ul>
+<li>用户，即资源所有者。</li>
+<li>资源服务器，即服务提供商。用来存放受保护的用户资源。在上面的例子中，资源服务器就是QQ服务器。</li>
+<li>客户端，向资源服务器进行资源请求的第三方应用程序。在上面的例子中，客户端就是网易云音乐服务器。</li>
+<li>认证服务器，在验证资源所有者并取得所有者的授权后，将访问令牌发给客户端。当我们想使用QQ登录网易云音乐，首先就是要证明我们的号主身份，这就是认证服务器的工作——证明身份、取得授权、允许第三方访问。</li>
+</ul>
+<p>显然，资源服务和认证服务的提供者都是QQ，因此它们可以运行在同一台服务器上。</p>
+<p>OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：<strong>授权码（Authorization Code）模式、简化模式、密码模式和客户端模式</strong>。下面就重点一起看一下授权码模式的工作流程。</p>
+</blockquote>
+<h5 id="3-授权码模式">3. 授权码模式</h5>
+<blockquote>
+<p>授权码是认证服务器提供的一串序列，客户端可以凭借授权码向认证服务器索要访问令牌（Access Token），进而实现相应资源的访问。没看懂？举个例子——</p>
+<hr>
+<p>还是使用QQ授权登录网易云音乐，我们需要经历如下的流程：</p>
+<ul>
+<li>打开网易云音乐，点击“使用QQ登录”；</li>
+<li>网易云音乐跟我们说：想使用QQ登录？行，但是我现在没有访问QQ账号的权限，给你张纸条，上面写了我要访问你账号哪些信息，你去找QQ让他同意我访问；</li>
+<li>于是我们来到QQ认证界面。QQ首先要我们登录账号，然后跟我们说：网易云音乐想要你的昵称信息、头像信息等等等等，你同意不？</li>
+<li>我们选择同意。于是QQ给了我们一张纸条，跟我们说：这个纸条上写了访问你昵称头像信息的授权码，你拿去给网易云音乐，他拿着这个条子来找我，我就让他访问；</li>
+<li>于是我们把写着授权码的条子给了网易云音乐，他拿着这个条子去找QQ了，QQ的认证服务器根据这张条子给网易云音乐开出了一个访问令牌（Access Token），网易云拿到了这张令牌，并凭借它成功访问了我们的QQ账号信息。</li>
+<li>网易云音乐拿到这个账号信息，在自己数据库里面一查，发现这个QQ账号已经跟某个网易云音乐账号绑定了，于是我们成功使用自己的QQ账号登录了网易云音乐。</li>
+</ul>
+<hr>
+<p>这就是非常具象的授权码模式，是不是非常简单？</p>
+<p>但是，这里还有一些细节需要思考：</p>
+<ul>
+<li>QQ会说，我这么没牌面的吗？谁想从我这请求资源我就给他？</li>
+<li>在上面的例子中，我们从网易云音乐去找QQ，拿到授权码之后回去找网易云音乐。但是，在真实的浏览器和Web服务器交互的过程中，我们的浏览器可没这么聪明，我们要给它规划好路线才行。</li>
+</ul>
+<p>针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。</p>
+<p>而针对第二个问题，我们在向QQ请求授权码的时候，需要提供<code>redirect_uri</code>（或callback_uri）字段，表明浏览器拿到授权码之后要交给谁。于是，授权码模式的完整交互流程如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/AuthorizationCode.png" alt="授权码工作模式" class="lazyload"><figcaption class="image-caption">授权码工作模式</figcaption></figure></p>
+</blockquote>
+<h5 id="4-简化模式">4. 简化模式</h5>
+<blockquote>
+<p>看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/ImplicitGrant.png" alt="简化模式" class="lazyload"><figcaption class="image-caption">简化模式</figcaption></figure></p>
+<p>在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。</p>
+<p>这样的模式对一些<strong>纯前端</strong>的网络服务比较友好，因为它不需要资源请求者与资源提供者进行认证交互，直接拿着访问令牌找上门就好了。</p>
+<p>但是它叫<strong>简化模式</strong>，就是因为它存在安全问题。试想：重要的访问令牌就这样在浏览器和资源提供方之间传递，假设攻击者截获了访问令牌，就能够获取到你的资源。</p>
+</blockquote>
+<h5 id="5-密码模式">5. 密码模式</h5>
+<blockquote>
+<p>在密码模式中，用户向客户端提供自己的用户名和密码。客户端使用这些信息向资源服务器索要授权。这就是我们开头讲过的模式，它要求用户提供自己的用户名和密码，但是客户端不得存储这些信息。显然该模式建立在用户对客户端的高度信任上，通常这里的客户端属于操作系统的一部分，或者由著名的公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才考虑使用这种模式。</p>
+</blockquote>
+<h5 id="6-客户端模式">6. 客户端模式</h5>
+<blockquote>
+<p>客户端以自己的名义，而不是用户的名义，向服务提供商进行认证。严格地说，这种模式并不属于OAuth框架所要解决的问题。在这种模式中，用户直接向客户端注册，客户端以自己的名义要求服务提供商提供服务，其实不存在授权问题。</p>
+</blockquote>
+<h5 id="小结">小结</h5>
+<p>OAuth2.0 协议率先被谷歌、雅虎、微软、FaceBook等公司使用，且目前得到较广泛的普及。之所以标注为2.0，是因为最初有一个1.0协议，但是这个1.0协议太复杂，易用性差，所以没有得到普及。2.0是一个新的设计，但它<strong>并不兼容1.0，可以说与1.0没什么关系。</strong></p>
+<p>本文简要介绍了OAuth2.0的四种工作方式，通过网易云音乐和QQ的认证交互，希望能使读者对此有初步的认识。关于具体的交互URL，本文没有给出，可以参考文末的一些博客。关于针对OAuth2.0的一些攻击手段，请见下回分解。</p>
+<blockquote>
+<p>参考资料：</p>
+<p>[1]  石瑞生，吴旭. 大数据安全与隐私保护[M]. 北京：北京邮电大学出版社，2019</p>
+<p>[2]  十八岁的夏天. OAuth2.0的简介. [EB/OL]. [2019-08-19]. <a href="https://www.cnblogs.com/xiaofengwang/p/11376881.html">https://www.cnblogs.com/xiaofengwang/p/11376881.html</a></p>
+<p>[3]  阮一峰. 理解OAuth2.0. [EB/OL]. [2014-05-12]. <a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html">http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html</a></p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words: </span>
+                   <span>72</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2foauth2.0%25E6%25B5%2585%25E6%259E%2590%2f&amp;text=OAuth2.0%e6%b5%85%e6%9e%90&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2foauth2.0%25E6%25B5%2585%25E6%259E%2590%2f&amp;appkey=&amp;title=OAuth2.0%e6%b5%85%e6%9e%90" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/%E6%8A%80%E6%9C%AF/">
+                    #技术</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://SGS4ever.github.io/2020/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/" class="prev" rel="prev" title="进程间文件同步写"><i class="iconfont icon-dajiantou"></i>&nbsp;进程间文件同步写</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-10-12 00:00:00 \u002b0000 UTC',
+              title: 'OAuth2.0浅析',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
