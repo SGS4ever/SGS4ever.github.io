@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://SGS4ever.github.io/2020/oauth2.0%E6%B5%85%E6%9E%90/" />
+  
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           一些简单的进程调度算法 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="一些简单的进程调度算法 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="一些简单的进程调度算法"/>
+<meta name="twitter:description" content="上一次挖的OAuth2.0坑还没填好，又要开一个操作系统的坑了&hellip;
+本篇介绍一些简单的进程调度算法，以及它们的代码实现。文章的具体组织为：一些关键概念的介绍 &ndash;&gt; 四种进程调度算法（SJF、FCFS、HRRF、HPF）。
+话不多说，Let&rsquo;s go！
+1. 一些概念
+ 在对四种调度算法进行介绍之前，有一些概念希望读者能够理解：
+ 周转时间：进程完成时间 - 进程到达时间。也就是整个进程从开始到结束所花费的时间。 平均周转时间：这个数值一般用于衡量调度的效率。比如在一段时间内来了5个进程，那么在这段时间内这些进程的平均周转时间就是五个进程的周转时间之和 / 5。 带权周转时间：某个进程的带权周转时间就是这个进程的周转时间 / 运行时间。由于系统中总有多个进程在运行，周转时间往往大于运行时间。因此，带权周转时间一般大于等于1。 平均带权周转时间：多个进程带权周转时间的平均值。  实际上，还有很多指标可以来衡量调度算法的优劣，如CPU利用率、系统吞吐量、响应时间等等。但是本文中介绍的调度算法与时间紧密相连，故此只需要理解以上几个概念，就能够看懂下文对于调度算法的分析。
+ 2. 先来先服务算法（First Come First Serve，FCFS）
+ 先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU优先服务最先到达的进程。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：
+假设有五个进程，它们的到达时间和希望的运行时间如下：
+本着先来先服务的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（在第7秒的时候到的），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。
+CPU对这五个进程的服务次序如下图所示：
+如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：
+你看出其中存在的问题了吗？
+ 3. 短作业优先算法（Shortest Job First，SJF）
+ 先来先服务算法很好理解、在生活中很常见，但是它存在一个问题：对于一些运行时间很短的进程，光是在那边排队等待所花费的时间可能数倍于真正的运行时间！
+在上一个例子中，进程2所花费的运行时间只有6秒，但是它很不幸地被进程3抢占先机，只能眼睁睁看着进程3运行了10秒。光是等待的时间就比运行的时间还多！因此，它的带权周转时间也是最大的，现在是否对这个概念的理解深刻了许多？
+先来先服务的死板特性对于某些短作业来说简直是灾难，此时，短作业优先算法就显得友好许多。
+短作业优先算法不关注进程的到达时间，当CPU结束了一个进程的服务之后，永远从等待的所有进程中找出运行时间最短的进程为其服务。
+还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。
+这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。
+如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：
+在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。
+但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。
+把数据完善一下，就会发现问题所在：
+可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！
+这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现进程饥饿。
+ 4. 最高响应比优先算法（Highest Response Ratio First，HRRF）
+ 在短作业优先算法中，进程饥饿是一个比较致命的问题。但是短作业优先的思想确实是有相当的可取之处的，于是人们考虑保留这种思想，同时使得长进程能够较少地受到饥饿，这就有了最高响应比优先算法。
+首先，什么是响应比：一个进程的响应比由以下这个公式得到——
+RR = (BT &#43; WT) / BT = 1 &#43; WT / BT"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "一些简单的进程调度算法",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "技术",
+  "wordcount":  116 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95\/",
+  "datePublished": "2020-10-19T00:00:00\u002b00:00",
+  "dateModified": "2020-10-19T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script src="https://sgs4ever.github.io/js/particles.js" async="false" ></script>
+        <script src="https://sgs4ever.github.io/js/app.js" async="false" ></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">一些简单的进程调度算法</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=19190-10-10 >19 October 2020</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>上一次挖的OAuth2.0坑还没填好，又要开一个操作系统的坑了&hellip;</p>
+<p>本篇介绍一些简单的进程调度算法，以及它们的代码实现。文章的具体组织为：一些关键概念的介绍 &ndash;&gt; 四种进程调度算法（SJF、FCFS、HRRF、HPF）。</p>
+<p>话不多说，Let&rsquo;s go！</p>
+<p><strong>1. 一些概念</strong></p>
+<blockquote>
+<p>在对四种调度算法进行介绍之前，有一些概念希望读者能够理解：</p>
+<ul>
+<li>周转时间：进程完成时间 - 进程到达时间。也就是整个进程从开始到结束所花费的时间。</li>
+<li>平均周转时间：这个数值一般用于衡量调度的效率。比如在一段时间内来了5个进程，那么在这段时间内这些进程的平均周转时间就是<code>五个进程的周转时间之和 / 5</code>。</li>
+<li>带权周转时间：某个进程的带权周转时间就是这个进程的<code>周转时间 / 运行时间</code>。由于系统中总有多个进程在运行，周转时间往往大于运行时间。因此，<strong>带权周转时间一般大于等于1</strong>。</li>
+<li>平均带权周转时间：多个进程带权周转时间的平均值。</li>
+</ul>
+<p>实际上，还有很多指标可以来衡量调度算法的优劣，如CPU利用率、系统吞吐量、响应时间等等。但是本文中介绍的调度算法与时间紧密相连，故此只需要理解以上几个概念，就能够看懂下文对于调度算法的分析。</p>
+</blockquote>
+<p><strong>2. 先来先服务算法（First Come First Serve，FCFS）</strong></p>
+<blockquote>
+<p>先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU<strong>优先服务最先到达的进程</strong>。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：</p>
+<p>假设有五个进程，它们的到达时间和希望的运行时间如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule1.png" alt="进程描述" class="lazyload"><figcaption class="image-caption">进程描述</figcaption></figure></p>
+<p>本着<strong>先来先服务</strong>的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（<em>在第7秒的时候到的</em>），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。</p>
+<p>CPU对这五个进程的服务次序如下图所示：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule2.png" alt="服务次序" class="lazyload"><figcaption class="image-caption">服务次序</figcaption></figure></p>
+<p>如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule3.png" alt="统计时间" class="lazyload"><figcaption class="image-caption">统计时间</figcaption></figure></p>
+<p>你看出其中存在的问题了吗？</p>
+</blockquote>
+<p><strong>3. 短作业优先算法（Shortest Job First，SJF）</strong></p>
+<blockquote>
+<p>先来先服务算法很好理解、在生活中很常见，但是它存在一个问题：对于一些运行时间很短的进程，光是在那边排队等待所花费的时间可能数倍于真正的运行时间！</p>
+<p>在上一个例子中，<strong>进程2</strong>所花费的运行时间只有6秒，但是它很不幸地被进程3抢占先机，只能眼睁睁看着进程3运行了10秒。光是等待的时间就比运行的时间还多！因此，它的<strong>带权周转时间</strong>也是最大的，现在是否对这个概念的理解深刻了许多？</p>
+<p>先来先服务的死板特性对于某些短作业来说简直是灾难，此时，<strong>短作业优先算法</strong>就显得友好许多。</p>
+<p>短作业优先算法不关注进程的到达时间，当CPU结束了一个进程的服务之后，永远从等待的所有进程中找出运行时间最短的进程为其服务。</p>
+<p>还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，<strong>虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务</strong>；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。</p>
+<p>这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。</p>
+<p>如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule4.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
+<p>在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。</p>
+<p>但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。</p>
+<p>把数据完善一下，就会发现问题所在：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule5.png" alt="新数据" class="lazyload"><figcaption class="image-caption">新数据</figcaption></figure></p>
+<p>可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！</p>
+<p>这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现<strong>进程饥饿</strong>。</p>
+</blockquote>
+<p><strong>4. 最高响应比优先算法（Highest Response Ratio First，HRRF）</strong></p>
+<blockquote>
+<p>在短作业优先算法中，<em>进程饥饿</em>是一个比较致命的问题。但是短作业优先的思想确实是有相当的可取之处的，于是人们考虑保留这种思想，同时使得长进程能够较少地受到饥饿，这就有了最高响应比优先算法。</p>
+<p>首先，什么是<em>响应比</em>：一个进程的响应比由以下这个公式得到——</p>
+<p><code>RR = (BT + WT) / BT = 1 + WT / BT</code></p>
+<p>其中，BT（Burst Time）表示运行时间，WT （Wait Time）表示等待时间。对于一个进程来说，（运行时间+等待时间）除以（运行时间）就是它的响应比。</p>
+<p>不难看出，一个进程的运行时间是不变的，而等待时间每时每刻都在变化，因此一个进程的响应比是每时每刻都在变化的。</p>
+<p>对于<code>RR = 1 + WT / BT</code>，显然每个进程的初始响应比都是<strong>1</strong>，因为刚刚到达的时候没有等待时间；随着等待时间的变长，进程的响应比不断地变大，它受到调度进入CPU的概率也就变大了。</p>
+<p>HRRF算法还有一个优点：它保留了短作业优先的原则。也就是说，对于同时到达的任务，虽然大家的响应比都是1，但是短作业优先，而长作业需要随着等待时间的增加慢慢地提高自己的响应比，最终接受调度。</p>
+<p>还是考虑第三小节的例子：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule4.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
+<p>在第0秒的时间，进程1到达，在第4秒的时间结束服务，此时进程2/3/5已经到达，计算它们的响应比：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule6.png" alt="第四秒响应比" class="lazyload"><figcaption class="image-caption">第四秒响应比</figcaption></figure></p>
+<p>可见，此时进程5已经等待很久了，需要让它接受服务。</p>
+<p>进程5运行2秒，在第6秒的时间结束，此时还有进程2/3在等待，计算它们的响应比：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule7.png" alt="第六秒响应比" class="lazyload"><figcaption class="image-caption">第六秒响应比</figcaption></figure></p>
+<p>可见，进程2的响应比还是高一些，让它接受服务。</p>
+<p>在第12秒的时候进程2结束，此时进程3和进程4在等待，计算它们的响应比：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule8.png" alt="第十二秒响应比" class="lazyload"><figcaption class="image-caption">第十二秒响应比</figcaption></figure></p>
+<p>此时让进程3接受服务，在第22秒的时候结束，进程4进入，在第30秒的时候结束。</p>
+<p>老规矩，计算数值：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule9.png" alt="新数据" class="lazyload"><figcaption class="image-caption">新数据</figcaption></figure></p>
+<p>相比于SJF算法，这个算法使得长进程3免于饥饿，是一个比较暖心的做法。</p>
+<p>这个算法唯一的问题，就是我们需要每时每刻地计算各个进程的响应比，同时需要把它们的响应比存入内存的某个空间中；<strong>增加了计算，增加了开销</strong>。</p>
+</blockquote>
+<p><strong>5. 最高优先数优先（Highest Priority First，HPF）</strong></p>
+<blockquote>
+<p><em>最高优先数优先</em>算法不关注进程的各种时间，而根据进程的**优先数（又称优先级）**进行调度。这个算法要求每个进程都要具备一个优先级，这个优先级可以是静态的，也可以是动态的。<em>静态优先级</em>在进程创建的时候分配，在进程生存周期内保持不变；<em>动态优先级</em>允许在进程生存期内被修改。</p>
+<p>实际上，之前的几种算法可以看做是这个算法的特例：比如短作业优先算法，进程的优先级可以看成是<strong>与运行时间成反比</strong>的一个数，即进程运行时间越短，优先级越高，因而越短的进程越先得到调度。</p>
+<p>在这个算法中，我们要引入两个概念：剥夺和非剥夺（又称抢占和非抢占）。</p>
+<p>*剥夺（抢占）*指的是在一个进程到达的时候，若当前运行的进程优先级小于自己，则它可以<strong>抢占</strong>当前进程的CPU，而被抢占的进程就会进入就绪队列，等待下一轮调度。</p>
+<p>*非剥夺（非抢占）*的调度方式就是指无论到达的进程优先级多高，都要等待当前进程运行完成（或者分配给它的时间用完），才能进入调度。</p>
+<p>以看病为例，抢占的看病方式就是你正在被医生诊断，此时突然来了急诊，医生就把你扔下，先去抢救伤员了；而非抢占的方式就是医生一定要把你诊断完成，再去抢救伤员。</p>
+<p>例子听起来比较离谱。这两种方式实际上各有优点，读者可以自行体会。</p>
+<p>回到正题，我们先考虑<strong>抢占方式下的HPF算法</strong>，首先为上面的例子中的几个进程引入优先级：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule10.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
+<p>在第0秒的时候，进程1到达，开始为其服务；</p>
+<p>在第1秒的时候，进程5到达，<strong>由于进程5的优先级高于进程1，此时将暂停进程1的服务，转为服务进程5</strong>，记住此时进程1还需要运行3秒的时间；</p>
+<p>在第2秒的时候，进程3到达，<strong>由于进程3的优先级低于进程5，CPU继续服务进程5</strong>；</p>
+<p>在第3秒的时候，进程5运行结束，此时进程2到达，现在等待的进程有1/2/3，由于进程2的优先级最高，系统为其服务；</p>
+<p>在第7秒的时候进程4到达，不会打断进程2；</p>
+<p>在第9秒的时候，进程2结束，此时等待的进程有1/3/4，由于进程3的优先级最高，系统为其服务；</p>
+<p>在第19秒的时候，进程3结束，此时等待的进程有1/4，由于进程4的优先级更高，系统为其服务；</p>
+<p>在第27秒的时候，进程4结束，此时为进程1服务，<strong>完成剩下的3秒时间</strong>，在第30秒结束。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule11.png" alt="抢占式HPF" class="lazyload"><figcaption class="image-caption">抢占式HPF</figcaption></figure></p>
+<p>在这个例子中，进程1最先到达，最晚结束，简直惨兮兮；但是我们首次看到了两个<em>带权周转时间为1</em>的情况，表明这个调度方式在优先级设置合理的条件下，效率还是不错的。</p>
+<p>对于非抢占式调度，上面三个小节已经讲了太多，在此不加赘述。</p>
+</blockquote>
+<p><strong>6. 小结</strong></p>
+<blockquote>
+<p>本文介绍了四种调度算法，并以几个简单的例子具体模拟了它们的运行模式。本来还希望附上这几个算法的代码实现，但篇幅有限，只好新开一篇。</p>
+<p>如果你认为我有哪些地方没有讲清楚，或者有哪些错误之处，欢迎评论区留言告诉我。(ノ￣▽￣)</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words: </span>
+                   <span>116</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E4%25B8%2580%25E4%25BA%259B%25E7%25AE%2580%25E5%258D%2595%25E7%259A%2584%25E8%25BF%259B%25E7%25A8%258B%25E8%25B0%2583%25E5%25BA%25A6%25E7%25AE%2597%25E6%25B3%2595%2f&amp;text=%e4%b8%80%e4%ba%9b%e7%ae%80%e5%8d%95%e7%9a%84%e8%bf%9b%e7%a8%8b%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E4%25B8%2580%25E4%25BA%259B%25E7%25AE%2580%25E5%258D%2595%25E7%259A%2584%25E8%25BF%259B%25E7%25A8%258B%25E8%25B0%2583%25E5%25BA%25A6%25E7%25AE%2597%25E6%25B3%2595%2f&amp;appkey=&amp;title=%e4%b8%80%e4%ba%9b%e7%ae%80%e5%8d%95%e7%9a%84%e8%bf%9b%e7%a8%8b%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/%E6%8A%80%E6%9C%AF/">
+                    #技术</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://SGS4ever.github.io/2020/oauth2.0%E6%B5%85%E6%9E%90/" class="prev" rel="prev" title="OAuth2.0浅析"><i class="iconfont icon-dajiantou"></i>&nbsp;OAuth2.0浅析</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-10-19 00:00:00 \u002b0000 UTC',
+              title: '一些简单的进程调度算法',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
