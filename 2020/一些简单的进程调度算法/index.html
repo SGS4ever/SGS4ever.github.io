@@ -213,12 +213,12 @@ RR = (BT &#43; WT) / BT = 1 &#43; WT / BT"/>
 <blockquote>
 <p>先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU<strong>优先服务最先到达的进程</strong>。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：</p>
 <p>假设有五个进程，它们的到达时间和希望的运行时间如下：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule1.png" alt="进程描述" class="lazyload"><figcaption class="image-caption">进程描述</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule1.png" alt="进程描述" class="lazyload"><figcaption class="image-caption">进程描述</figcaption></figure></p>
 <p>本着<strong>先来先服务</strong>的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（<em>在第7秒的时候到的</em>），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。</p>
 <p>CPU对这五个进程的服务次序如下图所示：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule2.png" alt="服务次序" class="lazyload"><figcaption class="image-caption">服务次序</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule2.png" alt="服务次序" class="lazyload"><figcaption class="image-caption">服务次序</figcaption></figure></p>
 <p>如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule3.png" alt="统计时间" class="lazyload"><figcaption class="image-caption">统计时间</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule3.png" alt="统计时间" class="lazyload"><figcaption class="image-caption">统计时间</figcaption></figure></p>
 <p>你看出其中存在的问题了吗？</p>
 </blockquote>
 <p><strong>3. 短作业优先算法（Shortest Job First，SJF）</strong></p>
@@ -230,11 +230,11 @@ RR = (BT &#43; WT) / BT = 1 &#43; WT / BT"/>
 <p>还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，<strong>虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务</strong>；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。</p>
 <p>这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。</p>
 <p>如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule4.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule4.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
 <p>在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。</p>
 <p>但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。</p>
 <p>把数据完善一下，就会发现问题所在：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule5.png" alt="新数据" class="lazyload"><figcaption class="image-caption">新数据</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule5.png" alt="新数据" class="lazyload"><figcaption class="image-caption">新数据</figcaption></figure></p>
 <p>可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！</p>
 <p>这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现<strong>进程饥饿</strong>。</p>
 </blockquote>
@@ -248,18 +248,18 @@ RR = (BT &#43; WT) / BT = 1 &#43; WT / BT"/>
 <p>对于<code>RR = 1 + WT / BT</code>，显然每个进程的初始响应比都是<strong>1</strong>，因为刚刚到达的时候没有等待时间；随着等待时间的变长，进程的响应比不断地变大，它受到调度进入CPU的概率也就变大了。</p>
 <p>HRRF算法还有一个优点：它保留了短作业优先的原则。也就是说，对于同时到达的任务，虽然大家的响应比都是1，但是短作业优先，而长作业需要随着等待时间的增加慢慢地提高自己的响应比，最终接受调度。</p>
 <p>还是考虑第三小节的例子：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule4.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule4.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
 <p>在第0秒的时间，进程1到达，在第4秒的时间结束服务，此时进程2/3/5已经到达，计算它们的响应比：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule6.png" alt="第四秒响应比" class="lazyload"><figcaption class="image-caption">第四秒响应比</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule6.png" alt="第四秒响应比" class="lazyload"><figcaption class="image-caption">第四秒响应比</figcaption></figure></p>
 <p>可见，此时进程5已经等待很久了，需要让它接受服务。</p>
 <p>进程5运行2秒，在第6秒的时间结束，此时还有进程2/3在等待，计算它们的响应比：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule7.png" alt="第六秒响应比" class="lazyload"><figcaption class="image-caption">第六秒响应比</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule7.png" alt="第六秒响应比" class="lazyload"><figcaption class="image-caption">第六秒响应比</figcaption></figure></p>
 <p>可见，进程2的响应比还是高一些，让它接受服务。</p>
 <p>在第12秒的时候进程2结束，此时进程3和进程4在等待，计算它们的响应比：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule8.png" alt="第十二秒响应比" class="lazyload"><figcaption class="image-caption">第十二秒响应比</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule8.png" alt="第十二秒响应比" class="lazyload"><figcaption class="image-caption">第十二秒响应比</figcaption></figure></p>
 <p>此时让进程3接受服务，在第22秒的时候结束，进程4进入，在第30秒的时候结束。</p>
 <p>老规矩，计算数值：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule9.png" alt="新数据" class="lazyload"><figcaption class="image-caption">新数据</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule9.png" alt="新数据" class="lazyload"><figcaption class="image-caption">新数据</figcaption></figure></p>
 <p>相比于SJF算法，这个算法使得长进程3免于饥饿，是一个比较暖心的做法。</p>
 <p>这个算法唯一的问题，就是我们需要每时每刻地计算各个进程的响应比，同时需要把它们的响应比存入内存的某个空间中；<strong>增加了计算，增加了开销</strong>。</p>
 </blockquote>
@@ -273,7 +273,7 @@ RR = (BT &#43; WT) / BT = 1 &#43; WT / BT"/>
 <p>以看病为例，抢占的看病方式就是你正在被医生诊断，此时突然来了急诊，医生就把你扔下，先去抢救伤员了；而非抢占的方式就是医生一定要把你诊断完成，再去抢救伤员。</p>
 <p>例子听起来比较离谱。这两种方式实际上各有优点，读者可以自行体会。</p>
 <p>回到正题，我们先考虑<strong>抢占方式下的HPF算法</strong>，首先为上面的例子中的几个进程引入优先级：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule10.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule10.png" alt="新例子" class="lazyload"><figcaption class="image-caption">新例子</figcaption></figure></p>
 <p>在第0秒的时候，进程1到达，开始为其服务；</p>
 <p>在第1秒的时候，进程5到达，<strong>由于进程5的优先级高于进程1，此时将暂停进程1的服务，转为服务进程5</strong>，记住此时进程1还需要运行3秒的时间；</p>
 <p>在第2秒的时候，进程3到达，<strong>由于进程3的优先级低于进程5，CPU继续服务进程5</strong>；</p>
@@ -282,7 +282,7 @@ RR = (BT &#43; WT) / BT = 1 &#43; WT / BT"/>
 <p>在第9秒的时候，进程2结束，此时等待的进程有1/3/4，由于进程3的优先级最高，系统为其服务；</p>
 <p>在第19秒的时候，进程3结束，此时等待的进程有1/4，由于进程4的优先级更高，系统为其服务；</p>
 <p>在第27秒的时候，进程4结束，此时为进程1服务，<strong>完成剩下的3秒时间</strong>，在第30秒结束。</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/Schedule11.png" alt="抢占式HPF" class="lazyload"><figcaption class="image-caption">抢占式HPF</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/schedule11.png" alt="抢占式HPF" class="lazyload"><figcaption class="image-caption">抢占式HPF</figcaption></figure></p>
 <p>在这个例子中，进程1最先到达，最晚结束，简直惨兮兮；但是我们首次看到了两个<em>带权周转时间为1</em>的情况，表明这个调度方式在优先级设置合理的条件下，效率还是不错的。</p>
 <p>对于非抢占式调度，上面三个小节已经讲了太多，在此不加赘述。</p>
 </blockquote>
