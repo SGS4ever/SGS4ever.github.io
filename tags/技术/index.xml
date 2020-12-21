@@ -6,7 +6,36 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 19 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 12 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>桌面美化方案-Rainmeter</title>
+      <link>https://SGS4ever.github.io/2020/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/</link>
+      <pubDate>Sat, 12 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://SGS4ever.github.io/2020/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/</guid>
+      <description>谁能想到我在考试前一天还在写桌面美化的博客呢？
+电脑桌面是每天开机后进入工作之前第一眼看到的东西，一个美观的桌面能从心情上给人以振奋。我在整机重装之后学习了一下如何美化桌面，现在我的Window10系统桌面长成这样：
+1. rainmeter
+ rainmeter实际上是一个系统状态监视软件，由于其强大的可定制性及扩展性，诸多使用者在原来的基础上开发了成百上千的插件程序和皮肤样式，使得现在的rainmeter几乎成为一款完美的系统美化工具。你可以从官网上下载它：
+ Rainmeter, desktop customization tool
+ 下载安装完成之后，打开这个程序，自带一个简单的样式，使得你可以在桌面上看到CPU使用率、磁盘使用情况等等。
+要达到美化的效果，仅仅使用自带的组件样式是不够的。我们需要从网络上寻找好看的rainmeter皮肤资源，这里首先给出官方的社区，本次桌面的效果就是使用社区中michaelpuerses大佬做的Sonder皮肤：
+ Sonder - Rainmeter skin by michaelpurses on DeviantArt
+ 需要注意的是，访问此网站需要科学上网，且最好选择漂亮国的节点，并开启全局模式。如果你不会，我也不打算教你，你可以从很多其他地方找到皮肤资源（如GitHub、国内各论坛等等）。此外，下载皮肤时要求进行注册，亲测gamil有效。
+rainmeter的皮肤有两种形式：
+ .rmskin文件格式。这类文件直接双击打开，自动安装皮肤。 文件夹格式。这类皮肤需要手动放入你的rainmeter皮肤路径下，具体做法为：右键右下角的rainmeter小图标 &amp;ndash;&amp;gt; 皮肤 &amp;ndash;&amp;gt; 打开皮肤目录，将你下好（并解压）的文件夹放进去。  我在寻找皮肤的过程中，发现国内网站的相关内容真是少的可怜，找到一个论坛，下载皮肤的时候居然还要交钱买邀请码进行登录，属实有点离谱；百度rainmeter贴吧上面有些大佬的作品看着还可以，我没有试用过。
+你还可以从知乎或者一些外文评测贴中找到很多好看的主题推荐，这里给出两个外文帖子，我的主题就是在第二篇文章的推荐下找到的：
+ [43 Best Rainmeter Skins For Windows in 2020 Updated Today] (techuntech.com)
+[35 Spectacular Rainmeter Skins For Windows 2020] | Stack Tunnel
+ 放张效果图吧，除了我现在使用的桌面外，rainmeter还能这样玩：
+看完是不是很想开启自己的皮肤邂逅之旅了？
+ 2. TaskbarX
+ 实际上，我的桌面还有处地方值得注意：任务栏图标居中。看似细小处，实则是整个和谐的视觉体系中不可或缺的一部分。在很多Windows的美化教程中，都使用各式各样的软件来制作出类似MacOS的dock效果，而且实际上rainmeter也能制作dock效果，不过michaelpuerses大佬没有在我这款皮肤中实现dock。
+就我个人而言，完全仿照MacOS进行美化实在是有点过头了。很多好看的主题，只需要将任务栏透明化、图标居中之后就会产生画龙点睛的效果。
+于是引出我们要下载的第二款软件：TaskbarX。这款软件能使你的任务栏图标始终保持居中状态，其原理大概是每隔固定的时间进行检查与调整（我猜的）。链接如下：
+ TaskbarX | Center taskbar icons (chrisandriessen.</description>
+    </item>
+    
     <item>
       <title>一些简单的进程调度算法</title>
       <link>https://SGS4ever.github.io/2020/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/</link>
