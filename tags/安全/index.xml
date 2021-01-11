@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>安全 on XR_G&#39;s Blog</title>
-    <link>https://SGS4ever.github.io/tags/%E5%AE%89%E5%85%A8/</link>
+    <link>https://sgs4ever.github.io/tags/%E5%AE%89%E5%85%A8/</link>
     <description>Recent content in 安全 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/tags/%E5%AE%89%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E5%AE%89%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>提权技术--绕过UAC</title>
-      <link>https://SGS4ever.github.io/2020/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</link>
+      <link>https://sgs4ever.github.io/2020/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</link>
       <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://SGS4ever.github.io/2020/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</guid>
+      <guid>https://sgs4ever.github.io/2020/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</guid>
       <description>最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。
 话不多说，总结本次的提权办法——绕过UAC。
  1. UAC   UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。
