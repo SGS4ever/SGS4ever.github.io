@@ -5,13 +5,14 @@
     <link>https://sgs4ever.github.io/categories/%E5%AD%A6%E4%B9%A0/</link>
     <description>Recent content in 学习 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language><atom:link href="https://sgs4ever.github.io/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Tue, 12 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>错题本 | LeetCode953</title>
-      <link>https://sgs4ever.github.io/1/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</link>
+      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/1/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</guid>
+      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</guid>
       <description>题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
 题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
 解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。

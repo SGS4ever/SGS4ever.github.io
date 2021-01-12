@@ -6,7 +6,22 @@
     <description>Recent content in Posts on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 21 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>错题本 | LeetCode953</title>
+      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</link>
+      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
+题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
+解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
+错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+AC代码：
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组  for (ite = words.begin(); ite != words.end(); ++ite) // 两两对比  { if (ite != words.end() - 1) { if (cmp(*ite, *(ite + 1)) &amp;gt; 0) // cmp返回正数，前者比后者大  { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; ++idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低  } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !</description>
+    </item>
+    
     <item>
       <title>桌面美化方案-Rainmeter</title>
       <link>https://sgs4ever.github.io/2020/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/</link>
@@ -228,21 +243,6 @@ hugo new site [yourSiteName]
 什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
 打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
 现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。</description>
-    </item>
-    
-    <item>
-      <title>错题本 | LeetCode953</title>
-      <link>https://sgs4ever.github.io/1/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://sgs4ever.github.io/1/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</guid>
-      <description>题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
-题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
-解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
-错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
-更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
-AC代码：
-class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组  for (ite = words.begin(); ite != words.end(); ++ite) // 两两对比  { if (ite != words.end() - 1) { if (cmp(*ite, *(ite + 1)) &amp;gt; 0) // cmp返回正数，前者比后者大  { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; ++idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低  } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !</description>
     </item>
     
   </channel>
