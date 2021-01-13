@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>学习 on XR_G&#39;s Blog</title>
-    <link>https://sgs4ever.github.io/categories/%E5%AD%A6%E4%B9%A0/</link>
-    <description>Recent content in 学习 on XR_G&#39;s Blog</description>
+    <title>难题本 on XR_G&#39;s Blog</title>
+    <link>https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/</link>
+    <description>Recent content in 难题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>难题本|LeetCode862</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%ACleetcode862/</link>
@@ -28,21 +28,6 @@
 我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
 使用下面的代码来进行实现，注意deque的初始元素0。
 // deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.push_back(0); // 放入一个0 for (i = 1; i &amp;lt;= A.</description>
-    </item>
-    
-    <item>
-      <title>错题本 | LeetCode953</title>
-      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</link>
-      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/</guid>
-      <description>题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
-题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
-解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
-错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
-更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
-AC代码：
-class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组  for (ite = words.begin(); ite != words.end(); ++ite) // 两两对比  { if (ite != words.end() - 1) { if (cmp(*ite, *(ite + 1)) &amp;gt; 0) // cmp返回正数，前者比后者大  { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; ++idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低  } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !</description>
     </item>
     
   </channel>
