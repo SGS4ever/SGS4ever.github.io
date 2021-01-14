@@ -48,6 +48,7 @@
 &lt;div id=&quot;particles-js&quot;&gt;&lt;/div&gt;
 然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
 p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
+p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/baseof.html，因为它似乎是所有页面的基本框架，适用性更强一些。
  引入插件   你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
 我们要在第二步的div底下写入插件。
 为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
@@ -82,7 +83,7 @@ p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很
   },
   "genre": "posts",
   "keywords": "博客搭建",
-  "wordcount":  95 ,
+  "wordcount":  98 ,
   "url": "https:\/\/sgs4ever.github.io\/2020\/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-2\/",
   "datePublished": "2020-09-19T00:00:00\u002b00:00",
   "dateModified": "2020-09-19T00:00:00\u002b00:00",
@@ -215,6 +216,7 @@ p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很
 <p><code>&lt;div id=&quot;particles-js&quot;&gt;&lt;/div&gt;</code></p>
 <p>然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！</p>
 <p>p.s <code>footer.html</code>在文件夹<code>partials</code>里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题<strong>没有footer.html文件</strong>，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。</p>
+<p>p.p.s 2021年1月14日，现在我把这部分代码加在了<code>layouts/_default/baseof.html</code>，因为它似乎是所有页面的基本框架，适用性更强一些。</p>
 </blockquote>
 <ol start="3">
 <li>引入插件</li>
@@ -286,9 +288,18 @@ p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很
 <hr>
 <p>(<a href="https://www.jb51.net/article/123594.htm">https://www.jb51.net/article/123594.htm</a>)</p>
 <hr>
-<p>仅以我现在使用的背景的部分键值为例：</p>
-<p>我的<code>particles.color.value = &quot;random&quot;</code>，这是为了在白色主题的情况下也可以看到背景特效；</p>
-<p>我的<code>particles.interactivity.events.onclick.mode = &quot;repulse&quot;</code>，当你点击鼠标的时候聚集在一起的星星会被弹开。</p>
+<p>例如我的<code>particles.color.value = &quot;random&quot;</code>，这是为了在白色主题的情况下也可以看到背景特效。</p>
+</blockquote>
+<ol start="7">
+<li>一些细节</li>
+</ol>
+<blockquote>
+<p><em>此部分增加于2021年1月14日</em></p>
+<p>博客已经发布了十来篇文章，重看此文，有一些细节（或不如说是遗留的BUG）是值得一提的。</p>
+<ul>
+<li>JS的加载顺序。本文前面的代码已经将JS的加载顺序考虑了进来，且添加了<code>async</code>标签指示浏览器按照顺序加载两个JS文件，然而这样的写法似乎是无用的，因为我的博客还是时不时地丢失掉背景效果；实际上使得JS按照顺序加载的办法还有不少，可以留待读者自行查找资料实现（主要是作者懒）。</li>
+<li>hugo的版本。<a href="https://sgs4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-1/">博客搭建指南——1</a>中提到了要下载<code>hugo-extend</code>，你除了使用文章中介绍的办法下载之外，还可以使用<code>chocolate</code>包管理器下载，具体做法可以使用搜索引擎查找，比较简单。而正如那篇文章中所说，如果你不安装extend版本，你将无法编译<code>SCSS</code>文件，而这对于我们这款主题（相信还有其他很多精美的主题）来说是很致命的。与本文相关的，如果你使用的不是extend版本的hugo，你在第5小节中自定义的CSS样式可能不会生效。</li>
+</ul>
 </blockquote>
 <p>以上，是本篇的全部内容。</p>
 
