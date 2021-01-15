@@ -6,13 +6,29 @@
     <description>Recent content in LeetCode on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>错题本 | LeetCode947</title>
+      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/</link>
+      <pubDate>Fri, 15 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/
+其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
+分析：
+ 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。
+于是题目转化为了以行列为依据的并查集问题。对于一块石头idx，其坐标为(x, y)，如果x行上已经有了先来的石头root_x[x]，那么将idx加入先前就存在的root_x[x]的并查集中；否则表示idx是这一行最先到达的石头，其后的所有石头都要加入idx的并查集中。对于y列来说同理。
+于是实现并查集如下：
+int parent[1010]; // 并查集 // memset(parent, -1, sizeof(parent)); // 或者 // for (i = 0; i &amp;lt; 1010; i++) parent[i] = i; void join(int parent_idx, int son_idx) { int root_p = find(parent_idx); int root_s = find(son_idx); if (root_p == root_s) return; else parent[root_s] = root_p; } int find(int idx) { if (parent[idx] == -1) return idx; parent[idx] = find(parent[idx]); // 路径压缩  return parent[idx]; } 我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。</description>
+    </item>
+    
     <item>
       <title>难题本 | LeetCode862</title>
-      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%ACleetcode862/</link>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</link>
       <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%ACleetcode862/</guid>
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</guid>
       <description>题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
 这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
 分析：

@@ -9,10 +9,10 @@
     <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>难题本 | LeetCode862</title>
-      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%ACleetcode862/</link>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</link>
       <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%ACleetcode862/</guid>
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</guid>
       <description>题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
 这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
 分析：

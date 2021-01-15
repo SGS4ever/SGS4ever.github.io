@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/" />
+  <link rel="next" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/" />
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           难题本 | LeetCode862 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="难题本 | LeetCode862 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="难题本 | LeetCode862"/>
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
+这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
+分析：
+ 题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
+最开始想到的是暴力。假设数组长度为n，我们分别求出长度为1、2、&hellip;、n的子数组的最大和，将他们按顺序和K比较，第一个比K大的长度就是答案。这样的做法时间复杂度是O(n2)，有点复杂。
+之后就没有想法了。跟泓泓挣扎了半天，还是只能去看题解。
+不得不说，官方题解真是不讲人话[2]，不到40行代码的思路，硬是能被说成鬼都看不懂的样子。
+首先，为了方便求任意一段连续子数组的和，我们需要使用前缀和数组prefix_sum。在这个题目中，prefix_sum[i]表示的是从A[0]到A[i - 1]的前缀和，注意是A[i - 1]，作用后面会讲。总之，求前缀和的办法是很常规的。
+我们知道，求得了前缀和数组之后，对于两个下标x、y（设y&gt;x），prefix_sum[y] - prefix_sum[x]表示的就是从A[x &#43; 1]到A[y]这段子数组的和。那么，问题就转化为了针对prefix_sum数组，求一对x和y，满足prefix_sum[y] - prefix_sum[x] &gt;= K，且y - x最小。
+朴素的思想是遍历每一对y和x，这样的复杂度还是O(n2)，显然需要用某种更巧妙的办法让我们摆脱两重循环。
+于是引出官方题解中的第一条性质：
+ 对于prefix_sum数组，假设有下标**a &gt; b**，且prefix_sum[a] &lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。  如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
+我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&hellip;始终满足prefix_sum[x0] &lt; prefix_sum[x1] &lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
+使用下面的代码来进行实现，注意deque的初始元素0。
+// deque&lt;int&gt; monoq;	// 变量名与官方题解保持一致 monoq.push_back(0); // 放入一个0 for (i = 1; i &lt;= A."/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "难题本 | LeetCode862",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "难题本, LeetCode",
+  "wordcount":  308 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862\/",
+  "datePublished": "2021-01-13T00:00:00\u002b00:00",
+  "dateModified": "2021-01-13T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">难题本 | LeetCode862</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=13130-01-01 >13 January 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>题目链接：<em><a href="https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/">https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/</a></em></p>
+<p>这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了<!-- raw HTML omitted -->[1]<!-- raw HTML omitted -->。</p>
+<p><strong>分析：</strong></p>
+<blockquote>
+<p>题目要求返回数组<code>A</code>的最短的非空连续子数组的<strong>长度</strong>，该子数组的和至少为K。</p>
+<p>最开始想到的是暴力。假设数组长度为n，我们分别求出长度为1、2、&hellip;、n的子数组的<strong>最大和</strong>，将他们按顺序和K比较，第一个比K大的长度就是答案。这样的做法时间复杂度是<em>O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</em>，有点复杂。</p>
+<p>之后就没有想法了。跟泓泓挣扎了半天，还是只能去看题解。</p>
+<p>不得不说，官方题解真是不讲人话<!-- raw HTML omitted -->[2]<!-- raw HTML omitted -->，不到40行代码的思路，硬是能被说成鬼都看不懂的样子。</p>
+<p>首先，为了方便求任意一段连续子数组的和，我们需要使用前缀和数组<code>prefix_sum</code>。在这个题目中，<code>prefix_sum[i]</code>表示的是<strong>从A[0]到A[i - 1]的前缀和</strong>，注意是A[i - 1]，作用后面会讲。总之，求前缀和的办法是很常规的。</p>
+<p>我们知道，求得了前缀和数组之后，对于两个下标x、y（设y&gt;x），<code>prefix_sum[y] - prefix_sum[x]</code>表示的就是从<strong>A[x + 1]到A[y]这段子数组的和</strong>。那么，问题就转化为了<strong>针对<code>prefix_sum</code>数组，求一对x和y，满足<code>prefix_sum[y] - prefix_sum[x] &gt;= K</code>，且<code>y - x</code>最小</strong>。</p>
+<p>朴素的思想是遍历每一对y和x，这样的复杂度还是<em>O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</em>，显然需要用某种更巧妙的办法让我们摆脱两重循环。</p>
+<p>于是引出官方题解中的<strong>第一条性质</strong>：</p>
+<ul>
+<li>对于<code>prefix_sum</code>数组，假设有下标**<code>a &gt; b</code>**，且<code>prefix_sum[a] &lt;= prefix_sum[b]</code>，那么对于它们后面的某个下标<code>y</code>来说，只需要考虑<code>a ~ y</code>这一段是否满足条件，而不再需要考虑<code>b ~ y</code>这一段了。这是因为，<code>prefix_sum[y] - prefix_sum[a] &gt;= prefix_sum[y] - prefix_sum[b]</code>，而且<code>y - a &lt; y - b</code>，如果<code>b ~ y</code>这一段能满足条件，那么<code>a ~ y</code>这一段也一定能满足条件，而且这段子数组的长度更小。</li>
+</ul>
+<p>如果我没有讲清楚，不妨看看参考[1]中的模拟大法：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode862-1.jpg" alt="本条性质的模拟" class="lazyload"><figcaption class="image-caption">本条性质的模拟</figcaption></figure></p>
+<p>我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&hellip;始终满足<code>prefix_sum[x0] &lt; prefix_sum[x1] &lt; ...</code>；注意，由于下标是从前往后走的，当出现了某个<code>prefix_sum[x_m] &lt; prefix_sum[deque.back()]</code>的时候，说明对于<strong>之后</strong>的下标<code>y</code>来说，<code>x_m</code>是更为合适的选择，也因此可以直接将队尾的元素剔除。</p>
+<p>使用下面的代码来进行实现，注意deque的初始元素0。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">// deque&lt;int&gt; monoq;			// 变量名与官方题解保持一致
+</span><span style="color:#75715e"></span>monoq.push_back(<span style="color:#ae81ff">0</span>);    		 	<span style="color:#75715e">// 放入一个0
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;=</span> A.size(); <span style="color:#f92672">++</span>i)  <span style="color:#75715e">// 下标从前往后走 
+</span><span style="color:#75715e"></span>{
+    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>monoq.empty() <span style="color:#f92672">&amp;&amp;</span> prefix_sum[monoq.back()] <span style="color:#f92672">&gt;=</span> prefix_sum[i])
+    {
+        monoq.pop_back();  <span style="color:#75715e">// 当前这个i满足性质一，使得后续的y只需要考虑下标i
+</span><span style="color:#75715e"></span>    }
+    ...
+}
+</code></pre></div><p>实现了性质一，需要引出性质二：</p>
+<ul>
+<li>对于一个固定的下标<code>x</code>来说，第一次遇见某个<code>y</code>满足<code>prefix_sum[y] - prefix_sum[x] &gt;= K</code>之后，其后更大的下标<code>y_bigger</code>就不必再考虑<code>x</code>了。这很合乎直觉，因为我们要求的是最小的<code>y - x</code>。</li>
+</ul>
+<p>我们的下标从前往后走的时候，<strong>当前下标既是<code>x</code>，也是<code>y</code></strong>。更确切地说，设当前下标为<code>i</code>，它<strong>向前</strong>需要看能否满足<code>prefix_sum[i] - prefix_sum[x] &gt;= K</code>；<strong>向后</strong>需要考虑自己作为区间起点的情况，也就是作为一个<code>x</code>，淘汰掉队列中现有的满足性质一的那些元素。</p>
+<p>上面的代码已经成功利用了性质一，现在只需要再从队首去找满足性质二的元素即可：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;=</span> A.size(); <span style="color:#f92672">++</span>i)
+{
+    <span style="color:#75715e">/* 性质一、当前下标作为区间起点的情况 */</span>
+    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>monoq.empty() <span style="color:#f92672">&amp;&amp;</span> prefix_sum[monoq.back()] <span style="color:#f92672">&gt;=</span> prefix_sum[i])
+    {
+        monoq.pop_back();
+    }
+    <span style="color:#75715e">/* 性质二、当前下标作为区间终点的情况 */</span>
+    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>monoq.empty() <span style="color:#f92672">&amp;&amp;</span> prefix_sum[i] <span style="color:#f92672">-</span> prefix_sum[monoq.front()] <span style="color:#f92672">&gt;=</span> K)
+    {
+        ans <span style="color:#f92672">=</span> min(ans, i <span style="color:#f92672">-</span> monoq.front());
+        monoq.pop_front();
+    }
+    <span style="color:#75715e">/* 当前下标放入队列中，作为区间起点 */</span>
+    monoq.push_back(i);
+}
+</code></pre></div></blockquote>
+<p><strong>AC代码：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">int</span> shortestSubarray(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> A, <span style="color:#66d9ef">int</span> K) {
+        <span style="color:#66d9ef">int</span> prefix_sum[<span style="color:#ae81ff">50010</span>];  <span style="color:#75715e">// 前缀和数组
+</span><span style="color:#75715e"></span>        deque<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> monoq;       <span style="color:#75715e">// 单调队列
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> i;                  <span style="color:#75715e">// 循环变量
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> ans <span style="color:#f92672">=</span> A.size() <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// 最终答案，初始值大于数组长度，是个违法数值
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">/* 循环一遍求得前缀和 */</span>
+        prefix_sum[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;      <span style="color:#75715e">// !IMPORTANT
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;=</span> A.size(); <span style="color:#f92672">++</span>i)  <span style="color:#75715e">// prefix_sum[i]为A[0]到A[i - 1]的前缀和
+</span><span style="color:#75715e"></span>        {
+            prefix_sum[i] <span style="color:#f92672">=</span> prefix_sum[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> A[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>];
+        }
+
+        <span style="color:#75715e">/* 再循环一遍求得最短子数组的长度 */</span>
+        monoq.push_back(<span style="color:#ae81ff">0</span>);     <span style="color:#75715e">// 放入一个0
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;=</span> A.size(); <span style="color:#f92672">++</span>i)
+        {
+            <span style="color:#75715e">/* 性质一、当前下标作为区间起点的情况 */</span>
+            <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>monoq.empty() <span style="color:#f92672">&amp;&amp;</span> prefix_sum[monoq.back()] <span style="color:#f92672">&gt;=</span> prefix_sum[i])
+            {
+                monoq.pop_back();
+            }
+            <span style="color:#75715e">/* 性质二、当前下标作为区间终点的情况 */</span>
+            <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>monoq.empty() <span style="color:#f92672">&amp;&amp;</span> prefix_sum[i] <span style="color:#f92672">-</span> prefix_sum[monoq.front()] <span style="color:#f92672">&gt;=</span> K)
+            {
+                ans <span style="color:#f92672">=</span> min(ans, i <span style="color:#f92672">-</span> monoq.front());
+                monoq.pop_front();
+            }
+            <span style="color:#75715e">/* 当前下标放入队列中，作为区间起点 */</span>
+            monoq.push_back(i);
+        }
+
+        <span style="color:#66d9ef">return</span> ans <span style="color:#f92672">==</span> A.size() <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">?</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> ans;
+    }
+};
+</code></pre></div><p><strong>一些细节</strong></p>
+<blockquote>
+<p>在之前的分析中我们提到过，在这个题目中，<code>prefix_sum[i]</code>表示的是<strong>从A[0]到A[i - 1]的前缀和</strong>。这里的前缀和数组的表示方法主要是为了满足区间长度为<code>A.size()</code>时的情况。我们的<code>monoq</code>需要有个初始元素0，这使得<code>prefix_sum[0]</code>也受到考虑。当答案区间长度为<code>A.size()</code>的时候，如样例3：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#960050;background-color:#1e0010">输入：</span>A <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>], K <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+<span style="color:#960050;background-color:#1e0010">输出：</span><span style="color:#ae81ff">3</span>
+</code></pre></div><p>如果没有一个<code>prefix_sum[monoq.front()] == 0</code>，前缀和<code>prefix_sum[3]</code>会直接减掉<code>prefix_sum[1]</code>，造成输出为-1。</p>
+</blockquote>
+<p><strong>参考文章</strong></p>
+<p>[1] 王琛.Leetcode 862 Shortest Subarray with Sum at Least K[EB/OL].2018-07-02</p>
+<p><em><a href="https://buptwc.github.io/2018/07/02/Leetcode-862-Shortest-Subarray-with-Sum-at-Least-K/">https://buptwc.github.io/2018/07/02/Leetcode-862-Shortest-Subarray-with-Sum-at-Least-K/</a></em></p>
+<p>[2] LeetCode.和至少为 K 的最短子数组[EB/OL].2019-08-13</p>
+<p><em><a href="https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/solution/he-zhi-shao-wei-k-de-zui-duan-zi-shu-zu-by-leetcod/">https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/solution/he-zhi-shao-wei-k-de-zui-duan-zi-shu-zu-by-leetcod/</a></em></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode862%2f&amp;text=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode862&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode862%2f&amp;appkey=&amp;title=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode862" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">
+                    #难题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953/" class="prev" rel="prev" title="错题本 | LeetCode953"><i class="iconfont icon-dajiantou"></i>&nbsp;错题本 | LeetCode953</a>
+         
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/" class="next" rel="next" title="错题本 | LeetCode947">错题本 | LeetCode947&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-01-13 00:00:00 \u002b0000 UTC',
+              title: '难题本 | LeetCode862',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
