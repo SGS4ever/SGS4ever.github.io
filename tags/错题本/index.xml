@@ -6,7 +6,21 @@
     <description>Recent content in 错题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 15 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>错题本 | LeetCode1232</title>
+      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232/</link>
+      <pubDate>Sun, 17 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/
+这种题目居然WA了一次。。。
+依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
+这题的特殊情况有两种：
+ 一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。  直接放代码了。
+class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 + b = y1; ax2 + b = y2  // a(x1 - x2) = y1 - y2  // a = (y1 - y2) / (x1 - x2)  // b = y1 - ax1  if (coordinates.size() == 2) return true; bool vertical = false; // 垂直，无斜率  float a = 0, b = 0; if (coordinates[0][0] == coordinates[1][0]) vertical = true; else { a = (float)(coordinates[0][1] - coordinates[1][1]) / (coordinates[0][0] - coordinates[1][0]); b = coordinates[0][1] - a * coordinates[0][0]; } if (vertical) { for (int i = 2; i &amp;lt; coordinates.</description>
+    </item>
+    
     <item>
       <title>错题本 | LeetCode947</title>
       <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/</link>
