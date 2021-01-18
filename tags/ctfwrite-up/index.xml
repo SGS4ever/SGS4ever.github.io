@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CTFwrite-up on XR_G&#39;s Blog</title>
-    <link>https://sgs4ever.github.io/tags/ctfwrite-up/</link>
+    <link>https://SGS4ever.github.io/tags/ctfwrite-up/</link>
     <description>Recent content in CTFwrite-up on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 18 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/ctfwrite-up/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 18 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/tags/ctfwrite-up/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>CTFLearn-07601</title>
-      <link>https://sgs4ever.github.io/2020/07601/</link>
+      <link>https://SGS4ever.github.io/2020/07601/</link>
       <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/2020/07601/</guid>
+      <guid>https://SGS4ever.github.io/2020/07601/</guid>
       <description>题目链接：(https://ctflearn.com/challenge/97)
   一道隐写题，信息隐藏在给出的图片文件里。
   打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
@@ -28,10 +28,10 @@
     
     <item>
       <title>CTFLearn-Inj3ctionTime</title>
-      <link>https://sgs4ever.github.io/2020/injectiontime/</link>
+      <link>https://SGS4ever.github.io/2020/injectiontime/</link>
       <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/2020/injectiontime/</guid>
+      <guid>https://SGS4ever.github.io/2020/injectiontime/</guid>
       <description>题目链接：(https://ctflearn.com/challenge/149)
  此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
   根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。   ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。

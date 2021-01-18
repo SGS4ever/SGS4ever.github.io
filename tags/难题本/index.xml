@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>难题本 on XR_G&#39;s Blog</title>
-    <link>https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/</link>
+    <link>https://SGS4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/</link>
     <description>Recent content in 难题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>难题本 | LeetCode862</title>
-      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</link>
+      <link>https://SGS4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</link>
       <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</guid>
+      <guid>https://SGS4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862/</guid>
       <description>题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
 这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
 分析：

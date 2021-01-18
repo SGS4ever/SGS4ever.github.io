@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>错题本 on XR_G&#39;s Blog</title>
-    <link>https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/</link>
+    <link>https://SGS4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/</link>
     <description>Recent content in 错题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 17 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>错题本 | LeetCode1232</title>
-      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232/</link>
+      <link>https://SGS4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232/</link>
       <pubDate>Sun, 17 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232/</guid>
+      <guid>https://SGS4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232/</guid>
       <description>题目链接：https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/
 这种题目居然WA了一次。。。
 依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
@@ -23,10 +23,10 @@ class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&
     
     <item>
       <title>错题本 | LeetCode947</title>
-      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/</link>
+      <link>https://SGS4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/</link>
       <pubDate>Fri, 15 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/</guid>
+      <guid>https://SGS4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947/</guid>
       <description>题目链接：https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/
 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
 暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。

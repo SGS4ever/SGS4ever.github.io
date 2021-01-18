@@ -63,4 +63,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: https://sgs4ever.github.io/sitemap.xml
+Sitemap: https://SGS4ever.github.io/sitemap.xml
