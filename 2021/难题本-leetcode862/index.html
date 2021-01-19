@@ -196,7 +196,7 @@
 <li>对于<code>prefix_sum</code>数组，假设有下标**<code>a &gt; b</code>**，且<code>prefix_sum[a] &lt;= prefix_sum[b]</code>，那么对于它们后面的某个下标<code>y</code>来说，只需要考虑<code>a ~ y</code>这一段是否满足条件，而不再需要考虑<code>b ~ y</code>这一段了。这是因为，<code>prefix_sum[y] - prefix_sum[a] &gt;= prefix_sum[y] - prefix_sum[b]</code>，而且<code>y - a &lt; y - b</code>，如果<code>b ~ y</code>这一段能满足条件，那么<code>a ~ y</code>这一段也一定能满足条件，而且这段子数组的长度更小。</li>
 </ul>
 <p>如果我没有讲清楚，不妨看看参考[1]中的模拟大法：</p>
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode862-1.jpg" alt="本条性质的模拟" class="lazyload"><figcaption class="image-caption">本条性质的模拟</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode862-1.png" alt="本条性质的模拟" class="lazyload"><figcaption class="image-caption">本条性质的模拟</figcaption></figure></p>
 <p>我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&hellip;始终满足<code>prefix_sum[x0] &lt; prefix_sum[x1] &lt; ...</code>；注意，由于下标是从前往后走的，当出现了某个<code>prefix_sum[x_m] &lt; prefix_sum[deque.back()]</code>的时候，说明对于<strong>之后</strong>的下标<code>y</code>来说，<code>x_m</code>是更为合适的选择，也因此可以直接将队尾的元素剔除。</p>
 <p>使用下面的代码来进行实现，注意deque的初始元素0。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">// deque&lt;int&gt; monoq;			// 变量名与官方题解保持一致

@@ -6,7 +6,36 @@
     <description>Recent content in 博客搭建手册 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 19 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 19 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://SGS4ever.github.io/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>博客搭建指南——3</title>
+      <link>https://SGS4ever.github.io/2021/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-3/</link>
+      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://SGS4ever.github.io/2021/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-3/</guid>
+      <description>总不能让这个博客老是在记录家常菜啊。
+本篇主要介绍hugo博客的进阶美化方法，根据本篇的讲解，结合自己的主题进行实践，有助于打造一个真正属于自己的博客。
+ 1. CSS和SCSS
+ CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。
+Sass（Syntatically Awesome Style Sheets）是一种CSS预处理器，它可以用来定义一套新的语法规则和函数，以加强和提升CSS。
+举例来说，一个页面中可能需要用到许多次颜色#000，即白色；在原始的CSS代码中这个#000需要不断地出现在各个位置，如color: #000、background: #000等，这就为样式的改变带来了麻烦，假如我们需要整体性地改变页面颜色主题，就只能找到所有的#000并将其修改，实在不够方便。而Sass引入了变量，其概念和C/C++等语言中的变量并无二致，极大地简化了数值的维护。现在可以使用如下的写法来设置页面颜色：
+$WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: $WHITE; } 然而，最初的Sass的语法规则和CSS有太多的出入，后来官方在2010年推出了一个全新的语法，叫做SCSS（Sassy CSS），试图弥合Sass和CSS之间的差别。现在我们看到的代码多数已经是SCSS，而其灵魂就是变量，如此理解便好。
+ 2. hugo和SCSS
+ hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
+你的网站样式存放在根目录下asset/css文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块include/import进来，实现完整的页面样式。
+我的KeepIt主题有一个内容如下的主文件，功能正如我所述：
+按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
+如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为str的类，我们的CSS文件中存在两种定义：
+/* line 11 */ .str { color: #efefef; } ... /* line 20 */ .str { color: #ffdab9; } 那么，位于20行的定义会覆盖位于11行的定义，使得具有str类的标签内容呈现#ffdab9这种颜色。
+这种覆盖原则就是我们自定义hugo样式的基础。
+ 3. 精确定义样式
+ 基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
+在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：
+可以看到，最后一行引入了_custom.scss文件，这使得定义在其中的样式位于最终CSS文件的末尾，其中重复定义的样式会被作为页面的最终效果。
+于是我们的问题就变得很简单了：找到你希望修改的元素和它对应的选择器，重新定义这个选择器即可。
+所幸，现代浏览器为我们提供的开发者工具使得这一切都变得无比简单。以Edge Beta为例，按下F12弹出开发者工具，使用左上角的小箭头使你的鼠标变成一个查看器，现在你点击页面上的任何元素，立即可以在右边的窗口看到这个元素对应的源码。</description>
+    </item>
+    
     <item>
       <title>博客搭建指南——2</title>
       <link>https://SGS4ever.github.io/2020/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-2/</link>
