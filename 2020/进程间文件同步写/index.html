@@ -49,8 +49,9 @@
 首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
 既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
 在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
-该API详见此文档我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
-const char* logPath = &#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&#34;; HANDLE hFile = ::CreateFileA(logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
+该API详见此文档。
+我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
+const char* logPath = &#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
  文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
 该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
 OVERLAPPED overlapped; memset(&amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;overlapped)) { DWORD err = GetLastError(); printf(&#34;Error %i\n&#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。"/>
@@ -72,7 +73,7 @@ OVERLAPPED overlapped; memset(&amp;overlapped, 0, sizeof(overlapped)); const int
   },
   "genre": "posts",
   "keywords": "技术",
-  "wordcount":  294 ,
+  "wordcount":  297 ,
   "url": "https:\/\/sgs4ever.github.io\/2020\/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99\/",
   "datePublished": "2020-09-27T00:00:00\u002b00:00",
   "dateModified": "2020-09-27T00:00:00\u002b00:00",
@@ -205,10 +206,18 @@ OVERLAPPED overlapped; memset(&amp;overlapped, 0, sizeof(overlapped)); const int
 <p>首先要明确一点，<strong>C++的文件流操作无法实现文件锁</strong>。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。</p>
 <p>既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。</p>
 <p>在这里，由于WindowsAPI提供的文件锁函数需要一个<code>HANDLE</code>类型作为参数，我们只能使用<code>CreateFile</code>函数去创建文件了。</p>
-<p>该API详见<!-- raw HTML omitted -->此文档<!-- raw HTML omitted --></p>
+<p>该API详见<a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea">此文档</a>。</p>
 <p>我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> logPath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;C:</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Users</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Administrator</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">Desktop</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">recLog.txt&#34;</span>;
-HANDLE hFile <span style="color:#f92672">=</span> <span style="color:#f92672">::</span>CreateFileA(logPath, GENERIC_WRITE, FILE_SHARE_WRITE, <span style="color:#ae81ff">0</span>, OPEN_ALWAYS, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+HANDLE hFile <span style="color:#f92672">=</span> <span style="color:#f92672">::</span>CreateFileA(
+    logPath,
+    GENERIC_WRITE,
+    FILE_SHARE_WRITE,
+    <span style="color:#ae81ff">0</span>,
+    OPEN_ALWAYS,
+    <span style="color:#ae81ff">0</span>,
+    <span style="color:#ae81ff">0</span>
+);
 </code></pre></div><p>值得注意的是CreateFileA的参数<code>OPEN_ALWAYS</code>，该参数指定了文件的打开方式：<strong>当文件不存在时，创建它；当文件存在时，打开它。</strong></p>
 </blockquote>
 <ol start="3">
@@ -233,8 +242,9 @@ memset(<span style="color:#f92672">&amp;</span>overlapped, <span style="color:#a
 {
 	std<span style="color:#f92672">::</span>string str(<span style="color:#e6db74">&#34;&#34;</span>);
 	str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;[+] Process 1 locked the file. [+]</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-	SetFilePointer(hFile, <span style="color:#ae81ff">0</span>, NULL, FILE_END);		<span style="color:#75715e">// 将文件指针移动到文件末尾，实现以追加方式写入
-</span><span style="color:#75715e"></span>	<span style="color:#f92672">::</span>WriteFile(hFile, str.c_str(), str.length(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+    <span style="color:#75715e">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span style="color:#75715e"></span>	SetFilePointer(hFile, <span style="color:#ae81ff">0</span>, NULL, FILE_END);
+	<span style="color:#f92672">::</span>WriteFile(hFile, str.c_str(), str.length(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
 	getchar();	<span style="color:#75715e">// 在此处停止，先不释放文件锁
 </span><span style="color:#75715e"></span>	UnlockFileEx(hFile, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped);
 	CloseHandle(hFile);
@@ -258,8 +268,9 @@ memset(<span style="color:#f92672">&amp;</span>overlapped, <span style="color:#a
 	{
 		std<span style="color:#f92672">::</span>string str(<span style="color:#e6db74">&#34;&#34;</span>);
 		str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;[+] Process 1 locked the file. [+]</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
-		SetFilePointer(hFile, <span style="color:#ae81ff">0</span>, NULL, FILE_END);		<span style="color:#75715e">// 将文件指针移动到文件末尾，实现以追加方式写入
-</span><span style="color:#75715e"></span>		<span style="color:#f92672">::</span>WriteFile(hFile, str.c_str(), str.length(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+        <span style="color:#75715e">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span style="color:#75715e"></span>		SetFilePointer(hFile, <span style="color:#ae81ff">0</span>, NULL, FILE_END);
+		<span style="color:#f92672">::</span>WriteFile(hFile, str.c_str(), str.length(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
 		getchar();	<span style="color:#75715e">// 在此处停止，先不释放文件锁
 </span><span style="color:#75715e"></span>		UnlockFileEx(hFile, <span style="color:#ae81ff">0</span>, lockSize, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>overlapped);
 		CloseHandle(hFile);

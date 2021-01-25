@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-3/" />
+  
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           难题本 | LeetCode959 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="难题本 | LeetCode959 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="难题本 | LeetCode959"/>
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/regions-cut-by-slashes/
+令我思考很久的一道题，最后还是学着官方题解做出来的([1])。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。
+分析  将单元格进一步细分，便于并查集操作。
+每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
+  格内合并
+ 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
+ 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
+ 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
+ 输入：[&quot;/\\&quot;,&quot;\\/&quot;] 输出：5  网格如下：
+我们从左上到右下进行遍历。
+首先第一个单元格进行格内合并：
+第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。
+第二个单元格的格内合并：
+格间合并，此时它已经没有右邻居：
+第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：
+ AC代码  将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标(x, y)的单元格位于一维数组中的n * x &#43; y处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。
+最终，坐标(x, y)的单元格位于4 * (n * x &#43; y)到4 * (n * x &#43; y) &#43; 3的下标位置。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "难题本 | LeetCode959",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "难题本, LeetCode",
+  "wordcount":  320 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959\/",
+  "datePublished": "2021-01-25T00:00:00\u002b00:00",
+  "dateModified": "2021-01-25T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">难题本 | LeetCode959</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=25250-01-01 >25 January 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>题目链接：<em><a href="https://leetcode-cn.com/problems/regions-cut-by-slashes/">https://leetcode-cn.com/problems/regions-cut-by-slashes/</a></em></p>
+<p>令我思考很久的一道题，最后还是学着官方题解做出来的(<em>[1]</em>)。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。</p>
+<h3 id="分析">分析</h3>
+<blockquote>
+<p>将单元格进一步细分，便于并查集操作。</p>
+<p>每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是<code>/</code>还是<code>\</code>，合并不同的小三角形。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/1.png" alt="图1. 单元格划分" class="lazyload"><figcaption class="image-caption">图1. 单元格划分</figcaption></figure></p>
+<ul>
+<li>
+<p>格内合并</p>
+<ul>
+<li>当本格字符为<strong>空格</strong>时，所有小三角形处于同一个区域中，全部合并；</li>
+<li>当本格字符为<code>/</code>时，合并0号和3号，合并1号和2号，且这两个区域不互通；</li>
+<li>当本格字符为<code>\</code>时，合并0号和1号，合并3号和2号，且这两个区域不互通。</li>
+</ul>
+</li>
+<li>
+<p>格间合并</p>
+<ul>
+<li>格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，<strong>当前单元格的1号</strong>三角形和<strong>右边单元格的3号</strong>永远处于同一个区域，<strong>当前单元格的2号</strong>和<strong>下边单元格的0号</strong>永远处于同一个区域。同理考虑左边和上边单元格。</li>
+<li>我们要遍历所有的单元格，故格间合并只需要<strong>顾及</strong>左右两侧邻居<strong>之一</strong>、上下两侧邻居<strong>之一</strong>即可；例如对于每个单元格只考虑与其<strong>右边</strong>单元格和<strong>下边</strong>单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。</li>
+</ul>
+</li>
+<li>
+<p>最终操作</p>
+<ul>
+<li>遍历每个单元格，按照字符进行格内合并；如果右边和下边<strong>有邻居</strong>就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。</li>
+<li>这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="模拟">模拟</h3>
+<blockquote>
+<p>考虑对于示例4：</p>
+<ul>
+<li><strong>输入：</strong><code>[&quot;/\\&quot;,&quot;\\/&quot;]</code></li>
+<li><strong>输出：</strong><code>5</code></li>
+</ul>
+<p>网格如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/2.png" alt="图2. 网格" class="lazyload"><figcaption class="image-caption">图2. 网格</figcaption></figure></p>
+<p>我们从左上到右下进行遍历。</p>
+<p>首先第一个单元格进行格内合并：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/3.png" alt="Step1" class="lazyload"><figcaption class="image-caption">Step1</figcaption></figure></p>
+<p>第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/4.png" alt="Step2" class="lazyload"><figcaption class="image-caption">Step2</figcaption></figure></p>
+<p>第二个单元格的格内合并：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/5.png" alt="Step3" class="lazyload"><figcaption class="image-caption">Step3</figcaption></figure></p>
+<p>格间合并，此时它已经没有右邻居：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/6.png" alt="Step4" class="lazyload"><figcaption class="image-caption">Step4</figcaption></figure></p>
+<p>第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/7.png" alt="Final" class="lazyload"><figcaption class="image-caption">Final</figcaption></figure></p>
+</blockquote>
+<h3 id="ac代码">AC代码</h3>
+<blockquote>
+<p>将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标<code>(x, y)</code>的单元格位于一维数组中的<code>n * x + y</code>处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。</p>
+<p>最终，坐标<code>(x, y)</code>的单元格位于<code>4 * (n * x + y)</code>到<code>4 * (n * x + y) + 3</code>的下标位置。</p>
+<p>则最终的一维数组即并查集需要开辟的大小为<code>4 * n * n</code>。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UnionFind</span> {
+<span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">int</span> f[<span style="color:#ae81ff">10000</span>];
+    <span style="color:#66d9ef">int</span> cnt;
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    UnionFind(<span style="color:#66d9ef">int</span> n)
+    {
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> n <span style="color:#f92672">*</span> n; i<span style="color:#f92672">++</span>)
+        {
+            f[i] <span style="color:#f92672">=</span> i;
+        }
+        cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> n <span style="color:#f92672">*</span> n;
+    }
+    
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getCnt</span>() { <span style="color:#66d9ef">return</span> cnt; }
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">find</span>(<span style="color:#66d9ef">int</span> n)
+    {
+        <span style="color:#66d9ef">if</span> (f[n] <span style="color:#f92672">==</span> n)
+            <span style="color:#66d9ef">return</span> n;
+        f[n] <span style="color:#f92672">=</span> find(f[n]);
+        <span style="color:#66d9ef">return</span> f[n];
+    }
+
+    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Union</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b)
+    {
+        <span style="color:#66d9ef">int</span> ra <span style="color:#f92672">=</span> find(a);
+        <span style="color:#66d9ef">int</span> rb <span style="color:#f92672">=</span> find(b);
+
+        <span style="color:#66d9ef">if</span> (ra <span style="color:#f92672">==</span> rb)
+            <span style="color:#66d9ef">return</span> ;
+        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (ra <span style="color:#f92672">&lt;</span> rb)
+            f[rb] <span style="color:#f92672">=</span> ra;
+        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (ra <span style="color:#f92672">&gt;</span> rb)
+            f[ra] <span style="color:#f92672">=</span> rb;
+
+        <span style="color:#75715e">// cout &lt;&lt; &#34;Union &#34; &lt;&lt; a &lt;&lt; &#34; with &#34; &lt;&lt; b &lt;&lt; endl;
+</span><span style="color:#75715e"></span>        cnt<span style="color:#f92672">--</span>;
+
+        <span style="color:#66d9ef">return</span> ;
+    }
+};
+
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">int</span> regionsBySlashes(vector<span style="color:#f92672">&lt;</span>string<span style="color:#f92672">&gt;&amp;</span> grid) {
+        <span style="color:#66d9ef">int</span> n <span style="color:#f92672">=</span> grid.size();
+        UnionFind <span style="color:#a6e22e">uf</span>(n);
+
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> x <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; x <span style="color:#f92672">&lt;</span> n; x<span style="color:#f92672">++</span>)
+        {
+            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> y <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; y <span style="color:#f92672">&lt;</span> n; y<span style="color:#f92672">++</span>)
+            {
+                <span style="color:#66d9ef">int</span> base <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> (x <span style="color:#f92672">*</span> n <span style="color:#f92672">+</span> y);  <span style="color:#75715e">// 0,4,8,...
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">/* 格内合并 */</span>
+                <span style="color:#66d9ef">if</span> (grid[x][y] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39; &#39;</span>)
+                {
+                    uf.Union(base, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+                    uf.Union(base, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>);
+                    uf.Union(base, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>);
+                }
+                <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (grid[x][y] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;/&#39;</span>)
+                {
+                    uf.Union(base, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>);
+                    uf.Union(base <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>);
+                }
+                <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (grid[x][y] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\\&#39;</span>)
+                {
+                    uf.Union(base, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+                    uf.Union(base <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>);
+                }
+                <span style="color:#75715e">/* 格间合并 */</span>
+                <span style="color:#66d9ef">if</span> (y <span style="color:#f92672">&lt;</span> n <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)  <span style="color:#75715e">// 还有右邻居
+</span><span style="color:#75715e"></span>                    uf.Union(base <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">7</span>);  <span style="color:#75715e">// 己方1，右邻居3
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> (x <span style="color:#f92672">&lt;</span> n <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)  <span style="color:#75715e">// 还有下邻居
+</span><span style="color:#75715e"></span>                uf.Union(base <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>, base <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> n);  <span style="color:#75715e">// 己方2，下邻居0
+</span><span style="color:#75715e"></span>            }
+        }
+
+        <span style="color:#66d9ef">return</span> uf.getCnt();
+    }
+};
+
+</code></pre></div><p>表现还不错，叉会儿腰。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode959/8.png" alt="Performance" class="lazyload"><figcaption class="image-caption">Performance</figcaption></figure></p>
+<h4 id="参考资料">参考资料</h4>
+<p>[1] 力扣官方题解.由斜杠划分区域[EB/OL].2021-01-24</p>
+<p><em><a href="https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/">https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/</a></em></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode959%2f&amp;text=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode959&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode959%2f&amp;appkey=&amp;title=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode959" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">
+                    #难题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%97-3/" class="prev" rel="prev" title="博客搭建指南——3"><i class="iconfont icon-dajiantou"></i>&nbsp;博客搭建指南——3</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-01-25 00:00:00 \u002b0000 UTC',
+              title: '难题本 | LeetCode959',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
