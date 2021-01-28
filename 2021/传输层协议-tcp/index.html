@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959/" />
+  
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE-tcp/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           传输层协议——TCP | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="传输层协议——TCP | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="传输层协议——TCP"/>
+<meta name="twitter:description" content="传输层 传输层的功能
+从通信和信息处理的角度看，传输层向它上面的应用层提供通信服务，它属于面向通信部分的最高层，同时也是用户功能中的最低层。
+实际上，传输层起到一个承上启下的作用。它之下的网络层、数据链路层、物理层被称为通信子网，其实现细节对用户是不可见的。
+传输层的功能如下：
+ 提供进程之间的逻辑通信（即端到端的通信）。进程间的逻辑通信是指本主机上运行的某个进程和对方主机上运行的某个进程进行通信。而与此相对的，网络层提供的是点到点的通信，指的是本主机与对方主机的通信。 复用和分用。多个进程可以使用同一个传输层协议封装自己的数据，而对方主机可以使用同样的协议正确解析这些数据，交付给正确的应用进程。 差错检测。传输层检测首部和数据部分的差错，而网络层只检查IP数据报的首部，不检查数据部分是否出错。 提供两种不同的传输协议，即面向连接的TCP和无连接的UDP。网络层无法同时实现两种协议（即要么使用面向连接的服务，如虚电路；要么只提供无连接的服务，如数据报）。  需要注意，在计算机网络层次结构中，网络层被认为是不可靠的服务，即网络层传输的数据可能出现丢失、混乱或重复，这些不可靠的问题需要由传输层来考虑解决。
+端口的概念
+网络层的数据交付是点到点的，也就是主机到主机的交付。当一个IP数据报到达了主机，如何判断这份数据报应该交给哪个进程呢？传输层引入了端口，每个进程与一个端口号绑定。主机把IP数据报解封，就能看到里面的传输层数据包，其包头中写明了目的端口，只需要把数据交付给对应于这个端口的进程即可。
+结合IP和端口，就能唯一地标识一台主机上的一个进程，这就是Socket（套接字）：
+套接字 = （主机IP地址， 端口号）
+TCP  TCP协议的特点
+ TCP是在不可靠的IP层之上实现的可靠的数据传输协议，它主要针对之前提及的网络层数据传输的丢失、混乱或重复问题，实现传输层上的可靠、有序、无丢失和不重复。
+TCP的主要特点如下：
+ 面向连接。 每条连接只能有两个端点，即一对一的。 可靠的交付服务，保证数据无差错、不丢失、不重复且有序。 全双工通信，即任何时刻双方都能进行数据的发送。为此，双方都应该设置发送缓存和接收缓存，用来临时存放双向通信的数据。 面向字节流。计算机网络中常见的一个问题是：*面向字节和面向报文有什么区别？*面向字节流是指TCP将应用程序交付下来的数据仅视为一连串的无结构的字节流，发送的时候按照TCP的规则进行发送，不会考虑保留原始数据的边界；而面向报文是指每次发送的数据作为一个报文，一个报文是一块有结构的数据。   TCP报文段
+ 想要理解TCP的连接建立等等细节，认识其报头是必要的。TCP有固定的20B报头，变长字段配合填充字段使TCP报头长度始终是4B的整数倍。由于首部长度字段只有4位，故报头最长为15 * 4 = 60B
+TCP报头格式如下：
+每个字段的含义可以参见这篇文章。
+ TCP连接管理
+ TCP是面向连接的协议，每个TCP连接都有三个阶段：连接建立、数据传输和连接释放。TCP的连接管理就是使运输连接的建立和释放都能正常进行。
+TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式，主动发起连接的进程称为客户机（Client），被动等待连接的进程称为服务器（Server）。
+连接的建立分为3个步骤，即三次握手：
+ 第一步：客户机向服务器发送一个报文段，该报文段不含应用层数据，首部中的SYN标志被置为1，且该报文段占用了一个随机序号seq=x。 第二步：服务器收到连接请求，如同意连接，就向客户机发回确认，并为该连接分配TCP缓存和变量。确认报文中SYN和ACK都置为1，seq是服务器选用的初始随机序号，ack表示期望收到的下一个客户机报文序号。 第三步：客户机接收到确认报文，也要为该连接分配缓存和变量，并回复确认。  完成三次握手之后，双方的应用进程在任何时刻都可以发送数据（全双工）。
+注意这里的第二步握手，服务器在此步分配资源，那么如果客户端不回应第三步的确认报文，则服务器在原地忙等，过一段时间后才删除这些资源；如果快速发送大量的SYN包给特定服务器，将耗尽它的资源，使得正常的连接无法被建立，这就是典型的SYN Flood攻击。
+ 三次握手的必要性：
+进行三次握手是必要的。
+从直觉进行理解：第一步握手是客户端向服务器发送数据，此时双方对信道的性质还不了解；第二步握手成功之后，客户端知道了服务器能够收到自己的数据，但服务器还不知道客户端能不能收到自己的数据；第三步握手成功之后，服务器知道客户端能收到自己的数据，可以开始通信。
+进一步地，考虑以下这种两次握手的情况：
+在第二步握手时，服务器回应的报文段没有被客户机收到，而此时服务器认为连接已经建立（因为对服务器来说第二步握手已经完成了），开始发送数据；服务器发送的数据到达客户机，但客户机并不知道自己的连接已经建立，这里的seq字段是违法的，丢弃这些包；服务器超时重传，客户端继续丢弃。
+当然，对于客户机来说，连接迟迟无法建立，应当重新发送SYN包，而对于服务器来说，与这个客户端的连接已经存在了，故对后来的连接请求不予响应。
+ 不妨再考虑下面这种情况：
+当客户机发送一个SYN包，该请求在网络中某个节点长时间滞留，客户机超时之后认为报文丢失，重传一次请求，服务器收到之后建立连接，开始传输数据。
+数据传输完毕之后双方断开连接，而此时，前一个滞留在网络中的连接请求到达服务器，服务器认为客户机又请求建立连接。此时，如果使用两次握手，服务器认为连接建立，而客户机实际上并没有发起连接请求，因此不予理睬，造成了服务器资源的浪费。
+ 数据传输完成之后，需要断开连接。如果你有注意到上图中的FIN报文段，需要留心，那只是个断开连接的示意，其中并没有展现“四次挥手”的过程。
+而真正的“四次挥手”过程如下图："/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "传输层协议——TCP",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE-tcp\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "计算机网络",
+  "wordcount":  152 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE-tcp\/",
+  "datePublished": "2021-01-27T00:00:00\u002b00:00",
+  "dateModified": "2021-01-27T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">传输层协议——TCP</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=27270-01-01 >27 January 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <h3 id="传输层">传输层</h3>
+<p><strong>传输层的功能</strong></p>
+<p>从通信和信息处理的角度看，传输层向它上面的应用层提供通信服务，它属于面向通信部分的最高层，同时也是用户功能中的最低层。</p>
+<p>实际上，传输层起到一个承上启下的作用。它之下的网络层、数据链路层、物理层被称为通信子网，其实现细节对用户是不可见的。</p>
+<p>传输层的功能如下：</p>
+<ul>
+<li>提供进程之间的逻辑通信（即端到端的通信）。进程间的逻辑通信是指本主机上运行的某个进程和对方主机上运行的某个进程进行通信。而与此相对的，网络层提供的是点到点的通信，指的是本主机与对方主机的通信。</li>
+<li>复用和分用。多个进程可以使用同一个传输层协议封装自己的数据，而对方主机可以使用同样的协议正确解析这些数据，交付给正确的应用进程。</li>
+<li>差错检测。传输层检测首部和数据部分的差错，而网络层只检查IP数据报的首部，不检查数据部分是否出错。</li>
+<li>提供两种不同的传输协议，即面向连接的TCP和无连接的UDP。网络层无法同时实现两种协议（即要么使用面向连接的服务，如虚电路；要么只提供无连接的服务，如数据报）。</li>
+</ul>
+<p>需要注意，在计算机网络层次结构中，网络层被认为是不可靠的服务，即网络层传输的数据可能出现<strong>丢失、混乱或重复</strong>，这些不可靠的问题需要由传输层来考虑解决。</p>
+<p><strong>端口的概念</strong></p>
+<p>网络层的数据交付是点到点的，也就是主机到主机的交付。当一个IP数据报到达了主机，如何判断这份数据报应该交给哪个进程呢？传输层引入了端口，每个进程与一个端口号绑定。主机把IP数据报解封，就能看到里面的传输层数据包，其包头中写明了目的端口，只需要把数据交付给对应于这个端口的进程即可。</p>
+<p>结合IP和端口，就能唯一地标识<strong>一台主机上的一个进程</strong>，这就是Socket（套接字）：</p>
+<p><code>套接字 = （主机IP地址， 端口号）</code></p>
+<h3 id="tcp">TCP</h3>
+<hr>
+<p><strong>TCP协议的特点</strong></p>
+<hr>
+<p>TCP是在不可靠的IP层之上实现的可靠的数据传输协议，它主要针对之前提及的网络层数据传输的<em>丢失、混乱或重复</em>问题，实现传输层上的<em>可靠、有序、无丢失和不重复</em>。</p>
+<p>TCP的主要特点如下：</p>
+<ul>
+<li>面向连接。</li>
+<li>每条连接只能有两个端点，即一对一的。</li>
+<li>可靠的交付服务，保证数据无差错、不丢失、不重复且有序。</li>
+<li>全双工通信，即任何时刻双方都能进行数据的发送。为此，双方都应该设置发送缓存和接收缓存，用来临时存放双向通信的数据。</li>
+<li>面向字节流。计算机网络中常见的一个问题是：*面向字节和面向报文有什么区别？*面向字节流是指TCP将应用程序交付下来的数据仅视为一连串的无结构的字节流，发送的时候按照TCP的规则进行发送，不会考虑保留原始数据的边界；而面向报文是指每次发送的数据作为一个报文，一个报文是一块有结构的数据。</li>
+</ul>
+<hr>
+<p><strong>TCP报文段</strong></p>
+<hr>
+<p>想要理解TCP的连接建立等等细节，认识其报头是必要的。TCP有固定的20B报头，变长字段配合填充字段使TCP报头长度始终是4B的整数倍。由于首部长度字段只有4位，故报头最长为<code>15 * 4 = 60B</code></p>
+<p>TCP报头格式如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/1.png" alt="TCP Header" class="lazyload"><figcaption class="image-caption">TCP Header</figcaption></figure></p>
+<p>每个字段的含义可以参见<a href="https://blog.csdn.net/a19881029/article/details/29557837">这篇文章</a>。</p>
+<hr>
+<p><strong>TCP连接管理</strong></p>
+<hr>
+<p>TCP是面向连接的协议，每个TCP连接都有三个阶段：连接建立、数据传输和连接释放。TCP的连接管理就是使运输连接的建立和释放都能正常进行。</p>
+<p>TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式，主动发起连接的进程称为客户机（Client），被动等待连接的进程称为服务器（Server）。</p>
+<p>连接的建立分为3个步骤，即三次握手：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/2.png" alt="TCP three-way-handshake" class="lazyload"><figcaption class="image-caption">TCP three-way-handshake</figcaption></figure></p>
+<ul>
+<li>第一步：客户机向服务器发送一个报文段，该报文段不含应用层数据，首部中的SYN标志被置为1，且该报文段占用了一个随机序号<code>seq=x</code>。</li>
+<li>第二步：服务器收到连接请求，如同意连接，就向客户机发回确认，<strong>并为该连接分配TCP缓存和变量</strong>。确认报文中SYN和ACK都置为1，seq是服务器选用的初始随机序号，ack表示期望收到的下一个客户机报文序号。</li>
+<li>第三步：客户机接收到确认报文，也要为该连接分配缓存和变量，并回复确认。</li>
+</ul>
+<p>完成三次握手之后，双方的应用进程在任何时刻都可以发送数据（全双工）。</p>
+<p>注意这里的第二步握手，服务器在此步分配资源，那么如果客户端不回应第三步的确认报文，则服务器在原地忙等，过一段时间后才删除这些资源；如果<strong>快速发送大量</strong>的SYN包给特定服务器，将耗尽它的资源，使得正常的连接无法被建立，这就是典型的<em>SYN Flood攻击</em>。</p>
+<blockquote>
+<p><strong>三次握手的必要性：</strong></p>
+<p>进行三次握手是必要的。</p>
+<p>从直觉进行理解：第一步握手是客户端向服务器发送数据，此时双方对信道的性质还不了解；第二步握手成功之后，客户端知道了服务器能够收到自己的数据，但服务器还不知道客户端能不能收到自己的数据；第三步握手成功之后，服务器知道客户端能收到自己的数据，可以开始通信。</p>
+<p>进一步地，考虑以下这种两次握手的情况：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/3.png" alt="TCP 2-way-handshake-bug1" class="lazyload"><figcaption class="image-caption">TCP 2-way-handshake-bug1</figcaption></figure></p>
+<p>在第二步握手时，服务器回应的报文段没有被客户机收到，而此时服务器认为连接已经建立（因为对服务器来说第二步握手已经完成了），开始发送数据；服务器发送的数据到达客户机，但客户机并不知道自己的连接已经建立，这里的<code>seq</code>字段是违法的，丢弃这些包；服务器超时重传，客户端继续丢弃。</p>
+<p>当然，对于客户机来说，连接迟迟无法建立，应当重新发送SYN包，而对于服务器来说，与这个客户端的连接已经存在了，故对后来的连接请求不予响应。</p>
+<hr>
+<p>不妨再考虑下面这种情况：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/4.png" alt="TCP 2-way-handshake-bug2" class="lazyload"><figcaption class="image-caption">TCP 2-way-handshake-bug2</figcaption></figure></p>
+<p>当客户机发送一个SYN包，该请求在网络中某个节点长时间滞留，客户机超时之后认为报文丢失，重传一次请求，服务器收到之后建立连接，开始传输数据。</p>
+<p>数据传输完毕之后双方断开连接，而此时，前一个滞留在网络中的连接请求到达服务器，服务器认为客户机又请求建立连接。此时，如果使用两次握手，服务器认为连接建立，而客户机实际上并没有发起连接请求，因此不予理睬，造成了服务器资源的浪费。</p>
+</blockquote>
+<p>数据传输完成之后，需要断开连接。如果你有注意到上图中的<code>FIN</code>报文段，需要留心，那只是个断开连接的示意，其中并没有展现“四次挥手”的过程。</p>
+<p>而真正的“四次挥手”过程如下图：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/5.png" alt="TCP 四次挥手" class="lazyload"><figcaption class="image-caption">TCP 四次挥手</figcaption></figure></p>
+<ul>
+<li>第一步：客户机打算关闭连接时，向服务器发送一个连接释放报文段，其中FIN标志位设置为1,同样占用一个序号即<code>seq=x</code>（这里的x与之前三次握手的x无关，只是一种表示）。此时发送FIN的一端不能再发送数据，但可以发送控制信息，可以接收数据。</li>
+<li>第二步：服务器收到连接释放报文段之后发出确认。此时客户机到服务器方向的连接就释放了，但服务器还能发送数据，客户机仍要接收。</li>
+<li>第三步：服务器数据也发送完毕，向客户机发出FIN=1的报文段。</li>
+<li>第四步：客户机收到连接释放报文段后，发出确认。<strong>发出确认后连接还没有释放，必须等待计时器设置的时间2MSL后才进入关闭状态。</strong></li>
+</ul>
+<blockquote>
+<p><strong>等待2MSL的必要性</strong>：</p>
+<p>第四步中客户机发出ACK之后需要等待2MSL才进入关闭状态。MSL（Maximum Segment Life）是指一个报文段在网络中存留的最长时间。等待的目的是为了保证服务器收到自己的ACK。</p>
+<p>在第三步中，服务器发出了FIN，但是此时并不能释放此次连接的资源，而要确保客户机收到了自己的FIN。</p>
+<p>客户机在第四步发出的ACK只有以下两种情况：</p>
+<ul>
+<li>客户机发出的ACK到达了服务器，则服务器认为连接关闭，立即释放资源；</li>
+<li>客户机发出的ACK没有到达服务器，那么服务器知道自己的FIN没有被收到，应该超时重传。</li>
+</ul>
+<p>显然，在第二种情况中，如果服务器进行了FIN的重传，而客户机在发出ACK之后就先行释放了资源，那就造成了错误。</p>
+<p>于是，客户机在发出ACK后等待<code>2MSL</code>的时间：</p>
+<p><code>2MSL = 自己的ACK的最大存活时间 + 重传的FIN的最大存活时间</code></p>
+<p>简而言之，在第四步发出ACK之后，如果ACK没有到达，那么在2MSL时间内一定能收到对方重传的FIN，从而可以继续响应ACK；若2MSL时间内都没有收到任何信息，那么自己的ACK一定已经到达，连接可以正常关闭。</p>
+</blockquote>
+<hr>
+<p><strong>TCP可靠传输</strong></p>
+<hr>
+<p>TCP的任务是在IP层不可靠的、尽力而为服务的基础上建立一种可靠数据传输服务，其使用了校验、序号、确认和重传等机制来达到这一目的。</p>
+<ol>
+<li>
+<p>校验</p>
+<p>TCP的校验机制和UDP是一样的。计算校验和时要在TCP/UDP数据报<strong>之前</strong>增加<em>12B</em>的伪首部，伪首部并不是真正的数据报首部，不实际发送，只是参与校验和的计算而已。添加了伪首部之后的数据报如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/6.png" alt="添加伪首部的临时数据报" class="lazyload"><figcaption class="image-caption">添加伪首部的临时数据报</figcaption></figure></p>
+<p>校验和的计算方法是：将临时数据报视为许多16位的字链接起来，末尾不足则用0填充。使用二进制反码计算出这些16位字的和，并将此和的二进制反码写入真正数据报头部的校验位字段。</p>
+</li>
+<li>
+<p>序号</p>
+<p>TCP首部的序号字段用来保证数据能有序提交给应用层，TCP把数据视为一个<strong>无结构但有序的字节流</strong>，序号建立在传送的<strong>字节流</strong>之上，而不建立在报文段之上。</p>
+<p>TCP连接传送的数据流中每个字节都编上一个序号。序号字段的值是本报文段所发送的数据的第一个字节的序号。例如一段数据有10个字节，分两个数据报传送，第一个数据报序号为0，包含0~5个字节，则第二个数据报的序号为6。</p>
+</li>
+<li>
+<p>确认</p>
+<p>TCP首部的确认号是期望收到对方的<strong>下一个报文序号</strong>。按照上面的例子，如果对方收到了第一个数据报（序号0，包含0~5个字节），则返回的<code>ack=6</code>。</p>
+<p>TCP默认使用累计确认，即TCP只确认数据流中至第一个丢失字节为止的字节。</p>
+</li>
+<li>
+<p>重传</p>
+<p>重传对于拥塞控制是比较重要的机制。有两种事件会导致TCP对报文进行重传：超时和冗余ACK。</p>
+<ul>
+<li>
+<p>超时</p>
+<p>TCP每发送一个报文段，就要对这个报文段设置一次计时器。计时器超时后要对这个报文进行重传。</p>
+<p>由于TCP的下层是一个互联网环境，IP数据报所选择的路由变化时刻影响传输层的往返时延。TCP的超时重传时间基于发送方测量得到的平均往返时间，具体细节不在本文讨论范围内。</p>
+</li>
+<li>
+<p>冗余ACK</p>
+<p>超时重传存在的问题是显然的：周期太长。而冗余ACK使得发送方可以在超时之前注意到丢包现象的存在。冗余ACK就是再次确认某个报文段的ACK，而发送方先前已经收到过该报文段的确认。例如，发送方A发送了序号为1/3/5/7/9的报文段，而3号报文在传输过程中丢失。对于接收方B，它收到1号报文后接下来需要的是3号报文，而收到5号、7号、9号报文之后发现这些报文并不是当前需要的报文，于是发送<em>3个</em>对3号报文的ACK。TCP规定<strong>当发送方收到对同一个报文的3个冗余ACK时，就可以认为跟在这个被确认报文段之后的报文段已经丢失</strong>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>TCP流量控制</strong></p>
+<hr>
+<p>注意流量控制和拥塞控制的本质区别：流量控制是指点对点的通信量的控制，其根本目的是<strong>使发送方的发送速率和接收方的接收速率匹配</strong>；拥塞控制是让网络能够承担现有的网络负荷，是一个全局性的过程，涉及所有的主机、所有的路由器，以及与降低网络传输性能有关的所有因素。</p>
+<p>TCP的发送端和接收端都维护发送窗口和接收窗口，接收方可以设置TCP头部的<code>窗口</code>字段来告诉发送方自己的窗口大小，使发送方对发送窗口进行动态调整。</p>
+<hr>
+<p><strong>TCP拥塞控制</strong></p>
+<hr>
+<p>发送方除了使自己发送的数据能够吻合接收端的接收速率之外，还需要考虑自己的发送速率对网络的影响。当网络负载较大的时候，发送速率应该减小，以免加重网络的负载。</p>
+<p>因此，发送方需要维护以下两个窗口：</p>
+<ul>
+<li>接受窗口<code>rwnd</code>，反映接收方的容量；</li>
+<li>拥塞窗口<code>cwnd</code>，根据自己估算的网络拥塞程度设置的窗口只，反映网络的当前容量。</li>
+</ul>
+<p>显然，真正的发送窗口大小 = <code>min(rwnd, cwnd)</code>。</p>
+<p>为了更好地对传输层进行拥塞控制，因特网建议标准定义了4种算法：慢启动、拥塞避免、快重传、快恢复。</p>
+<ol>
+<li>
+<p>慢启动</p>
+<p>在TCP刚刚连接好并开始发送TCP报文段时，先令拥塞窗口<code>cwnd = 1</code>，即刚开始时只能发送一个最大报文段（MSS）。</p>
+<p>每经过一个传输轮次（经过一次往返时延RTT之后），拥塞窗口<strong>加倍</strong>，在这种算法下<code>cwnd</code>的大小指数式增长。我们从一开始就需要规定一个慢开始门限<code>ssthresh</code>，即<em>阈值</em>，拥塞窗口大小一直指数增长到这个阈值之后，改用拥塞避免算法。</p>
+</li>
+<li>
+<p>拥塞避免算法</p>
+<p>拥塞避免算法要求：</p>
+<ul>
+<li>发送端的拥塞窗口<code>cwnd</code>每经过一个往返时延RTT就<strong>增加一个MSS的大小</strong>。在这种算法下<code>cwnd</code>按线性规律缓慢增长（加法增大）；</li>
+<li>每当出现一次超时，令慢开始门限（阈值）等于<strong>当前</strong><code>cwnd</code>的一半（乘法减小），然后将<code>cwnd</code>设置为1，重新慢启动。</li>
+</ul>
+<p>慢启动和拥塞避免的实现过程如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/7.png" alt="慢启动和拥塞避免" class="lazyload"><figcaption class="image-caption">慢启动和拥塞避免</figcaption></figure></p>
+<blockquote>
+<p>注意在慢开始（指数增长）阶段，若<code>2 * cwnd &gt; ssthresh</code>，则下一个RTT的<code>cwnd </code>等于<code>ssthresh</code>；即<code>cwnd</code><strong>不能跃过</strong><code>ssthresh</code>值。</p>
+</blockquote>
+</li>
+<li>
+<p>快重传</p>
+<p>先前提过，发送端收到连续三个冗余ACK时，就能进行重传，而不必等待计时器超时。此即“快重传”。</p>
+</li>
+<li>
+<p>快恢复</p>
+<p>快恢复是为了配合快重传而定义的算法。它规定：发送端收到连续三个冗余ACK时执行“乘法减小”算法，即将慢开始门限设置为此时<code>cwnd</code>的一半，然后把<code>cwnd</code>的值设置为改变后的阈值，直接进行加法增长。</p>
+<p>显然，快恢复不需要<code>cwnd</code>从1开始时的慢启动过程，所以它比较“快”。</p>
+<p>两种算法实现的比较如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/TCP/8.png" alt="快恢复算法的实现过程" class="lazyload"><figcaption class="image-caption">快恢复算法的实现过程</figcaption></figure></p>
+<blockquote>
+<p>为什么快重传要搭配快恢复？</p>
+<p>在拥塞避免算法中，重传的情况是<strong>计时器超时</strong>，说明此时不管是自己的数据报还是对方的ACK都已经无法送达，网络的负载已经很大，直接将自己的拥塞窗口减成1，是一种比较高效的限流措施；</p>
+<p>在快重传情况下，能够收到三次冗余ACK，说明网络中还是能够通过一些数据报的，此时将拥塞窗口减半，直接开始拥塞避免算法（加法增长），对性能的影响较小。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="小结">小结</h3>
+<p>本文对重要的传输层协议——TCP进行了较为全面的梳理，包括TCP报文段格式、TCP连接管理、TCP可靠传输、流量控制和拥塞控制。</p>
+<p>本文多数内容来自参考资料[2]，少数内容来自网络，对部分知识点进行了补充。参考资料难免不够全面，对本文中的内容有任何疑问处请在评论区留言。</p>
+<h4 id="参考资料">参考资料</h4>
+<p>发送报。么TCP4次挥手时等待为2MSL？[EB/OL].2017-10-23</p>
+<p>[1] 车小胖.为什么TCP4次挥手时等待为2MSL？[EB/OL].2017-10-23</p>
+<p>[1] 车小胖.为什么TCP4次挥手时等待为2MSL[EB/OL].2017-10-23</p>
+<p><em><a href="https://www.zhihu.com/question/67013338">https://www.zhihu.com/question/67013338</a></em></p>
+<p>[2] 王道论坛.2021年计算机网络考研复习指导[M].北京:电子工业出版社,2020:209-246</p>
+<p>[3] 李卓航.TCP的三次握手与四次挥手理解及面试题（很全面）[EB/OL].2019-06-29</p>
+<p><em><a href="https://www.cnblogs.com/bj-mr-li/p/11106390.html">https://www.cnblogs.com/bj-mr-li/p/11106390.html</a></em></p>
+<p>[4] 小狼的世界.Wireshark使用入门[EB/OL].2019-06-23</p>
+<p><em><a href="https://www.cnblogs.com/cocowool/p/wireshark_tcp_http.html">https://www.cnblogs.com/cocowool/p/wireshark_tcp_http.html</a></em></p>
+<p>[5] sean-zou.TCP报文格式[EB/OL].2014-06-10</p>
+<p><em><a href="https://blog.csdn.net/a19881029/article/details/29557837">https://blog.csdn.net/a19881029/article/details/29557837</a></em></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E4%25BC%25A0%25E8%25BE%2593%25E5%25B1%2582%25E5%258D%258F%25E8%25AE%25AE-tcp%2f&amp;text=%e4%bc%a0%e8%be%93%e5%b1%82%e5%8d%8f%e8%ae%ae%e2%80%94%e2%80%94TCP&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E4%25BC%25A0%25E8%25BE%2593%25E5%25B1%2582%25E5%258D%258F%25E8%25AE%25AE-tcp%2f&amp;appkey=&amp;title=%e4%bc%a0%e8%be%93%e5%b1%82%e5%8d%8f%e8%ae%ae%e2%80%94%e2%80%94TCP" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+                    #计算机网络</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959/" class="prev" rel="prev" title="难题本 | LeetCode959"><i class="iconfont icon-dajiantou"></i>&nbsp;难题本 | LeetCode959</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-01-27 00:00:00 \u002b0000 UTC',
+              title: '传输层协议——TCP',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
