@@ -6,7 +6,31 @@
     <description>Recent content in LeetCode on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 25 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>难题本 | LeetCode778</title>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778/</link>
+      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/swim-in-rising-water/
+又是一道不错的复习题，借此回顾回顾BFS和SPFA。
+BFS Breadth First Search，宽度优先搜素。
+已知图G = (V, E)和一个源顶点s，宽度优先搜索以一种系统的方式探寻G的边，从而“发现”s所能到达的所有顶点，并计算s到所有这些点的距离（最少边数）。
+使用一个数组visited维护每个顶点先前是否被访问过；使用一个数组dist维护源点到每个顶点的距离。visited初始化为全0，dist初始化为全正无穷。
+使用一个队列q维护当前正在访问的点，每次从队首中取出head来进行操作。对于head的邻接点tmp，若我们之前没有访问过它，则源点到它的距离就是源点到head的距离加1。我们记dist[tmp] = dist[head] + 1，然后将tmp放入队列q中，之后的某个时刻，tmp会被取出，然后继续找出与它邻接且没被访问过的点，直到队列为空，所有可达的点都被访问过了。
+BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张，最终遍历结束，涟漪消散。
+使用当年在HDU数据结构课的一道作业来进行BFS的回顾：
+ 题目描述 一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
+输入格式 第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&#39;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&#39;。
+输出格式 输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
+输入1  5 5 ..### #&amp;hellip;. #.#.# #.#.# #.#..
+ 输出1  8
+  这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&#39;#&#39;）且该点未被访问，则记录它到源点的距离。
+我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
+#include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.</description>
+    </item>
+    
     <item>
       <title>难题本 | LeetCode959</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959/</link>
