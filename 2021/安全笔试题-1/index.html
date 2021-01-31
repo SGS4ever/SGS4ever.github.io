@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE-tcp/" />
+  <link rel="next" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778/" />
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E5%AE%89%E5%85%A8%E7%AC%94%E8%AF%95%E9%A2%98-1/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           安全岗笔试题——1 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="安全岗笔试题——1 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="安全岗笔试题——1"/>
+<meta name="twitter:description" content="&quot;安全岗笔试题——1&quot;  近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+ 答案  ABD  iOS系统也采用了安全引导链，C错误   以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+ 答案  C  中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。   以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+ 答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&lt;=0.7.65,0.8&lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "安全岗笔试题——1",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E5%AE%89%E5%85%A8%E7%AC%94%E8%AF%95%E9%A2%98-1\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "学习, 技术",
+  "wordcount":  150 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E5%AE%89%E5%85%A8%E7%AC%94%E8%AF%95%E9%A2%98-1\/",
+  "datePublished": "2021-01-29T00:00:00\u002b00:00",
+  "dateModified": "2021-01-29T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">安全岗笔试题——1</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=29290-01-01 >29 January 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>&quot;安全岗笔试题——1&quot;</title></head>
+<body>
+<p>近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。</p>
+<ol start='' >
+<li><p>以下哪些说法是正确的？（）</p>
+<p>A、 iOS系统从iOS6开始引入kernel ASLR安全措施</p>
+<p>B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎</p>
+<p>C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用</p>
+<p>D、 Android4.1 系统默认启用了内存ASLR</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        ABD
+    </p>
+    <p>
+        iOS系统也采用了安全引导链，C错误
+    </p>
+</details>
+</li>
+<li><p>以下哪个工具可以用来运行DDoS攻击？（）</p>
+<p>A、 菜刀</p>
+<p>B、 WSI</p>
+<p>C、 Dosend</p>
+<p>D、 Chkrootkit</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        C
+    </p>
+    <p>
+        中国菜刀是一款专业的网站管理软件；
+        WSI是PHP注入工具，具体可以参考<a href="http://www.doc88.com/p-0671743443993.html">这篇文章</a>；
+        Dosend是一款Linux发包工具，可以用来实现DDoS攻击；
+        chkrootkit是用来检查rootkit的。
+    </p>
+</details>
+</li>
+<li><p>以下哪些服务器曾被发现文件解析漏洞？（）</p>
+<p>A、 Apache</p>
+<p>B、 IIS</p>
+<p>C、 nginx</p>
+<p>D、 squid</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        ABC
+    </p>
+    <p>
+        A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如<code>shell.php.owf.rar</code>，其中<code>.owf</code>和<code>.rar</code>是Apache不可解析的，就将此文件最终解析为<code>shell.php</code>
+    </p>
+    <p>
+        B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为<code>.asp/.asa</code>的文件夹，其内的任何文件都被当成asp文件解析并执行；二是<code>123.asp;.jpg</code>会被解析为<code>123.asp</code>。
+    </p>
+    <p>
+        C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为<code>upupimage.jpg</code>，内容为PHP代码的文件，然后访问<code>upupimage.jpg/.php</code>，在这个目录下就会生成一句话木马<code>shell.php</code>；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&lt;=0.7.65,0.8&lt;=0.0.37。
+    </p>
+    <p>
+        squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。
+    </p>
+</details>
+</li>
+<li><p>以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）</p>
+<p>A、 hackbar</p>
+<p>B、 AWVS</p>
+<p>C、 IBM appsacn</p>
+<p>D、 nmap</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        BC
+    </p>
+    <p>
+        hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。
+    </p>
+</details>
+</li>
+<li><p>黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现：</p>
+<blockquote><p>C:\Users\test&gt;ping <a href='http://www.baidu.com' target='_blank' class='url'>www.baidu.com</a> -n 1
+正在 Ping<a href='http://www.a.shifen.com' target='_blank' class='url'>www.a.shifen.com</a> [14.215.177.38] 具有32字节的数据：
+请求超时</p>
+<p>C:\Users\test&gt;telnet <a href='http://www.baidu.com' target='_blank' class='url'>www.baidu.com</a> 80
+正在链接<a href='http://www.baidu.com' target='_blank' class='url'>www.baidu.com</a>…无法打开到主机的连接。
+在端口 80: 连接失败。</p>
+</blockquote>
+<p>通过如上信息判断，一下哪些反弹shell操作会失败</p>
+<p>A、 Windows/meterpreter/reverse_http</p>
+<p>B、 icmp协议的后门</p>
+<p>C、 windows/meterpreter/reverse_https</p>
+<p>D、 windows/meterpreter.reverse_tcp</p>
+<details>
+ <summary>答案</summary>
+    <p>
+        ABCD
+    </p>
+    <p>
+        IE浏览器使用了代理，可能HTTP协议会受到防火墙限制，故A不对；ping不通百度说明ICMP协议也受影响。故http、https、icmp协议的反弹shell都会失败，D也是不对的，对方挂了代理，telnet不通，只有通过插入挂了代理的IE进程反弹，或者通过代理反弹.
+    </p>
+</details>
+</li>
+<li><p>以下哪些工具可以抓取Windows明文密码？（）</p>
+<p>A、 WCE</p>
+<p>B、 minikatz</p>
+<p>C、 Quarks PWdump</p>
+<p>D、 CAIN</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        AB
+    </p>
+    <p>
+        A、WCE是与gethashes和mimikatz齐名的一款hash管理工具，使用wce进行本地和域的hash注入，可以在高权限下获取明文密码
+    </p>
+    <p>
+        B、法国一个牛B的人写的轻量级调试器，可以帮助安全测试人员抓取Windows密码。mimikatz 2.0版本，抓密码命令更加简单了，新功能还包括能够通过获取的kerberos登录凭据，绕过支持RestrictedAdmin模式的win8或win2012svr的远程终端(RDP)的登陆认证
+    </p>
+    <p>
+        C、一个Win32环境下的系统授权信息导出工具，目前除此之外没有任何一款工具可以导出如此全面的信息，支持这么多的OS版本，且相当稳定。
+    </p>
+    <p>
+        D、CAIN主要用于网络数据嗅探，也带有密码破解功能，但是不能抓取windows明文密码
+    </p>
+</details>
+</li>
+<li><p>iOS平台上常见的Hook框架有（）</p>
+<p>A、 Xposed</p>
+<p>B、 Intent Fuzz</p>
+<p>C、 Drozer</p>
+<p>D、 Substrate</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        D
+    </p>
+    <p>
+        A/ 这个是android的hook框架，有不少开发者发布了不错的框架。
+    </p>
+    <p>
+        B/ 这个是android 应用组件模糊测试框架
+    </p>
+    <p>
+        C/ 这个是android 综合渗透测试平台
+    </p>
+    <p>
+        D/ IOS平台的hook的框架。此外，Cydia Substrate是android上的强大而实用的HOOK工具
+    </p>
+</details>
+</li>
+<li><p>执行<code>nmap 10.5.5.1</code>默认会扫描以下哪个端口（）</p>
+<p>A、 21</p>
+<p>B、 3389</p>
+<p>C、 8080</p>
+<p>D、 1024</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        AC
+    </p>
+    <p>
+        nmap默认扫描选项是对常规端口和服务进行探测。其中常规端口是1000个最可能开放的端口。
+    </p>
+</details>
+</li>
+<li><p>【判断】TCP和UDP相比，TCP传送数据更安全（）</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        错。可靠传输不等于更加安全，两者实际上不存在哪个更安全的对比。
+    </p>
+</details>
+</li>
+
+</ol>
+<h3>题目来源</h3>
+<p>[1] daxi0ng.腾讯2016实习招聘-安全岗笔试题答案详细解释[EB/OL].2019-03-13</p>
+<p><em><a href='https://blog.csdn.net/qq_40989258/article/details/88532712' target='_blank' class='url'>https://blog.csdn.net/qq_40989258/article/details/88532712</a></em></p>
+<p>&nbsp;</p>
+</body>
+</html>
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E5%25AE%2589%25E5%2585%25A8%25E7%25AC%2594%25E8%25AF%2595%25E9%25A2%2598-1%2f&amp;text=%e5%ae%89%e5%85%a8%e5%b2%97%e7%ac%94%e8%af%95%e9%a2%98%e2%80%94%e2%80%941&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E5%25AE%2589%25E5%2585%25A8%25E7%25AC%2594%25E8%25AF%2595%25E9%25A2%2598-1%2f&amp;appkey=&amp;title=%e5%ae%89%e5%85%a8%e5%b2%97%e7%ac%94%e8%af%95%e9%a2%98%e2%80%94%e2%80%941" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E5%AD%A6%E4%B9%A0/">
+                    #学习</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E6%8A%80%E6%9C%AF/">
+                    #技术</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE-tcp/" class="prev" rel="prev" title="传输层协议——TCP"><i class="iconfont icon-dajiantou"></i>&nbsp;传输层协议——TCP</a>
+         
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778/" class="next" rel="next" title="难题本 | LeetCode778">难题本 | LeetCode778&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-01-29 00:00:00 \u002b0000 UTC',
+              title: '安全岗笔试题——1',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

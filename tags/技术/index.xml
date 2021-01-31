@@ -6,7 +6,33 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 21 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 29 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>安全岗笔试题——1</title>
+      <link>https://sgs4ever.github.io/2021/%E5%AE%89%E5%85%A8%E7%AC%94%E8%AF%95%E9%A2%98-1/</link>
+      <pubDate>Fri, 29 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E5%AE%89%E5%85%A8%E7%AC%94%E8%AF%95%E9%A2%98-1/</guid>
+      <description>&amp;quot;安全岗笔试题——1&amp;quot;  近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+ 答案  ABD  iOS系统也采用了安全引导链，C错误   以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+ 答案  C  中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。   以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+ 答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar</description>
+    </item>
+    
     <item>
       <title>桌面美化方案-Rainmeter</title>
       <link>https://sgs4ever.github.io/2020/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/</link>
