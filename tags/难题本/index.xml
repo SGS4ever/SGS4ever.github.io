@@ -6,7 +6,22 @@
     <description>Recent content in 难题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 30 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>难题本 | LeetCode5667</title>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667/</link>
+      <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667/</guid>
+      <description>我的第一次LeetCode周赛，本来大有希望AC三道题，结果在这个神坑上趴了半个多小时o(╥﹏╥)o
+题目链接：https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/
+题目  给你一个下标从 0 开始的正整数数组 candiesCount ，其中 candiesCount[i] 表示你拥有的第 i 类糖果的数目。同时给你一个二维数组 queries ，其中 queries[i] = [favoriteTypei, favoriteDayi, dailyCapi] 。
+你按照如下规则进行一场游戏：
+ 你从第 0 天开始吃糖果。 你在吃完 所有 第 i - 1 类糖果之前，不能 吃任何一颗第 i 类糖果。 在吃完所有糖果之前，你必须每天 至少 吃 一颗 糖果。  请你构建一个布尔型数组 answer ，满足 answer.length == queries.length 。answer[i] 为 true 的条件是：在每天吃 不超过 dailyCapi 颗糖果的前提下，你可以在第 favoriteDayi 天吃到第favoriteTypei类糖果；否则 answer[i] 为 false 。注意，只要满足上面 3 条规则中的第二条规则，你就可以在同一天吃不同类型的糖果。
+请你返回得到的数组 answer 。
+示例1  输入：candiesCount = [7,4,5,3,8], queries = [[0,2,2],[4,2,4],[2,13,1000000000]]</description>
+    </item>
+    
     <item>
       <title>难题本 | LeetCode778</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778/</link>

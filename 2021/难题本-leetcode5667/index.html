@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778/" />
+  
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           难题本 | LeetCode5667 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="难题本 | LeetCode5667 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="难题本 | LeetCode5667"/>
+<meta name="twitter:description" content="我的第一次LeetCode周赛，本来大有希望AC三道题，结果在这个神坑上趴了半个多小时o(╥﹏╥)o
+题目链接：https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/
+题目  给你一个下标从 0 开始的正整数数组 candiesCount ，其中 candiesCount[i] 表示你拥有的第 i 类糖果的数目。同时给你一个二维数组 queries ，其中 queries[i] = [favoriteTypei, favoriteDayi, dailyCapi] 。
+你按照如下规则进行一场游戏：
+ 你从第 0 天开始吃糖果。 你在吃完 所有 第 i - 1 类糖果之前，不能 吃任何一颗第 i 类糖果。 在吃完所有糖果之前，你必须每天 至少 吃 一颗 糖果。  请你构建一个布尔型数组 answer ，满足 answer.length == queries.length 。answer[i] 为 true 的条件是：在每天吃 不超过 dailyCapi 颗糖果的前提下，你可以在第 favoriteDayi 天吃到第favoriteTypei类糖果；否则 answer[i] 为 false 。注意，只要满足上面 3 条规则中的第二条规则，你就可以在同一天吃不同类型的糖果。
+请你返回得到的数组 answer 。
+示例1  输入：candiesCount = [7,4,5,3,8], queries = [[0,2,2],[4,2,4],[2,13,1000000000]]"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "难题本 | LeetCode5667",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "难题本, LeetCode",
+  "wordcount":  343 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667\/",
+  "datePublished": "2021-01-31T00:00:00\u002b00:00",
+  "dateModified": "2021-01-31T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">难题本 | LeetCode5667</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=31310-01-01 >31 January 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>我的第一次LeetCode周赛，本来大有希望AC三道题，结果在这个神坑上趴了半个多小时o(╥﹏╥)o</p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/">https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/</a></em></p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>给你一个下标从 0 开始的正整数数组 <code>candiesCount </code>，其中 <code>candiesCount[i]</code> 表示你拥有的第 <code>i</code> 类糖果的数目。同时给你一个二维数组 <code>queries</code> ，其中 <code>queries[i] = [favoriteTypei, favoriteDayi, dailyCapi] </code>。</p>
+<p>你按照如下规则进行一场游戏：</p>
+<ul>
+<li>你从第 <strong>0</strong> 天开始吃糖果。</li>
+<li>你在吃完 <strong>所有</strong> 第 <code>i - 1</code> 类糖果之前，<strong>不能</strong> 吃任何一颗第 <code>i</code> 类糖果。</li>
+<li>在吃完所有糖果之前，你必须每天 至少 吃 一颗 糖果。</li>
+</ul>
+<p>请你构建一个布尔型数组 <code>answer</code> ，满足 <code>answer.length == queries.length</code> 。<code>answer[i] </code>为 <code>true</code> 的条件是：在每天吃 <strong>不超过</strong> <code>dailyCapi</code> 颗糖果的前提下，你可以在第 <code>favoriteDayi</code> 天吃到第<code>favoriteTypei</code>类糖果；否则 <code>answer[i]</code> 为 <code>false</code> 。注意，只要满足上面 3 条规则中的第二条规则，你就可以在同一天吃不同类型的糖果。</p>
+<p>请你返回得到的数组 <code>answer </code>。</p>
+<h3 id="示例1">示例1</h3>
+<blockquote>
+<p><strong>输入</strong>：candiesCount = [7,4,5,3,8], queries = [[0,2,2],[4,2,4],[2,13,1000000000]]</p>
+<p><strong>输出</strong>：[true,false,true]</p>
+</blockquote>
+<h3 id="示例2">示例2</h3>
+<blockquote>
+<p><strong>输入</strong>：candiesCount = [5,2,6,4,1], queries = [[3,1,2],[4,10,3],[3,10,100],[4,100,30],[1,3,1]]</p>
+<p><strong>输出</strong>：[false,true,true,false,false]</p>
+</blockquote>
+<h3 id="数据范围">数据范围</h3>
+<ul>
+<li><code>1 &lt;= candiesCount.length &lt;= 105</code></li>
+<li><code>1 &lt;= candiesCount[i] &lt;= 105</code></li>
+<li><code>1 &lt;= queries.length &lt;= 105</code></li>
+<li><code>queries[i].length == 3</code></li>
+<li><code>0 &lt;= favoriteTypei &lt; candiesCount.length</code></li>
+<li><code>0 &lt;= favoriteDayi &lt;= 109</code></li>
+<li><code>1 &lt;= dailyCapi &lt;= 109</code></li>
+</ul>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>弯弯绕绕的规则，实际上就是在问：从头开始吃，能不能在第<code>favDay</code>天吃到<code>favType</code>这种糖果。</p>
+<p><strong>由于从第0天开始吃</strong>，所以在<code>favDay</code>这一天的时候，前面一共也<strong>已经吃了</strong><code>favDay</code>天。</p>
+<p>这么多天里，最多能吃掉多少糖果，最少能吃掉多少糖果呢？非常简单：</p>
+<ul>
+<li>
+<p>每个<code>query</code>里面给出了每天最多能吃多少糖果，我的程序中记做<code>dayCap</code>；</p>
+</li>
+<li>
+<p>每天敞开了吃，不算<code>favDay</code>这一天，最多吃掉<code>favDat * dayCap</code>的糖果，算上这一天结束，能吃掉<code>(favDay + 1) * dayCap</code>的糖果；</p>
+</li>
+<li>
+<p>每天省着吃，但是规定至少需要吃掉一颗。不算<code>favDay</code>这一天，最少也得吃掉<code>favDay</code>的糖果。</p>
+</li>
+</ul>
+<p><strong>由于从前往后吃</strong>，所以在<code>favDay</code>这一天能不能吃到<code>favType</code>这类糖果，就转化为了<code>favType</code>之前的所有糖果的数量和与上面这两个数值的关系。吃不到糖果只有两种可能，太多与太少：</p>
+<ul>
+<li>当我们敞开了吃，结果在<code>favDay</code><strong>这一天结束的时候</strong>都没办法吃到第<code>favType</code>类糖果，这是由于它前面类型的糖果数量太多了；</li>
+<li>当我们省着吃，结果在<code>favDay</code><strong>这一天之前</strong>就已经把<code>favType</code>类糖果吃完了，这是由于它前面类型的糖果数量太少了；</li>
+</ul>
+<p>使用前缀和数组保存<code>favType</code>之前的糖果数量和，<code>prefix_sum[i]</code>表示<strong>第i类糖果之前的糖果和（不包括第i类）</strong>。</p>
+</blockquote>
+<h2 id="ac代码">AC代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span>:
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">canEat</span>(self, candiesCount: List[int], queries: List[List[int]]) <span style="color:#f92672">-&gt;</span> List[bool]:
+        res <span style="color:#f92672">=</span> []
+        prefix_sum <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>]
+        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, len(candiesCount) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>):
+            prefix_sum<span style="color:#f92672">.</span>append(prefix_sum[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> candiesCount[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>])
+            
+        <span style="color:#75715e"># print(len(prefix_sum))</span>
+        
+        <span style="color:#66d9ef">for</span> q <span style="color:#f92672">in</span> queries:
+            favType <span style="color:#f92672">=</span> q[<span style="color:#ae81ff">0</span>]
+            favDay <span style="color:#f92672">=</span> q[<span style="color:#ae81ff">1</span>]
+            dayCap <span style="color:#f92672">=</span> q[<span style="color:#ae81ff">2</span>]
+            
+            <span style="color:#75715e"># 敞开了吃，都不能在favDay结束的时候把前面的糖果吃完</span>
+            <span style="color:#75715e"># 这里需要算上favDay，一共吃favDay + 1天</span>
+            <span style="color:#66d9ef">if</span> (favDay <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> dayCap <span style="color:#f92672">&lt;=</span> prefix_sum[favType]:
+                res<span style="color:#f92672">.</span>append(False)
+                <span style="color:#66d9ef">continue</span>
+            <span style="color:#75715e"># 省着吃，在favDay之前就已经把favType吃完</span>
+            <span style="color:#66d9ef">if</span> favDay <span style="color:#f92672">&gt;=</span> prefix_sum[favType <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]:
+                res<span style="color:#f92672">.</span>append(False)
+                <span style="color:#66d9ef">continue</span>
+            res<span style="color:#f92672">.</span>append(True)
+            
+        <span style="color:#66d9ef">return</span> res
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">long</span> <span style="color:#66d9ef">long</span> LL;
+    
+    vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">bool</span><span style="color:#f92672">&gt;</span> canEat(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> candiesCount, vector<span style="color:#f92672">&lt;</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;&amp;</span> queries) {
+        LL prefix_sum[<span style="color:#ae81ff">100010</span>] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+        <span style="color:#75715e">// prefix_sum[i]: candiesCount[0]加到candiesCount[i - 1]
+</span><span style="color:#75715e"></span>        
+        <span style="color:#66d9ef">bool</span> check <span style="color:#f92672">=</span> false;
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;=</span> candiesCount.size(); <span style="color:#f92672">++</span>i)
+        {
+            prefix_sum[i] <span style="color:#f92672">=</span> prefix_sum[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> candiesCount[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>];
+            <span style="color:#75715e">// cout &lt;&lt; &#34;i = &#34; &lt;&lt; i &lt;&lt; &#34;: &#34; &lt;&lt; prefix_sum[i] &lt;&lt; &#34; &#34;;
+</span><span style="color:#75715e"></span>        }
+        
+        LL favDay, favType, dayCap;
+        vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">bool</span><span style="color:#f92672">&gt;</span> res;
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> t : queries)
+        {
+            favDay <span style="color:#f92672">=</span> t[<span style="color:#ae81ff">1</span>];
+            favType <span style="color:#f92672">=</span> t[<span style="color:#ae81ff">0</span>];
+            dayCap <span style="color:#f92672">=</span> t[<span style="color:#ae81ff">2</span>];
+            
+            <span style="color:#75715e">// 第favDay之前，一共吃了favDay天
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// 每天开足马力吃，都吃不完前面的
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// prefix_sum[favType] = candiesCount[0] 加到 candiesCount[favType - 1]
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// 即开始吃favType之前的糖果总和
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> ((favDay <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> dayCap <span style="color:#f92672">&lt;=</span> prefix_sum[favType])
+            {
+                res.push_back(false);
+                <span style="color:#66d9ef">continue</span>;
+            }
+            <span style="color:#75715e">// 每天省着吃，都吃不够
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (favDay <span style="color:#f92672">&gt;=</span> prefix_sum[favType <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>])
+            {
+                res.push_back(false);
+                <span style="color:#66d9ef">continue</span>;
+            }
+            res.push_back(true);
+        }
+        
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+</code></pre></div><blockquote>
+<p>数据层面，我看讨论区讲的最多的是<code>int</code>存不下的坑，其实这道题从看到数据的第一眼开始就应该选择使用<code>long</code>或<code>long long</code>，大佬们的低级错误啊~</p>
+<p>然后是从第0天开始吃的问题，加粗也拯救不了眼瞎&hellip;</p>
+<p>之前WA了几次，还是逻辑上的错误，没有考虑到<code>favDay</code>这一天也是能吃的，所以最大数量少算了一天；就这还能过<code>61/62</code>，测试数据有点弱。</p>
+<p>关键测试组：</p>
+<h3 id="input">Input:</h3>
+<blockquote>
+<p><strong>[46,5,47,48,43,34,15,26,11,25,41,47,15,25,16,50,32,42,32,21,36,34,50,45,46,15,46,38,50,12,3,26,26,16,23,1,4,48,47,32,47,16,33,23,38,2,19,50,6,19,29,3,27,12,6,22,33,28,7,10,12,8,13,24,21,38,43,26,35,18,34,3,14,48,50,34,38,4,50,26,5,35,11,2,35,9,11,31,36,20,21,37,18,34,34,10,21,8,5]</strong></p>
+<p><strong>[[85,54,42]]</strong></p>
+</blockquote>
+<h3 id="output">Output:</h3>
+<blockquote>
+<p><strong>true</strong></p>
+</blockquote>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode5667%2f&amp;text=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode5667&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode5667%2f&amp;appkey=&amp;title=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode5667" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">
+                    #难题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778/" class="prev" rel="prev" title="难题本 | LeetCode778"><i class="iconfont icon-dajiantou"></i>&nbsp;难题本 | LeetCode778</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-01-31 00:00:00 \u002b0000 UTC',
+              title: '难题本 | LeetCode5667',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
