@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667/" />
+  <link rel="next" href="https://sgs4ever.github.io/2021/dos-%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/" />
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           错题本 | LeetCode888 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="错题本 | LeetCode888 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="错题本 | LeetCode888"/>
+<meta name="twitter:description" content="美好的二月从WA一道简单题开始。
+题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
+ 描述 爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
+因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
+返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
+如果有多个答案，你可以返回其中任何一个。保证答案存在。
+示例1  输入： A = [1,1], B = [2,2]
+输出：[1,2]
+ 示例2  输入： A = [1,2], B = [2,3]
+输出：[1,2]
+ 数据范围  1 &lt;= A.length &lt;= 10000 1 &lt;= B.length &lt;= 10000 1 &lt;= A[i] &lt;= 100000 1 &lt;= B[i] &lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "错题本 | LeetCode888",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "错题本, LeetCode",
+  "wordcount":  447 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888\/",
+  "datePublished": "2021-02-01T00:00:00\u002b00:00",
+  "dateModified": "2021-02-01T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">错题本 | LeetCode888</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=1010-02-02 >1 February 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p><del>美好的</del>二月从WA一道简单题开始。</p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/fair-candy-swap/">https://leetcode-cn.com/problems/fair-candy-swap/</a></em></p>
+<blockquote>
+<h3 id="描述">描述</h3>
+<p>爱丽丝和鲍勃有不同大小的糖果棒：<code>A[i]</code> 是爱丽丝拥有的第 <code>i</code> 根糖果棒的大小，<code>B[j]</code> 是鲍勃拥有的第 <code>j</code> 根糖果棒的大小。</p>
+<p>因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）</p>
+<p>返回一个整数数组 <code>ans</code>，其中 <code>ans[0]</code> 是爱丽丝必须交换的糖果棒的大小，<code>ans[1]</code> 是 Bob 必须交换的糖果棒的大小。</p>
+<p>如果有多个答案，你可以返回其中任何一个。保证答案存在。</p>
+<h3 id="示例1">示例1</h3>
+<blockquote>
+<p><strong>输入：</strong> A = [1,1], B = [2,2]</p>
+<p><strong>输出：</strong>[1,2]</p>
+</blockquote>
+<h3 id="示例2">示例2</h3>
+<blockquote>
+<p><strong>输入：</strong> A = [1,2], B = [2,3]</p>
+<p><strong>输出：</strong>[1,2]</p>
+</blockquote>
+<h3 id="数据范围">数据范围</h3>
+<ul>
+<li><code>1 &lt;= A.length &lt;= 10000</code></li>
+<li><code>1 &lt;= B.length &lt;= 10000</code></li>
+<li><code>1 &lt;= A[i] &lt;= 100000</code></li>
+<li><code>1 &lt;= B[i] &lt;= 100000</code></li>
+<li>保证爱丽丝与鲍勃的糖果总量不同。</li>
+<li>答案肯定存在。</li>
+</ul>
+</blockquote>
+<h2 id="分析">分析</h2>
+<p>希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。</p>
+<p>我们设Allice拿来交换的大小是<code>changeA</code>，Bob拿来交换的大小是<code>changeB</code>；两人交换前分别具有<code>sumA</code>和<code>sumB</code>总量的糖果，则两人交换之后拥有的总量分别是：</p>
+<ul>
+<li>Allice：<code>sumA - changeA + changeB</code></li>
+<li>Bob：<code>sumB - changeB + changeA</code></li>
+</ul>
+<p>两个式子是相等的，那么我们进行相减，得到<code>sumA - sumB + 2changeB - 2changeA = 0</code>；</p>
+<p>进一步使用<code>diff</code>来表示<code>sumA - sumB</code>，即初始总量之差，则对等式变形能得到：<code>changeA = changeB + diff / 2</code>。</p>
+<p>这就是我们最终使用的公式，<code>changeA</code>和<code>changeB</code>满足的关系。</p>
+<h3 id="暴力">暴力</h3>
+<p>我们可以循环Allice的每一个糖果棒，即对于每一个<code>changeA</code>，只需要使用公式计算<code>changeB</code>，然后判断<code>changeB</code>是否存在于Bob的集合中；当我们找到了一对<code>changeA</code>和<code>changeB</code>同时存在，就是最终的答案。</p>
+<p>则转化成为一个搜索问题，对于一个特定的<code>changeB</code>，在Bob的集合中查找它是否存在。</p>
+<p>使用顺序搜索，一层循环<code>changeA</code>，每个<code>changeA</code>还需要遍历一次Bob的集合，复杂度是<em>O(n^2)</em>，显然不行；</p>
+<p>使用二分搜索，一层循环<code>changeA</code>，每个<code>changeA</code>搜索对应的<code>changeB</code>只需要花费<em>logn</em>，则总复杂度是<em>O(nlogn)</em>，可以一试。</p>
+<p>第一次WA，二分写错了&hellip;</p>
+<h4 id="暴力二分ac代码">暴力二分，AC代码：</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">long</span> <span style="color:#66d9ef">long</span> LL;
+
+    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> INF <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xffffff</span>;
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">bSearch</span>(<span style="color:#66d9ef">int</span> target, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> v)
+    {
+        <span style="color:#66d9ef">int</span> left <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> right <span style="color:#f92672">=</span> v.size() <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">int</span> res <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>INF;
+
+        <span style="color:#66d9ef">while</span> (left <span style="color:#f92672">&lt;=</span> right)
+        {
+            <span style="color:#66d9ef">int</span> mid <span style="color:#f92672">=</span> (left <span style="color:#f92672">+</span> right) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+            <span style="color:#66d9ef">if</span> (v[mid] <span style="color:#f92672">&lt;</span> target)  <span style="color:#75715e">// 答案在右半部分
+</span><span style="color:#75715e"></span>            {
+                left <span style="color:#f92672">=</span> mid <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+                <span style="color:#66d9ef">continue</span>;
+            }
+            <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (v[mid] <span style="color:#f92672">&gt;</span> target)  <span style="color:#75715e">// 答案在左半部分
+</span><span style="color:#75715e"></span>            {
+                right <span style="color:#f92672">=</span> mid <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+                <span style="color:#66d9ef">continue</span>;
+            }
+            <span style="color:#66d9ef">else</span>
+            {
+                res <span style="color:#f92672">=</span> target;
+                <span style="color:#66d9ef">break</span>;
+            }
+        }
+        <span style="color:#66d9ef">return</span> res;  <span style="color:#75715e">// 没找到，-INF；找到，target
+</span><span style="color:#75715e"></span>    }
+
+    vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> fairCandySwap(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> A, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> B) {
+        sort(A.begin(), A.end());
+        sort(B.begin(), B.end());
+
+        LL sum_a <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        LL sum_b <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> A.size(); <span style="color:#f92672">++</span>i)
+            sum_a <span style="color:#f92672">+=</span> A[i];
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> B.size(); <span style="color:#f92672">++</span>i)
+            sum_b <span style="color:#f92672">+=</span> B[i];
+
+        LL diff <span style="color:#f92672">=</span> sum_a <span style="color:#f92672">-</span> sum_b;
+        <span style="color:#66d9ef">int</span> change_a, change_b;
+        <span style="color:#75715e">// change_a = change_b + diff / 2
+</span><span style="color:#75715e"></span>        vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> res;
+
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> A.size(); <span style="color:#f92672">++</span>i)
+        {
+            change_a <span style="color:#f92672">=</span> A[i];
+            change_b <span style="color:#f92672">=</span> change_a <span style="color:#f92672">-</span> diff <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+            <span style="color:#75715e">// cout &lt;&lt; change_a &lt;&lt; &#34; &#34; &lt;&lt; change_b &lt;&lt; endl;
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span>(bSearch(change_b, B) <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span>INF)  <span style="color:#75715e">// 找到
+</span><span style="color:#75715e"></span>            {
+                res.push_back(change_a);
+                res.push_back(change_b);
+                <span style="color:#66d9ef">break</span>;
+            }
+        }
+
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+</code></pre></div><blockquote>
+<p>对于一个<code>vector</code>进行二分查找，初始化<code>right = v.size() - 1</code>，第一次WA的时候没有减一；</p>
+<p>while循环，判断条件应该是<code>left &lt;= right</code>，第一次WA的时候也没有等号。</p>
+<p>二分还是细啊o(╥﹏╥)o</p>
+</blockquote>
+<p>不过表现就烂成蛇皮了。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode888/1.png" alt="Performance 1" class="lazyload"><figcaption class="image-caption">Performance 1</figcaption></figure></p>
+<h3 id="双指针">双指针</h3>
+<p>在查找<code>changeA</code>和<code>changeB</code>的时候是否存在<em>O(n)</em> 的办法呢？是存在的。</p>
+<p>假设Allice和Bob的集合都已经从小到大排好序，使用一个<code>pA</code>指向Allice的集合起始元素，<code>pB</code>指向Bob的集合起始元素，用如下规则进行移动：</p>
+<ul>
+<li>当<code>*pA &gt; *pB + diff / 2</code>的时候，<code>pB++</code>；</li>
+<li>当<code>*pA &lt; *pB + diff / 2</code>的时候，<code>pA++</code>；</li>
+<li>两者相等的时候，就是我们要的答案。</li>
+</ul>
+<p>此法的正确性主要来自于集合的有序性。第一种情况出现时，说明<code>pB</code>指向的元素太小了，<code>changeB</code>需要再大一点，故将<code>pB</code>向后移动；当第二种情况出现的时候，说明<code>pA</code>指向的元素太小了，<code>changeA</code>需要再大一点。</p>
+<p>二分和双指针法的最大复杂度其实都是<em>O(nlogn)</em>（排序），但是在查找过程中显然双指针更快一些。</p>
+<h4 id="ac代码">AC代码：</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">long</span> <span style="color:#66d9ef">long</span> LL;
+    
+    vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> fairCandySwap(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> A, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> B) {
+        sort(A.begin(), A.end());
+        sort(B.begin(), B.end());
+
+        LL sum_a <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        LL sum_b <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> A.size(); <span style="color:#f92672">++</span>i)
+            sum_a <span style="color:#f92672">+=</span> A[i];
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> B.size(); <span style="color:#f92672">++</span>i)
+            sum_b <span style="color:#f92672">+=</span> B[i];
+        
+        LL diff <span style="color:#f92672">=</span> sum_a <span style="color:#f92672">-</span> sum_b;
+
+        vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> res;
+        vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;::</span>iterator pA <span style="color:#f92672">=</span> A.begin();
+        vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;::</span>iterator pB <span style="color:#f92672">=</span> B.begin();
+
+        <span style="color:#66d9ef">while</span> (pA <span style="color:#f92672">!=</span> A.end() <span style="color:#f92672">&amp;&amp;</span> pB <span style="color:#f92672">!=</span> B.end())
+        {            
+            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>pA <span style="color:#f92672">&gt;</span> <span style="color:#f92672">*</span>pB <span style="color:#f92672">+</span> diff <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>)  <span style="color:#75715e">// pB指向的目标太小
+</span><span style="color:#75715e"></span>            {
+                pB<span style="color:#f92672">++</span>;
+            }
+            <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (<span style="color:#f92672">*</span>pA <span style="color:#f92672">&lt;</span> <span style="color:#f92672">*</span>pB <span style="color:#f92672">+</span> diff <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>)  <span style="color:#75715e">// pA指向的目标太小
+</span><span style="color:#75715e"></span>            {
+                pA<span style="color:#f92672">++</span>;
+            }
+            <span style="color:#66d9ef">else</span>
+            {
+                res.push_back(<span style="color:#f92672">*</span>pA);
+                res.push_back(<span style="color:#f92672">*</span>pB);
+                <span style="color:#66d9ef">break</span>;
+            }
+        }
+
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+</code></pre></div><p>表现还不错。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode888/2.png" alt="Performance 2" class="lazyload"><figcaption class="image-caption">Performance 2</figcaption></figure></p>
+<p>官方题解中提到的<strong>哈希表</strong>，在最开始构思的时候就想到了，但是懒得再查STL的用法，故放弃。</p>
+<p>题解中有个老哥与我的双指针方法一毛一样，但是我的做法是独立想出来的，故不将其放入参考资料中。</p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 力扣官方题解.公平的糖果交换[EB/OL].2021-02-01</p>
+<p><em><a href="https://leetcode-cn.com/problems/fair-candy-swap/solution/gong-ping-de-tang-guo-jiao-huan-by-leetc-tlam/">https://leetcode-cn.com/problems/fair-candy-swap/solution/gong-ping-de-tang-guo-jiao-huan-by-leetc-tlam/</a></em></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%2594%2599%25E9%25A2%2598%25E6%259C%25AC-leetcode888%2f&amp;text=%e9%94%99%e9%a2%98%e6%9c%ac%20%7c%20LeetCode888&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%2594%2599%25E9%25A2%2598%25E6%259C%25AC-leetcode888%2f&amp;appkey=&amp;title=%e9%94%99%e9%a2%98%e6%9c%ac%20%7c%20LeetCode888" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/">
+                    #错题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667/" class="prev" rel="prev" title="难题本 | LeetCode5667"><i class="iconfont icon-dajiantou"></i>&nbsp;难题本 | LeetCode5667</a>
+         
+        
+        <a href="https://sgs4ever.github.io/2021/dos-%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/" class="next" rel="next" title="DoS——拒绝服务攻击">DoS——拒绝服务攻击&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-02-01 00:00:00 \u002b0000 UTC',
+              title: '错题本 | LeetCode888',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

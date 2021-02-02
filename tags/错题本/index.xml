@@ -6,7 +6,26 @@
     <description>Recent content in 错题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 17 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>错题本 | LeetCode888</title>
+      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888/</link>
+      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888/</guid>
+      <description>美好的二月从WA一道简单题开始。
+题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
+ 描述 爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
+因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
+返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
+如果有多个答案，你可以返回其中任何一个。保证答案存在。
+示例1  输入： A = [1,1], B = [2,2]
+输出：[1,2]
+ 示例2  输入： A = [1,2], B = [2,3]
+输出：[1,2]
+ 数据范围  1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。</description>
+    </item>
+    
     <item>
       <title>错题本 | LeetCode1232</title>
       <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232/</link>
