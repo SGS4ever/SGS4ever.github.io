@@ -6,7 +6,27 @@
     <description>Recent content in 难题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 31 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 07 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>难题本 | LeetCode665</title>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665/</link>
+      <pubDate>Sun, 07 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/non-decreasing-array/
+看到这题第一感受：简单题！
+做完这题第一感受：简单题？
+题目  给你一个长度为 n 的整数数组，请你判断在 最多 改变 1 个元素的情况下，该数组能否变成一个非递减数列。
+我们是这样定义一个非递减数列的： 对于数组中所有的 i (0 &amp;lt;= i &amp;lt;= n-2)，总满足 nums[i] &amp;lt;= nums[i + 1]。
+示例1  输入： nums = [4,2,3]
+输出： true
+解释： 你可以通过把第一个4变成1来使得它成为一个非递减数列。
+ 示例2  输入： nums = [4,2,1]
+输出： false
+ 数据范围  1 &amp;lt;= n &amp;lt;= 10 ^ 4 - 10 ^ 5 &amp;lt;= nums[i] &amp;lt;= 10 ^ 5   分析  简单题毕竟还是简单题，思路初步找起来是比较容易的。
+我们把所有元素以(index, value)这种形式在坐标轴上画出来，横坐标是元素下标，纵坐标是元素数值，那么如果希望该数组是一个非递减数列，这张折线图的形状最终需要满足各个部位的斜率都大于等于0。</description>
+    </item>
+    
     <item>
       <title>难题本 | LeetCode5667</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667/</link>

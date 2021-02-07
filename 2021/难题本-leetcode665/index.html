@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/dos-%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/" />
+  
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           难题本 | LeetCode665 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="难题本 | LeetCode665 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="难题本 | LeetCode665"/>
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/non-decreasing-array/
+看到这题第一感受：简单题！
+做完这题第一感受：简单题？
+题目  给你一个长度为 n 的整数数组，请你判断在 最多 改变 1 个元素的情况下，该数组能否变成一个非递减数列。
+我们是这样定义一个非递减数列的： 对于数组中所有的 i (0 &lt;= i &lt;= n-2)，总满足 nums[i] &lt;= nums[i &#43; 1]。
+示例1  输入： nums = [4,2,3]
+输出： true
+解释： 你可以通过把第一个4变成1来使得它成为一个非递减数列。
+ 示例2  输入： nums = [4,2,1]
+输出： false
+ 数据范围  1 &lt;= n &lt;= 10 ^ 4 - 10 ^ 5 &lt;= nums[i] &lt;= 10 ^ 5   分析  简单题毕竟还是简单题，思路初步找起来是比较容易的。
+我们把所有元素以(index, value)这种形式在坐标轴上画出来，横坐标是元素下标，纵坐标是元素数值，那么如果希望该数组是一个非递减数列，这张折线图的形状最终需要满足各个部位的斜率都大于等于0。"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "难题本 | LeetCode665",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "难题本, LeetCode",
+  "wordcount":  223 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665\/",
+  "datePublished": "2021-02-07T00:00:00\u002b00:00",
+  "dateModified": "2021-02-07T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">难题本 | LeetCode665</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=7070-02-02 >7 February 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>题目链接：<em><a href="https://leetcode-cn.com/problems/non-decreasing-array/">https://leetcode-cn.com/problems/non-decreasing-array/</a></em></p>
+<p>看到这题第一感受：简单题！</p>
+<p>做完这题第一感受：简单题？</p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>给你一个长度为 <code>n</code> 的整数数组，请你判断在 <strong>最多</strong> 改变 <code>1</code> 个元素的情况下，该数组能否变成一个非递减数列。</p>
+<p>我们是这样定义一个非递减数列的： 对于数组中所有的 <code>i</code> <code>(0 &lt;= i &lt;= n-2)</code>，总满足 <code>nums[i] &lt;= nums[i + 1]</code>。</p>
+<h3 id="示例1">示例1</h3>
+<blockquote>
+<p><strong>输入：</strong> nums = [4,2,3]</p>
+<p><strong>输出：</strong> true</p>
+<p><strong>解释：</strong> 你可以通过把第一个4变成1来使得它成为一个非递减数列。</p>
+</blockquote>
+<h3 id="示例2">示例2</h3>
+<blockquote>
+<p><strong>输入：</strong> nums = [4,2,1]</p>
+<p><strong>输出：</strong> false</p>
+</blockquote>
+<h3 id="数据范围">数据范围</h3>
+<ul>
+<li><code>1 &lt;= n &lt;= 10 ^ 4</code></li>
+<li><code>- 10 ^ 5 &lt;= nums[i] &lt;= 10 ^ 5</code></li>
+</ul>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>简单题毕竟还是简单题，思路初步找起来是比较容易的。</p>
+<p>我们把所有元素以<code>(index, value)</code>这种形式在坐标轴上画出来，横坐标是元素下标，纵坐标是元素数值，那么如果希望该数组是一个非递减数列，这张折线图的形状<strong>最终</strong>需要满足各个部位的斜率都<strong>大于等于0</strong>。</p>
+<p>如果在允许改变一个元素的情况下，希望该数组变为一个非递减数列，那么初始图形只允许有<strong>一个波谷</strong>存在，而且这个波谷还必须具备某些性质。</p>
+<p>例如，对于一组数据<code>3,5,6,7,8,3,10</code>，可以改变倒数第二个元素<code>3</code>，令其等于<code>8</code>，即可构成一个非递减数列。</p>
+<p>这组数据原本的折线图是这样的：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode665/1.png" alt="Fig 1." class="lazyload"><figcaption class="image-caption">Fig 1.</figcaption></figure></p>
+<p>改变一个元素后的折线图是这样的：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode665/2.png" alt="Fig 2." class="lazyload"><figcaption class="image-caption">Fig 2.</figcaption></figure></p>
+<p>下面给出原始折线图需要满足的两个性质：</p>
+<ul>
+<li>
+<p>对于原始的折线图，首先只允许有一个波谷存在，如果超过一个波谷，说明存在有两处的非递减情况，这时只改变一个元素是不行的。</p>
+</li>
+<li>
+<p>对于这一处波谷，还有几种情况：</p>
+<ul>
+<li>
+<p><strong>波谷左边的元素小于等于波谷右边</strong>。也就是<code>Fig1</code>的情况，我们可以直接令波谷元素等于波谷左边的元素，这样就填平了波谷，并且保持继续上涨的趋势不变；如果波谷<strong>右边已经没有元素</strong>，说明已经到达了最后，直接将波谷元素拔高即可；</p>
+</li>
+<li>
+<p><strong>波谷左边的元素大于波谷右边</strong>。此时我们就不能将波谷拔高到其左边的元素了，只能将其左边的元素拉低到波谷。这种情况下，我们要考虑到波谷<strong>左边第二个</strong>元素，如果它也大于波谷，这时就不存在一种办法来填平波谷。</p>
+<p>我们先看看可以填平波谷的情况：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode665/3.png" alt="Fig 3." class="lazyload"><figcaption class="image-caption">Fig 3.</figcaption></figure></p>
+<p>可以看到，波谷左边第二个元素小于波谷，那么我们将波谷左边的元素拉低到波谷的水平，就能把波谷消除掉：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode665/4.png" alt="Fig 4." class="lazyload"><figcaption class="image-caption">Fig 4.</figcaption></figure></p>
+<p>当波谷左边第二个元素大于波谷，我们把波谷左边的元素拉低到波谷时，产生了新的波谷：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode665/5.png" alt="波谷左边第二个元素大于波谷" class="lazyload"><figcaption class="image-caption">波谷左边第二个元素大于波谷</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode665/6.png" alt="产生新的波谷" class="lazyload"><figcaption class="image-caption">产生新的波谷</figcaption></figure></p>
+<p>特别地，当波谷左边<strong>只有一个元素</strong>，自然就直接将左边的元素拉低即可。示例1中的<code>nums = [4,2,3]</code>就属于这种情况。</p>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="ac代码">AC代码</h2>
+<blockquote>
+<p>下标从前往后递增，每次判断是否出现一个下降的区段。</p>
+<p>首先，全局范围内只能出现一次下降；</p>
+<p>其次，这个波谷要分上面两种情况讨论。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">bool</span> checkPossibility(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> nums) {
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> nums.size();
+        <span style="color:#66d9ef">if</span> (len <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+        {
+            <span style="color:#66d9ef">return</span> true;
+        }
+
+        <span style="color:#66d9ef">int</span> ptr;
+        <span style="color:#66d9ef">int</span> change <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;  <span style="color:#75715e">// 改变的元素个数
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">bool</span> res <span style="color:#f92672">=</span> true;
+
+        ptr <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">while</span> (ptr <span style="color:#f92672">&lt;</span> len)
+        {
+            <span style="color:#66d9ef">if</span> (nums[ptr] <span style="color:#f92672">&lt;</span> nums[ptr <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>])  <span style="color:#75715e">// 递减了
+</span><span style="color:#75715e"></span>            {
+                <span style="color:#66d9ef">if</span> (change <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>)
+                {
+                    <span style="color:#75715e">// 波谷左边的元素大于波谷右边，只能拉低左边元素，不能拔高波谷
+</span><span style="color:#75715e"></span>                    <span style="color:#66d9ef">if</span> (ptr <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;</span> len <span style="color:#f92672">&amp;&amp;</span> nums[ptr <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">&gt;</span> nums[ptr <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>])
+                    {
+                        <span style="color:#75715e">// 只能改变nums[ptr - 1]
+</span><span style="color:#75715e"></span>                        <span style="color:#66d9ef">if</span> ((ptr <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> nums[ptr <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">&lt;=</span> nums[ptr]) <span style="color:#f92672">||</span> ptr <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+                        {
+                            nums[ptr <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> nums[ptr];
+                            change<span style="color:#f92672">++</span>;
+                            <span style="color:#66d9ef">continue</span>;
+                        }
+                        <span style="color:#66d9ef">else</span>
+                        {
+                            <span style="color:#75715e">// nums[ptr - 2] &gt; nums[ptr]
+</span><span style="color:#75715e"></span>                            res <span style="color:#f92672">=</span> false;
+                            <span style="color:#66d9ef">break</span>;
+                        }
+                    }
+                    <span style="color:#66d9ef">else</span>  <span style="color:#75715e">// 波谷左边元素小于等于波谷右边元素，直接拔高波谷
+</span><span style="color:#75715e"></span>                    {
+                        nums[ptr] <span style="color:#f92672">=</span> nums[ptr <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>];
+                        change<span style="color:#f92672">++</span>;
+                        <span style="color:#66d9ef">continue</span>;
+                    }
+                }
+                <span style="color:#66d9ef">else</span>
+                {
+                    res <span style="color:#f92672">=</span> false;
+                    <span style="color:#66d9ef">break</span>;
+                }
+            }
+            ptr<span style="color:#f92672">++</span>;
+        }
+
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+</code></pre></div><p>表现很一般，就不放出来了。比较复杂的逻辑增大了时间消耗，暂时没有看到有什么优化的办法。</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode665%2f&amp;text=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode665&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode665%2f&amp;appkey=&amp;title=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode665" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">
+                    #难题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/dos-%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/" class="prev" rel="prev" title="DoS——拒绝服务攻击"><i class="iconfont icon-dajiantou"></i>&nbsp;DoS——拒绝服务攻击</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-02-07 00:00:00 \u002b0000 UTC',
+              title: '难题本 | LeetCode665',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
