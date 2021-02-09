@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665/" />
+  
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           难题本 | LeetCode992 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="难题本 | LeetCode992 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="难题本 | LeetCode992"/>
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/subarrays-with-k-different-integers/
+思路是真难想，想出来之后是真简单。
+已经是我目前的水平无法搞定的程度了，在此稍作记录。
+题目  给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。
+（例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
+返回 A 中好子数组的数目。
+示例1  输入： A = [1,2,1,2,3], K = 2
+输出： 7
+解释： 恰好由 2 个不同整数组成的子数组：[1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2].
+ 示例2  输入： A = [1,2,1,3,4], K = 3
+输出： 3
+解释： 恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].
+ 数据范围  1 &lt;= A.length &lt;= 20000 1 &lt;= A[i] &lt;= A."/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "难题本 | LeetCode992",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "难题本, LeetCode",
+  "wordcount":  328 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992\/",
+  "datePublished": "2021-02-09T00:00:00\u002b00:00",
+  "dateModified": "2021-02-09T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">难题本 | LeetCode992</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=9090-02-02 >9 February 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>题目链接：<em><a href="https://leetcode-cn.com/problems/subarrays-with-k-different-integers/">https://leetcode-cn.com/problems/subarrays-with-k-different-integers/</a></em></p>
+<p>思路是真难想，想出来之后是真简单。</p>
+<p>已经是我目前的水平无法搞定的程度了，在此稍作记录。</p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>给定一个正整数数组 <code>A</code>，如果 <code>A</code> 的某个子数组中不同整数的个数恰好为 <code>K</code>，则称 <code>A</code> 的这个连续、不一定独立的子数组为<em>好子数组</em>。</p>
+<p>（例如，<code>[1,2,3,1,2]</code> 中有 <code>3</code> 个不同的整数：<code>1</code>，<code>2</code>，以及 <code>3</code>。）</p>
+<p>返回 <code>A</code> 中<em>好子数组</em>的数目。</p>
+<h3 id="示例1">示例1</h3>
+<blockquote>
+<p><strong>输入：</strong> A = [1,2,1,2,3], K = 2</p>
+<p><strong>输出：</strong> 7</p>
+<p><strong>解释：</strong> 恰好由 2 个不同整数组成的子数组：[1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2].</p>
+</blockquote>
+<h3 id="示例2">示例2</h3>
+<blockquote>
+<p><strong>输入：</strong> A = [1,2,1,3,4], K = 3</p>
+<p><strong>输出：</strong> 3</p>
+<p><strong>解释：</strong> 恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].</p>
+</blockquote>
+<h3 id="数据范围">数据范围</h3>
+<ol>
+<li><code>1 &lt;= A.length &lt;= 20000</code></li>
+<li><code>1 &lt;= A[i] &lt;= A.length</code></li>
+<li><code>1 &lt;= K &lt;= A.length</code></li>
+</ol>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>这个月是滑动窗口月啊，这题也想着滑动窗口，但是没有以前的题目那么直白了。</p>
+<p>我们可以看看滑动窗口常用的场景——“最值”问题：</p>
+<ul>
+<li><a href="https://leetcode-cn.com/problems/minimum-window-substring/">76. 最小覆盖子串</a>；</li>
+<li><a href="https://leetcode-cn.com/problems/minimum-size-subarray-sum/">209. 长度最小的子数组</a>；</li>
+<li><a href="https://leetcode-cn.com/problems/longest-substring-with-at-most-two-distinct-characters/">159. 至多包含两个不同字符的最长子串</a>；</li>
+<li><a href="https://leetcode-cn.com/problems/longest-repeating-character-replacement/">424. 替换后的最长重复字符</a>。</li>
+</ul>
+<p>在这道题中，我们要把“恰好”转换成为“最多”。使用<strong>最多</strong>包含<code>K</code>个不同整数的子区间个数减掉<strong>最多</strong>包含<code>K - 1</code>个不同整数的子区间个数，正是所要求的<strong>恰好</strong>包含K个不同整数的子区间个数。</p>
+<p><em>为什么能想到这样的思路呢？无他，唯手熟尔。</em></p>
+</blockquote>
+<blockquote>
+<p>如何使用滑动窗口求解最多包含K个不同整数的子区间个数呢？我们使用两个指针<code>left</code>和<code>right</code>来标识一个<strong>左闭右闭</strong>区间，每当一个窗口满足其内的元素<strong>小于等于K个</strong>时，这个窗口将会贡献<code>right - left + 1</code>个子数组。当一个窗口内的元素大于K个时，我们移动左指针，使得窗口内的元素再次小于等于K个，然后再考虑它的贡献。</p>
+<p>为什么一个窗口能贡献这么多的子数组呢？以及这种方法的正确性在哪里呢？</p>
+<p>以<em>示例1</em>为例，数组<code>[1,2,1,2,3], K = 2</code>，我们考虑元素个数小于等于2的所有子数组。</p>
+<p>当<code>left = right = 0</code>时，窗口内不同元素个数小于等于2，贡献了一个子数组。</p>
+<p>当<code>left = 0, right = 1</code>时，窗口内不同元素个数等于2，贡献了两个子数组。</p>
+<p>&hellip;&hellip;</p>
+<p>我们特别地考虑<code>left = 0, right = 3</code>的情况，窗口内不同元素的个数还是2，我们看看它到底是不是贡献了<code>3 - 2 + 1 = 4</code>个子数组。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode992/1.png" alt="4个满足条件的子数组" class="lazyload"><figcaption class="image-caption">4个满足条件的子数组</figcaption></figure></p>
+<p>是的，我们从<code>right</code>向左延伸，包括<code>right</code>所指的元素本身在内，一共能找到<code>right - left + 1 = 4</code>个子数组。</p>
+<p>注意是从<code>right</code><strong>向左延伸</strong>，因为右边界小于<code>right</code>的子数组一定在更早的循环被考虑过了。比如图中的中间子数组<code>[2, 1]</code>，在我们的<code>right = 2</code>时已经考虑过它。</p>
+<p>因此，能够写出至多包含K个子元素的滑动窗口代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">subarrayWithMostKDistinct</span>(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> A, <span style="color:#66d9ef">int</span> K)
+{
+    <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> A.size();
+    <span style="color:#66d9ef">if</span> (len <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+
+    <span style="color:#66d9ef">int</span> freq[<span style="color:#ae81ff">200001</span>] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+    <span style="color:#66d9ef">int</span> left <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">int</span> right <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">int</span> cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">int</span> res <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">while</span> (right <span style="color:#f92672">&lt;</span> len)
+    {
+        freq[A[right]]<span style="color:#f92672">++</span>;  <span style="color:#75715e">// 加入
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (freq[A[right]] <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)  <span style="color:#75715e">// 新的元素
+</span><span style="color:#75715e"></span>        {
+            cnt<span style="color:#f92672">++</span>;
+        }
+        <span style="color:#66d9ef">while</span> (cnt <span style="color:#f92672">&gt;</span> K)  <span style="color:#75715e">// 已经不满足条件
+</span><span style="color:#75715e"></span>        {
+            freq[A[left]]<span style="color:#f92672">--</span>;
+            <span style="color:#66d9ef">if</span> (freq[A[left]] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+                cnt<span style="color:#f92672">--</span>;
+            left<span style="color:#f92672">++</span>;
+        }
+        res <span style="color:#f92672">+=</span> (right <span style="color:#f92672">-</span> left <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+        right<span style="color:#f92672">++</span>;
+    }
+    <span style="color:#66d9ef">return</span> res;
+}
+</code></pre></div></blockquote>
+<h2 id="ac代码">AC代码</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">int</span> subarrayWithMostKDistinct(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> A, <span style="color:#66d9ef">int</span> K)
+    {
+        <span style="color:#75715e">/* 最多包含K个不同元素的子数组个数
+</span><span style="color:#75715e">           ` `
+</span><span style="color:#75715e">        */</span>
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> A.size();
+        <span style="color:#66d9ef">if</span> (len <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+
+        <span style="color:#66d9ef">int</span> freq[<span style="color:#ae81ff">200001</span>] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+        <span style="color:#66d9ef">int</span> left <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> right <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> res <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">while</span> (right <span style="color:#f92672">&lt;</span> len)
+        {
+            freq[A[right]]<span style="color:#f92672">++</span>;  <span style="color:#75715e">// 加入
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (freq[A[right]] <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)  <span style="color:#75715e">// 新的元素
+</span><span style="color:#75715e"></span>            {
+                cnt<span style="color:#f92672">++</span>;
+            }
+            <span style="color:#66d9ef">while</span> (cnt <span style="color:#f92672">&gt;</span> K)  <span style="color:#75715e">// 已经不满足条件
+</span><span style="color:#75715e"></span>            {
+                freq[A[left]]<span style="color:#f92672">--</span>;
+                <span style="color:#66d9ef">if</span> (freq[A[left]] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+                    cnt<span style="color:#f92672">--</span>;
+                left<span style="color:#f92672">++</span>;
+            }
+            res <span style="color:#f92672">+=</span> (right <span style="color:#f92672">-</span> left <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+            right<span style="color:#f92672">++</span>;
+        }
+        <span style="color:#66d9ef">return</span> res;
+    }
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">subarraysWithKDistinct</span>(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> A, <span style="color:#66d9ef">int</span> K) {
+        <span style="color:#66d9ef">return</span> subarrayWithMostKDistinct(A, K) 
+            <span style="color:#f92672">-</span> subarrayWithMostKDistinct(A, K <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>);
+    }
+};
+</code></pre></div><p>表现效果莫名其妙😏</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode992/2.png" alt="Performance" class="lazyload"><figcaption class="image-caption">Performance</figcaption></figure></p>
+<blockquote>
+<p>人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。</p>
+</blockquote>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 力扣（LeetCode）.K个不同整数的子数组[EB/OL].2021-02-08</p>
+<p><em><a href="https://leetcode-cn.com/problems/subarrays-with-k-different-integers/solution/k-ge-bu-tong-zheng-shu-de-zi-shu-zu-by-l-ud34/">https://leetcode-cn.com/problems/subarrays-with-k-different-integers/solution/k-ge-bu-tong-zheng-shu-de-zi-shu-zu-by-l-ud34/</a></em></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode992%2f&amp;text=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode992&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode992%2f&amp;appkey=&amp;title=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode992" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">
+                    #难题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665/" class="prev" rel="prev" title="难题本 | LeetCode665"><i class="iconfont icon-dajiantou"></i>&nbsp;难题本 | LeetCode665</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-02-09 00:00:00 \u002b0000 UTC',
+              title: '难题本 | LeetCode992',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
