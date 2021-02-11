@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992/" />
+  <link rel="next" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567/" />
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           错题本 | LeetCode703 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="错题本 | LeetCode703 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="错题本 | LeetCode703"/>
+<meta name="twitter:description" content="不是吧啊Sir，这种题也错？😢
+题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
+题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+请实现 KthLargest 类：
+ KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1  输入：
+[&ldquo;KthLargest&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+输出：
+[null, 4, 5, 5, 8, 8]
+ 示例2  输入：
+[&ldquo;KthLargest&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]
+输出：
+[null,-1,0,0,0,1]
+  分析  啪地一下，我就想到了双堆对顶，很快嗷！"/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "错题本 | LeetCode703",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "错题本, LeetCode",
+  "wordcount":  390 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703\/",
+  "datePublished": "2021-02-11T00:00:00\u002b00:00",
+  "dateModified": "2021-02-11T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">错题本 | LeetCode703</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=11110-02-02 >11 February 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>不是吧啊Sir，这种题也错？😢</p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/">https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/</a></em></p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>设计一个找到数据流中第 <code>k</code> 大元素的类（class）。注意是排序后的第 <code>k</code> 大元素，不是第 <code>k</code> 个不同的元素。</p>
+<p>请实现 <code>KthLargest</code> 类：</p>
+<ul>
+<li><code>KthLargest(int k, int[] nums)</code> 使用整数 <code>k</code> 和整数流 <code>nums</code> 初始化对象。</li>
+<li><code>int add(int val)</code> 将 <code>val</code> 插入数据流 <code>nums</code> 后，返回当前数据流中第 <code>k</code> 大的元素。</li>
+</ul>
+<h3 id="示例1">示例1</h3>
+<blockquote>
+<p><strong>输入：</strong></p>
+<p>[&ldquo;KthLargest&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;]
+[[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]</p>
+<p><strong>输出：</strong></p>
+<p>[null, 4, 5, 5, 8, 8]</p>
+</blockquote>
+<h3 id="示例2">示例2</h3>
+<blockquote>
+<p><strong>输入：</strong></p>
+<p>[&ldquo;KthLargest&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]</p>
+<p><strong>输出：</strong></p>
+<p>[null,-1,0,0,0,1]</p>
+</blockquote>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>啪地一下，我就想到了<em>双堆对顶</em>，很快嗷！</p>
+<p>然而又想复杂了o(╥﹏╥)o。要求第K大数，实际上只需要使用一个<strong>小根堆</strong>，堆中一共有K个元素，堆顶就是目标。</p>
+<p>当然，这K个元素不是随随便便的K个元素，而是将<strong>初始数组</strong>中所有元素都放入小根堆后，逐个弹出，直到只剩K个元素。</p>
+<p>当我们希望添加元素时，首先可以比较此元素与堆顶元素的大小关系，当此元素比堆顶元素小时，不会对前K个大数的顺序产生影响，直接返回堆顶元素即可；当此元素大于堆顶元素，第K大数一定会改变，我们将其放入堆中，再从堆中弹出一个元素，此时的堆中还是K个元素，堆顶元素即为答案。</p>
+</blockquote>
+<blockquote>
+<p>我最开始的想法，<em>双堆对顶</em>又是什么呢？这是一种同时使用小根堆和大根堆来维护整个数组的办法，小根堆<code>larger</code>中的所有元素都比堆顶元素更大，大根堆<code>smaller</code>中的所有元素都比堆顶元素小。这样，任何时刻，数组中的数据被组织如下：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode703/1.png" alt="双堆对顶" class="lazyload"><figcaption class="image-caption">双堆对顶</figcaption></figure></p>
+<p>这种办法可以用于<strong>快速求解数据流的中位数</strong>，是个困难题，我还没做。根据中位数的定义，中间部分的数据正需要满足比左边都大，比右边都小的性质，使用双堆对顶的办法可以在 <em>O(1)</em> 的时间内找到数据流中的中位数。</p>
+<p>这题使用双堆对顶是杀鸡用了牛刀了。将小于第K大数的数据保存在smaller堆中并没有什么意义，只是空耗时间罢了。</p>
+<p>而且，这种办法在额外考虑<strong>初始数组为空</strong>的情况、以及<strong>初始数组的大小小于K</strong>的情况时比较繁琐，我在这里WA了两次😢</p>
+</blockquote>
+<h3 id="ac代码1">AC代码1</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">KthLargest</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    priority_queue<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>, greater<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;</span> larger;
+    priority_queue<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>, less<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;</span> smaller;
+    <span style="color:#66d9ef">bool</span> larger_not_full <span style="color:#f92672">=</span> true;
+    <span style="color:#75715e">// larger是个小顶堆，堆顶元素是最小的
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// smaller是个大顶堆，堆顶元素是最大的
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 第K大数，表示有K - 1个数比他更大
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 有len - K个数比他更小
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// e.g 4,5,8,2中的第三大数
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 有两个比他小，有一个比他大
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 我们以larger.top()为第K大数，则smaller里面始终保持len - K个元素
+</span><span style="color:#75715e"></span>    KthLargest(<span style="color:#66d9ef">int</span> k, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> nums) {
+        <span style="color:#66d9ef">if</span> (nums.size() <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+            nums.push_back(<span style="color:#f92672">-</span><span style="color:#ae81ff">100000</span>);  <span style="color:#75715e">// 放入一个极小值，对第K大数无影响
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> t : nums)
+        {
+            larger.push(t);
+        }
+        <span style="color:#66d9ef">if</span> (nums.size() <span style="color:#f92672">&gt;=</span> k)
+        {
+            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> nums.size() <span style="color:#f92672">-</span> k; i<span style="color:#f92672">++</span>)
+            {
+                smaller.push(larger.top());
+                larger.pop();
+            }
+            larger_not_full <span style="color:#f92672">=</span> false;
+        }
+        <span style="color:#75715e">// larger里的所有元素都大于堆顶
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 故保持larger个数为K个，即可从堆顶中获取第K大数
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span style="color:#75715e"></span>    }
+
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">int</span> val) {
+        <span style="color:#66d9ef">int</span> res;
+        <span style="color:#66d9ef">if</span> (larger_not_full)
+        {
+            larger.push(val);
+            res <span style="color:#f92672">=</span> larger.top();
+            larger_not_full <span style="color:#f92672">=</span> false;
+        }
+        <span style="color:#66d9ef">else</span>
+        {
+            <span style="color:#66d9ef">if</span> (val <span style="color:#f92672">&gt;=</span> larger.top())  <span style="color:#75715e">// 比第K大数还大，第K大数可能改变
+</span><span style="color:#75715e"></span>            {
+                smaller.push(larger.top());
+                larger.pop();
+                larger.push(val);
+                <span style="color:#75715e">// cout &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span style="color:#75715e"></span>                res <span style="color:#f92672">=</span> larger.top();
+            }
+            <span style="color:#66d9ef">else</span>  <span style="color:#75715e">// 插入了一个更小的数，不会改变第K大数
+</span><span style="color:#75715e"></span>            {
+                smaller.push(val);
+                <span style="color:#75715e">// cout &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span style="color:#75715e"></span>                res <span style="color:#f92672">=</span> larger.top();
+            }
+        }
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * Your KthLargest object will be instantiated and called as such:
+</span><span style="color:#75715e"> * KthLargest* obj = new KthLargest(k, nums);
+</span><span style="color:#75715e"> * int param_1 = obj-&gt;add(val);
+</span><span style="color:#75715e"> */</span>
+</code></pre></div><h3 id="ac代码2">AC代码2</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">KthLargest</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    priority_queue<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>, greater<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;</span> larger;
+    <span style="color:#66d9ef">int</span> K;
+    KthLargest(<span style="color:#66d9ef">int</span> k, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> nums) {
+        K <span style="color:#f92672">=</span> k;
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> t : nums)
+        {
+            larger.push(t);
+        }
+        <span style="color:#66d9ef">while</span> (larger.size() <span style="color:#f92672">&gt;</span> k)
+        {
+            larger.pop();
+        }
+        <span style="color:#75715e">// larger里的所有元素都大于堆顶
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 故保持larger个数为K个，即可从堆顶中获取第K大数
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span style="color:#75715e"></span>    }
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">int</span> val) {
+        <span style="color:#66d9ef">int</span> res;
+        <span style="color:#66d9ef">if</span> (larger.size() <span style="color:#f92672">&lt;</span> K)
+        {
+            larger.push(val);
+            res <span style="color:#f92672">=</span> larger.top();
+        }
+        <span style="color:#66d9ef">else</span>
+        {
+            <span style="color:#66d9ef">if</span> (val <span style="color:#f92672">&gt;=</span> larger.top())  <span style="color:#75715e">// 比第K大数还大，第K大数可能改变
+</span><span style="color:#75715e"></span>            {
+                larger.push(val);
+                larger.pop();
+                res <span style="color:#f92672">=</span> larger.top();
+            }
+            <span style="color:#66d9ef">else</span>  <span style="color:#75715e">// 插入了一个更小的数，不会改变第K大数
+</span><span style="color:#75715e"></span>            {
+                res <span style="color:#f92672">=</span> larger.top();
+            }
+        }
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * Your KthLargest object will be instantiated and called as such:
+</span><span style="color:#75715e"> * KthLargest* obj = new KthLargest(k, nums);
+</span><span style="color:#75715e"> * int param_1 = obj-&gt;add(val);
+</span><span style="color:#75715e"> */</span>
+</code></pre></div><p>优化掉<code>smaller</code>堆之后，表现会好一些。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode703/2.png" alt="Performance-Final" class="lazyload"><figcaption class="image-caption">Performance-Final</figcaption></figure></p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 力扣官方题解.数据流中的第K大元素[EB/OL].2021-02-11</p>
+<p><em><a href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/">https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/</a></em></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%2594%2599%25E9%25A2%2598%25E6%259C%25AC-leetcode703%2f&amp;text=%e9%94%99%e9%a2%98%e6%9c%ac%20%7c%20LeetCode703&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%2594%2599%25E9%25A2%2598%25E6%259C%25AC-leetcode703%2f&amp;appkey=&amp;title=%e9%94%99%e9%a2%98%e6%9c%ac%20%7c%20LeetCode703" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%94%99%E9%A2%98%E6%9C%AC/">
+                    #错题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992/" class="prev" rel="prev" title="难题本 | LeetCode992"><i class="iconfont icon-dajiantou"></i>&nbsp;难题本 | LeetCode992</a>
+         
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567/" class="next" rel="next" title="错题本 | LeetCode567">错题本 | LeetCode567&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-02-11 00:00:00 \u002b0000 UTC',
+              title: '错题本 | LeetCode703',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

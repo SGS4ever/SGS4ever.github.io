@@ -30,6 +30,27 @@ WA了一次后发现，当某个字符不在集合中时直接使left = right = 
     </item>
     
     <item>
+      <title>错题本 | LeetCode703</title>
+      <link>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703/</link>
+      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703/</guid>
+      <description>不是吧啊Sir，这种题也错？😢
+题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
+题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+请实现 KthLargest 类：
+ KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1  输入：
+[&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+输出：
+[null, 4, 5, 5, 8, 8]
+ 示例2  输入：
+[&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]
+输出：
+[null,-1,0,0,0,1]
+  分析  啪地一下，我就想到了双堆对顶，很快嗷！</description>
+    </item>
+    
+    <item>
       <title>难题本 | LeetCode992</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992/</link>
       <pubDate>Tue, 09 Feb 2021 00:00:00 +0000</pubDate>
