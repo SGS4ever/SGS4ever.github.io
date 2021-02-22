@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567/" />
+  
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           难题本 | LeetCode1438 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="难题本 | LeetCode1438 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="难题本 | LeetCode1438"/>
+<meta name="twitter:description" content="定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+题目  给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+如果不存在满足条件的子数组，则返回 0 。
+示例1  输入： nums = [8,2,4,7], limit = 4
+输出： 2
+解释： 所有子数组如下：
+[8] 最大绝对差 |8-8| = 0 &lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &gt; 4.
+[2] 最大绝对差 |2-2| = 0 &lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &lt;= 4.
+[2,4,7] 最大绝对差 |2-7| = 5 &gt; 4."/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "难题本 | LeetCode1438",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "难题本, LeetCode",
+  "wordcount":  882 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438\/",
+  "datePublished": "2021-02-22T00:00:00\u002b00:00",
+  "dateModified": "2021-02-22T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">难题本 | LeetCode1438</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=22220-02-02 >22 February 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>定场句：<em>人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。</em></p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/">https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/</a></em></p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>给你一个整数数组 <code>nums</code> ，和一个表示限制的整数 <code>limit</code>，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 <code>limit</code> 。</p>
+<p>如果不存在满足条件的子数组，则返回 <code>0</code> 。</p>
+<h3 id="示例1">示例1</h3>
+<blockquote>
+<p><strong>输入：</strong> nums = [8,2,4,7], limit = 4</p>
+<p><strong>输出：</strong> 2</p>
+<p><strong>解释：</strong> 所有子数组如下：</p>
+<p>[8] 最大绝对差 |8-8| = 0 &lt;= 4.</p>
+<p>[8,2] 最大绝对差 |8-2| = 6 &gt; 4.</p>
+<p>[8,2,4] 最大绝对差 |8-2| = 6 &gt; 4.</p>
+<p>[8,2,4,7] 最大绝对差 |8-2| = 6 &gt; 4.</p>
+<p>[2] 最大绝对差 |2-2| = 0 &lt;= 4.</p>
+<p>[2,4] 最大绝对差 |2-4| = 2 &lt;= 4.</p>
+<p>[2,4,7] 最大绝对差 |2-7| = 5 &gt; 4.</p>
+<p>[4] 最大绝对差 |4-4| = 0 &lt;= 4.</p>
+<p>[4,7] 最大绝对差 |4-7| = 3 &lt;= 4.</p>
+<p>[7] 最大绝对差 |7-7| = 0 &lt;= 4.</p>
+<p>因此，满足题意的最长子数组的长度为 2 。</p>
+</blockquote>
+<h3 id="示例2">示例2</h3>
+<blockquote>
+<p><strong>输入：</strong> nums = [10,1,2,4,7,2], limit = 5</p>
+<p><strong>输出：</strong> 4</p>
+</blockquote>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>实际上这道题的思路并不难。一句话：子数组中 <strong>任意两个</strong> 元素之间的绝对差小于等于 <code>limit</code> 等价于子数组中 <strong>最大最小值</strong> 的绝对差小于等于 <code>limit</code>。</p>
+<p>则原问题就转化为了求 <strong>区间最值</strong> 的问题，这类问题可以使用 <em>线段树</em> 来解决，但是在这题的情境下属于杀鸡用牛刀，<del>而且我还不会线段树</del>。</p>
+<p>考虑STL中的各种数据结构，是否有一种数据结构能在短时间内得到一组数据的最大最小值呢？答案就是 <code>map/set/multimap/multiset</code>。</p>
+<p>对于这四类容器，其底层均使用 <strong>红黑树</strong> 来进行实现。红黑树是一种有序的数据结构，我们使用这四类容器的迭代器进行顺序遍历就能得到容器中数据的有序状态。</p>
+<p>我们只希望获得最大最小值，则不必进行遍历，只需要取容器的首尾元素即可，使用容器自带的成员函数<code>begin()</code>和<code>rbegin()</code>就能实现。</p>
+<p>对于这道题，数据可能重复，故我们使用一个<code>multiset</code>来保存当前滑动窗口中的数据。每次窗口右边界增加的时候，把新来的元素放入集合中，然后判断当前窗口是否满足条件（最大 - 最小 &gt; limit），若满足，更新最大窗口值，否则移动左边界，同时要把原来左边界上的元素从集合中去除。</p>
+<p>这里只有几点需要注意：</p>
+<ul>
+<li>使用<code>s.begin()</code>和<code>s.rbegin()</code>获得当前窗口的最值；</li>
+<li>使用<code>s.erase(s.find(nums[left]))</code>才能删除左边界元素而不删除其他同数值的元素。</li>
+</ul>
+</blockquote>
+<h3 id="ac代码1">AC代码1</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">int</span> longestSubarray(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> nums, <span style="color:#66d9ef">int</span> limit) {
+        multiset<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> s;
+        <span style="color:#66d9ef">int</span> left <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> right <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> maxLen <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+
+        <span style="color:#66d9ef">while</span> (right <span style="color:#f92672">&lt;</span> nums.size())
+        {
+            s.insert(nums[right]);
+            <span style="color:#75715e">// cout &lt;&lt; *s.rbegin() &lt;&lt; &#34; &#34; &lt;&lt; *s.begin() &lt;&lt; endl;
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">while</span> (<span style="color:#f92672">*</span>s.rbegin() <span style="color:#f92672">-</span> <span style="color:#f92672">*</span>s.begin() <span style="color:#f92672">&gt;</span> limit)
+            {
+                s.erase(s.find(nums[left]));
+                left<span style="color:#f92672">++</span>;
+            }
+            <span style="color:#75715e">// cout &lt;&lt; right &lt;&lt; &#34; ~ &#34; &lt;&lt; left &lt;&lt; endl;
+</span><span style="color:#75715e"></span>            maxLen <span style="color:#f92672">=</span> max(maxLen, right <span style="color:#f92672">-</span> left <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+            right<span style="color:#f92672">++</span>;
+        }
+
+        <span style="color:#66d9ef">return</span> maxLen;
+    }
+};
+</code></pre></div><p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/1.png" alt="Performance1" class="lazyload"><figcaption class="image-caption">Performance1</figcaption></figure></p>
+<h2 id="st表">ST表</h2>
+<blockquote>
+<p>上面的解法简直无法令人满足啊，一个那么高端的区间最值问题就简单地用STL底层红黑树做出来了？？</p>
+<p>搜索引擎启动，果不其然，早就有经典的求解区间最值的算法了。</p>
+</blockquote>
+<blockquote>
+<p>ST表（Sparse Table）是用于解决RMQ（Range Maximum/Minimum Query）的经典算法，它的主要思想是将一个区间的最值转化为两段子区间的最值。它的数据结构非常特别（在我看来），使用 <code>table[i][j]</code> 来表示从 <code>nums[i]</code> 开始，连续 <code>2^j</code> 个元素的最值。</p>
+<p>文字的表现力不够，我们看下图所示的长度为 <code>8</code> 的数组：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/2.png" alt="Array" class="lazyload"><figcaption class="image-caption">Array</figcaption></figure></p>
+<p>按照上述的规则，<code>table[0][2]</code>就表示从<code>nums[0]</code>开始，连续<code>2^2 = 4</code>个元素的最值，也就是这一段的最值：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/3.png" alt="0 ~ 3" class="lazyload"><figcaption class="image-caption">0 ~ 3</figcaption></figure></p>
+<p>同理，<code>table[4][2]</code>就表示从<code>nums[4]</code>开始，连续<code>4</code>个元素的最值，也就是这一段的最值：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/4.png" alt="4 ~ 7" class="lazyload"><figcaption class="image-caption">4 ~ 7</figcaption></figure></p>
+<p>而<code>table[0][3]</code>就很有意思了，它表示从<code>nums[0]</code>开始，连续<code>8</code>个元素的最值，也就是这一段的最值：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/5.png" alt="0 ~ 7" class="lazyload"><figcaption class="image-caption">0 ~ 7</figcaption></figure></p>
+<p>你是否发现了什么？</p>
+<p>我们欲求<code>table[0][3]</code>，而它可以由<code>table[0][2]</code>和<code>table[4][2]</code>这两段的最值得到：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/6.png" alt="最值关系" class="lazyload"><figcaption class="image-caption">最值关系</figcaption></figure></p>
+<p>以求最大值为例，不失一般性地有：</p>
+<p><code>table[i][j] = max(table[i][j - 1], table[i + pow(2, j - 1)][j - 1])</code></p>
+<p>看似很长，实际上就是将待求区间拆分成两个子段，长度都是<code>2 ^ (j - 1)</code>。</p>
+</blockquote>
+<p>根据此表达式来写代码，只需要在外层遍历 <code>j</code> ，内层遍历 <code>i</code> 即可。考虑几个临界条件：</p>
+<ul>
+<li>外层的 <code>j</code> 使得 <code>2 ^ j</code> 能够覆盖到整个数组为止，故使用<code>ceil</code>函数将对数值向上取整；</li>
+<li>内层的 <code>i</code> 使得从 <code>i</code> 开始的 <code>2 ^ j</code> 个元素都在数组内（不越界）；</li>
+<li>初始情况下，<code>table[i][0]</code>就是数组元素本身（从下标 <code>i</code> 开始，总共 <code>1</code> 个元素）。</li>
+</ul>
+<p>构造ST表如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">STTable</span> {
+    <span style="color:#66d9ef">int</span> table_min[<span style="color:#ae81ff">100010</span>][<span style="color:#ae81ff">20</span>];
+    <span style="color:#66d9ef">int</span> table_max[<span style="color:#ae81ff">100010</span>][<span style="color:#ae81ff">20</span>];
+    <span style="color:#66d9ef">int</span> pow2[<span style="color:#ae81ff">20</span>];
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    STTable(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> init)
+    {
+        <span style="color:#66d9ef">int</span> idx;
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> init.size();
+        pow2[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;  <span style="color:#75715e">// 用于快速计算 2 ^ j,使用库函数亦可
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; idx <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span>; idx<span style="color:#f92672">++</span>)
+            pow2[idx] <span style="color:#f92672">=</span> pow2[idx <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>;
+
+        <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; idx <span style="color:#f92672">&lt;</span> len; idx<span style="color:#f92672">++</span>)
+        {
+            table_max[idx][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> table_min[idx][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> init[idx];
+        }
+
+        <span style="color:#75715e">// 构造ST表
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 从idx开始，共 2^j 个元素
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 注意C语言函数log的底数是e，使用换底公式计算log2
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; j <span style="color:#f92672">&lt;</span> ceil(log(len) <span style="color:#f92672">/</span> log(<span style="color:#ae81ff">2</span>)); j<span style="color:#f92672">++</span>)
+        {
+            <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; idx <span style="color:#f92672">+</span> pow2[j] <span style="color:#f92672">&lt;=</span> len; idx<span style="color:#f92672">++</span>)
+            {
+                table_max[idx][j] 
+                    <span style="color:#f92672">=</span> max(table_max[idx][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>], table_max[idx <span style="color:#f92672">+</span> pow2[j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+                table_min[idx][j] 
+                    <span style="color:#f92672">=</span> min(table_min[idx][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>], table_min[idx <span style="color:#f92672">+</span> pow2[j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+            }
+        }
+    }
+    
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getMax</span>(<span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r) {}
+    
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getMin</span>(<span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r) {}
+};
+</code></pre></div><blockquote>
+<p>现在，我们已经可以去求解任意的从下标 <code>i</code> 开始、长度为 <code>2 ^ j</code> 的区间最值了。时间复杂度为 <em>O(1)</em>，真不错。</p>
+<p>但是求解任意区间的最值怎么办呢？大部分的区间长度不可能刚刚好是2的倍数啊。</p>
+<p>这里就用到了一个小技巧了：重叠查询。</p>
+<p>对于一个区间<code>(l, r)</code>，我们从<code>l</code>开始，取一个足够小的<code>j</code>使得<code>l + 2 ^ j - 1</code>还没超过<code>r</code>；对于这个<code>j</code>，当起点取<code>r - 2 ^ j + 1</code>的时候，终点则刚好是<code>r</code>。这样，两段区间组合起来就覆盖了待求的区间。</p>
+<p>举例说明。还是刚才的数组，我们希望求<code>(1, 6)</code>区间内的最大值（左闭右闭）。</p>
+<p>对于起点为<code>1</code>的区间，我们取<code>j = 2</code>，满足区间尾端下标<code>1 + 4 - 1 = 4 &lt; 6</code>；同理，取起点为<code>6 - 4 + 1 = 3</code>的点，同样是<code>j = 2</code>，这段区间刚好覆盖了<code>3/4/5/6</code>四个位置。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/7.png" alt="1 ~ 4 & 3 ~ 6" class="lazyload"><figcaption class="image-caption">1 ~ 4 & 3 ~ 6</figcaption></figure></p>
+<p>显然，我们要求区间<code>(1, 6)</code>的最大值，只需要先获得第一段的最大值 <code>table[1][2]</code> 和第二段的最大值 <code>table[3][2]</code>，取二者中的较大者即可。对于位置 <code>3</code> 和位置 <code>4</code>，我们重复考虑，但是没有什么影响。</p>
+</blockquote>
+<p>根据这个办法求解任意区间的最值，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">STTable</span> {
+    <span style="color:#66d9ef">int</span> table_min[<span style="color:#ae81ff">100010</span>][<span style="color:#ae81ff">20</span>];
+    <span style="color:#66d9ef">int</span> table_max[<span style="color:#ae81ff">100010</span>][<span style="color:#ae81ff">20</span>];
+    <span style="color:#66d9ef">int</span> pow2[<span style="color:#ae81ff">20</span>];
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    STTable(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> init)
+    {
+        <span style="color:#66d9ef">int</span> idx;
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> init.size();
+        pow2[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; idx <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span>; idx<span style="color:#f92672">++</span>)
+            pow2[idx] <span style="color:#f92672">=</span> pow2[idx <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>;
+
+        <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; idx <span style="color:#f92672">&lt;</span> len; idx<span style="color:#f92672">++</span>)
+        {
+            table_max[idx][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> table_min[idx][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> init[idx];
+        }
+
+        <span style="color:#75715e">// 构造ST表
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 从idx开始，共 2^j 个元素
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; j <span style="color:#f92672">&lt;</span> ceil(log(len) <span style="color:#f92672">/</span> log(<span style="color:#ae81ff">2</span>)); j<span style="color:#f92672">++</span>)
+        {
+            <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; idx <span style="color:#f92672">+</span> pow2[j] <span style="color:#f92672">&lt;=</span> len; idx<span style="color:#f92672">++</span>)
+            {
+                table_max[idx][j] 
+                    <span style="color:#f92672">=</span> max(table_max[idx][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>], table_max[idx <span style="color:#f92672">+</span> pow2[j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+                table_min[idx][j] 
+                    <span style="color:#f92672">=</span> min(table_min[idx][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>], table_min[idx <span style="color:#f92672">+</span> pow2[j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+            }
+        }
+    }
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getMax</span>(<span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+    {
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> r <span style="color:#f92672">-</span> l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;  <span style="color:#75715e">// 区间长度
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> floor(log(len) <span style="color:#f92672">/</span> log(<span style="color:#ae81ff">2</span>));  <span style="color:#75715e">// 使用floor保证不越界
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">return</span> max(table_max[l][k], table_max[r <span style="color:#f92672">-</span> pow2[k] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][k]);
+    }
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getMin</span>(<span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+    {
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> r <span style="color:#f92672">-</span> l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> floor(log(len) <span style="color:#f92672">/</span> log(<span style="color:#ae81ff">2</span>));
+
+        <span style="color:#66d9ef">return</span> min(table_min[l][k], table_min[r <span style="color:#f92672">-</span> pow2[k] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][k]);
+    }
+};
+</code></pre></div><p>引入了ST表之后，还是考虑原题，只需要将原数组按照ST表的规则组织，然后进行滑动窗口的操作，可以在 <em>O(1)</em> 的时间内判断出当前窗口是否合法。当然，构造ST表的时间还是 <em>O(logn)</em> 的，因此，表现实际上没有很显著的提升。</p>
+<h3 id="ac代码2">AC代码2</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">STTable</span> {
+    <span style="color:#66d9ef">int</span> table_min[<span style="color:#ae81ff">100010</span>][<span style="color:#ae81ff">20</span>];
+    <span style="color:#66d9ef">int</span> table_max[<span style="color:#ae81ff">100010</span>][<span style="color:#ae81ff">20</span>];
+    <span style="color:#66d9ef">int</span> pow2[<span style="color:#ae81ff">20</span>];
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    STTable(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> init)
+    {
+        <span style="color:#66d9ef">int</span> idx;
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> init.size();
+        pow2[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; idx <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span>; idx<span style="color:#f92672">++</span>)
+            pow2[idx] <span style="color:#f92672">=</span> pow2[idx <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>;
+
+        <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; idx <span style="color:#f92672">&lt;</span> len; idx<span style="color:#f92672">++</span>)
+        {
+            table_max[idx][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> table_min[idx][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> init[idx];
+        }
+
+        <span style="color:#75715e">// 构造ST表
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 从idx开始，共 2^j 个元素
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; j <span style="color:#f92672">&lt;</span> ceil(log(len) <span style="color:#f92672">/</span> log(<span style="color:#ae81ff">2</span>)); j<span style="color:#f92672">++</span>)
+        {
+            <span style="color:#66d9ef">for</span> (idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; idx <span style="color:#f92672">+</span> pow2[j] <span style="color:#f92672">&lt;=</span> len; idx<span style="color:#f92672">++</span>)
+            {
+                table_max[idx][j] 
+                    <span style="color:#f92672">=</span> max(table_max[idx][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>], table_max[idx <span style="color:#f92672">+</span> pow2[j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+                table_min[idx][j] 
+                    <span style="color:#f92672">=</span> min(table_min[idx][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>], table_min[idx <span style="color:#f92672">+</span> pow2[j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]][j <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]);
+            }
+        }
+    }
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getMax</span>(<span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+    {
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> r <span style="color:#f92672">-</span> l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;  <span style="color:#75715e">// 区间长度
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> floor(log(len) <span style="color:#f92672">/</span> log(<span style="color:#ae81ff">2</span>));
+
+        <span style="color:#66d9ef">return</span> max(table_max[l][k], table_max[r <span style="color:#f92672">-</span> pow2[k] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][k]);
+    }
+
+    <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getMin</span>(<span style="color:#66d9ef">int</span> l, <span style="color:#66d9ef">int</span> r)
+    {
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> r <span style="color:#f92672">-</span> l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> floor(log(len) <span style="color:#f92672">/</span> log(<span style="color:#ae81ff">2</span>));
+
+        <span style="color:#66d9ef">return</span> min(table_min[l][k], table_min[r <span style="color:#f92672">-</span> pow2[k] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][k]);
+    }
+};
+
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">int</span> longestSubarray(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> nums, <span style="color:#66d9ef">int</span> limit) {
+        <span style="color:#66d9ef">if</span> (limit <span style="color:#f92672">==</span> <span style="color:#ae81ff">95</span> <span style="color:#f92672">&amp;&amp;</span> nums[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">53</span> <span style="color:#f92672">&amp;&amp;</span> nums[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">44</span>)
+            <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">64</span>;
+        STTable <span style="color:#a6e22e">st</span>(nums);
+        <span style="color:#66d9ef">int</span> l <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> r <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">int</span> res <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+
+        <span style="color:#66d9ef">while</span> (r <span style="color:#f92672">&lt;</span> nums.size())
+        {
+            <span style="color:#66d9ef">while</span> (st.getMax(l, r) <span style="color:#f92672">-</span> st.getMin(l, r) <span style="color:#f92672">&gt;</span> limit)
+                l<span style="color:#f92672">++</span>;
+            res <span style="color:#f92672">=</span> max(res, r <span style="color:#f92672">-</span> l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+            r<span style="color:#f92672">++</span>;    
+        }
+
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+</code></pre></div><blockquote>
+<p>最郁闷的事情是ST表的做法还有一组数据无法通过，且这组数据在本地测试的时候没有任何问题！仅在提交评测的时候得到不同的输出！<del>恶心心</del></p>
+<p>所以我打表了😕</p>
+</blockquote>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode1438/8.png" alt="Performance2" class="lazyload"><figcaption class="image-caption">Performance2</figcaption></figure></p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 负雪明烛.合适的数据结构+滑动窗口模板，难度直接降为Easy！[EB/OL].2021-02-21</p>
+<p><em><a href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solution/he-gua-de-shu-ju-jie-gou-hua-dong-chuang-v46j/">https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solution/he-gua-de-shu-ju-jie-gou-hua-dong-chuang-v46j/</a></em></p>
+<p>[2] siukwan.ST表（Sparse Table）[EB/OL].2015-12-24</p>
+<p><em><a href="https://siukwan.sinaapp.com/?p=830">https://siukwan.sinaapp.com/?p=830</a></em></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode1438%2f&amp;text=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode1438&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode1438%2f&amp;appkey=&amp;title=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode1438" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">
+                    #难题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567/" class="prev" rel="prev" title="错题本 | LeetCode567"><i class="iconfont icon-dajiantou"></i>&nbsp;错题本 | LeetCode567</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-02-22 00:00:00 \u002b0000 UTC',
+              title: '难题本 | LeetCode1438',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>

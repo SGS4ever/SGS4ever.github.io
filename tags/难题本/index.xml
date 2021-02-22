@@ -6,7 +6,29 @@
     <description>Recent content in 难题本 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 09 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 22 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>难题本 | LeetCode1438</title>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438/</link>
+      <pubDate>Mon, 22 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438/</guid>
+      <description>定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+题目  给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+如果不存在满足条件的子数组，则返回 0 。
+示例1  输入： nums = [8,2,4,7], limit = 4
+输出： 2
+解释： 所有子数组如下：
+[8] 最大绝对差 |8-8| = 0 &amp;lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[2] 最大绝对差 |2-2| = 0 &amp;lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &amp;lt;= 4.
+[2,4,7] 最大绝对差 |2-7| = 5 &amp;gt; 4.</description>
+    </item>
+    
     <item>
       <title>难题本 | LeetCode992</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992/</link>

@@ -11,7 +11,7 @@
   
   
   <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703/" />
-  
+  <link rel="next" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438/" />
   <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567/" />
   <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -68,7 +68,7 @@ WA了一次后发现，当某个字符不在集合中时直接使left = right = 
   },
   "genre": "posts",
   "keywords": "错题本, LeetCode",
-  "wordcount":  385 ,
+  "wordcount":  387 ,
   "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567\/",
   "datePublished": "2021-02-11T00:00:00\u002b00:00",
   "dateModified": "2021-02-11T00:00:00\u002b00:00",
@@ -308,7 +308,7 @@ WA了一次后发现，当某个字符不在集合中时直接使left = right = 
 <blockquote>
 <p>这个性能已经裂开了。。</p>
 <p>此时我去看了看题解，发现使用集合这种思路可能不是一般人能想到的。</p>
-<p>确实，记录s1中出现的所有字符，只需要使用一个*O(26)*大小的数组就可以了，为什么要逐个存在集合中呢？？</p>
+<p>确实，记录s1中出现的所有字符，只需要使用一个 <em>O(26)</em> 大小的数组就可以了，为什么要逐个存在集合中呢？？</p>
 <p>使用整数数组存字符频数，使得空间复杂度降低了许多。</p>
 <p>对于滑动窗口，可以直接使<strong>窗口大小恒等于s1的长度</strong>，这样从左向右滑动就遍历完成所有<strong>可能符合条件</strong> 的子数组了。</p>
 <p>每次滑动时，只有当前窗口左右边界的字符频数会发生变化，每次比较当前窗口的字符频数与s1数组的字符频数即可。</p>
@@ -443,6 +443,8 @@ WA了一次后发现，当某个字符不在集合中时直接使left = right = 
         
         <a href="https://sgs4ever.github.io/2021/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703/" class="prev" rel="prev" title="错题本 | LeetCode703"><i class="iconfont icon-dajiantou"></i>&nbsp;错题本 | LeetCode703</a>
          
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438/" class="next" rel="next" title="难题本 | LeetCode1438">难题本 | LeetCode1438&nbsp;<i class="iconfont icon-xiaojiantou"></i></a>
         
     </div>
 
