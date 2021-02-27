@@ -6,7 +6,26 @@
     <description>Recent content in LeetCode on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 22 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 27 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>难题本 | LeetCode395</title>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395/</link>
+      <pubDate>Sat, 27 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395/</guid>
+      <description>题目链接： https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/
+题目  给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
+示例1  输入： s = &amp;ldquo;aaabb&amp;rdquo;, k = 3
+输出： 3
+解释： 最长子串为“aaa”，其中”a“重复了3次
+ 示例2  输入： s = “ababbc”, k = 2
+输出： 5
+ 数据范围  1 &amp;lt;= s.length &amp;lt;= 104 s 仅由小写英文字母组成 1 &amp;lt;= k &amp;lt;= 105   分析  没有任何思路，参照题解的分治法将此题解出，稍作记录。
+首先，对于 s 中的所有字符，我们可以统计它们出现的次数，对于所有出现次数小于 k 的字符，答案中一定不包含它。
+则我们只需要考虑这些字符之外的子串。我们可以遍历整个字符串，当某个字符出现次数小于 k 的时候，将其位置记录下来；我们凭借这些位点，可以将原字符串 s 分割成许多个子串，然后按照相同的办法去处理这些子串即可。
+按照这样的分析，整个题目可以使用递归的写法来实现分治算法。</description>
+    </item>
+    
     <item>
       <title>难题本 | LeetCode1438</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438/</link>
