@@ -6,7 +6,33 @@
     <description>Recent content in LeetCode on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 29 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 31 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://sgs4ever.github.io/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>难题本 | LeetCode90</title>
+      <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/subsets-ii/
+题目  给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。
+解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
+示例1  输入： nums = [1,2,2]
+输出： [[],[1],[1,2],[1,2,2],[2],[2,2]]
+ 示例2  输入： nums = [0]
+输出： [[],[0]]
+  分析  三个月之前WA过的题，在每日一题里碰见了，而我还是思考了很久😢
+ 原始数组中可能包含重复元素，则对于重复元素的考虑就尤为重要，一般来说，重复元素对于子集的贡献也有重复。
+我们不妨考虑进行以下的模拟，对于一个 不包含重复元素 的集合 [1, 2, 3] ，如何求得它的所有子集呢？
+首先，答案中包含一个空集。
+首先取得第一个元素，将其与当前答案中的所有集合拼接，放入答案中；
+考虑第二个元素，将其与当前答案中的所有集合拼接，放入答案中；
+第三个元素同理。
+在这个环节中，由于答案是在不断地增长的，我们只需要用一个变量保存添加元素之前的答案集合大小即可。
+这种做法的正确性是 不会证明 理所当然的。
+实际上，根据这种做法我们可以AC掉 LeetCode78. 子集 。
+// LeetCode 78 class Solution { public: vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; subsets(vector&amp;lt;int&amp;gt;&amp;amp; nums) { vector&amp;lt;int&amp;gt; tmp; vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; res; res.push_back(tmp); // empty set  for (auto n : nums) { int sze = res.</description>
+    </item>
+    
     <item>
       <title>难题本 | LeetCode190</title>
       <link>https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190/</link>

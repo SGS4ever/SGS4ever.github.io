@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="prev" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190/" />
+  
+  <link rel="canonical" href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90/" />
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           难题本 | LeetCode90 | XR_G&#39;s Blog
+       
+  </title>
+  <meta name="title" content="难题本 | LeetCode90 | XR_G&#39;s Blog">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="难题本 | LeetCode90"/>
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/subsets-ii/
+题目  给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。
+解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
+示例1  输入： nums = [1,2,2]
+输出： [[],[1],[1,2],[1,2,2],[2],[2,2]]
+ 示例2  输入： nums = [0]
+输出： [[],[0]]
+  分析  三个月之前WA过的题，在每日一题里碰见了，而我还是思考了很久😢
+ 原始数组中可能包含重复元素，则对于重复元素的考虑就尤为重要，一般来说，重复元素对于子集的贡献也有重复。
+我们不妨考虑进行以下的模拟，对于一个 不包含重复元素 的集合 [1, 2, 3] ，如何求得它的所有子集呢？
+首先，答案中包含一个空集。
+首先取得第一个元素，将其与当前答案中的所有集合拼接，放入答案中；
+考虑第二个元素，将其与当前答案中的所有集合拼接，放入答案中；
+第三个元素同理。
+在这个环节中，由于答案是在不断地增长的，我们只需要用一个变量保存添加元素之前的答案集合大小即可。
+这种做法的正确性是 不会证明 理所当然的。
+实际上，根据这种做法我们可以AC掉 LeetCode78. 子集 。
+// LeetCode 78 class Solution { public: vector&lt;vector&lt;int&gt;&gt; subsets(vector&lt;int&gt;&amp; nums) { vector&lt;int&gt; tmp; vector&lt;vector&lt;int&gt;&gt; res; res.push_back(tmp); // empty set  for (auto n : nums) { int sze = res."/>
+
+  <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "难题本 | LeetCode90",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90\/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:\/\/sgs4ever.github.io\/cover.png",
+    "width":  800 ,
+    "height":  600 
+  },
+  "genre": "posts",
+  "keywords": "难题本, LeetCode",
+  "wordcount":  209 ,
+  "url": "https:\/\/sgs4ever.github.io\/2021\/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90\/",
+  "datePublished": "2021-03-31T00:00:00\u002b00:00",
+  "dateModified": "2021-03-31T00:00:00\u002b00:00",
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "XR_G",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:\/\/sgs4ever.github.io\/logo.png",
+      "width":  127 ,
+      "height":  47 
+    }
+  },
+  "author": {
+    "@type": "Person",
+    "name": "XR_G"
+  },
+  "description": ""
+}
+</script>
+  
+</head>
+
+  
+
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="https://sgs4ever.github.io">主页</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-sun"></i></a>&nbsp;<a href="https://sgs4ever.github.io">XR_G&#39;s Blog</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博文</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about" title="">关于作者</a>
+                
+        </div>
+    </div>
+</nav>
+
+    	 <main class="main">
+        <div id="particles-js" style="position: absolute; width: auto;height: auto;"></div>
+        <script  async="false" src="https://sgs4ever.github.io/js/particles.js"></script>
+        <script  async="false" src="https://sgs4ever.github.io/js/app.js"></script>
+          <div class="container">
+      		
+<article class="post-warp">
+    <header class="post-header">
+        <h1 class="post-title">难题本 | LeetCode90</h1>
+        <div class="post-meta">
+            Written by <a href="https://sgs4ever.github.io" rel="author">XR_G</a> with ♥ 
+                <span class="post-time">
+                    on <time datetime=31310-03-03 >31 March 2021</time>
+                </span>
+                
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>题目链接：<em><a href="https://leetcode-cn.com/problems/subsets-ii/">https://leetcode-cn.com/problems/subsets-ii/</a></em></p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>给你一个整数数组 <code>nums</code> ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。</p>
+<p>解集 不能 包含重复的子集。返回的解集中，子集可以按 <strong>任意顺序</strong> 排列。</p>
+<h3 id="示例1">示例1</h3>
+<blockquote>
+<p><strong>输入：</strong> nums = [1,2,2]</p>
+<p><strong>输出：</strong> [[],[1],[1,2],[1,2,2],[2],[2,2]]</p>
+</blockquote>
+<h3 id="示例2">示例2</h3>
+<blockquote>
+<p><strong>输入：</strong> nums = [0]</p>
+<p><strong>输出：</strong> [[],[0]]</p>
+</blockquote>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>三个月之前WA过的题，在每日一题里碰见了，而我还是思考了很久😢</p>
+<hr>
+<p>原始数组中可能包含重复元素，则对于重复元素的考虑就尤为重要，一般来说，重复元素对于子集的贡献也有重复。</p>
+<p>我们不妨考虑进行以下的模拟，对于一个 <strong>不包含重复元素</strong> 的集合 <code>[1, 2, 3]</code> ，如何求得它的所有子集呢？</p>
+<p>首先，答案中包含一个空集。</p>
+<p>首先取得第一个元素，将其与当前答案中的所有集合拼接，放入答案中；</p>
+<p>考虑第二个元素，将其与当前答案中的所有集合拼接，放入答案中；</p>
+<p>第三个元素同理。</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode90/1.png" alt="示意" class="lazyload"><figcaption class="image-caption">示意</figcaption></figure></p>
+<p>在这个环节中，由于答案是在不断地增长的，我们只需要用一个变量保存添加元素之前的答案集合大小即可。</p>
+<p>这种做法的正确性是 <del>不会证明</del> 理所当然的。</p>
+<p>实际上，根据这种做法我们可以AC掉 <a href="https://leetcode-cn.com/problems/subsets/">LeetCode78. 子集</a> 。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#75715e">// LeetCode 78
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    vector<span style="color:#f92672">&lt;</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;</span> subsets(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> nums) {
+        vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> tmp;
+        vector<span style="color:#f92672">&lt;</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;</span> res;
+
+        res.push_back(tmp);  <span style="color:#75715e">// empty set
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> n : nums)
+        {
+            <span style="color:#66d9ef">int</span> sze <span style="color:#f92672">=</span> res.size();
+            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> sze; i<span style="color:#f92672">++</span>)
+            {
+                tmp <span style="color:#f92672">=</span> res[i];
+                tmp.push_back(n);
+                res.push_back(tmp);
+            }
+        }
+
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+</code></pre></div></blockquote>
+<blockquote>
+<p>那么问题在于，本题的原始数组是可以重复的。</p>
+<p>对于重复数据，首先可以进行一波排序，使得我们比较方便地进行判重。</p>
+<p>在上面的做法中，重复数据产生的答案会有相当一部分重复，我们考虑集合 <code>[1, 2, 2]</code> ：</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode90/2.png" alt="对集合[1,2,2]进行同样的操作" class="lazyload"><figcaption class="image-caption">对集合[1,2,2]进行同样的操作</figcaption></figure></p>
+<p>可以看到，对于重复出现的 <code>2</code> 来说，它不需要再与 <code>[]</code> 和 <code>[1]</code> 进行合并。</p>
+<p>那么，重复数据在哪里能够产生贡献呢？</p>
+<p>答案就是 <strong>上一步新加入的子集</strong> ！</p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/LeetCode90/3.png" alt="重复数据与上一步加入的子集合并" class="lazyload"><figcaption class="image-caption">重复数据与上一步加入的子集合并</figcaption></figure></p>
+<p>由此，形势就变得比较明朗了。对于非重复的数据，与目前拥有的所有子集进行合并；对于重复的数据，只与上一步加入的子集进行合并。</p>
+<p>如何只获取上一步加入的子集呢？在上面给出的代码中，我们使用 <code>sze</code> 来记录答案集合中原本的大小。很巧的，上一步加入的子集在答案集合中的下标就从 <code>sze</code> 开始。</p>
+<p>于是，使用一个变量 <code>start</code> 来记录本轮需要合并的子集起点，当当前的数是重复的， <code>start</code> 就被设置为 <code>sze</code> ，然后更新新的 <code>sze</code> ，否则 <code>start</code> 直接设置为 <code>0</code> 。</p>
+</blockquote>
+<h3 id="ac代码">AC代码</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    vector<span style="color:#f92672">&lt;</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;</span> subsetsWithDup(vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&amp;</span> nums) {
+        vector<span style="color:#f92672">&lt;</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;&gt;</span> res;
+        vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> tmp;
+        res.push_back(tmp);
+        <span style="color:#66d9ef">int</span> start, sze;
+
+        sort(nums.begin(), nums.end());
+
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> idx <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; idx <span style="color:#f92672">&lt;</span> nums.size(); idx<span style="color:#f92672">++</span>)
+        {
+            <span style="color:#66d9ef">if</span> (idx <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> nums[idx] <span style="color:#f92672">==</span> nums[idx <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>])
+            {
+                start <span style="color:#f92672">=</span> sze;
+            }
+            <span style="color:#66d9ef">else</span>
+            {
+                start <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+            }
+            sze <span style="color:#f92672">=</span> res.size();
+            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> start; i <span style="color:#f92672">&lt;</span> sze; i<span style="color:#f92672">++</span>)
+            {
+                tmp <span style="color:#f92672">=</span> res[i];
+                tmp.push_back(nums[idx]);
+                res.push_back(tmp);
+            }
+        }
+
+        <span style="color:#66d9ef">return</span> res;
+    }
+};
+</code></pre></div><p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="../../images/post/4.png" alt="Performance" class="lazyload"><figcaption class="image-caption">Performance</figcaption></figure></p>
+<h3 id="小结">小结</h3>
+<p>三个月前WA掉的题目在今天重新来到我的面前，经过一番思索之后能够独立地将其做出来了。人生点滴进步大抵皆见于此类细节之中。题解基本采用回溯的办法，在此没有花费精力予以研究。亦因此本文无所参考，便有，也是此三月中所见的某篇文章，回忆不清矣。</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author: </span>
+                <span>XR_G </span>
+                </p>
+            
+           
+            <p class="copyright-item">
+                
+                <span>Share: </span>
+                <span>
+
+      
+        <a href="//twitter.com/share?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode90%2f&amp;text=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode90&amp;via=HuangruiLee" target="_blank" title="Share on Twitter">
+          <i class="iconfont icon-twitter"></i>
+        </a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+        
+      
+
+          
+
+          
+
+          
+
+          
+        <a href="//service.weibo.com/share/share.php?url=https%3a%2f%2fsgs4ever.github.io%2f2021%2f%25E9%259A%25BE%25E9%25A2%2598%25E6%259C%25AC-leetcode90%2f&amp;appkey=&amp;title=%e9%9a%be%e9%a2%98%e6%9c%ac%20%7c%20LeetCode90" target="_blank" title="Share on Douban ">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+          
+</span>
+                
+            </p>
+
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-icon-tag"></i>Tag: 
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">
+                    #难题本</a></span>
+            
+            <span class="tag"><a href="https://sgs4ever.github.io/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">Back</a></span> · 
+                <span><a href="https://sgs4ever.github.io">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://sgs4ever.github.io/2021/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190/" class="prev" rel="prev" title="难题本 | LeetCode190"><i class="iconfont icon-dajiantou"></i>&nbsp;难题本 | LeetCode190</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+          
+
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+      <script type="text/javascript">
+          var gitalk = new Gitalk({
+              id: '2021-03-31 00:00:00 \u002b0000 UTC',
+              title: '难题本 | LeetCode90',
+              clientID: '60cf432a89bc92763c12',
+              clientSecret: '58a643e9afb7d2b630c9c8ca5909f7d231b4f9d6',
+              repo: 'BlogComments',
+              owner: 'SGS4ever',
+              admin: ['SGS4ever'],
+              body: decodeURI(location.href)
+          });
+          gitalk.render('gitalk-container');
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+ 
+
+          
+    </div>
+</article>
+          </div>
+       </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2021</span>
+        
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://sgs4ever.github.io">XR_G</a> | </span>
+         
+
+		  <span>Crafted with ❤️ by <a href="https://github.com/Fastbyte01/KeepIt" target="_blank" rel="external nofollow noopener noreffer">KeepIt</a> & <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <link crossorigin="anonymous" integrity="sha384-yziQACfvCVwLqVFLqkWBYRO3XeA4EqzfXKGwaWnenYn5XzqfJFlFdKEmvutIQdKb" href="https://lib.baomitu.com/lightgallery/1.6.12/css/lightgallery.min.css" rel="stylesheet">
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+
+
+
+
+     </div>
+  </body>
+</html>
