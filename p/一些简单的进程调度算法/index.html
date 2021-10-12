@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='上一次挖的OAuth2.0坑还没填好，又要开一个操作系统的坑了&amp;hellip;
+本篇介绍一些简单的进程调度算法，以及它们的代码实现。文章的具体组织为：一些关键概念的介绍 &amp;ndash;&amp;gt; 四种进程调度算法（SJF、FCFS、HRRF、HPF）。
+话不多说，Let&amp;rsquo;s go！
+一些概念  在对四种调度算法进行介绍之前，有一些概念希望读者能够理解：
+ 周转时间：进程完成时间 - 进程到达时间。也就是整个进程从开始到结束所花费的时间。 平均周转时间：这个数值一般用于衡量调度的效率。比如在一段时间内来了5个进程，那么在这段时间内这些进程的平均周转时间就是五个进程的周转时间之和 / 5。 带权周转时间：某个进程的带权周转时间就是这个进程的周转时间 / 运行时间。由于系统中总有多个进程在运行，周转时间往往大于运行时间。因此，带权周转时间一般大于等于1。 平均带权周转时间：多个进程带权周转时间的平均值。  实际上，还有很多指标可以来衡量调度算法的优劣，如CPU利用率、系统吞吐量、响应时间等等。但是本文中介绍的调度算法与时间紧密相连，故此只需要理解以上几个概念，就能够看懂下文对于调度算法的分析。
+ 先来先服务算法（First Come First Serve，FCFS）  先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU优先服务最先到达的进程。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：
+假设有五个进程，它们的到达时间和希望的运行时间如下：
+进程描述
+本着先来先服务的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（在第7秒的时候到的），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。
+CPU对这五个进程的服务次序如下图所示：
+服务次序
+如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：
+统计时间
+你看出其中存在的问题了吗？
+ 短作业优先算法（Shortest Job First，SJF）  先来先服务算法很好理解、在生活中很常见，但是它存在一个问题：对于一些运行时间很短的进程，光是在那边排队等待所花费的时间可能数倍于真正的运行时间！
+在上一个例子中，进程2所花费的运行时间只有6秒，但是它很不幸地被进程3抢占先机，只能眼睁睁看着进程3运行了10秒。光是等待的时间就比运行的时间还多！因此，它的带权周转时间也是最大的，现在是否对这个概念的理解深刻了许多？
+先来先服务的死板特性对于某些短作业来说简直是灾难，此时，短作业优先算法就显得友好许多。
+短作业优先算法不关注进程的到达时间，当CPU结束了一个进程的服务之后，永远从等待的所有进程中找出运行时间最短的进程为其服务。
+还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。
+这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。
+如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：
+新例子
+在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。
+但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。
+把数据完善一下，就会发现问题所在：
+新数据
+可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！
+这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现进程饥饿。
+ 最高响应比优先算法（Highest Response Ratio First，HRRF）  在短作业优先算法中，进程饥饿是一个比较致命的问题。但是短作业优先的思想确实是有相当的可取之处的，于是人们考虑保留这种思想，同时使得长进程能够较少地受到饥饿，这就有了最高响应比优先算法。'><title>一些简单的进程调度算法</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='一些简单的进程调度算法'>
+<meta property='og:description' content='上一次挖的OAuth2.0坑还没填好，又要开一个操作系统的坑了&amp;hellip;
+本篇介绍一些简单的进程调度算法，以及它们的代码实现。文章的具体组织为：一些关键概念的介绍 &amp;ndash;&amp;gt; 四种进程调度算法（SJF、FCFS、HRRF、HPF）。
+话不多说，Let&amp;rsquo;s go！
+一些概念  在对四种调度算法进行介绍之前，有一些概念希望读者能够理解：
+ 周转时间：进程完成时间 - 进程到达时间。也就是整个进程从开始到结束所花费的时间。 平均周转时间：这个数值一般用于衡量调度的效率。比如在一段时间内来了5个进程，那么在这段时间内这些进程的平均周转时间就是五个进程的周转时间之和 / 5。 带权周转时间：某个进程的带权周转时间就是这个进程的周转时间 / 运行时间。由于系统中总有多个进程在运行，周转时间往往大于运行时间。因此，带权周转时间一般大于等于1。 平均带权周转时间：多个进程带权周转时间的平均值。  实际上，还有很多指标可以来衡量调度算法的优劣，如CPU利用率、系统吞吐量、响应时间等等。但是本文中介绍的调度算法与时间紧密相连，故此只需要理解以上几个概念，就能够看懂下文对于调度算法的分析。
+ 先来先服务算法（First Come First Serve，FCFS）  先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU优先服务最先到达的进程。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：
+假设有五个进程，它们的到达时间和希望的运行时间如下：
+进程描述
+本着先来先服务的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（在第7秒的时候到的），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。
+CPU对这五个进程的服务次序如下图所示：
+服务次序
+如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：
+统计时间
+你看出其中存在的问题了吗？
+ 短作业优先算法（Shortest Job First，SJF）  先来先服务算法很好理解、在生活中很常见，但是它存在一个问题：对于一些运行时间很短的进程，光是在那边排队等待所花费的时间可能数倍于真正的运行时间！
+在上一个例子中，进程2所花费的运行时间只有6秒，但是它很不幸地被进程3抢占先机，只能眼睁睁看着进程3运行了10秒。光是等待的时间就比运行的时间还多！因此，它的带权周转时间也是最大的，现在是否对这个概念的理解深刻了许多？
+先来先服务的死板特性对于某些短作业来说简直是灾难，此时，短作业优先算法就显得友好许多。
+短作业优先算法不关注进程的到达时间，当CPU结束了一个进程的服务之后，永远从等待的所有进程中找出运行时间最短的进程为其服务。
+还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。
+这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。
+如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：
+新例子
+在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。
+但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。
+把数据完善一下，就会发现问题所在：
+新数据
+可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！
+这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现进程饥饿。
+ 最高响应比优先算法（Highest Response Ratio First，HRRF）  在短作业优先算法中，进程饥饿是一个比较致命的问题。但是短作业优先的思想确实是有相当的可取之处的，于是人们考虑保留这种思想，同时使得长进程能够较少地受到饥饿，这就有了最高响应比优先算法。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='操作系统' /><meta property='article:published_time' content='2020-10-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-10-19T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="一些简单的进程调度算法">
+<meta name="twitter:description" content="上一次挖的OAuth2.0坑还没填好，又要开一个操作系统的坑了&amp;hellip;
+本篇介绍一些简单的进程调度算法，以及它们的代码实现。文章的具体组织为：一些关键概念的介绍 &amp;ndash;&amp;gt; 四种进程调度算法（SJF、FCFS、HRRF、HPF）。
+话不多说，Let&amp;rsquo;s go！
+一些概念  在对四种调度算法进行介绍之前，有一些概念希望读者能够理解：
+ 周转时间：进程完成时间 - 进程到达时间。也就是整个进程从开始到结束所花费的时间。 平均周转时间：这个数值一般用于衡量调度的效率。比如在一段时间内来了5个进程，那么在这段时间内这些进程的平均周转时间就是五个进程的周转时间之和 / 5。 带权周转时间：某个进程的带权周转时间就是这个进程的周转时间 / 运行时间。由于系统中总有多个进程在运行，周转时间往往大于运行时间。因此，带权周转时间一般大于等于1。 平均带权周转时间：多个进程带权周转时间的平均值。  实际上，还有很多指标可以来衡量调度算法的优劣，如CPU利用率、系统吞吐量、响应时间等等。但是本文中介绍的调度算法与时间紧密相连，故此只需要理解以上几个概念，就能够看懂下文对于调度算法的分析。
+ 先来先服务算法（First Come First Serve，FCFS）  先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU优先服务最先到达的进程。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：
+假设有五个进程，它们的到达时间和希望的运行时间如下：
+进程描述
+本着先来先服务的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（在第7秒的时候到的），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。
+CPU对这五个进程的服务次序如下图所示：
+服务次序
+如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：
+统计时间
+你看出其中存在的问题了吗？
+ 短作业优先算法（Shortest Job First，SJF）  先来先服务算法很好理解、在生活中很常见，但是它存在一个问题：对于一些运行时间很短的进程，光是在那边排队等待所花费的时间可能数倍于真正的运行时间！
+在上一个例子中，进程2所花费的运行时间只有6秒，但是它很不幸地被进程3抢占先机，只能眼睁睁看着进程3运行了10秒。光是等待的时间就比运行的时间还多！因此，它的带权周转时间也是最大的，现在是否对这个概念的理解深刻了许多？
+先来先服务的死板特性对于某些短作业来说简直是灾难，此时，短作业优先算法就显得友好许多。
+短作业优先算法不关注进程的到达时间，当CPU结束了一个进程的服务之后，永远从等待的所有进程中找出运行时间最短的进程为其服务。
+还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。
+这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。
+如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：
+新例子
+在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。
+但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。
+把数据完善一下，就会发现问题所在：
+新数据
+可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！
+这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现进程饥饿。
+ 最高响应比优先算法（Highest Response Ratio First，HRRF）  在短作业优先算法中，进程饥饿是一个比较致命的问题。但是短作业优先的思想确实是有相当的可取之处的，于是人们考虑保留这种思想，同时使得长进程能够较少地受到饥饿，这就有了最高响应比优先算法。">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一些概念">一些概念</a></li>
+    <li><a href="#先来先服务算法first-come-first-servefcfs">先来先服务算法（First Come First Serve，FCFS）</a></li>
+    <li><a href="#短作业优先算法shortest-job-firstsjf">短作业优先算法（Shortest Job First，SJF）</a></li>
+    <li><a href="#最高响应比优先算法highest-response-ratio-firsthrrf">最高响应比优先算法（Highest Response Ratio First，HRRF）</a></li>
+    <li><a href="#最高优先数优先highest-priority-firsthpf">最高优先数优先（Highest Priority First，HPF）</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/">一些简单的进程调度算法</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Oct 19, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>上一次挖的OAuth2.0坑还没填好，又要开一个操作系统的坑了&hellip;</p>
+<p>本篇介绍一些简单的进程调度算法，以及它们的代码实现。文章的具体组织为：一些关键概念的介绍 &ndash;&gt; 四种进程调度算法（SJF、FCFS、HRRF、HPF）。</p>
+<p>话不多说，Let&rsquo;s go！</p>
+<h3 id="一些概念">一些概念</h3>
+<blockquote>
+<p>在对四种调度算法进行介绍之前，有一些概念希望读者能够理解：</p>
+<ul>
+<li>周转时间：进程完成时间 - 进程到达时间。也就是整个进程从开始到结束所花费的时间。</li>
+<li>平均周转时间：这个数值一般用于衡量调度的效率。比如在一段时间内来了5个进程，那么在这段时间内这些进程的平均周转时间就是<code>五个进程的周转时间之和 / 5</code>。</li>
+<li>带权周转时间：某个进程的带权周转时间就是这个进程的<code>周转时间 / 运行时间</code>。由于系统中总有多个进程在运行，周转时间往往大于运行时间。因此，<strong>带权周转时间一般大于等于1</strong>。</li>
+<li>平均带权周转时间：多个进程带权周转时间的平均值。</li>
+</ul>
+<p>实际上，还有很多指标可以来衡量调度算法的优劣，如CPU利用率、系统吞吐量、响应时间等等。但是本文中介绍的调度算法与时间紧密相连，故此只需要理解以上几个概念，就能够看懂下文对于调度算法的分析。</p>
+</blockquote>
+<h3 id="先来先服务算法first-come-first-servefcfs">先来先服务算法（First Come First Serve，FCFS）</h3>
+<blockquote>
+<p>先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU<strong>优先服务最先到达的进程</strong>。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：</p>
+<p>假设有五个进程，它们的到达时间和希望的运行时间如下：</p>
+<p><figure style="flex-grow: 431; flex-basis: 1035px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule1.png" data-size="1187x275"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule1.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule1_hu8859486d243b2d44633fc3b351b232b9_13194_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule1_hu8859486d243b2d44633fc3b351b232b9_13194_1024x0_resize_box_2.png 1024w"
+				width="1187"
+				height="275"
+				loading="lazy"
+				alt="进程描述">
+		</a>
+		
+		<figcaption>进程描述</figcaption>
+		
+	</figure></p>
+<p>本着<strong>先来先服务</strong>的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（<em>在第7秒的时候到的</em>），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。</p>
+<p>CPU对这五个进程的服务次序如下图所示：</p>
+<p><figure style="flex-grow: 397; flex-basis: 954px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule2.png" data-size="1280x322"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule2.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule2_huaaf96923f64c7bc178db766817199e99_25093_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule2_huaaf96923f64c7bc178db766817199e99_25093_1024x0_resize_box_2.png 1024w"
+				width="1280"
+				height="322"
+				loading="lazy"
+				alt="服务次序">
+		</a>
+		
+		<figcaption>服务次序</figcaption>
+		
+	</figure></p>
+<p>如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：</p>
+<p><figure style="flex-grow: 433; flex-basis: 1039px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule3.png" data-size="1178x272"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule3.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule3_hu321460d357d08afaeafac210840ed551_21536_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule3_hu321460d357d08afaeafac210840ed551_21536_1024x0_resize_box_2.png 1024w"
+				width="1178"
+				height="272"
+				loading="lazy"
+				alt="统计时间">
+		</a>
+		
+		<figcaption>统计时间</figcaption>
+		
+	</figure></p>
+<p>你看出其中存在的问题了吗？</p>
+</blockquote>
+<h3 id="短作业优先算法shortest-job-firstsjf">短作业优先算法（Shortest Job First，SJF）</h3>
+<blockquote>
+<p>先来先服务算法很好理解、在生活中很常见，但是它存在一个问题：对于一些运行时间很短的进程，光是在那边排队等待所花费的时间可能数倍于真正的运行时间！</p>
+<p>在上一个例子中，<strong>进程2</strong>所花费的运行时间只有6秒，但是它很不幸地被进程3抢占先机，只能眼睁睁看着进程3运行了10秒。光是等待的时间就比运行的时间还多！因此，它的<strong>带权周转时间</strong>也是最大的，现在是否对这个概念的理解深刻了许多？</p>
+<p>先来先服务的死板特性对于某些短作业来说简直是灾难，此时，<strong>短作业优先算法</strong>就显得友好许多。</p>
+<p>短作业优先算法不关注进程的到达时间，当CPU结束了一个进程的服务之后，永远从等待的所有进程中找出运行时间最短的进程为其服务。</p>
+<p>还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，<strong>虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务</strong>；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。</p>
+<p>这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。</p>
+<p>如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：</p>
+<p><figure style="flex-grow: 229; flex-basis: 551px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4.png" data-size="637x277"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4_hub8babe70dc868a85059e7eb55ec48647_11752_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4_hub8babe70dc868a85059e7eb55ec48647_11752_1024x0_resize_box_2.png 1024w"
+				width="637"
+				height="277"
+				loading="lazy"
+				alt="新例子">
+		</a>
+		
+		<figcaption>新例子</figcaption>
+		
+	</figure></p>
+<p>在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。</p>
+<p>但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。</p>
+<p>把数据完善一下，就会发现问题所在：</p>
+<p><figure style="flex-grow: 444; flex-basis: 1066px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule5.png" data-size="1187x267"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule5.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule5_hu04e99653b8eac8285ae0416a96a12309_22810_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule5_hu04e99653b8eac8285ae0416a96a12309_22810_1024x0_resize_box_2.png 1024w"
+				width="1187"
+				height="267"
+				loading="lazy"
+				alt="新数据">
+		</a>
+		
+		<figcaption>新数据</figcaption>
+		
+	</figure></p>
+<p>可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！</p>
+<p>这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现<strong>进程饥饿</strong>。</p>
+</blockquote>
+<h3 id="最高响应比优先算法highest-response-ratio-firsthrrf">最高响应比优先算法（Highest Response Ratio First，HRRF）</h3>
+<blockquote>
+<p>在短作业优先算法中，<em>进程饥饿</em>是一个比较致命的问题。但是短作业优先的思想确实是有相当的可取之处的，于是人们考虑保留这种思想，同时使得长进程能够较少地受到饥饿，这就有了最高响应比优先算法。</p>
+<p>首先，什么是<em>响应比</em>：一个进程的响应比由以下这个公式得到——</p>
+<p><code>RR = (BT + WT) / BT = 1 + WT / BT</code></p>
+<p>其中，BT（Burst Time）表示运行时间，WT （Wait Time）表示等待时间。对于一个进程来说，（运行时间+等待时间）除以（运行时间）就是它的响应比。</p>
+<p>不难看出，一个进程的运行时间是不变的，而等待时间每时每刻都在变化，因此一个进程的响应比是每时每刻都在变化的。</p>
+<p>对于<code>RR = 1 + WT / BT</code>，显然每个进程的初始响应比都是<strong>1</strong>，因为刚刚到达的时候没有等待时间；随着等待时间的变长，进程的响应比不断地变大，它受到调度进入CPU的概率也就变大了。</p>
+<p>HRRF算法还有一个优点：它保留了短作业优先的原则。也就是说，对于同时到达的任务，虽然大家的响应比都是1，但是短作业优先，而长作业需要随着等待时间的增加慢慢地提高自己的响应比，最终接受调度。</p>
+<p>还是考虑第三小节的例子：</p>
+<p><figure style="flex-grow: 229; flex-basis: 551px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4.png" data-size="637x277"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4_hub8babe70dc868a85059e7eb55ec48647_11752_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule4_hub8babe70dc868a85059e7eb55ec48647_11752_1024x0_resize_box_2.png 1024w"
+				width="637"
+				height="277"
+				loading="lazy"
+				alt="新例子">
+		</a>
+		
+		<figcaption>新例子</figcaption>
+		
+	</figure></p>
+<p>在第0秒的时间，进程1到达，在第4秒的时间结束服务，此时进程2/3/5已经到达，计算它们的响应比：</p>
+<p><figure style="flex-grow: 275; flex-basis: 661px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule6.png" data-size="808x293"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule6.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule6_hu8f73919131e8044e083f697d9061f808_15981_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule6_hu8f73919131e8044e083f697d9061f808_15981_1024x0_resize_box_2.png 1024w"
+				width="808"
+				height="293"
+				loading="lazy"
+				alt="第四秒响应比">
+		</a>
+		
+		<figcaption>第四秒响应比</figcaption>
+		
+	</figure></p>
+<p>可见，此时进程5已经等待很久了，需要让它接受服务。</p>
+<p>进程5运行2秒，在第6秒的时间结束，此时还有进程2/3在等待，计算它们的响应比：</p>
+<p><figure style="flex-grow: 346; flex-basis: 830px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule7.png" data-size="1007x291"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule7.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule7_hu5fb45a228c242f826bad80656ba13a83_17404_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule7_hu5fb45a228c242f826bad80656ba13a83_17404_1024x0_resize_box_2.png 1024w"
+				width="1007"
+				height="291"
+				loading="lazy"
+				alt="第六秒响应比">
+		</a>
+		
+		<figcaption>第六秒响应比</figcaption>
+		
+	</figure></p>
+<p>可见，进程2的响应比还是高一些，让它接受服务。</p>
+<p>在第12秒的时候进程2结束，此时进程3和进程4在等待，计算它们的响应比：</p>
+<p><figure style="flex-grow: 430; flex-basis: 1034px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule8.png" data-size="1198x278"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule8.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule8_hu438caeace9903764331357b1fea69d36_22715_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule8_hu438caeace9903764331357b1fea69d36_22715_1024x0_resize_box_2.png 1024w"
+				width="1198"
+				height="278"
+				loading="lazy"
+				alt="第十二秒响应比">
+		</a>
+		
+		<figcaption>第十二秒响应比</figcaption>
+		
+	</figure></p>
+<p>此时让进程3接受服务，在第22秒的时候结束，进程4进入，在第30秒的时候结束。</p>
+<p>老规矩，计算数值：</p>
+<p><figure style="flex-grow: 420; flex-basis: 1010px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule9.png" data-size="1187x282"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule9.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule9_hu9fc538ffcaec434c406e09a6fdb9c2b1_22646_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule9_hu9fc538ffcaec434c406e09a6fdb9c2b1_22646_1024x0_resize_box_2.png 1024w"
+				width="1187"
+				height="282"
+				loading="lazy"
+				alt="新数据">
+		</a>
+		
+		<figcaption>新数据</figcaption>
+		
+	</figure></p>
+<p>相比于SJF算法，这个算法使得长进程3免于饥饿，是一个比较暖心的做法。</p>
+<p>这个算法唯一的问题，就是我们需要每时每刻地计算各个进程的响应比，同时需要把它们的响应比存入内存的某个空间中；<strong>增加了计算，增加了开销</strong>。</p>
+</blockquote>
+<h3 id="最高优先数优先highest-priority-firsthpf">最高优先数优先（Highest Priority First，HPF）</h3>
+<blockquote>
+<p><em>最高优先数优先</em>算法不关注进程的各种时间，而根据进程的**优先数（又称优先级）**进行调度。这个算法要求每个进程都要具备一个优先级，这个优先级可以是静态的，也可以是动态的。<em>静态优先级</em>在进程创建的时候分配，在进程生存周期内保持不变；<em>动态优先级</em>允许在进程生存期内被修改。</p>
+<p>实际上，之前的几种算法可以看做是这个算法的特例：比如短作业优先算法，进程的优先级可以看成是<strong>与运行时间成反比</strong>的一个数，即进程运行时间越短，优先级越高，因而越短的进程越先得到调度。</p>
+<p>在这个算法中，我们要引入两个概念：剥夺和非剥夺（又称抢占和非抢占）。</p>
+<p>*剥夺（抢占）*指的是在一个进程到达的时候，若当前运行的进程优先级小于自己，则它可以<strong>抢占</strong>当前进程的CPU，而被抢占的进程就会进入就绪队列，等待下一轮调度。</p>
+<p>*非剥夺（非抢占）*的调度方式就是指无论到达的进程优先级多高，都要等待当前进程运行完成（或者分配给它的时间用完），才能进入调度。</p>
+<p>以看病为例，抢占的看病方式就是你正在被医生诊断，此时突然来了急诊，医生就把你扔下，先去抢救伤员了；而非抢占的方式就是医生一定要把你诊断完成，再去抢救伤员。</p>
+<p>例子听起来比较离谱。这两种方式实际上各有优点，读者可以自行体会。</p>
+<p>回到正题，我们先考虑<strong>抢占方式下的HPF算法</strong>，首先为上面的例子中的几个进程引入优先级：</p>
+<p><figure style="flex-grow: 201; flex-basis: 484px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule10.png" data-size="547x271"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule10.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule10_hu649291675c468e180d8508c523d12316_12709_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule10_hu649291675c468e180d8508c523d12316_12709_1024x0_resize_box_2.png 1024w"
+				width="547"
+				height="271"
+				loading="lazy"
+				alt="新例子">
+		</a>
+		
+		<figcaption>新例子</figcaption>
+		
+	</figure></p>
+<p>在第0秒的时候，进程1到达，开始为其服务；</p>
+<p>在第1秒的时候，进程5到达，<strong>由于进程5的优先级高于进程1，此时将暂停进程1的服务，转为服务进程5</strong>，记住此时进程1还需要运行3秒的时间；</p>
+<p>在第2秒的时候，进程3到达，<strong>由于进程3的优先级低于进程5，CPU继续服务进程5</strong>；</p>
+<p>在第3秒的时候，进程5运行结束，此时进程2到达，现在等待的进程有1/2/3，由于进程2的优先级最高，系统为其服务；</p>
+<p>在第7秒的时候进程4到达，不会打断进程2；</p>
+<p>在第9秒的时候，进程2结束，此时等待的进程有1/3/4，由于进程3的优先级最高，系统为其服务；</p>
+<p>在第19秒的时候，进程3结束，此时等待的进程有1/4，由于进程4的优先级更高，系统为其服务；</p>
+<p>在第27秒的时候，进程4结束，此时为进程1服务，<strong>完成剩下的3秒时间</strong>，在第30秒结束。</p>
+<p><figure style="flex-grow: 423; flex-basis: 1017px">
+		<a href="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule11.png" data-size="1195x282"><img src="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule11.png"
+				srcset="/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule11_hu4ea6816fdaa4a6149802286eb33dfa49_21847_480x0_resize_box_2.png 480w, /p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/schedule11_hu4ea6816fdaa4a6149802286eb33dfa49_21847_1024x0_resize_box_2.png 1024w"
+				width="1195"
+				height="282"
+				loading="lazy"
+				alt="抢占式HPF">
+		</a>
+		
+		<figcaption>抢占式HPF</figcaption>
+		
+	</figure></p>
+<p>在这个例子中，进程1最先到达，最晚结束，简直惨兮兮；但是我们首次看到了两个<em>带权周转时间为1</em>的情况，表明这个调度方式在优先级设置合理的条件下，效率还是不错的。</p>
+<p>对于非抢占式调度，上面三个小节已经讲了太多，在此不加赘述。</p>
+</blockquote>
+<h3 id="小结">小结</h3>
+<blockquote>
+<p>本文介绍了四种调度算法，并以几个简单的例子具体模拟了它们的运行模式。本来还希望附上这几个算法的代码实现，但篇幅有限，只好新开一篇。</p>
+<p>如果你认为我有哪些地方没有讲清楚，或者有哪些错误之处，欢迎评论区留言告诉我。(ノ￣▽￣)</p>
+</blockquote>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">秋招 | 一些知识点</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1713. 得到子序列的最少操作次数</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode面试题 08.13. 堆箱子</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2020-10-19 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

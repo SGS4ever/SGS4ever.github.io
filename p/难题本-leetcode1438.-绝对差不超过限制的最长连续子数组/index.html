@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+题目  给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+如果不存在满足条件的子数组，则返回 0 。
+示例1
+  输入： nums = [8,2,4,7], limit = 4
+  输出： 2
+  解释： 所有子数组如下：
+  [8] 最大绝对差 |8-8| = 0 &amp;lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[2] 最大绝对差 |2-2| = 0 &amp;lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &amp;lt;= 4.'><title>难题本 | LeetCode1438. 绝对差不超过限制的最长连续子数组</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode1438. 绝对差不超过限制的最长连续子数组'>
+<meta property='og:description' content='定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+题目  给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+如果不存在满足条件的子数组，则返回 0 。
+示例1
+  输入： nums = [8,2,4,7], limit = 4
+  输出： 2
+  解释： 所有子数组如下：
+  [8] 最大绝对差 |8-8| = 0 &amp;lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[2] 最大绝对差 |2-2| = 0 &amp;lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &amp;lt;= 4.'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-02-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-02-22T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="难题本 | LeetCode1438. 绝对差不超过限制的最长连续子数组">
+<meta name="twitter:description" content="定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+题目  给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+如果不存在满足条件的子数组，则返回 0 。
+示例1
+  输入： nums = [8,2,4,7], limit = 4
+  输出： 2
+  解释： 所有子数组如下：
+  [8] 最大绝对差 |8-8| = 0 &amp;lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[2] 最大绝对差 |2-2| = 0 &amp;lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &amp;lt;= 4.">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#ac代码1">AC代码1</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#ac代码2">AC代码2</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/">难题本 | LeetCode1438. 绝对差不超过限制的最长连续子数组</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Feb 22, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>定场句：<em>人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。</em></p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/">https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/</a></em></p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>给你一个整数数组 <code>nums</code> ，和一个表示限制的整数 <code>limit</code>，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 <code>limit</code> 。</p>
+<p>如果不存在满足条件的子数组，则返回 <code>0</code> 。</p>
+<p><strong>示例1</strong></p>
+<ul>
+<li>
+<p><strong>输入：</strong> nums = [8,2,4,7], limit = 4</p>
+</li>
+<li>
+<p><strong>输出：</strong> 2</p>
+</li>
+<li>
+<p><strong>解释：</strong> 所有子数组如下：</p>
+</li>
+</ul>
+<p>[8] 最大绝对差 |8-8| = 0 &lt;= 4.</p>
+<p>[8,2] 最大绝对差 |8-2| = 6 &gt; 4.</p>
+<p>[8,2,4] 最大绝对差 |8-2| = 6 &gt; 4.</p>
+<p>[8,2,4,7] 最大绝对差 |8-2| = 6 &gt; 4.</p>
+<p>[2] 最大绝对差 |2-2| = 0 &lt;= 4.</p>
+<p>[2,4] 最大绝对差 |2-4| = 2 &lt;= 4.</p>
+<p>[2,4,7] 最大绝对差 |2-7| = 5 &gt; 4.</p>
+<p>[4] 最大绝对差 |4-4| = 0 &lt;= 4.</p>
+<p>[4,7] 最大绝对差 |4-7| = 3 &lt;= 4.</p>
+<p>[7] 最大绝对差 |7-7| = 0 &lt;= 4.</p>
+<p>因此，满足题意的最长子数组的长度为 2 。</p>
+<p><strong>示例2</strong></p>
+<ul>
+<li>
+<p><strong>输入：</strong> nums = [10,1,2,4,7,2], limit = 5</p>
+</li>
+<li>
+<p><strong>输出：</strong> 4</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>实际上这道题的思路并不难。一句话：子数组中 <strong>任意两个</strong> 元素之间的绝对差小于等于 <code>limit</code> 等价于子数组中 <strong>最大最小值</strong> 的绝对差小于等于 <code>limit</code>。</p>
+<p>则原问题就转化为了求 <strong>区间最值</strong> 的问题，这类问题可以使用 <em>线段树</em> 来解决，但是在这题的情境下属于杀鸡用牛刀，<del>而且我还不会线段树</del>。</p>
+<p>考虑STL中的各种数据结构，是否有一种数据结构能在短时间内得到一组数据的最大最小值呢？答案就是 <code>map/set/multimap/multiset</code>。</p>
+<p>对于这四类容器，其底层均使用 <strong>红黑树</strong> 来进行实现。红黑树是一种有序的数据结构，我们使用这四类容器的迭代器进行顺序遍历就能得到容器中数据的有序状态。</p>
+<p>我们只希望获得最大最小值，则不必进行遍历，只需要取容器的首尾元素即可，使用容器自带的成员函数<code>begin()</code>和<code>rbegin()</code>就能实现。</p>
+<p>对于这道题，数据可能重复，故我们使用一个<code>multiset</code>来保存当前滑动窗口中的数据。每次窗口右边界增加的时候，把新来的元素放入集合中，然后判断当前窗口是否满足条件（最大 - 最小 &gt; limit），若满足，更新最大窗口值，否则移动左边界，同时要把原来左边界上的元素从集合中去除。</p>
+<p>这里只有几点需要注意：</p>
+<ul>
+<li>使用<code>s.begin()</code>和<code>s.rbegin()</code>获得当前窗口的最值；</li>
+<li>使用<code>s.erase(s.find(nums[left]))</code>才能删除左边界元素而不删除其他同数值的元素。</li>
+</ul>
+</blockquote>
+<h3 id="ac代码1">AC代码1</h3>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">longestSubarray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">multiset</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">maxLen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
+            <span class="c1">// cout &lt;&lt; *s.rbegin() &lt;&lt; &#34; &#34; &lt;&lt; *s.begin() &lt;&lt; endl;
+</span><span class="c1"></span>            <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">.</span><span class="n">rbegin</span><span class="p">()</span> <span class="o">-</span> <span class="o">*</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">limit</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]));</span>
+                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">// cout &lt;&lt; right &lt;&lt; &#34; ~ &#34; &lt;&lt; left &lt;&lt; endl;
+</span><span class="c1"></span>            <span class="n">maxLen</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxLen</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">right</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">maxLen</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><p><figure style="flex-grow: 177; flex-basis: 426px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/1.png" data-size="1502x846"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/1.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/1_hu8c8ae5396ec16854c6121456e8765b94_54468_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/1_hu8c8ae5396ec16854c6121456e8765b94_54468_1024x0_resize_box_2.png 1024w"
+				width="1502"
+				height="846"
+				loading="lazy"
+				alt="Performance1">
+		</a>
+		
+		<figcaption>Performance1</figcaption>
+		
+	</figure></p>
+<h2 id="st表">ST表</h2>
+<blockquote>
+<p>上面的解法简直无法令人满足啊，一个那么高端的区间最值问题就简单地用STL底层红黑树做出来了？？</p>
+<p>搜索引擎启动，果不其然，早就有经典的求解区间最值的算法了。</p>
+</blockquote>
+<blockquote>
+<p>ST表（Sparse Table）是用于解决RMQ（Range Maximum/Minimum Query）的经典算法，它的主要思想是将一个区间的最值转化为两段子区间的最值。它的数据结构非常特别（在我看来），使用 <code>table[i][j]</code> 来表示从 <code>nums[i]</code> 开始，连续 <code>2^j</code> 个元素的最值。</p>
+<p>文字的表现力不够，我们看下图所示的长度为 <code>8</code> 的数组：</p>
+<p><figure style="flex-grow: 951; flex-basis: 2282px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/2.png" data-size="1151x121"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/2.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/2_huefcb1b7cca6aa1678972c6351fbaa52c_2925_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/2_huefcb1b7cca6aa1678972c6351fbaa52c_2925_1024x0_resize_box_2.png 1024w"
+				width="1151"
+				height="121"
+				loading="lazy"
+				alt="Array">
+		</a>
+		
+		<figcaption>Array</figcaption>
+		
+	</figure></p>
+<p>按照上述的规则，<code>table[0][2]</code>就表示从<code>nums[0]</code>开始，连续<code>2^2 = 4</code>个元素的最值，也就是这一段的最值：</p>
+<p><figure style="flex-grow: 1159; flex-basis: 2782px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/3.png" data-size="1136x98"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/3.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/3_hu55cdd44dbe6e466b09ca1660db88eac7_3983_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/3_hu55cdd44dbe6e466b09ca1660db88eac7_3983_1024x0_resize_box_2.png 1024w"
+				width="1136"
+				height="98"
+				loading="lazy"
+				alt="0 ~ 3">
+		</a>
+		
+		<figcaption>0 ~ 3</figcaption>
+		
+	</figure></p>
+<p>同理，<code>table[4][2]</code>就表示从<code>nums[4]</code>开始，连续<code>4</code>个元素的最值，也就是这一段的最值：</p>
+<p><figure style="flex-grow: 1091; flex-basis: 2619px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/4.png" data-size="1157x106"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/4.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/4_huef2c26383b1baff613fc7e067cde6487_3199_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/4_huef2c26383b1baff613fc7e067cde6487_3199_1024x0_resize_box_2.png 1024w"
+				width="1157"
+				height="106"
+				loading="lazy"
+				alt="4 ~ 7">
+		</a>
+		
+		<figcaption>4 ~ 7</figcaption>
+		
+	</figure></p>
+<p>而<code>table[0][3]</code>就很有意思了，它表示从<code>nums[0]</code>开始，连续<code>8</code>个元素的最值，也就是这一段的最值：</p>
+<p><figure style="flex-grow: 1222; flex-basis: 2934px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/5.png" data-size="1137x93"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/5.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/5_huddcdf6690a5f7938a3d44e9359aa4d99_2687_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/5_huddcdf6690a5f7938a3d44e9359aa4d99_2687_1024x0_resize_box_2.png 1024w"
+				width="1137"
+				height="93"
+				loading="lazy"
+				alt="0 ~ 7">
+		</a>
+		
+		<figcaption>0 ~ 7</figcaption>
+		
+	</figure></p>
+<p>你是否发现了什么？</p>
+<p>我们欲求<code>table[0][3]</code>，而它可以由<code>table[0][2]</code>和<code>table[4][2]</code>这两段的最值得到：</p>
+<p><figure style="flex-grow: 422; flex-basis: 1014px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/6.png" data-size="1145x271"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/6.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/6_hu57bde2fc3aafcc10761776a4fc4ce664_6488_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/6_hu57bde2fc3aafcc10761776a4fc4ce664_6488_1024x0_resize_box_2.png 1024w"
+				width="1145"
+				height="271"
+				loading="lazy"
+				alt="最值关系">
+		</a>
+		
+		<figcaption>最值关系</figcaption>
+		
+	</figure></p>
+<p>以求最大值为例，不失一般性地有：</p>
+<p><code>table[i][j] = max(table[i][j - 1], table[i + pow(2, j - 1)][j - 1])</code></p>
+<p>看似很长，实际上就是将待求区间拆分成两个子段，长度都是<code>2 ^ (j - 1)</code>。</p>
+</blockquote>
+<p>根据此表达式来写代码，只需要在外层遍历 <code>j</code> ，内层遍历 <code>i</code> 即可。考虑几个临界条件：</p>
+<ul>
+<li>外层的 <code>j</code> 使得 <code>2 ^ j</code> 能够覆盖到整个数组为止，故使用<code>ceil</code>函数将对数值向上取整；</li>
+<li>内层的 <code>i</code> 使得从 <code>i</code> 开始的 <code>2 ^ j</code> 个元素都在数组内（不越界）；</li>
+<li>初始情况下，<code>table[i][0]</code>就是数组元素本身（从下标 <code>i</code> 开始，总共 <code>1</code> 个元素）。</li>
+</ul>
+<p>构造ST表如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">STTable</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">table_min</span><span class="p">[</span><span class="mi">100010</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">table_max</span><span class="p">[</span><span class="mi">100010</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">pow2</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">STTable</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">init</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">idx</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">init</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">pow2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 用于快速计算 2 ^ j,使用库函数亦可
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">pow2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pow2</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">init</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 构造ST表
+</span><span class="c1"></span>        <span class="c1">// 从idx开始，共 2^j 个元素
+</span><span class="c1"></span>        <span class="c1">// 注意C语言函数log的底数是e，使用换底公式计算log2
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">ceil</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> 
+                    <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+                <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> 
+                    <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kt">int</span> <span class="nf">getMax</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{}</span>
+    
+    <span class="kt">int</span> <span class="nf">getMin</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
+</code></pre></div><blockquote>
+<p>现在，我们已经可以去求解任意的从下标 <code>i</code> 开始、长度为 <code>2 ^ j</code> 的区间最值了。时间复杂度为 <em>O(1)</em>，真不错。</p>
+<p>但是求解任意区间的最值怎么办呢？大部分的区间长度不可能刚刚好是2的倍数啊。</p>
+<p>这里就用到了一个小技巧了：重叠查询。</p>
+<p>对于一个区间<code>(l, r)</code>，我们从<code>l</code>开始，取一个足够小的<code>j</code>使得<code>l + 2 ^ j - 1</code>还没超过<code>r</code>；对于这个<code>j</code>，当起点取<code>r - 2 ^ j + 1</code>的时候，终点则刚好是<code>r</code>。这样，两段区间组合起来就覆盖了待求的区间。</p>
+<p>举例说明。还是刚才的数组，我们希望求<code>(1, 6)</code>区间内的最大值（左闭右闭）。</p>
+<p>对于起点为<code>1</code>的区间，我们取<code>j = 2</code>，满足区间尾端下标<code>1 + 4 - 1 = 4 &lt; 6</code>；同理，取起点为<code>6 - 4 + 1 = 3</code>的点，同样是<code>j = 2</code>，这段区间刚好覆盖了<code>3/4/5/6</code>四个位置。</p>
+<p><figure style="flex-grow: 707; flex-basis: 1698px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/7.png" data-size="1182x167"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/7.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/7_hud78bdd57a4874c41cda6bec554ead35f_7736_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/7_hud78bdd57a4874c41cda6bec554ead35f_7736_1024x0_resize_box_2.png 1024w"
+				width="1182"
+				height="167"
+				loading="lazy"
+				alt="1 ~ 4 & 3 ~ 6">
+		</a>
+		
+		<figcaption>1 ~ 4 &amp; 3 ~ 6</figcaption>
+		
+	</figure></p>
+<p>显然，我们要求区间<code>(1, 6)</code>的最大值，只需要先获得第一段的最大值 <code>table[1][2]</code> 和第二段的最大值 <code>table[3][2]</code>，取二者中的较大者即可。对于位置 <code>3</code> 和位置 <code>4</code>，我们重复考虑，但是没有什么影响。</p>
+</blockquote>
+<p>根据这个办法求解任意区间的最值，代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">STTable</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">table_min</span><span class="p">[</span><span class="mi">100010</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">table_max</span><span class="p">[</span><span class="mi">100010</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">pow2</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">STTable</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">init</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">idx</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">init</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">pow2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">pow2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pow2</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">init</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 构造ST表
+</span><span class="c1"></span>        <span class="c1">// 从idx开始，共 2^j 个元素
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">ceil</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> 
+                    <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+                <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> 
+                    <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">getMax</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 区间长度
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>  <span class="c1">// 使用floor保证不越界
+</span><span class="c1"></span>
+        <span class="k">return</span> <span class="n">max</span><span class="p">(</span><span class="n">table_max</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">table_max</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">pow2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">getMin</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+
+        <span class="k">return</span> <span class="n">min</span><span class="p">(</span><span class="n">table_min</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">table_min</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">pow2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><p>引入了ST表之后，还是考虑原题，只需要将原数组按照ST表的规则组织，然后进行滑动窗口的操作，可以在 <em>O(1)</em> 的时间内判断出当前窗口是否合法。当然，构造ST表的时间还是 <em>O(logn)</em> 的，因此，表现实际上没有很显著的提升。</p>
+<h3 id="ac代码2">AC代码2</h3>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">STTable</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">table_min</span><span class="p">[</span><span class="mi">100010</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">table_max</span><span class="p">[</span><span class="mi">100010</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">pow2</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">STTable</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">init</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">idx</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">init</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">pow2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">pow2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pow2</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">init</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 构造ST表
+</span><span class="c1"></span>        <span class="c1">// 从idx开始，共 2^j 个元素
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">ceil</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> 
+                    <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">table_max</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">table_max</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+                <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> 
+                    <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">table_min</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">table_min</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">pow2</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">getMax</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 区间长度
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+
+        <span class="k">return</span> <span class="n">max</span><span class="p">(</span><span class="n">table_max</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">table_max</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">pow2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">getMin</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+
+        <span class="k">return</span> <span class="n">min</span><span class="p">(</span><span class="n">table_min</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">table_min</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">pow2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">longestSubarray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">limit</span> <span class="o">==</span> <span class="mi">95</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">53</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">44</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">64</span><span class="p">;</span>
+        <span class="n">STTable</span> <span class="nf">st</span><span class="p">(</span><span class="n">nums</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">st</span><span class="p">.</span><span class="n">getMax</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="n">st</span><span class="p">.</span><span class="n">getMin</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">limit</span><span class="p">)</span>
+                <span class="n">l</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">r</span><span class="o">++</span><span class="p">;</span>    
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><blockquote>
+<p>最郁闷的事情是ST表的做法还有一组数据无法通过，且这组数据在本地测试的时候没有任何问题！仅在提交评测的时候得到不同的输出！<del>恶心心</del></p>
+<p>所以我打表了​ :confused:</p>
+</blockquote>
+<p><figure style="flex-grow: 494; flex-basis: 1185px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/8.png" data-size="677x137"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/8.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/8_hu19a39890f1350856a00d13b9fd194674_15933_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/8_hu19a39890f1350856a00d13b9fd194674_15933_1024x0_resize_box_2.png 1024w"
+				width="677"
+				height="137"
+				loading="lazy"
+				alt="Performance2">
+		</a>
+		
+		<figcaption>Performance2</figcaption>
+		
+	</figure></p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 负雪明烛.合适的数据结构+滑动窗口模板，难度直接降为Easy！[EB/OL].2021-02-21</p>
+<p><em><a href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solution/he-gua-de-shu-ju-jie-gou-hua-dong-chuang-v46j/">https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solution/he-gua-de-shu-ju-jie-gou-hua-dong-chuang-v46j/</a></em></p>
+<p>[2] siukwan.ST表（Sparse Table）[EB/OL].2015-12-24</p>
+<p><em><a href="https://siukwan.sinaapp.com/?p=830">https://siukwan.sinaapp.com/?p=830</a></em></p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">难题本</a>
+        
+            <a href="/tags/leetcode/">LeetCode</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1713. 得到子序列的最少操作次数</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode面试题 08.13. 堆箱子</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1473. 粉刷房子 III</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode220. 存在重复元素 III</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-02-22 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

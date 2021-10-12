@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='2021版本的OWASP Top10已经出炉，目前处于同行评审阶段。本博客上已有2017版本的归纳总结，考虑到后面几年时间内，该版本（2021版）的Top10将可能对行业产生较大的影响，现单列一篇，总结其内容。
+ 截至本文发布，该版本已经定稿
+ 0 总览 新版本相较于2017版，引入了3个新类别（Insecure Design、Software and Data Integrity Failures、SSRF），修改了原有4个类的名称，以及进行了一些类别的整合。
+变化
+这一版Top10综合考虑了大数据和行业调查的结果；由于安全人员需要对大数据分析得到的漏洞进行验证和测试，为了保证结论的与时俱进，该机构对一线安全人员进行了问卷调查，由他们来对大数据分析的结果进行补充。
+1 Broken Access Control 失效的访问控制 是原榜单的 No. 5 ，现在来到了第一位。在 秋招 | 一些知识点 (gitee.io) 这篇文章中已经对这一安全问题进行了解释，在此不妨再重复一遍。
+访问控制策略使得所有用户都只能在其对应的权限之下行动，而失效的访问控制将导致未授权信息的读取、修改、销毁，或导致用户执行其权限之外的功能函数。一般的访问控制漏洞包括以下几点：
+ 攻击者可以通过修改URL、应用内部状态、HTML页面或使用API攻击工具来绕过访问控制检查； 允许攻击者将数据库主键设置为其他用户，从而导致查看或修改其他用户的信息； 提权。未登录时能够执行已登录用户的操作，或已登录用户执行管理员操作； 修改元数据，例如JSON Web Token（JWT）的重放或伪造，cookie或隐藏元数据字段的伪造，从而进行提权； CORS（跨域资源共享）配置不当，从而导致未授权的API调用； 在未登录状态下通过目录遍历找到了需要登录才能访问的界面，或同理找到了管理员界面。  防护措施 ：
+ 只开放公共资源，其余资源默认禁止访问； 只实现一种访问控制机制，贯彻落实到整个应用中； 访问控制模型要明确每一条记录的拥有者，不允许用户随便创建、读取、更新、删除记录； 记录失败的访问控制，并及时告警。  2 Cryptographic Failures 密码算法失效 旧称 敏感数据泄露 ，是原榜单的 No. 3 ，现在来到了第二位。敏感数据泄露是现象而非本质，新版本将其表达修改为更加接近问题根源的形式。
+人们总是需要考虑数据传输、存储、处理过程中的保护需求，诸如口令、信用卡号、个人信息等数据需要提供额外的保护；一般来说，只要是法律规定的敏感数据都需要进行严密的保护。参照欧盟的GDPR、金融业的PCI DSS等文件，数据保护要考虑如下的问题：
+ 数据明文明文传输问题； 在默认配置或较老的代码中使用了脆弱的密码算法； 使用了默认的/脆弱的/重复使用的密钥，或密钥没有得到妥善的保管； 没有强制进行加密； 客户端没有对服务端证书进行验证。  防护措施 ：'><title>OWASP Top10（2021）</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/owasp-top102021/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='OWASP Top10（2021）'>
+<meta property='og:description' content='2021版本的OWASP Top10已经出炉，目前处于同行评审阶段。本博客上已有2017版本的归纳总结，考虑到后面几年时间内，该版本（2021版）的Top10将可能对行业产生较大的影响，现单列一篇，总结其内容。
+ 截至本文发布，该版本已经定稿
+ 0 总览 新版本相较于2017版，引入了3个新类别（Insecure Design、Software and Data Integrity Failures、SSRF），修改了原有4个类的名称，以及进行了一些类别的整合。
+变化
+这一版Top10综合考虑了大数据和行业调查的结果；由于安全人员需要对大数据分析得到的漏洞进行验证和测试，为了保证结论的与时俱进，该机构对一线安全人员进行了问卷调查，由他们来对大数据分析的结果进行补充。
+1 Broken Access Control 失效的访问控制 是原榜单的 No. 5 ，现在来到了第一位。在 秋招 | 一些知识点 (gitee.io) 这篇文章中已经对这一安全问题进行了解释，在此不妨再重复一遍。
+访问控制策略使得所有用户都只能在其对应的权限之下行动，而失效的访问控制将导致未授权信息的读取、修改、销毁，或导致用户执行其权限之外的功能函数。一般的访问控制漏洞包括以下几点：
+ 攻击者可以通过修改URL、应用内部状态、HTML页面或使用API攻击工具来绕过访问控制检查； 允许攻击者将数据库主键设置为其他用户，从而导致查看或修改其他用户的信息； 提权。未登录时能够执行已登录用户的操作，或已登录用户执行管理员操作； 修改元数据，例如JSON Web Token（JWT）的重放或伪造，cookie或隐藏元数据字段的伪造，从而进行提权； CORS（跨域资源共享）配置不当，从而导致未授权的API调用； 在未登录状态下通过目录遍历找到了需要登录才能访问的界面，或同理找到了管理员界面。  防护措施 ：
+ 只开放公共资源，其余资源默认禁止访问； 只实现一种访问控制机制，贯彻落实到整个应用中； 访问控制模型要明确每一条记录的拥有者，不允许用户随便创建、读取、更新、删除记录； 记录失败的访问控制，并及时告警。  2 Cryptographic Failures 密码算法失效 旧称 敏感数据泄露 ，是原榜单的 No. 3 ，现在来到了第二位。敏感数据泄露是现象而非本质，新版本将其表达修改为更加接近问题根源的形式。
+人们总是需要考虑数据传输、存储、处理过程中的保护需求，诸如口令、信用卡号、个人信息等数据需要提供额外的保护；一般来说，只要是法律规定的敏感数据都需要进行严密的保护。参照欧盟的GDPR、金融业的PCI DSS等文件，数据保护要考虑如下的问题：
+ 数据明文明文传输问题； 在默认配置或较老的代码中使用了脆弱的密码算法； 使用了默认的/脆弱的/重复使用的密钥，或密钥没有得到妥善的保管； 没有强制进行加密； 客户端没有对服务端证书进行验证。  防护措施 ：'>
+<meta property='og:url' content='https://xrg.fj.cn/p/owasp-top102021/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2021-09-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-09-29T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="OWASP Top10（2021）">
+<meta name="twitter:description" content="2021版本的OWASP Top10已经出炉，目前处于同行评审阶段。本博客上已有2017版本的归纳总结，考虑到后面几年时间内，该版本（2021版）的Top10将可能对行业产生较大的影响，现单列一篇，总结其内容。
+ 截至本文发布，该版本已经定稿
+ 0 总览 新版本相较于2017版，引入了3个新类别（Insecure Design、Software and Data Integrity Failures、SSRF），修改了原有4个类的名称，以及进行了一些类别的整合。
+变化
+这一版Top10综合考虑了大数据和行业调查的结果；由于安全人员需要对大数据分析得到的漏洞进行验证和测试，为了保证结论的与时俱进，该机构对一线安全人员进行了问卷调查，由他们来对大数据分析的结果进行补充。
+1 Broken Access Control 失效的访问控制 是原榜单的 No. 5 ，现在来到了第一位。在 秋招 | 一些知识点 (gitee.io) 这篇文章中已经对这一安全问题进行了解释，在此不妨再重复一遍。
+访问控制策略使得所有用户都只能在其对应的权限之下行动，而失效的访问控制将导致未授权信息的读取、修改、销毁，或导致用户执行其权限之外的功能函数。一般的访问控制漏洞包括以下几点：
+ 攻击者可以通过修改URL、应用内部状态、HTML页面或使用API攻击工具来绕过访问控制检查； 允许攻击者将数据库主键设置为其他用户，从而导致查看或修改其他用户的信息； 提权。未登录时能够执行已登录用户的操作，或已登录用户执行管理员操作； 修改元数据，例如JSON Web Token（JWT）的重放或伪造，cookie或隐藏元数据字段的伪造，从而进行提权； CORS（跨域资源共享）配置不当，从而导致未授权的API调用； 在未登录状态下通过目录遍历找到了需要登录才能访问的界面，或同理找到了管理员界面。  防护措施 ：
+ 只开放公共资源，其余资源默认禁止访问； 只实现一种访问控制机制，贯彻落实到整个应用中； 访问控制模型要明确每一条记录的拥有者，不允许用户随便创建、读取、更新、删除记录； 记录失败的访问控制，并及时告警。  2 Cryptographic Failures 密码算法失效 旧称 敏感数据泄露 ，是原榜单的 No. 3 ，现在来到了第二位。敏感数据泄露是现象而非本质，新版本将其表达修改为更加接近问题根源的形式。
+人们总是需要考虑数据传输、存储、处理过程中的保护需求，诸如口令、信用卡号、个人信息等数据需要提供额外的保护；一般来说，只要是法律规定的敏感数据都需要进行严密的保护。参照欧盟的GDPR、金融业的PCI DSS等文件，数据保护要考虑如下的问题：
+ 数据明文明文传输问题； 在默认配置或较老的代码中使用了脆弱的密码算法； 使用了默认的/脆弱的/重复使用的密钥，或密钥没有得到妥善的保管； 没有强制进行加密； 客户端没有对服务端证书进行验证。  防护措施 ：">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-总览">0 总览</a></li>
+    <li><a href="#1-broken-access-control">1 Broken Access Control</a></li>
+    <li><a href="#2-cryptographic-failures">2 Cryptographic Failures</a></li>
+    <li><a href="#3-injection">3 Injection</a></li>
+    <li><a href="#4-insecure-design">4 Insecure Design</a></li>
+    <li><a href="#5-security-misconfiguration">5 Security Misconfiguration</a></li>
+    <li><a href="#6-vulnerable-and-outdated-components">6 Vulnerable and Outdated Components</a></li>
+    <li><a href="#7-identification-and-authentication-failures">7 Identification and Authentication Failures</a></li>
+    <li><a href="#8-software-and-data-integrity-failures">8 Software and Data Integrity Failures</a></li>
+    <li><a href="#9-security-logging-and-monitoring-failures">9 Security Logging and Monitoring Failures</a></li>
+    <li><a href="#10-server-side-request-forgeryssrf">10 Server Side Request Forgery（SSRF）</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" style="background-color: #2a9d8f; color: #fff;">
+                网络安全
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/owasp-top102021/">OWASP Top10（2021）</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Sep 29, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>2021版本的OWASP Top10已经出炉，目前处于同行评审阶段。本博客上已有2017版本的归纳总结，考虑到后面几年时间内，该版本（2021版）的Top10将可能对行业产生较大的影响，现单列一篇，总结其内容。</p>
+<blockquote>
+<p>截至本文发布，该版本已经定稿</p>
+</blockquote>
+<h3 id="0-总览">0 总览</h3>
+<p>新版本相较于2017版，引入了3个新类别（Insecure Design、Software and Data Integrity Failures、SSRF），修改了原有4个类的名称，以及进行了一些类别的整合。</p>
+<p><figure style="flex-grow: 355; flex-basis: 852px">
+		<a href="/p/owasp-top102021/1.png" data-size="1478x416"><img src="/p/owasp-top102021/1.png"
+				srcset="/p/owasp-top102021/1_hub87a255dfc24ec245748f79e7ce18cbc_314333_480x0_resize_box_2.png 480w, /p/owasp-top102021/1_hub87a255dfc24ec245748f79e7ce18cbc_314333_1024x0_resize_box_2.png 1024w"
+				width="1478"
+				height="416"
+				loading="lazy"
+				alt="变化">
+		</a>
+		
+		<figcaption>变化</figcaption>
+		
+	</figure></p>
+<p>这一版Top10综合考虑了大数据和行业调查的结果；由于安全人员需要对大数据分析得到的漏洞进行验证和测试，为了保证结论的与时俱进，该机构对一线安全人员进行了问卷调查，由他们来对大数据分析的结果进行补充。</p>
+<h3 id="1-broken-access-control">1 Broken Access Control</h3>
+<p><em>失效的访问控制</em> 是原榜单的 No. 5 ，现在来到了第一位。在 <a class="link" href="https://xr_g.gitee.io/blog/p/%e7%a7%8b%e6%8b%9b-%e4%b8%80%e4%ba%9b%e7%9f%a5%e8%af%86%e7%82%b9/"  target="_blank" rel="noopener"
+    >秋招 | 一些知识点 (gitee.io)</a> 这篇文章中已经对这一安全问题进行了解释，在此不妨再重复一遍。</p>
+<p>访问控制策略使得所有用户都只能在其对应的权限之下行动，而失效的访问控制将导致未授权信息的读取、修改、销毁，或导致用户执行其权限之外的功能函数。一般的访问控制漏洞包括以下几点：</p>
+<ul>
+<li>攻击者可以通过修改URL、应用内部状态、HTML页面或使用API攻击工具来绕过访问控制检查；</li>
+<li>允许攻击者将数据库主键设置为其他用户，从而导致查看或修改其他用户的信息；</li>
+<li>提权。未登录时能够执行已登录用户的操作，或已登录用户执行管理员操作；</li>
+<li>修改元数据，例如JSON Web Token（JWT）的重放或伪造，cookie或隐藏元数据字段的伪造，从而进行提权；</li>
+<li>CORS（跨域资源共享）配置不当，从而导致未授权的API调用；</li>
+<li>在未登录状态下通过目录遍历找到了需要登录才能访问的界面，或同理找到了管理员界面。</li>
+</ul>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>只开放公共资源，其余资源默认禁止访问；</li>
+<li>只实现一种访问控制机制，贯彻落实到整个应用中；</li>
+<li>访问控制模型要明确每一条记录的拥有者，不允许用户随便创建、读取、更新、删除记录；</li>
+<li>记录失败的访问控制，并及时告警。</li>
+</ul>
+<h3 id="2-cryptographic-failures">2 Cryptographic Failures</h3>
+<p><em>密码算法失效</em> 旧称 <em>敏感数据泄露</em> ，是原榜单的 No. 3 ，现在来到了第二位。敏感数据泄露是现象而非本质，新版本将其表达修改为更加接近问题根源的形式。</p>
+<p>人们总是需要考虑数据传输、存储、处理过程中的保护需求，诸如口令、信用卡号、个人信息等数据需要提供额外的保护；一般来说，只要是法律规定的敏感数据都需要进行严密的保护。参照欧盟的GDPR、金融业的PCI DSS等文件，数据保护要考虑如下的问题：</p>
+<ul>
+<li>数据明文明文传输问题；</li>
+<li>在默认配置或较老的代码中使用了脆弱的密码算法；</li>
+<li>使用了默认的/脆弱的/重复使用的密钥，或密钥没有得到妥善的保管；</li>
+<li>没有强制进行加密；</li>
+<li>客户端没有对服务端证书进行验证。</li>
+</ul>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>对没必要存储的敏感数据予以及时销毁，存储的敏感数据确保加密。</li>
+<li>使用最新的、强大的算法、协议、密钥，且密钥妥善管理。</li>
+<li>确保数据传输过程中受到加密保护，如使用HSTS。</li>
+</ul>
+<h3 id="3-injection">3 Injection</h3>
+<p>2017版本的OWASP Top10将注入漏洞排在第一位，因此相信很多人都对此有所了解。</p>
+<p>以下的情况可能导致注入漏洞的出现：</p>
+<ul>
+<li>用户提供的数据没有经过应用程序的验证、过滤；</li>
+<li>未经过转义就将动态请求或非参数化的API调用放入解释器执行；</li>
+<li>恶意数据被直接使用或拼接使用。</li>
+</ul>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>将数据和可执行的命令/查询语句分离。</li>
+<li>使用安全的API，避免完全使用解释器，提供参数化的API调用方式。</li>
+<li>对输入设置白名单，或进行输入验证。</li>
+<li>转义特殊字符。</li>
+<li>在查询中使用 <code>LIMIT</code> 或其他SQL控件，防止SQL注入时大量地泄露记录。</li>
+</ul>
+<h3 id="4-insecure-design">4 Insecure Design</h3>
+<p><del>你从未见过的船新种类</del></p>
+<p>新版本中新增的 <code>Insecure Design</code> 主要关注由程序设计和架构上的缺陷所引起的安全风险，由此建议人们更多地在工程中使用对威胁进行建模，使用安全的设计模式和参考架构。</p>
+<p><em>不安全设计</em> 其实是一个较为宽泛的类型，其下包含若干常见的脆弱点，但基本可以归纳为“缺失或无效的控制设计”（missing or ineffective control design）。</p>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>与安全专家一起建立并使用安全的开发流程，对现有的安全或敏感数据相关的控制措施进行评估。</li>
+<li>在安全的模式下构建并使用库/组件。</li>
+<li>对重要的认证、访问控制、业务逻辑、关键流程等模块进行 <a class="link" href="https://owasp.org/www-community/Threat_Modeling"  target="_blank" rel="noopener"
+    >威胁建模</a> 。</li>
+<li>编写单元和集成测试，以验证所有关键流程是否能够抵抗威胁。</li>
+</ul>
+<h3 id="5-security-misconfiguration">5 Security Misconfiguration</h3>
+<p><em>不安全的配置</em> 是原榜单的 No. 6 ，现在上升了一位。随着软件的可配置性逐渐变强，这一安全问题的加剧也就不足为奇了。</p>
+<p>应用中常见的不安全配置有：</p>
+<ul>
+<li>云服务中的权限配置错误；</li>
+<li>安装或启用了不必要的特性（如非必要的服务、端口、页面、账号）；</li>
+<li>仍在使用默认的账号或密码；</li>
+<li>把应用的报错信息泄露给了用户；</li>
+<li>系统升级之后没有及时启用新的安全特性；</li>
+<li>没有在开发/服务框架中配置好安全属性；</li>
+<li>服务端没有向客户端发送安全相关的指令或消息头；</li>
+<li>使用了不安全的组件。</li>
+</ul>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>实施安全的安装过程，如开发、测试、生产环境中保持相同安全配置，且口令不同。安装过程尽量自动化，以减小出错的可能。</li>
+<li>搭建最小化平台，移除所有不必要的功能、组件、文件及示例。</li>
+<li>检查和修复安全配置项来适应最新的安全说明、更新和补丁，并将其作为更新管理过程的一部分。检查过程中，特别注意云存储的权限。</li>
+<li>向客户端发送安全指令，如安全标头（想到了CSP、HTTP-Only）。</li>
+</ul>
+<h3 id="6-vulnerable-and-outdated-components">6 Vulnerable and Outdated Components</h3>
+<p><em>存在漏洞的或过时的组件</em> 旧称 <em>使用含有已知漏洞的组件</em> ，原榜单排第九。在行业调查中，这一安全问题收到了 <strong>第二多</strong> 的反馈。</p>
+<p>这一问题一般出现在：</p>
+<ul>
+<li>对自己使用的组件或依赖的组件的版本没有清晰的认知；</li>
+<li>依赖的组件或运行环境存在漏洞或过时（如OS、DBMS等）；</li>
+<li>没有定期进行组件的漏洞检测，没有关注组件开发者发布的安全公告；</li>
+<li>没有修复或升级底层依赖；</li>
+<li>没有对新组建的适配性进行测试；</li>
+<li>没有对组件进行妥善的安全配置（见上一个问题）。</li>
+</ul>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>移除不使用的依赖、不需要的功能、组件、文档。</li>
+<li>利用各种工具来持续记录客户端和服务端以及它们的依赖库的版本信息。持续监控CVE等信息来判断已有组件是否有漏洞。</li>
+<li>使用官方渠道安全地获取组件，并使用签名机制来降低组件被篡改或加入恶意漏洞的风险。</li>
+<li>监控那些不再维护或不发布安全补丁的库和组件。</li>
+</ul>
+<h3 id="7-identification-and-authentication-failures">7 Identification and Authentication Failures</h3>
+<p><em>身份认证和授权失败</em> 旧称 <em>失效的身份认证</em> ，由原榜 No. 2 下滑到第7位。</p>
+<p>对用户身份的认证和授权是非常关键的过程，假如应用中存在如下的问题，则可能导致认证机制的失效：</p>
+<ul>
+<li>不对暴力破解或其他自动化的身份认证攻击进行防御；</li>
+<li>允许弱口令的存在；</li>
+<li>使用不安全的口令找回机制，使得攻击者可以获取或重置用户口令；</li>
+<li>使用明文或不安全的密码哈希算法（见旧版 <em>敏感数据泄露</em> 或新版 <em>密码算法失效</em> ）；</li>
+<li>没有使用或使用了脆弱的多因素认证；</li>
+<li>没有妥善处理会话ID。包括：在URL中暴露了会话ID，或用户登录之后没有生成新的会话ID，或用户注销之后没有及时销毁会话ID。</li>
+</ul>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>多因素身份认证。</li>
+<li>弱口令检查。</li>
+<li>统一注册、凭据恢复等接口，防止用户枚举攻击。</li>
+<li>会话ID的合理管理，如登录之后生成高度随机的会话ID、妥善存储（肯定不能出现在URL里……）、登出之后及时销毁。</li>
+</ul>
+<h3 id="8-software-and-data-integrity-failures">8 Software and Data Integrity Failures</h3>
+<p>新类别~</p>
+<p>我们经常能遇到一些与软件更新或某部分重要数据密切相关的操作，而假如这些操作不对软件和数据完整性进行验证，就会出现问题。一个很好的例子是旧版排名 No. 8 的问题——不安全的反序列化，它实际上属于该类别的一部分。</p>
+<p>该问题通常由于代码或架构中没有对软件/数据完整性进行检查，比如程序中使用了来自不受信源的插件、模块或库。近年来，许多程序都集成了自动更新功能，这些更新内容被下载之后没有进行周到的完整性检查，就被应用在了原本受信的程序上；攻击者可能会发布一个恶意更新，并使得这些更新被所有安装了原程序的机器运行。</p>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>使用数字签名或其他类似的机制来保证软件或数据的来源是可信的，且传输过程中并未受到篡改；</li>
+<li>确保你使用的管理和构建工具（如Maven）是从可信的仓库下载依赖；</li>
+<li>使用软件供应链安全检查工具，如 <code>OWASP Dependency Check</code> 或 <code>OWASP CycloneDX</code> ，来确保项目使用的组件中没有已知漏洞；</li>
+<li>建立一个 <em>review</em> 机制来对代码或配置的变更进行审查，防止不安全的变更被引入项目流水线中；</li>
+<li>不要将未签名或未加密的序列化数据发送给不受信的客户端，防止恶意客户端篡改或重放序列化数据。</li>
+</ul>
+<h3 id="9-security-logging-and-monitoring-failures">9 Security Logging and Monitoring Failures</h3>
+<p><em>日志和监控不足</em> 由原版第十位上升来到第九位。日志和审计数据的重要性不言而喻，它们是攻击溯源、账号审计、告警和响应等安全功能的重要依赖。</p>
+<p>日志和监控不足的问题一般可能发生在如下的场景：</p>
+<ul>
+<li>有些事件应被审计，但并未被审计（如登录成功、登录失败）；</li>
+<li>系统确实产生了告警或报错，但是这些消息呈现的信息不够清晰；</li>
+<li>应用日志和API日志没有受到实时的监控，由此不能及时发现可疑行为；</li>
+<li>日志没有妥善存储；</li>
+<li>告警阈值和响应启动的过程没有设置到位；</li>
+<li>渗透测试或扫描工具发起的扫描行为没能触发告警；</li>
+<li>程序不能够对攻击行为进行实时或及时的告警、响应、处置。</li>
+</ul>
+<p>对于这些日志和监控信息，最好还要制定适当的访问控制权限，否则也可能存在风险。</p>
+<p><strong>防护措施</strong> ：</p>
+<ul>
+<li>确保所有登录、访问控制和服务端的输入验证失败信息都受到了记录，且这些记录需要带有完整的用户上下文信息，以定位可疑账号；同时，这些记录要存留足够长的事件，以便后续的分析；</li>
+<li>确保日志格式易于处理，尤其是让自动化的日志管理工具处理（<del>宣传一波TxSOC</del>）；</li>
+<li>确保日志数据被正确地编码，防止针对日志和监控系统的注入攻击；</li>
+<li>确保高额交易有完整性控制的审计信息，且审计信息必须防止篡改或删除；</li>
+<li>制定应急管理预案，保障事件的有序响应和恢复。</li>
+</ul>
+<h3 id="10-server-side-request-forgeryssrf">10 Server Side Request Forgery（SSRF）</h3>
+<p><del>OHHHHHHHH</del></p>
+<p>面试常客了，同时也是业界反馈第一高的问题，但在这一轮的测试过程中没有出现很广泛的SSRF问题。这种新条目覆盖的面一般较小，主要是为了引起人们的关注和认知，后续可能扩大成更广一点的类别。</p>
+<p>当一个网站后端使用用户提供的URL来获取远程资源，且未对这一URL进行检查时，就可能发生SSRF。这一漏洞使得后端服务器被攻击者用来向我们不希望的目标发送恶意请求，且这种请求可以绕过WAF、VPN和其他类型的ACL。</p>
+<p>当前的Web应用都在向用户提供越来越多的方便功能，包括从用户侧获取URL，这使得SSRF的出现概率在不断增加；同时，随着云计算的发展和程序架构的复杂化，SSRF的严重性也在不断增加。</p>
+<p><strong>防护措施</strong> ：</p>
+<p><em>网络层</em></p>
+<ul>
+<li>对内网进行划分，尤其是具有远程资源访问功能的部分，以减轻SSRF带来的影响；</li>
+<li>防火墙上配置“默认拒绝”的规则，只放行一些必要的请求；</li>
+</ul>
+<p><em>应用层</em></p>
+<ul>
+<li>检查来自客户端的所有输入数据；</li>
+<li>对URL格式、端口和目的地址设置一个白名单；</li>
+<li>不把原始数据返回给客户端（即远程获取到的资源要进行处理）；</li>
+<li>禁用HTTP重定向；</li>
+<li>留意URL的有效时间，防止DNS重绑定或TOUTOC（time of use, time of check）竞争条件攻击；</li>
+</ul>
+<p>不要用黑名单来防止SSRF，因为攻击者有很多种办法绕过它们。</p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/audit-%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">audit 简述</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DoS——拒绝服务攻击</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">安全岗笔试题——1</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">提权技术--绕过UAC</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-09-29 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

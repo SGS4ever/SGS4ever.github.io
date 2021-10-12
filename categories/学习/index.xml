@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>学习 on XR_G&#39;s Blog</title>
+    <link>https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 学习 on XR_G&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 29 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>秋招 | 一些知识点</title>
+      <link>https://xrg.fj.cn/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/</link>
+      <pubDate>Sun, 29 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/</guid>
+      <description>2021-07-20，正式拉开了秋招备战的序幕。
+我一直以来都深以为然的一个句子是，人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。 这个句子的意思是，如果你的学习能力比不上他人，那就花费百倍的精力去学，能够做到这一点的人，即使是一个愚者，也能够明了很多的知识。
+1 C++引用和指针的区别 这个问题出现在昨天的面试中，在此予以学习和记录。
+指针： 指针是一个变量，用于保存另一个变量的地址。指针需要使用 * 来进行解引用，以获取它指向的内存地址上的内容。
+引用： 引用是一个 已经存在 的变量的别名，实际上，引用也是通过存储变量的地址来进行实现的。
+两者的区别有如下几点：
+  初始化的方式不同。指针可以先声明，后赋值；引用必须在声明的同时进行初始化，因为它必须作为一个已经存在的变量的别名。
+  重复赋值。指针可以重复赋值（当然，const指针不行），而引用一旦声明，就不可以重复赋值。
+  内存占用。指针在栈上有其独立的内存空间（32bit机器就占用4字节），而引用与它的初始变量共享同一个空间，虽然它还是会花掉一部分栈空间。
+  是否为空。指针可以设置为NULL，而引用不行（基于第一点和第二点区别）。
+  间接引用。指针可以有多重嵌套，而引用不行。
+In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &amp;amp;p; // Whereas in references,  int &amp;amp;p = a; int &amp;amp;&amp;amp;q = p; //it is reference to reference, so it is an error.</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode1713. 得到子序列的最少操作次数</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/</link>
+      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/</guid>
+      <description>题目 给你一个数组 target ，包含若干 互不相同 的整数，以及另一个整数数组 arr ，arr 可能 包含重复元素。
+每一次操作中，你可以在 arr 的任意位置插入任一整数。比方说，如果 arr = [1,4,1,2] ，那么你可以在中间添加 3 得到 [1,4,3,1,2] 。你可以在数组最开始或最后面添加整数。
+请你返回 最少 操作次数，使得 target 成为 arr 的一个子序列。
+一个数组的 子序列 指的是删除原数组的某些元素（可能一个元素都不删除），同时不改变其余元素的相对顺序得到的数组。比方说，[2,7,4] 是 [4,2,3,7,2,1,4] 的子序列（加粗元素），但 [2,4,2] 不是子序列。
+示例1
+ 输入： target = [5,1,3], arr = [9,4,2,3,4] 输出： 2 解释： 你可以添加 5 和 1 ，使得 arr 变为 [5,9,4,1,2,3,4] ，target 为 arr 的子序列。  示例2
+ 输入： target = [6,4,8,1,3,2], arr = [4,7,6,2,3,8,6,1] 输出： 3  数据范围</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode面试题 08.13. 堆箱子</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/</link>
+      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/</guid>
+      <description>这道题有点难，但并不是完全难。
+题目 堆箱子。给你一堆n个箱子，箱子宽 wi、深 di、高 hi。箱子不能翻转，将箱子堆起来时，下面箱子的宽度、高度和深度必须大于上面的箱子。实现一种方法，搭出最高的一堆箱子。箱堆的高度为每个箱子高度的总和。
+输入使用数组 [wi, di, hi]表示每个箱子。
+示例1
+ 输入： box = [[1, 1, 1], [2, 2, 2], [3, 3, 3]] 输出： 6  示例2
+ 输入： box = [[1, 1, 1], [2, 3, 4], [2, 6, 7], [3, 4, 5]] 输出： 10  数据范围
+ 箱子的数目不大于3000个。  分析 箱子有三个维度，一瞬间就让人想到了三维的DP。
+能否降低循环层数呢？我们注意到题目中所说的 下面箱子的宽度、高度和深度必须大于上面的箱子 ，那么，只需要根据任意一个维度进行排序，最终箱子叠起来的顺序就是排序后的顺序（正序或反序）。
+更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &amp;lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。</description>
+    </item>
+    
+    <item>
+      <title>syslog机制简述</title>
+      <link>https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/</link>
+      <pubDate>Sat, 03 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/</guid>
+      <description>断更了将近两个月？
+五月下旬开始参加实习，工作颇为忙碌，单程一小时的通勤也磨灭了我回到宿舍之后继续学习和输出的热情；然而实习已近两月，所幸稍有所得，不做记录则恐愧对时光矣。
+syslog工作流程简述 不管是什么应用，日志机制永是最重要的机制之一，从日志中，维护人员可以排查错误、发现攻击，从而有效地提高应用的可用性。
+操作系统也是如此，本文将对Linux日志机制中的一个重要组成部分——syslog/rsyslog——进行一个简要的叙述。
+大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
+syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
+流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
+syslog处理分类分级处理信息
+当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
+过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
+authpriv.* /var/log/secure
+这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
+规则的组成
+第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
+你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
+仔细看看配置文件吧，每一条规则都是如此的简单而实用：
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages!</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/</link>
+      <pubDate>Fri, 07 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/</guid>
+      <description>难题本为数不多的Hard题~
+题目 给你一个 m x n 的矩阵 matrix 和一个整数 k ，找出并返回矩阵内部矩形区域的不超过 k 的最大数值和。
+题目数据保证总会存在一个数值和不超过 k 的矩形区域。
+示例1
+
+ 输入： matrix = [[1,0,1],[0,-2,3]], k = 2 输出： 2 解释： 蓝色边框圈出来的矩形区域 [[0, 1], [-2, 3]] 的数值和是 2，且 2 是不超过 k 的最大数字（k = 2）。  示例2
+ 输入： matrix = [[2,2,-1]], k = 3 输出： 3  数据范围
+ m == matrix.length n == matrix[i].length 1 &amp;lt;= m, n &amp;lt;= 100 -100 &amp;lt;= matrix[i][j] &amp;lt;= 100 -105 &amp;lt;= k &amp;lt;= 105  分析 我们要得到每一个小矩形，则可以：</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode1473. 粉刷房子 III</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/</link>
+      <pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/</guid>
+      <description>愉快的五四青年节从遇到一道Hard的动态规划题结束~
+题目链接：1473. 粉刷房子 III - 力扣（LeetCode） (leetcode-cn.com)
+题目 在一个小城市里，有 m 个房子排成一排，你需要给每个房子涂上 n 种颜色之一（颜色编号为 1 到 n ）。有的房子去年夏天已经涂过颜色了，所以这些房子不需要被重新涂色。
+我们将连续相同颜色尽可能多的房子称为一个街区。（比方说 houses = [1,2,2,3,3,2,1,1] ，它包含 5 个街区 [{1}, {2,2}, {3,3}, {2}, {1,1}] 。）
+给你一个数组 houses ，一个 m * n 的矩阵 cost 和一个整数 target ，其中：
+houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色。 cost[i][j]：是将第 i 个房子涂成颜色 j+1 的花费。 请你返回房子涂色方案的最小总花费，使得每个房子都被涂色后，恰好组成 target 个街区。如果没有可用的涂色方案，请返回 -1 。
+示例1
+ 输入： houses = [0,0,0,0,0], cost = [[1,10],[10,1],[10,1],[1,10],[5,1]], m = 5, n = 2, target = 3 输出： 9 解释： 房子涂色方案为 [1,2,2,1,1]，此方案包含 target = 3 个街区，分别是 [{1}, {2,2}, {1,1}]。涂色的总花费为 (1 + 1 + 1 + 1 + 5) = 9。  示例2:</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode220. 存在重复元素 III</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/</link>
+      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/contains-duplicate-iii/
+这是个中等题？
+题目  给你一个整数数组 nums 和两个整数 k 和 t 。请你判断是否存在 两个不同下标 i 和 j，使得 abs(nums[i] - nums[j]) &amp;lt;= t ，同时又满足 abs(i - j) &amp;lt;= k 。
+如果存在则返回 true，不存在返回 false。
+示例1
+ 输入： nums = [1,2,3,1], k = 3, t = 0 输出： true  示例2
+ 输入： nums = [1,5,9,1,5,9], k = 2, t = 3 输出： false  数据范围
+ 0 &amp;lt;= nums.length &amp;lt;= 2 * 104 -231 &amp;lt;= nums[i] &amp;lt;= 231 - 1 0 &amp;lt;= k &amp;lt;= 104 0 &amp;lt;= t &amp;lt;= 231 - 1   分析 朴素想法：遍历每个满足条件的 i 、 j ，找到符合条件的就退出。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode208. 实现 Trie (前缀树)</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/</link>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/
+定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目  Trie（发音类似 &amp;ldquo;try&amp;rdquo;）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+请你实现 Trie 类：
+  Trie() 初始化前缀树对象。
+  void insert(String word) 向前缀树中插入字符串 word 。
+  boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+  boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+  示例
+  输入：
+[&amp;ldquo;Trie&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;startsWith&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;]
+[[], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;]]
+  输出：</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode80. 删除有序数组中的重复项 II</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/</link>
+      <pubDate>Tue, 06 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/
+题目  给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+示例1
+ 输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。  示例2
+ 输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3]  数据范围
+ 1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列   分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode90. 子集 II</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/subsets-ii/
+题目 给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。
+解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
+示例1
+  输入： nums = [1,2,2]
+  输出： [[],[1],[1,2],[1,2,2],[2],[2,2]]
+  示例2
+  输入： nums = [0]
+  输出： [[],[0]]
+  分析  三个月之前WA过的题，在每日一题里碰见了，而我还是思考了很久 :cry:
+ 原始数组中可能包含重复元素，则对于重复元素的考虑就尤为重要，一般来说，重复元素对于子集的贡献也有重复。
+我们不妨考虑进行以下的模拟，对于一个 不包含重复元素 的集合 [1, 2, 3] ，如何求得它的所有子集呢？
+首先，答案中包含一个空集。
+首先取得第一个元素，将其与当前答案中的所有集合拼接，放入答案中；
+考虑第二个元素，将其与当前答案中的所有集合拼接，放入答案中；
+第三个元素同理。
+示意
+在这个环节中，由于答案是在不断地增长的，我们只需要用一个变量保存添加元素之前的答案集合大小即可。
+这种做法的正确性是 不会证明 理所当然的。
+实际上，根据这种做法我们可以AC掉 LeetCode78. 子集 。
+// LeetCode 78 class Solution { public: vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; subsets(vector&amp;lt;int&amp;gt;&amp;amp; nums) { vector&amp;lt;int&amp;gt; tmp; vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; res; res.</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode190. 颠倒二进制位</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/</link>
+      <pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/reverse-bits/
+一道简单题，却能引出一个无比骚包的操作。此法前所未见，独自亦难想出，因此大抵也算是难的。
+题目  颠倒给定的 32 位无符号整数的二进制位。
+示例1
+  输入： 00000010100101000001111010011100
+  输出： 00111001011110000010100101000000
+  解释： 输入的二进制串 00000010100101000001111010011100 表示无符号整数 43261596， 因此返回 964176192，其二进制表示形式为 00111001011110000010100101000000。
+  示例2
+ 输入： 11111111111111111111111111111101 输出： 10111111111111111111111111111111   分析  易得简单暴力的32次循环法，在此不表，详见AC代码1。唯有一点值得注意：先加最低位再将 res 移位的时候，只能移动 31 次，否则最高位将溢出。因此，AC代码1中只取31次循环，而将最后一位置于循环外。
+ 对于一个首尾对换的操作，我们可以使用分治的思路。
+考虑对于最大的32位二进制，将前16位与后16位对换。
+考虑高低的16位，将每一部分中的高8位与低8位对换。
+如此进行······
+分治
+那么，我们如何做到这种形式的对换呢？
+不妨以8位二进制为例，对于一个八位二进制数 1011 0011 ，我们首先需要将其高低四位进行对换。示意如下：
+Step 1
+对于一个二进制数，我们可以很简单地使用如下办法取得它的高低四位：
+highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode82. 删除排序链表中的重复元素 II</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/</link>
+      <pubDate>Thu, 25 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
+题目  存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+返回同样按升序排列的结果链表。
+示例1
+  输入： head = [1,2,3,3,4,4,5]
+  输出： [1,2,5]
+  示例2
+  输入： head = [1,1,1,2,3]
+  输出： [2,3]
+  数据范围
+ 链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列   分析  在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
+而两次遍历的办法则更为简单，也是最初浮现在我脑海中的念头。考虑到链表节点的数据范围在 [-100, 100] 区间中，我们在第一次遍历的过程中记录每个数值出现的次数，而在第二次遍历过程中考虑下一个节点（的数值）是否应该存在于最终的结果中即可。
+ 当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
+在有序的数组中取得一段相同元素的子数组，直接考虑滑动窗口。
+我们使用一个指针，指向窗口 左边界的左邻居 ，使用两个指针维护窗口的左右边界。当窗口右边界数值等于左边界数值时，窗口向右扩张，否则进行一定的更新操作。
+容易想象，在不发生重复的情况下，窗口的大小（right - left）始终为 1 ，而发生重复的时候整段窗口需要全部从链表上删除。
+窗口中无重复</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode395. 至少有 K 个重复字符的最长子串</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395.-%E8%87%B3%E5%B0%91%E6%9C%89-k-%E4%B8%AA%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</link>
+      <pubDate>Sat, 27 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395.-%E8%87%B3%E5%B0%91%E6%9C%89-k-%E4%B8%AA%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</guid>
+      <description>题目链接： https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/
+题目  给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
+示例1
+  输入： s = &amp;ldquo;aaabb&amp;rdquo;, k = 3
+  输出： 3
+  解释： 最长子串为“aaa”，其中”a“重复了3次
+  示例2
+  输入： s = “ababbc”, k = 2
+  输出： 5
+  数据范围
+ 1 &amp;lt;= s.length &amp;lt;= 104 s 仅由小写英文字母组成 1 &amp;lt;= k &amp;lt;= 105   分析  没有任何思路，参照题解的分治法将此题解出，稍作记录。
+首先，对于 s 中的所有字符，我们可以统计它们出现的次数，对于所有出现次数小于 k 的字符，答案中一定不包含它。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode1438. 绝对差不超过限制的最长连续子数组</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Mon, 22 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/</guid>
+      <description>定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+题目  给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+如果不存在满足条件的子数组，则返回 0 。
+示例1
+  输入： nums = [8,2,4,7], limit = 4
+  输出： 2
+  解释： 所有子数组如下：
+  [8] 最大绝对差 |8-8| = 0 &amp;lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[2] 最大绝对差 |2-2| = 0 &amp;lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &amp;lt;= 4.</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode567. 字符串的排列</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/</link>
+      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/</guid>
+      <description>今天是农历除夕，然而近年来年味渐淡，凡有亲朋在，便是好时节，也无需对此日特别注重了。
+题目链接：https://leetcode-cn.com/problems/permutation-in-string/
+题目  给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
+换句话说，第一个字符串的排列之一是第二个字符串的子串。
+示例1
+  输入： s1 = &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidbaooo&amp;rdquo;
+  输出： True
+  解释： s2包含s1的排列之一（“ba”）
+  示例2
+  输入： s1= &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidboaoo&amp;rdquo;
+  输出： False
+  数据范围
+ 输入的字符串只包含小写字母 两个字符串的长度都在 [1, 10,000] 之间   分析  s2的某个子串包含s1的排列，即s2的某个子串中字母分布与s1完全一样。
+我最先想到使用一个集合来保存s1的所有字母，使用滑动窗口left ~ right遍历s2中的每个子串：
+ 当某个字符不在集合中时，left = right = right + 1 当某个字符在集合中时，从集合中删除该字符  按照上面的规则，当某个子串完全包含s1中的所有字符时，遍历完这个子串之后集合就变为空。</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode703. 数据流中的第 K 大元素</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/</link>
+      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/</guid>
+      <description>不是吧啊Sir，这种题也错？:cry:
+题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
+题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+请实现 KthLargest 类：
+ KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+  输出： [null, 4, 5, 5, 8, 8]
+  示例2
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode992. K 个不同整数的子数组</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Tue, 09 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/subarrays-with-k-different-integers/
+思路是真难想，想出来之后是真简单。
+已经是我目前的水平无法搞定的程度了，在此稍作记录。
+题目  给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。
+（例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
+返回 A 中好子数组的数目。
+示例1
+  输入： A = [1,2,1,2,3], K = 2
+  输出： 7
+  解释： 恰好由 2 个不同整数组成的子数组：[1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2].
+  示例2
+  输入： A = [1,2,1,3,4], K = 3
+  输出： 3
+  解释： 恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode665. 非递减数列</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665.-%E9%9D%9E%E9%80%92%E5%87%8F%E6%95%B0%E5%88%97/</link>
+      <pubDate>Sun, 07 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665.-%E9%9D%9E%E9%80%92%E5%87%8F%E6%95%B0%E5%88%97/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/non-decreasing-array/
+看到这题第一感受：简单题！
+做完这题第一感受：简单题？
+题目  给你一个长度为 n 的整数数组，请你判断在 最多 改变 1 个元素的情况下，该数组能否变成一个非递减数列。
+我们是这样定义一个非递减数列的： 对于数组中所有的 i (0 &amp;lt;= i &amp;lt;= n-2)，总满足 nums[i] &amp;lt;= nums[i + 1]。
+示例1
+  输入： nums = [4,2,3]
+  输出： true
+  解释： 你可以通过把第一个4变成1来使得它成为一个非递减数列。
+  示例2
+  输入： nums = [4,2,1]
+  输出： false
+  数据范围
+ 1 &amp;lt;= n &amp;lt;= 10 ^ 4 - 10 ^ 5 &amp;lt;= nums[i] &amp;lt;= 10 ^ 5   分析  简单题毕竟还是简单题，思路初步找起来是比较容易的。</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode888. 公平的糖果棒交换</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/</link>
+      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/</guid>
+      <description>美好的二月从WA一道简单题开始。
+题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
+ 描述
+爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
+因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
+返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
+如果有多个答案，你可以返回其中任何一个。保证答案存在。
+示例1
+  输入： A = [1,1], B = [2,2]
+  输出：[1,2]
+  示例2
+  输入： A = [1,2], B = [2,3]
+  输出：[1,2]
+  数据范围
+ 1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode5667. 你能在你最喜欢的那天吃到你最喜欢的糖果吗？</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667.-%E4%BD%A0%E8%83%BD%E5%9C%A8%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E9%82%A3%E5%A4%A9%E5%90%83%E5%88%B0%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E7%B3%96%E6%9E%9C%E5%90%97/</link>
+      <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667.-%E4%BD%A0%E8%83%BD%E5%9C%A8%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E9%82%A3%E5%A4%A9%E5%90%83%E5%88%B0%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E7%B3%96%E6%9E%9C%E5%90%97/</guid>
+      <description>我的第一次LeetCode周赛，本来大有希望AC三道题，结果在这个神坑上趴了半个多小时o(╥﹏╥)o
+题目链接：https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/
+题目  给你一个下标从 0 开始的正整数数组 candiesCount ，其中 candiesCount[i] 表示你拥有的第 i 类糖果的数目。同时给你一个二维数组 queries ，其中 queries[i] = [favoriteTypei, favoriteDayi, dailyCapi] 。
+你按照如下规则进行一场游戏：
+ 你从第 0 天开始吃糖果。 你在吃完 所有 第 i - 1 类糖果之前，不能 吃任何一颗第 i 类糖果。 在吃完所有糖果之前，你必须每天 至少 吃 一颗 糖果。  请你构建一个布尔型数组 answer ，满足 answer.length == queries.length 。answer[i] 为 true 的条件是：在每天吃 不超过 dailyCapi 颗糖果的前提下，你可以在第 favoriteDayi 天吃到第favoriteTypei类糖果；否则 answer[i] 为 false 。注意，只要满足上面 3 条规则中的第二条规则，你就可以在同一天吃不同类型的糖果。
+请你返回得到的数组 answer 。
+示例1
+  输入：candiesCount = [7,4,5,3,8], queries = [[0,2,2],[4,2,4],[2,13,1000000000]]</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode778. 水位上升的泳池中游泳</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/</link>
+      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/swim-in-rising-water/
+又是一道不错的复习题，借此回顾回顾BFS和SPFA。
+BFS Breadth First Search，宽度优先搜素。
+已知图G = (V, E)和一个源顶点s，宽度优先搜索以一种系统的方式探寻G的边，从而“发现”s所能到达的所有顶点，并计算s到所有这些点的距离（最少边数）。
+使用一个数组visited维护每个顶点先前是否被访问过；使用一个数组dist维护源点到每个顶点的距离。visited初始化为全0，dist初始化为全正无穷。
+使用一个队列q维护当前正在访问的点，每次从队首中取出head来进行操作。对于head的邻接点tmp，若我们之前没有访问过它，则源点到它的距离就是源点到head的距离加1。我们记dist[tmp] = dist[head] + 1，然后将tmp放入队列q中，之后的某个时刻，tmp会被取出，然后继续找出与它邻接且没被访问过的点，直到队列为空，所有可达的点都被访问过了。
+BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张，最终遍历结束，涟漪消散。
+使用当年蹭HDU数据结构课的一道作业来进行BFS的回顾：
+ 题目描述
+一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
+输入格式
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&#39;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&#39;。
+输出格式
+输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
+输入1：
+5 5
+..###
+#&amp;hellip;.
+#.#.#
+#.#.#
+#.#..
+输出1： 8
+ 这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&#39;#&#39;）且该点未被访问，则记录它到源点的距离。
+我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
+#include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.</description>
+    </item>
+    
+    <item>
+      <title>传输层协议——TCP</title>
+      <link>https://xrg.fj.cn/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/</guid>
+      <description>传输层 传输层的功能
+从通信和信息处理的角度看，传输层向它上面的应用层提供通信服务，它属于面向通信部分的最高层，同时也是用户功能中的最低层。
+实际上，传输层起到一个承上启下的作用。它之下的网络层、数据链路层、物理层被称为通信子网，其实现细节对用户是不可见的。
+传输层的功能如下：
+ 提供进程之间的逻辑通信（即端到端的通信）。进程间的逻辑通信是指本主机上运行的某个进程和对方主机上运行的某个进程进行通信。而与此相对的，网络层提供的是点到点的通信，指的是本主机与对方主机的通信。 复用和分用。多个进程可以使用同一个传输层协议封装自己的数据，而对方主机可以使用同样的协议正确解析这些数据，交付给正确的应用进程。 差错检测。传输层检测首部和数据部分的差错，而网络层只检查IP数据报的首部，不检查数据部分是否出错。 提供两种不同的传输协议，即面向连接的TCP和无连接的UDP。网络层无法同时实现两种协议（即要么使用面向连接的服务，如虚电路；要么只提供无连接的服务，如数据报）。  需要注意，在计算机网络层次结构中，网络层被认为是不可靠的服务，即网络层传输的数据可能出现丢失、混乱或重复，这些不可靠的问题需要由传输层来考虑解决。
+端口的概念
+网络层的数据交付是点到点的，也就是主机到主机的交付。当一个IP数据报到达了主机，如何判断这份数据报应该交给哪个进程呢？传输层引入了端口，每个进程与一个端口号绑定。主机把IP数据报解封，就能看到里面的传输层数据包，其包头中写明了目的端口，只需要把数据交付给对应于这个端口的进程即可。
+结合IP和端口，就能唯一地标识一台主机上的一个进程，这就是Socket（套接字）：
+套接字 = （主机IP地址， 端口号）
+TCP  TCP协议的特点
+ TCP是在不可靠的IP层之上实现的可靠的数据传输协议，它主要针对之前提及的网络层数据传输的丢失、混乱或重复问题，实现传输层上的可靠、有序、无丢失和不重复。
+TCP的主要特点如下：
+ 面向连接。 每条连接只能有两个端点，即一对一的。 可靠的交付服务，保证数据无差错、不丢失、不重复且有序。 全双工通信，即任何时刻双方都能进行数据的发送。为此，双方都应该设置发送缓存和接收缓存，用来临时存放双向通信的数据。 面向字节流。计算机网络中常见的一个问题是：面向字节和面向报文有什么区别？ 面向字节流是指TCP将应用程序交付下来的数据仅视为一连串的无结构的字节流，发送的时候按照TCP的规则进行发送，不会考虑保留原始数据的边界；而面向报文是指每次发送的数据作为一个报文，一个报文是一块有结构的数据。   TCP报文段
+ 想要理解TCP的连接建立等等细节，认识其报头是必要的。TCP有固定的20B报头，变长字段配合填充字段使TCP报头长度始终是4B的整数倍。由于首部长度字段只有4位，故报头最长为15 * 4 = 60B
+TCP报头格式如下：
+TCP Header
+每个字段的含义可以参见这篇文章。
+ TCP连接管理
+ TCP是面向连接的协议，每个TCP连接都有三个阶段：连接建立、数据传输和连接释放。TCP的连接管理就是使运输连接的建立和释放都能正常进行。
+TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式，主动发起连接的进程称为客户机（Client），被动等待连接的进程称为服务器（Server）。
+连接的建立分为3个步骤，即三次握手：
+TCP three-way-handshake
+ 第一步：客户机向服务器发送一个报文段，该报文段不含应用层数据，首部中的SYN标志被置为1，且该报文段占用了一个随机序号seq=x。 第二步：服务器收到连接请求，如同意连接，就向客户机发回确认，并为该连接分配TCP缓存和变量。确认报文中SYN和ACK都置为1，seq是服务器选用的初始随机序号，ack表示期望收到的下一个客户机报文序号。 第三步：客户机接收到确认报文，也要为该连接分配缓存和变量，并回复确认。  完成三次握手之后，双方的应用进程在任何时刻都可以发送数据（全双工）。
+注意这里的第二步握手，服务器在此步分配资源，那么如果客户端不回应第三步的确认报文，则服务器在原地忙等，过一段时间后才删除这些资源；如果快速发送大量的SYN包给特定服务器，将耗尽它的资源，使得正常的连接无法被建立，这就是典型的SYN Flood攻击。
+ 三次握手的必要性：
+进行三次握手是必要的。
+从直觉进行理解：第一步握手是客户端向服务器发送数据，此时双方对信道的性质还不了解；第二步握手成功之后，客户端知道了服务器能够收到自己的数据，但服务器还不知道客户端能不能收到自己的数据；第三步握手成功之后，服务器知道客户端能收到自己的数据，可以开始通信。
+进一步地，考虑以下这种两次握手的情况：</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode959. 由斜杠划分区域</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/</link>
+      <pubDate>Mon, 25 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/regions-cut-by-slashes/
+令我思考很久的一道题，最后还是学着官方题解做出来的([1])。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。
+题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
+（请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
+返回区域的数目。
+分析  将单元格进一步细分，便于并查集操作。
+每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
+图1. 单元格划分
+  格内合并
+ 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
+ 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
+ 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
+ 输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
+图2. 网格</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode1232. 缀点成线</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/</link>
+      <pubDate>Sun, 17 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/
+题目 在一个 XY 坐标系中有一些点，我们用数组 coordinates 来分别记录它们的坐标，其中 coordinates[i] = [x, y] 表示横坐标为 x、纵坐标为 y 的点。
+请你来判断，这些点是否在该坐标系中属于同一条直线上，是则返回 true，否则请返回 false。
+分析 这种题目居然WA了一次。。。
+依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
+这题的特殊情况有两种：
+ 一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。  直接放代码了。
+class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 + b = y1; ax2 + b = y2  // a(x1 - x2) = y1 - y2  // a = (y1 - y2) / (x1 - x2)  // b = y1 - ax1  if (coordinates.</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode947. 移除最多的同行或同列石头</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/</link>
+      <pubDate>Fri, 15 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/
+题目 n 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。
+如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
+给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
+示例1
+ 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
+分析：
+ 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode862. 和至少为 K 的最短子数组</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
+这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
+分析：
+ 题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
+最开始想到的是暴力。假设数组长度为n，我们分别求出长度为1、2、&amp;hellip;、n的子数组的最大和，将他们按顺序和K比较，第一个比K大的长度就是答案。这样的做法时间复杂度是O(n2)，有点复杂。
+之后就没有想法了。跟泓泓挣扎了半天，还是只能去看题解。
+不得不说，官方题解真是不讲人话[2]，不到40行代码的思路，硬是能被说成鬼都看不懂的样子。
+首先，为了方便求任意一段连续子数组的和，我们需要使用前缀和数组prefix_sum。在这个题目中，prefix_sum[i]表示的是从A[0]到A[i - 1]的前缀和，注意是A[i - 1]，作用后面会讲。总之，求前缀和的办法是很常规的。
+我们知道，求得了前缀和数组之后，对于两个下标x、y（设y&amp;gt;x），prefix_sum[y] - prefix_sum[x]表示的就是从A[x + 1]到A[y]这段子数组的和。那么，问题就转化为了针对prefix_sum数组，求一对x和y，满足prefix_sum[y] - prefix_sum[x] &amp;gt;= K，且y - x最小。
+朴素的思想是遍历每一对y和x，这样的复杂度还是O(n2)，显然需要用某种更巧妙的办法让我们摆脱两重循环。
+于是引出官方题解中的第一条性质：
+ 对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。  如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
+本条性质的模拟
+我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
+使用下面的代码来进行实现，注意deque的初始元素0。
+// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode953. 验证外星语词典</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953.-%E9%AA%8C%E8%AF%81%E5%A4%96%E6%98%9F%E8%AF%AD%E8%AF%8D%E5%85%B8/</link>
+      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953.-%E9%AA%8C%E8%AF%81%E5%A4%96%E6%98%9F%E8%AF%AD%E8%AF%8D%E5%85%B8/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
+题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
+解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
+错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+AC代码：
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组  for (ite = words.begin(); ite != words.end(); ++ite) // 两两对比  { if (ite != words.end() - 1) { if (cmp(*ite, *(ite + 1)) &amp;gt; 0) // cmp返回正数，前者比后者大  { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; ++idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低  } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !</description>
+    </item>
+    
+    <item>
+      <title>一些简单的进程调度算法</title>
+      <link>https://xrg.fj.cn/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Mon, 19 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/</guid>
+      <description>上一次挖的OAuth2.0坑还没填好，又要开一个操作系统的坑了&amp;hellip;
+本篇介绍一些简单的进程调度算法，以及它们的代码实现。文章的具体组织为：一些关键概念的介绍 &amp;ndash;&amp;gt; 四种进程调度算法（SJF、FCFS、HRRF、HPF）。
+话不多说，Let&amp;rsquo;s go！
+一些概念  在对四种调度算法进行介绍之前，有一些概念希望读者能够理解：
+ 周转时间：进程完成时间 - 进程到达时间。也就是整个进程从开始到结束所花费的时间。 平均周转时间：这个数值一般用于衡量调度的效率。比如在一段时间内来了5个进程，那么在这段时间内这些进程的平均周转时间就是五个进程的周转时间之和 / 5。 带权周转时间：某个进程的带权周转时间就是这个进程的周转时间 / 运行时间。由于系统中总有多个进程在运行，周转时间往往大于运行时间。因此，带权周转时间一般大于等于1。 平均带权周转时间：多个进程带权周转时间的平均值。  实际上，还有很多指标可以来衡量调度算法的优劣，如CPU利用率、系统吞吐量、响应时间等等。但是本文中介绍的调度算法与时间紧密相连，故此只需要理解以上几个概念，就能够看懂下文对于调度算法的分析。
+ 先来先服务算法（First Come First Serve，FCFS）  先来先服务算法简直是不怎么需要介绍的了。顾名思义，该算法使得CPU优先服务最先到达的进程。生活中充满着先来先服务算法：超市排队、食堂取餐等等。下面用一个例子来模拟这个算法：
+假设有五个进程，它们的到达时间和希望的运行时间如下：
+进程描述
+本着先来先服务的原则，我们在第0秒的时间为进程1服务；在第4秒的时间服务结束，此时进程2、3、5都已到达，但是进程5是最先到的，因而进程5优先受到服务；在第6秒的时间进程5服务结束，此时在等候的进程还有进程2和进程3，为进程3服务，在第16秒的时间服务结束，此时还有进程2和进程4（在第7秒的时候到的），为进程2服务，在第22秒的时候结束进程2，服务进程4，最终在第34秒结束进程4。
+CPU对这五个进程的服务次序如下图所示：
+服务次序
+如果你还记得第一小节所讲的内容，我们不妨算一下在这个例子中这几个概念分别是多少：
+统计时间
+你看出其中存在的问题了吗？
+ 短作业优先算法（Shortest Job First，SJF）  先来先服务算法很好理解、在生活中很常见，但是它存在一个问题：对于一些运行时间很短的进程，光是在那边排队等待所花费的时间可能数倍于真正的运行时间！
+在上一个例子中，进程2所花费的运行时间只有6秒，但是它很不幸地被进程3抢占先机，只能眼睁睁看着进程3运行了10秒。光是等待的时间就比运行的时间还多！因此，它的带权周转时间也是最大的，现在是否对这个概念的理解深刻了许多？
+先来先服务的死板特性对于某些短作业来说简直是灾难，此时，短作业优先算法就显得友好许多。
+短作业优先算法不关注进程的到达时间，当CPU结束了一个进程的服务之后，永远从等待的所有进程中找出运行时间最短的进程为其服务。
+还是上面的例子，在第0秒的时间为进程1服务，在第4秒的时间进程2、3、5都已到达，此时进程5需要的时间最少，因此它优先受到服务；在第6秒的时间进程5的服务结束了，此时在等候的进程还有2和3，虽然进程3是先到的，但是进程2所需要的时间更少，因此进程2优先受到服务；在第12秒的时候进程2的服务结束了，此时在等候的进程还有3和4，优先为进程3服务，在第22秒的时候为进程4服务，在第34秒的时候结束。
+这个例子中，我们的进程2比进程3更晚到达，但是由于它所需要的时间更短，就得到了优先的服务。这就是短作业优先的思想。
+如果你没有第一时间看出这个算法的问题，那么请考虑下面这个例子：
+新例子
+在这里，我们只是把进程4的运行时间由12秒调整为8秒，其他的没有变化。
+但是此时，我们在第12秒的时候结束了进程2的服务，此时在等候的还有进程3和进程4，我们优先服务进程4，在第20秒的时候结束它，服务进程3，在第30秒的时候进程3结束。
+把数据完善一下，就会发现问题所在：
+新数据
+可怜的进程3，在第2秒到达，在第30秒结束，周转时间高达28秒！
+这就是短作业优先的问题——当系统中不断地有短作业到来的时候，很早就在那里等待的长作业就无法得到服务，最终出现进程饥饿。
+ 最高响应比优先算法（Highest Response Ratio First，HRRF）  在短作业优先算法中，进程饥饿是一个比较致命的问题。但是短作业优先的思想确实是有相当的可取之处的，于是人们考虑保留这种思想，同时使得长进程能够较少地受到饥饿，这就有了最高响应比优先算法。</description>
+    </item>
+    
+    <item>
+      <title>进程间文件同步写</title>
+      <link>https://xrg.fj.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/</link>
+      <pubDate>Sun, 27 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/</guid>
+      <description>这段期间没学到任何完整的、值得记录的东西，因此好久没有更新博客了，凑巧中午一边喝大红袍一边搞出了一点东西，虽然不太完整，也不妨一记。
+最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
+由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
+答案就是文件锁。
+ 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
+显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
+于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
+本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
+这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
+ 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C++为主体，但是核心部分完全兼容C语言。
+首先要明确一点，C++的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
+既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
+在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
+该API详见此文档。
+我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
+const char* logPath = &amp;#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&amp;#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
+ 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;amp;overlapped)) { DWORD err = GetLastError(); printf(&amp;#34;Error %i\n&amp;#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。</description>
+    </item>
+    
+  </channel>
+</rss>

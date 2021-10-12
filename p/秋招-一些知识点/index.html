@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='2021-07-20，正式拉开了秋招备战的序幕。
+我一直以来都深以为然的一个句子是，人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。 这个句子的意思是，如果你的学习能力比不上他人，那就花费百倍的精力去学，能够做到这一点的人，即使是一个愚者，也能够明了很多的知识。
+1 C&#43;&#43;引用和指针的区别 这个问题出现在昨天的面试中，在此予以学习和记录。
+指针： 指针是一个变量，用于保存另一个变量的地址。指针需要使用 * 来进行解引用，以获取它指向的内存地址上的内容。
+引用： 引用是一个 已经存在 的变量的别名，实际上，引用也是通过存储变量的地址来进行实现的。
+两者的区别有如下几点：
+  初始化的方式不同。指针可以先声明，后赋值；引用必须在声明的同时进行初始化，因为它必须作为一个已经存在的变量的别名。
+  重复赋值。指针可以重复赋值（当然，const指针不行），而引用一旦声明，就不可以重复赋值。
+  内存占用。指针在栈上有其独立的内存空间（32bit机器就占用4字节），而引用与它的初始变量共享同一个空间，虽然它还是会花掉一部分栈空间。
+  是否为空。指针可以设置为NULL，而引用不行（基于第一点和第二点区别）。
+  间接引用。指针可以有多重嵌套，而引用不行。
+In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &amp;amp;p; // Whereas in references,  int &amp;amp;p = a; int &amp;amp;&amp;amp;q = p; //it is reference to reference, so it is an error.'><title>秋招 | 一些知识点</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='秋招 | 一些知识点'>
+<meta property='og:description' content='2021-07-20，正式拉开了秋招备战的序幕。
+我一直以来都深以为然的一个句子是，人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。 这个句子的意思是，如果你的学习能力比不上他人，那就花费百倍的精力去学，能够做到这一点的人，即使是一个愚者，也能够明了很多的知识。
+1 C&#43;&#43;引用和指针的区别 这个问题出现在昨天的面试中，在此予以学习和记录。
+指针： 指针是一个变量，用于保存另一个变量的地址。指针需要使用 * 来进行解引用，以获取它指向的内存地址上的内容。
+引用： 引用是一个 已经存在 的变量的别名，实际上，引用也是通过存储变量的地址来进行实现的。
+两者的区别有如下几点：
+  初始化的方式不同。指针可以先声明，后赋值；引用必须在声明的同时进行初始化，因为它必须作为一个已经存在的变量的别名。
+  重复赋值。指针可以重复赋值（当然，const指针不行），而引用一旦声明，就不可以重复赋值。
+  内存占用。指针在栈上有其独立的内存空间（32bit机器就占用4字节），而引用与它的初始变量共享同一个空间，虽然它还是会花掉一部分栈空间。
+  是否为空。指针可以设置为NULL，而引用不行（基于第一点和第二点区别）。
+  间接引用。指针可以有多重嵌套，而引用不行。
+In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &amp;amp;p; // Whereas in references,  int &amp;amp;p = a; int &amp;amp;&amp;amp;q = p; //it is reference to reference, so it is an error.'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='学习' /><meta property='article:published_time' content='2021-08-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-08-29T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="秋招 | 一些知识点">
+<meta name="twitter:description" content="2021-07-20，正式拉开了秋招备战的序幕。
+我一直以来都深以为然的一个句子是，人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。 这个句子的意思是，如果你的学习能力比不上他人，那就花费百倍的精力去学，能够做到这一点的人，即使是一个愚者，也能够明了很多的知识。
+1 C&#43;&#43;引用和指针的区别 这个问题出现在昨天的面试中，在此予以学习和记录。
+指针： 指针是一个变量，用于保存另一个变量的地址。指针需要使用 * 来进行解引用，以获取它指向的内存地址上的内容。
+引用： 引用是一个 已经存在 的变量的别名，实际上，引用也是通过存储变量的地址来进行实现的。
+两者的区别有如下几点：
+  初始化的方式不同。指针可以先声明，后赋值；引用必须在声明的同时进行初始化，因为它必须作为一个已经存在的变量的别名。
+  重复赋值。指针可以重复赋值（当然，const指针不行），而引用一旦声明，就不可以重复赋值。
+  内存占用。指针在栈上有其独立的内存空间（32bit机器就占用4字节），而引用与它的初始变量共享同一个空间，虽然它还是会花掉一部分栈空间。
+  是否为空。指针可以设置为NULL，而引用不行（基于第一点和第二点区别）。
+  间接引用。指针可以有多重嵌套，而引用不行。
+In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &amp;amp;p; // Whereas in references,  int &amp;amp;p = a; int &amp;amp;&amp;amp;q = p; //it is reference to reference, so it is an error.">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-c引用和指针的区别">1 C++引用和指针的区别</a></li>
+    <li><a href="#2-https流程">2 HTTPS流程</a></li>
+    <li><a href="#3-死锁">3 死锁</a></li>
+    <li><a href="#4-malloc和new的区别">4 malloc和new的区别</a></li>
+    <li><a href="#5-虚函数">5 虚函数</a></li>
+    <li><a href="#2021-07-26">2021-07-26</a></li>
+    <li><a href="#2021-07-27">2021-07-27</a></li>
+    <li><a href="#2021-07-28">2021-07-28</a></li>
+    <li><a href="#2021-07-29">2021-07-29</a></li>
+    <li><a href="#6-ftp与sftp">6 FTP与SFTP</a></li>
+    <li><a href="#7-leetcode-987-二叉树的垂序遍历">7 LeetCode 987. 二叉树的垂序遍历</a></li>
+    <li><a href="#2021-08-01">2021-08-01</a></li>
+    <li><a href="#8-c中的static关键字">8 C++中的static关键字</a></li>
+    <li><a href="#9-分组密码des">9 分组密码——DES</a></li>
+    <li><a href="#10-笔试复盘">10 笔试复盘</a></li>
+    <li><a href="#2021-08-03">2021-08-03</a></li>
+    <li><a href="#2021-08-14">2021-08-14</a></li>
+    <li><a href="#11-leetcode-1583-统计不开心的朋友">11 LeetCode 1583. 统计不开心的朋友</a></li>
+    <li><a href="#12-leetcode面试题-0405-合法二叉搜索树">12 LeetCode面试题 04.05. 合法二叉搜索树</a></li>
+    <li><a href="#13-leetcode5845-你能穿过矩阵的最后一天">13 LeetCode5845. 你能穿过矩阵的最后一天</a></li>
+    <li><a href="#14-leetcode576-出界的路径数">14 LeetCode576. 出界的路径数</a></li>
+    <li><a href="#15-数据库并发导致的问题">15 数据库并发导致的问题</a></li>
+    <li><a href="#16-程序装入和链接">16 程序装入和链接</a></li>
+    <li><a href="#17-设计模式简述">17 设计模式简述</a></li>
+    <li><a href="#18-c中的const关键字">18 C++中的const关键字</a></li>
+    <li><a href="#19-owasp-top-102017">19 OWASP top 10（2017）</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">秋招 | 一些知识点</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Aug 29, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>2021-07-20，正式拉开了秋招备战的序幕。</p>
+<p>我一直以来都深以为然的一个句子是，<em>人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。</em> 这个句子的意思是，如果你的学习能力比不上他人，那就花费百倍的精力去学，能够做到这一点的人，即使是一个愚者，也能够明了很多的知识。</p>
+<h3 id="1-c引用和指针的区别">1 C++引用和指针的区别</h3>
+<p>这个问题出现在昨天的面试中，在此予以学习和记录。</p>
+<p><strong>指针：</strong> 指针是一个变量，用于保存另一个变量的地址。指针需要使用 <code>*</code> 来进行解引用，以获取它指向的内存地址上的内容。</p>
+<p><strong>引用：</strong> 引用是一个 <strong>已经存在</strong> 的变量的别名，实际上，引用也是通过存储变量的地址来进行实现的。</p>
+<p>两者的区别有如下几点：</p>
+<ul>
+<li>
+<p><strong>初始化的方式不同</strong>。指针可以先声明，后赋值；引用必须在声明的同时进行初始化，因为它必须作为一个已经存在的变量的别名。</p>
+</li>
+<li>
+<p><strong>重复赋值</strong>。指针可以重复赋值（当然，const指针不行），而引用一旦声明，就不可以重复赋值。</p>
+</li>
+<li>
+<p><strong>内存占用</strong>。指针在栈上有其独立的内存空间（32bit机器就占用4字节），而引用与它的初始变量共享同一个空间，虽然它还是会花掉一部分栈空间。</p>
+</li>
+<li>
+<p><strong>是否为空</strong>。指针可以设置为NULL，而引用不行（基于第一点和第二点区别）。</p>
+</li>
+<li>
+<p><strong>间接引用</strong>。指针可以有多重嵌套，而引用不行。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">In</span> <span class="n">Pointers</span><span class="p">,</span>
+<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
+<span class="kt">int</span> <span class="o">**</span><span class="n">q</span><span class="p">;</span>  <span class="c1">//it is valid.
+</span><span class="c1"></span><span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
+<span class="n">q</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">;</span>
+  
+<span class="c1">// Whereas in references,
+</span><span class="c1"></span>  
+<span class="kt">int</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+<span class="kt">int</span> <span class="o">&amp;&amp;</span><span class="n">q</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span> <span class="c1">//it is reference to reference, so it is an error.
+</span></code></pre></div></li>
+</ul>
+<p>可以使用一句话来概括两者在实际使用中的规律：只在万不得已的时候使用指针。一般来说，引用会用在一个类的public接口中，而指针运用在其内部。</p>
+<hr>
+<p><em>以下编辑于2021-07-25</em></p>
+<p><strong>传引用比传指针安全。</strong> 因为不存在空引用，并且引用一旦被初始化为指向一个对象，就不会被改变为另一个对象的引用；而指针可能被改变为另一个对象。</p>
+<p><strong>即使声明为常量指针 <code>const Type* </code></strong> ，仍可能为空指针，并且可能产生野指针，所以还是不安全。</p>
+<blockquote>
+<p>Reference</p>
+<p>[1] <a class="link" href="https://www.geeksforgeeks.org/pointers-vs-references-cpp/"  target="_blank" rel="noopener"
+    >Pointers vs References in C++ - GeeksforGeeks</a></p>
+<p>[2] <a class="link" href="https://zhuanlan.zhihu.com/p/31451123"  target="_blank" rel="noopener"
+    >【C++】C++常见面试题汇总_持续更新中&hellip; - 知乎 (zhihu.com)</a></p>
+</blockquote>
+<h3 id="2-https流程">2 HTTPS流程</h3>
+<p>HTTPS的流程总结为如下步骤：</p>
+<ul>
+<li>客户端向服务器发送自己支持的密码套件（cipher suit）和一个随机数 <code>rc</code> ；</li>
+<li>服务端选择一套密码算法，连同自己的证书信息返回给客户端。在这里，服务端具体会将自己的公钥、数字证书、签名以及一个随机数 <code>rs</code> 等信息发送给客户端；</li>
+<li>客户端接受服务端的证书之后，会根据 <code>rc</code> 和 <code>rs</code> 生成一个随机的对称秘钥，同理，服务器此时也会生成相同的对称秘钥；</li>
+<li>双方加密通信。</li>
+</ul>
+<p><em>以下于2021-07-24重编辑</em></p>
+<p>还有一种对HTTPS流程的描述是：</p>
+<ul>
+<li>客户端向服务器发送自己支持的密码套件（cipher suit）；</li>
+<li>服务端选择一套密码算法，连同自己的证书信息返回给客户端。在这里，服务端具体会将自己的公钥、数字证书、签名等信息发送给客户端；</li>
+<li>客户端接受服务端的证书之后，会生成一个随机的对称秘钥，用服务端的公钥加密后发送给服务端；服务端收到消息之后可以解密得到对称秘钥；</li>
+<li>双方加密通信。</li>
+</ul>
+<p>实际上，这两种描述所不同的地方仅在于一个关键的步骤：密钥交换。</p>
+<p>在第一种描述中，表现的是名为 <em>DHE(Diffie-Hellman Exchange)</em> 的密钥交换方式，而第二种描述中，表现的是名为 <em>RSA密钥交换</em> 的方式。第二种描述的实现方法法非常简单，但假如服务端的私钥被破解，将可以解密此前截取的所有流量，即这种办法不具备 <em>前向安全</em> 性。</p>
+<blockquote>
+<p>Reference</p>
+<p>[1] <a class="link" href="https://zhuanlan.zhihu.com/p/60033345"  target="_blank" rel="noopener"
+    >让面试官膜拜你的HTTPS运行流程（超详细） - 知乎 (zhihu.com)</a></p>
+<p>[2] <a class="link" href="https://zhuanlan.zhihu.com/p/56663184"  target="_blank" rel="noopener"
+    >HTTPS原理和通信流程 - 知乎 (zhihu.com)</a></p>
+<p>[3] 石瑞生.大数据安全CH02-03-安全基础知识.2020年秋季学期.BUPT</p>
+<p>[4] <a class="link" href="https://www.jianshu.com/p/8837640221af"  target="_blank" rel="noopener"
+    >《HTTPS权威指南》笔记-密钥交换 - 简书 (jianshu.com)</a></p>
+</blockquote>
+<p>昨天工作累爆，没有学习，今天休息，补上~</p>
+<h3 id="3-死锁">3 死锁</h3>
+<p>昨天遇到的面试题，答得还算可以，但是有一些点还是忘了。死锁也是网上各个面经的常客了，稍作梳理，不亏。</p>
+<h4 id="31-定义">3.1 定义</h4>
+<p>操作系统中往往有多个进程在并发执行，而所谓死锁，是指多个进程因竞争资源而造成的一种僵局（互相等待），若无外力作用，这些进程都将无法向前推进。</p>
+<h4 id="32-死锁产生的原因和必要条件">3.2 死锁产生的原因和必要条件</h4>
+<p><em><strong>（1）系统资源的竞争</strong></em></p>
+<p>通常系统中拥有的不可剥夺资源，数量不足以满足多个进程运行的需要。若进程在运行中因为对不可剥夺资源的竞争而陷入僵局，就可能产生死锁。对可剥夺资源的竞争是不会引起死锁的。</p>
+<p><em><strong>（2）进程的推进顺序非法</strong></em></p>
+<p>进程在运行过程中，请求和释放资源的顺序不当，也同样会导致死锁。</p>
+<p>信号量使用不当也会造成死锁。</p>
+<p><em><strong>（3）死锁产生的必要条件</strong></em></p>
+<p>昨天面试的时候短路遗忘的知识点（小声）。</p>
+<p>产生死锁必须同时满足4个条件，只要其中一个不成立，死锁就不会产生。</p>
+<ul>
+<li>
+<p>互斥条件。如果某个资源无需互斥访问，自然就不存在对它的竞争了。</p>
+</li>
+<li>
+<p>不剥夺条件。</p>
+</li>
+<li>
+<p>请求和保持条件。进程已经保持了至少一个资源，而在提出新的资源请求的时候，该资源已被其他进程占用，此时当前进程被阻塞；但是它对自己已经获得的资源保持不放。</p>
+<blockquote>
+<p>我理解这一条件和不剥夺条件的区别是，请求和保持条件允许进程可以保持资源不放，但是其他进程可能强行剥夺；如果你保持不放，且外人不能剥夺的话，就可能陷入僵局。</p>
+</blockquote>
+</li>
+<li>
+<p>循环等待条件。存在一种进程资源的循环等待链，链中每个进程已获得的资源同时被链中下一个进程所请求。直观上看，循环等待条件似乎和死锁的定义一样，其实不然。按死锁定义所构成的等待环要求的条件更严格，它要求 P<!-- raw HTML omitted -->i<!-- raw HTML omitted --> 等待的资源必须由 P<!-- raw HTML omitted -->i+1<!-- raw HTML omitted --> 来满足，循环等待条件则无此限制。例如，系统中有两台设备， P<!-- raw HTML omitted -->0<!-- raw HTML omitted --> 占有一台， P<!-- raw HTML omitted -->k<!-- raw HTML omitted --> 占有一台， P<!-- raw HTML omitted -->n<!-- raw HTML omitted --> 请求这一设备，则这一设备可以从 P<!-- raw HTML omitted -->0<!-- raw HTML omitted --> 处获得，也可以从 P<!-- raw HTML omitted -->k<!-- raw HTML omitted --> 处获得；虽然 P<!-- raw HTML omitted -->0<!-- raw HTML omitted --> 到 P<!-- raw HTML omitted -->n<!-- raw HTML omitted --> 构成了一个等待圈，但等待圈外的设备 P<!-- raw HTML omitted -->k<!-- raw HTML omitted --> 只要释放了这一设备，就打破了等待。因此，循环等待条件只是死锁的必要条件。</p>
+</li>
+</ul>
+<h4 id="33-死锁的处理策略">3.3 死锁的处理策略</h4>
+<p><em><strong>（1）死锁预防</strong></em></p>
+<p>打破四个必要条件中的某一个，即可完全防止死锁的出现。</p>
+<p><em><strong>（2）死锁避免</strong></em></p>
+<p>注意“避免”和“预防”的区别。</p>
+<p>在资源的动态分配过程中，采用某种方法（如银行家算法）来防止系统进入不安全状态，从而避免死锁。</p>
+<p><em><strong>（3）死锁的检测和解除</strong></em></p>
+<p>事先不采取任何限制性措施，允许进程在运行过程中发生死锁。通过系统的检测机构及时地检测出死锁的发生，然后采取某些措施解除死锁（剥夺资源、杀死进程、进程回退）。</p>
+<blockquote>
+<p>周末是如此的Relaxed，今天又只记录了一个知识点，睡觉去也~</p>
+<p>Reference</p>
+<p>[1] 王道论坛.2021年操作系统考研复习指导[M].北京:电子工业出版社,2020:129::131</p>
+</blockquote>
+<p>基本上一整天都在弄博客样式，折腾来折腾去，没有太大的改观······</p>
+<h3 id="4-malloc和new的区别">4 malloc和new的区别</h3>
+<p>C++经典问题之一。</p>
+<p><em><strong>（1）是否调用构造函数。</strong></em> <code>malloc</code> 为一个对象申请空间时，不会自动调用它的构造函数；而 <code>new</code> 会自动调用构造函数。同时，使用 <code>new</code> 申请一个对象数组时，会对每一个单元进行构造函数的调用，如下所示：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">A</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>		<span class="c1">// 对每一个对象调用构造函数
+</span><span class="c1"></span><span class="k">delete</span><span class="p">[]</span> <span class="n">ptr</span><span class="p">;</span>			<span class="c1">// new数组的时候要搭配 delete[]
+</span></code></pre></div><p><em><strong>（2）一个是函数，一个是运算符（operator new）。</strong></em> <code>malloc</code> 虽然是函数，但是它不允许重载；而 <code>new</code> 可以被重载。</p>
+<p><em><strong>（3）返回类型不同。</strong></em> <code>malloc</code> 返回一个 <code>void*</code> 类型的指针，指向申请的那块空间；而 <code>new</code> 返回的是一个 <strong>确切的</strong> 对象指针。</p>
+<p><em><strong>（4）错误处理。</strong></em> <code>malloc</code> 申请内存失败之后，会返回一个空指针 <code>NULL</code> ；而 <code>new</code> 申请内存失败后，会抛出 <code>bad_alloc</code> 异常。</p>
+<p><em><strong>（5）内存区域。</strong></em> <code>malloc</code> 从堆中申请内存；而 <code>new</code> 会从 <em>自由存储区（free store）</em> 上申请内存。自由存储区是C++基于new操作符的一个抽象概念，凡是通过new操作符进行内存申请，该内存即为自由存储区。自由存储区的具体性质，取决于 <code>new</code> 运算符的实现方式，它本身也可以是堆。</p>
+<p><em><strong>（6）申请的大小。</strong></em> <code>malloc</code> 需要调用者传入要申请的内存大小；而 <code>new</code> 申请的空间大小由编译器自动计算。</p>
+<p><em><strong>（7）更改大小。</strong></em> <code>malloc</code> 允许通过 <code>realloc()</code> 函数更改缓冲区大小，假如要将缓冲区变大，系统会分配一块更大的空间，然后将当前缓冲区中的内容复制过去；而 <code>new</code> 不允许更改申请到的缓冲区的大小。</p>
+<blockquote>
+<p>Reference</p>
+<p>[1] <a class="link" href="https://www.geeksforgeeks.org/malloc-vs-new/"  target="_blank" rel="noopener"
+    >malloc() vs new - GeeksforGeeks</a></p>
+<p>[2] <a class="link" href="https://www.cnblogs.com/ywliao/articles/8116622.html"  target="_blank" rel="noopener"
+    >c++ new 与malloc有什么区别 - ywliao - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<h3 id="5-虚函数">5 虚函数</h3>
+<p>虚函数一般在继承的场景下发挥作用。基类声明一个虚函数，子类重载这一函数，这样一来，当我们使用一个基类指针指向子类，并且希望调用这一函数的时候，得到的就是子类重载过的函数。</p>
+<p>实际上，虚函数的意义就在于能够使得函数调用合乎逻辑，而不必考虑指针的类型。</p>
+<p>虚函数的解析在运行的时候完成。</p>
+<p>以下有几个虚函数的使用原则：</p>
+<ul>
+<li>不能是 <code>static</code> 函数；</li>
+<li>可以是其他类的友元函数；</li>
+<li>使用基类指针或者引用来调用虚函数，以获得 <em>运行时多态（run time polymorphism）</em> ；</li>
+<li>一般在基类定义、子类重载，但没有强制要求子类进行重载，在这种情况下，就和普通的函数继承没有区别；</li>
+<li>可以有 <em>虚析构函数（virtual destructor）</em> ，但不能有 <em>虚构造函数（virtual constructor）</em> 。</li>
+</ul>
+<blockquote>
+<p>夜已深了，且先休息去，来日再作补充~</p>
+<p>Reference</p>
+<p>[1] <a class="link" href="https://www.geeksforgeeks.org/virtual-function-cpp/"  target="_blank" rel="noopener"
+    >Virtual Function in C++ - GeeksforGeeks</a></p>
+</blockquote>
+<h3 id="2021-07-26">2021-07-26</h3>
+<p>今天做题，学习了 【最长递增子序列】 的解法、之后AC了一道困难题！准备新开一篇难题本讲讲这道题： <a class="link" href="https://leetcode-cn.com/problems/minimum-operations-to-make-a-subsequence/"  target="_blank" rel="noopener"
+    >1713. 得到子序列的最少操作次数 - 力扣（LeetCode） (leetcode-cn.com)</a></p>
+<p>所以就鸽了鸽了~</p>
+<h3 id="2021-07-27">2021-07-27</h3>
+<p>今天投简历，改完之后夜深了；明天留公司，估计也没有新的知识点学习。希望昨天说的文章能尽快完成吧。</p>
+<p>既然啥知识点都没学，就简单讲一下每日一题吧。今天的每日一题是 <a class="link" href="https://leetcode-cn.com/problems/second-minimum-node-in-a-binary-tree/"  target="_blank" rel="noopener"
+    >671. 二叉树中第二小的节点 - 力扣（LeetCode） (leetcode-cn.com)</a></p>
+<p>如何找到【第二小】的节点，下午折腾了一段时间；晚上回来，稍作考虑，可以直接使用排序+遍历的方法，找到第一个与左邻居不同的元素即可。</p>
+<p>两次遍历的情况有一点问题，测试用例有一组 <code>[2,2,2147483647]</code> ，用 <code>INT_MAX</code> 初始化答案，找最小值的办法是行不通的，出题人属实很有水平。</p>
+<p>答案里还有人直接使用 <code>set</code> ，属于是把STL玩明白了，我以后也要好好再学一下STL o(╥﹏╥)o</p>
+<h3 id="2021-07-28">2021-07-28</h3>
+<p>今天公司留宿，不更新是理所当然的吧~
+今日的每日一题是 <a href="https://leetcode-cn.com/problems/all-nodes-distance-k-in-binary-tree/">https://leetcode-cn.com/problems/all-nodes-distance-k-in-binary-tree/</a> ，中等题，一时间没有思路；看了题解之后发现二叉树可以转为图，这样就比较简单了。
+一开始想用邻接矩阵，但是一个节点实际上只可能有三条边，那就使用dfs先存下这个节点的父节点，这样一个节点的所有邻居就全都可以找到了（两个子节点加上一个父节点，最多只有三个邻居）；构造完了一个抽象意义上的“图”，使用BFS找目标距离的节点即可。</p>
+<h3 id="2021-07-29">2021-07-29</h3>
+<p>谌龙翻盘李梓嘉！姜还是老的辣！</p>
+<p>今天的知识点启发于白天的工作中，实际上并不是非常的重要，仅稍作记录。</p>
+<h3 id="6-ftp与sftp">6 FTP与SFTP</h3>
+<p><strong>FTP</strong> 是文件传输协议（File Transport Protocol）的简写，使用 C/S 架构在web服务器和FTP客户端之间进行文件传输。FTP使用两个独立的连接，分别是命令连接和数据连接，前者用于传输指令，后者用于传输数据（文件）。实际上，双连接的机制在使用socket编程来实现文件传输功能时，是非常有意义的：当服务器发送完文件之后，可以直接关闭文件连接的socket，这样命令连接就知道文件传输已经完成，可以进行下一步工作了。</p>
+<p>默认情况下，FTP没有加密，也就意味着 <em>中间人攻击</em> 的可能性。</p>
+<p><strong>SFTP</strong> 是SSH File Transport Protocol的简写，或者也被成为Secure File Transport Protocol。它提供与FTP一样的功能，但基于SSH而非C/S架构的FTP实现。SFTP只使用一个连接，并要求用户使用用户名/密码或者SSH密钥的方式进行授权。</p>
+<p>由于实现方式的不同，FTP使用的端口是传统的21，而SFTP使用与SSH相同的22端口。</p>
+<blockquote>
+<p>[1] <a class="link" href="https://kinsta.com/knowledgebase/ftp-vs-sftp/"  target="_blank" rel="noopener"
+    >FTP vs SFTP: What&rsquo;s the Difference? Which One Should You Use? (kinsta.com)</a></p>
+</blockquote>
+<h3 id="7-leetcode-987-二叉树的垂序遍历">7 LeetCode 987. 二叉树的垂序遍历</h3>
+<p>因不可抗力断更，昨天重感冒了······</p>
+<p>今天仍然没好，仅对每日一题进行记录。</p>
+<p>今天的每日一题是 <a class="link" href="https://leetcode-cn.com/problems/vertical-order-traversal-of-a-binary-tree/"  target="_blank" rel="noopener"
+    >987. 二叉树的垂序遍历 - 力扣（LeetCode） (leetcode-cn.com)</a></p>
+<p>题目给的数据属于是少了，针对一千个二叉树节点，我们使用一个 <code>multimap</code> 来进行 <strong>列</strong> → <strong>Node</strong> 的映射，注意这里的 <strong>Node</strong> 指的是自定义的数据结构：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">typedef</span> <span class="k">struct</span> <span class="nc">_node</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">row</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">Node</span><span class="p">,</span> <span class="o">*</span><span class="n">PNode</span><span class="p">;</span>
+</code></pre></div><p>我们使用 <code>multimap</code> 来将某个列上的所有节点存储起来，使用 <code>Node</code> 来记录节点所在的行和值。这样，我们遍历完成之后得到的 <code>multimap</code> 就能够根据一个列值取出这一列上的所有节点；我们利用这些 <code>Node</code> 的行和值进行排序，正如题意所说的：</p>
+<blockquote>
+<p>二叉树的 <strong>垂序遍历</strong> 从最左边的列开始直到最右边的列结束，按列索引每一列上的所有结点，形成一个按出现位置从上到下排序的有序列表。如果同行同列上有多个结点，则按结点的值从小到大进行排序。</p>
+</blockquote>
+<p>这里注意 <code>multimap</code> 的几个用法：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">multimap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>  <span class="c1">// 插入值
+</span><span class="c1"></span><span class="n">multimap</span><span class="p">.</span><span class="n">equal_range</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>  <span class="c1">// 返回key值对应的所有value，返回值是一个pair，首元素是区间起点，次元素是区间终点的后面
+</span></code></pre></div><p>独立自主完成的困难题，AC代码还是要贴一下~</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
+</span><span class="cm"> * Definition for a binary tree node.
+</span><span class="cm"> * struct TreeNode {
+</span><span class="cm"> *     int val;
+</span><span class="cm"> *     TreeNode *left;
+</span><span class="cm"> *     TreeNode *right;
+</span><span class="cm"> *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+</span><span class="cm"> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+</span><span class="cm"> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+</span><span class="cm"> * };
+</span><span class="cm"> */</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">typedef</span> <span class="k">struct</span> <span class="nc">_node</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">row</span><span class="p">;</span>
+    <span class="p">}</span> <span class="n">Node</span><span class="p">,</span> <span class="o">*</span><span class="n">PNode</span><span class="p">;</span>
+
+    <span class="n">multimap</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Node</span><span class="o">&gt;</span> <span class="n">col2node</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="kt">int</span> <span class="n">col</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Node</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">n</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+        <span class="n">n</span><span class="p">.</span><span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="p">;</span>
+        <span class="n">col2node</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">static</span> <span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">Node</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">row</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">row</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">row</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">verticalTraversal</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">res</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1000</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">col2node</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">col2node</span><span class="p">.</span><span class="n">equal_range</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                <span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span> <span class="n">sortedNodes</span><span class="p">;</span>
+                <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">ret</span><span class="p">.</span><span class="n">first</span><span class="p">;</span> <span class="n">a</span> <span class="o">!=</span> <span class="n">ret</span><span class="p">.</span><span class="n">second</span><span class="p">;</span> <span class="n">a</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">sortedNodes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">sort</span><span class="p">(</span><span class="n">sortedNodes</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">sortedNodes</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">n</span> <span class="p">:</span> <span class="n">sortedNodes</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">tmp</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">val</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><h3 id="2021-08-01">2021-08-01</h3>
+<p>建军节，伟大的人民军队万岁！</p>
+<h3 id="8-c中的static关键字">8 C++中的static关键字</h3>
+<p>我们知道，函数的局部变量空间分配在栈上，函数运行结束之后这些变量的空间就会被释放掉；当我们需要保存函数上一次调用时变量的状态，就需要将这个变量放到另一块存储空间上，这就是 <code>static</code> 关键字的作用。</p>
+<p><code>static</code> 变量存储在静态存储区，在程序结束之前都不会被释放。即使一个函数被多次调用，其中的 <code>static</code> 变量也始终只进行了一次内存分配，且它的值可以保持上一次调用时的样子。</p>
+<p><code>static</code> 关键字用于定义一个类中的成员变量的时候，有其独特的影响。由于 <code>static</code> 变量存储在一块独立的区域，所有类对象都共享这一个变量。如以下的例子所示，所有 <code>GfG</code> 类型的实例都共享 <code>static</code> 变量 <code>i</code> 。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// C++ program to demonstrate static
+</span><span class="c1">// variables inside a class
+</span><span class="c1"></span>  
+<span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+  
+<span class="k">class</span> <span class="nc">GfG</span>
+<span class="p">{</span>
+   <span class="k">public</span><span class="o">:</span>
+     <span class="k">static</span> <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+      
+     <span class="n">GfG</span><span class="p">()</span>
+     <span class="p">{</span>
+        <span class="c1">// Do nothing
+</span><span class="c1"></span>     <span class="p">};</span>
+<span class="p">};</span>
+  
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">GfG</span> <span class="n">obj1</span><span class="p">;</span>
+  <span class="n">GfG</span> <span class="n">obj2</span><span class="p">;</span>
+  <span class="n">obj1</span><span class="p">.</span><span class="n">i</span> <span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+  <span class="n">obj2</span><span class="p">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    
+  <span class="c1">// prints value of i
+</span><span class="c1"></span>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">obj1</span><span class="p">.</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="s">&#34; &#34;</span><span class="o">&lt;&lt;</span><span class="n">obj2</span><span class="p">.</span><span class="n">i</span><span class="p">;</span>   <span class="c1">// Get 3
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>正因如此， <strong>不允许在类的构造函数中对 <code>static</code> 类型的成员变量进行操作</strong> 。类中的 <code>static</code> 变量应该由用户在外部使用作用域运算符进行赋值。</p>
+<p>如 <code>int GfG::i = 1;</code> 。</p>
+<p>由以上的分析我们可以进一步推理，<code>static</code> 类型的类对象也具有全局的生命力，它的析构函数只会在程序结束的时候被调用。</p>
+<p>再进一步推理，<code>static</code> 类型的函数也具有全局的生命力，当然，对函数讨论“生命力”没什么意义。</p>
+<p>在一个类中， <code>static</code> 类型的成员函数正如 <code>static</code> 类型的成员变量那样，被所有对象（实例）所共享。我们可以使用 <code>className.functionName</code> 的形式来调用这个函数，不过还是首推作用域运算符 <code>className::functionName</code> 的方式来进行调用。由于所有的实例都共享这么一个 <code>static</code> 函数，它自然只能访问 <code>static</code> 类型的成员变量，或者其他 <code>static</code> 类型的成员函数；设想，所有的实例都来调用这个函数，然后它去访问一个非全局共享的变量，那么这个函数怎么知道这个变量应该属于哪个实例的呢？</p>
+<blockquote>
+<p>Reference</p>
+<p>[1] <a class="link" href="https://zhuanlan.zhihu.com/p/31451123"  target="_blank" rel="noopener"
+    >【C++】C++常见面试题汇总_持续更新中&hellip; - 知乎 (zhihu.com)</a></p>
+<p>[2] <a class="link" href="https://www.geeksforgeeks.org/static-keyword-cpp/"  target="_blank" rel="noopener"
+    >Static Keyword in C++ - GeeksforGeeks</a></p>
+</blockquote>
+<h3 id="9-分组密码des">9 分组密码——DES</h3>
+<h4 id="91-简介">9.1 简介</h4>
+<p>分组密码（块密码）是将明文消息编码表示后的二进制序列，划分成固定大小的块，每块分别在密钥的控制下变换成等长的二进制序列。</p>
+<p>注意，尽管一些传统加密算法也进行分组，但它们并不是分组密码。例如，Vigenere加密算法的密钥也可以自定义块的大小，但它不属于分组密码。</p>
+<p>分组密码加解密的设计有如下几个要求：</p>
+<ul>
+<li><strong>分组足够长。</strong> 根据分组长度 <code>n</code> ，每一组中的元素个数 <code>2^n</code> 要足够对抗明文穷举攻击。</li>
+<li><strong>密钥长度足够长。</strong> 密钥长度 <code>k</code> ，则密钥有 <code>2^k</code> 种情况，需要足够对抗密钥穷举攻击。但密钥长度不能太长，否则不利于管理和加解密速度。</li>
+<li><strong>置换算法足够复杂。</strong> 置换算法要足以对抗差分攻击和线性攻击等，使得攻击者只能进行穷举。</li>
+<li><strong>加解密运算简单，利于硬件实现。</strong></li>
+<li><strong>一般无数据扩展，即明文和密文长度相同。</strong></li>
+</ul>
+<p>Shannon提出了三个分组密码的设计思想——混乱、扩散和乘积密码。</p>
+<ul>
+<li><strong>混乱。</strong> 可以理解为”搅拌机“，指在加密过程中明文、密钥以及密文之间的关系尽可能复杂，以防密码破译者采用统计分析法进行破译攻击。</li>
+<li><strong>扩散。</strong> 每1比特明文的变化尽可能多地影响到输出密文序列的比特，以便隐藏明文的统计特性。扩散的另一层意思是每1位密钥也尽可能影响到较多的输出密文比特。简而言之，扩散就是希望密文中的任一比特都要尽可能与明文和密钥的每一比特相关联。</li>
+<li><strong>乘积密码体制。</strong> 针对嵌套加密的一系列原则。此处省略。</li>
+</ul>
+<h4 id="92-分组密码的迭代结构">9.2 分组密码的迭代结构</h4>
+<p>分组密码有两种迭代结构：Feistel网络结构和SP网络结构。</p>
+<p>Feistel网络结构的加密办法如下：</p>
+<ol>
+<li>
+<p>将明文分组分割成长度相同的两块：(L0, R0)</p>
+</li>
+<li>
+<p>对每一轮，i=0,1,&hellip;n</p>
+<p><code>Li+1 = Ri</code></p>
+<p><code>Ri+1 = Li ⊕ F(Ri, Ki)</code></p>
+</li>
+<li>
+<p>加密后的密文为 (Rn+1, Ln+1)</p>
+</li>
+</ol>
+<p>解密办法与加密办法相反：</p>
+<ol>
+<li>
+<p>对于密文(Rn+1, Ln+1)，每一轮 i=n,n-1,&hellip;0</p>
+<p><code>Ri = Li+1</code></p>
+<p><code>Li = Ri+1 ⊕ F(Li+1, Ki)</code></p>
+</li>
+<li>
+<p>解密出 (L0, R0)</p>
+</li>
+</ol>
+<p>SP网络结构是代换-置换网络的简写。它由两个基本组件S盒和P盒组成。S盒进行代换操作，起到混乱作用；P盒进行置换操作，起到扩散作用。每一轮迭代中都先经过S盒、再经过P盒。</p>
+<p>需要注意，置换不等于扩散。置换本身并不改变明文在单个字符或置换分组上的统计特性。但是，经过了多轮代换-置换的结合，就产生了扩散作用。</p>
+<h4 id="93-des">9.3 DES</h4>
+<p>DES的初始密钥长度为64位，但有效密钥为56位，其中第8/16/24/32/40/48/56位是奇偶校验位。</p>
+<p>流程如下图所示：</p>
+<p><figure style="flex-grow: 121; flex-basis: 291px">
+		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1.png" data-size="810x666"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1.png"
+				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1_huad2ac91fca89a541a9478ab4b39f59e0_221573_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1_huad2ac91fca89a541a9478ab4b39f59e0_221573_1024x0_resize_box_2.png 1024w"
+				width="810"
+				height="666"
+				loading="lazy"
+				alt="DES">
+		</a>
+		
+		<figcaption>DES</figcaption>
+		
+	</figure></p>
+<p>DES的初始置换Initial Permutation是固定的，它的作用是将原明文块的位进行换位。完成加密之后，要使用它的逆置换将其换回来，置换表如图所示：</p>
+<p><figure style="flex-grow: 191; flex-basis: 460px">
+		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2.png" data-size="712x371"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2.png"
+				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2_hu3a17fb41486db7ed6cc8f813cae4acd7_125837_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2_hu3a17fb41486db7ed6cc8f813cae4acd7_125837_1024x0_resize_box_2.png 1024w"
+				width="712"
+				height="371"
+				loading="lazy"
+				alt="DES IP">
+		</a>
+		
+		<figcaption>DES IP</figcaption>
+		
+	</figure></p>
+<p>DES一轮迭代过程如图所示，其遵循了Feistel网络结构，轮函数总共经历了扩展置换-密钥加-非线性代换-线性置换四个步骤。</p>
+<p><figure style="flex-grow: 136; flex-basis: 328px">
+		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3.png" data-size="878x642"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3.png"
+				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3_hu18323e30fcbd13f298a76d722638509a_181449_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3_hu18323e30fcbd13f298a76d722638509a_181449_1024x0_resize_box_2.png 1024w"
+				width="878"
+				height="642"
+				loading="lazy"
+				alt="DES Round">
+		</a>
+		
+		<figcaption>DES Round</figcaption>
+		
+	</figure></p>
+<p>扩展置换又称E盒，将32位输入扩展为48位输出。E盒在DES算法上最基本地是要将输入扩展为与轮密钥相同的48比特，而更进一步，由于E盒的1位输入可能影响2个S盒的输入，能够更快地实现血崩效应。</p>
+<p>代换盒又称S盒，是DES中唯一的非线性部分。经过S盒的代换，E盒扩展生成的48位数又压缩回32位。</p>
+<p>最后的P盒没有太多探讨的意义，就是一个32位的置换表。</p>
+<p>DES的密钥编排如下图所示，首先将64位密钥进行PC-1置换，然后根据轮数进行左移，其中，第1/2/9/16只移动1位，其余轮数移动2位。最后，56位密钥经过PC-2置换得到48位密钥。</p>
+<p><figure style="flex-grow: 118; flex-basis: 284px">
+		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4.png" data-size="785x662"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4.png"
+				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4_huffcf7b0d6cbf0fcc28969c1b085110f5_46417_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4_huffcf7b0d6cbf0fcc28969c1b085110f5_46417_1024x0_resize_box_2.png 1024w"
+				width="785"
+				height="662"
+				loading="lazy"
+				alt="DES Key Generation">
+		</a>
+		
+		<figcaption>DES Key Generation</figcaption>
+		
+	</figure></p>
+<p>关于DES的安全性问题，暂且不予记录了~</p>
+<h3 id="10-笔试复盘">10 笔试复盘</h3>
+<p>晚上参加了Shopee的笔试，果然安全拉胯，编程AK……</p>
+<p>编程题实际上也不难，第一题估计有个LeetCode的中等偏上，予以记录吧。</p>
+<p>有一个整数 <code>n</code> 和一个整数 <code>k</code> ，现在要将 <code>n</code> 分成 <code>k</code> 份，每份至少有一个元素，求总共有多少种分法。注意，分割的办法不考虑顺序，例如将 <code>7</code> 分成 <code>3</code> 份，其中 <code>1,1,5</code> 和 <code>5,1,1</code> 或 <code>1,5,1</code> 属于同一种分法。</p>
+<ul>
+<li><code>1 &lt;= n &lt;= 200</code></li>
+<li><code>1 &lt;= k &lt;= 7</code></li>
+</ul>
+<p>这题我使用了三维记忆化搜索，<code>rec[n][k][startswith]</code> 表示将 <code>n</code> 分成 <code>k</code> 份，每一份的元素至少要大于 <code>startswith</code> 。</p>
+<p>假设要将 <code>7</code> 分成 <code>3</code> 份，我们可以将其转化为将 <code>6</code> 分为 <code>2</code> 份，每份至少从 <code>1</code> 开始，或者将 <code>5</code> 分为两份，每份至少从 <code>2</code> 开始……</p>
+<p>不好解释，直接放代码：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">record</span><span class="p">[</span><span class="mi">210</span><span class="p">][</span><span class="mi">8</span><span class="p">][</span><span class="mi">210</span><span class="p">];</span>
+
+<span class="kt">int</span> <span class="nf">d</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startswith</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// cout &lt;&lt; n &lt;&lt; &#34; &#34; &lt;&lt; k &lt;&lt; &#34; &#34; &lt;&lt; startswith &lt;&lt; endl;
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">startswith</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">record</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">startswith</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">startswith</span> <span class="o">*</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="n">startswith</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">start</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">d</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">record</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">startswith</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// write code here
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">d</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+    
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">divide</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>本场笔试也暴露出了一些安全理论上的缺陷，之后有空进行总结。今天就先到这里啦~</p>
+<blockquote>
+<p>Reference</p>
+<p>[1] 谷利泽,郑世慧,杨义先.现代密码学教程（第2版）[M].北京:北京邮电大学出版社,2019</p>
+</blockquote>
+<h3 id="2021-08-03">2021-08-03</h3>
+<p>今天将昨天的笔试题整理了一下，还有些题目找不到答案，明天继续~</p>
+<h3 id="2021-08-14">2021-08-14</h3>
+<p>断更将近2周，陆续恢复吧……</p>
+<h3 id="11-leetcode-1583-统计不开心的朋友">11 LeetCode 1583. 统计不开心的朋友</h3>
+<p><a class="link" href="https://leetcode-cn.com/problems/count-unhappy-friends/"  target="_blank" rel="noopener"
+    >1583. 统计不开心的朋友 - 力扣（LeetCode） (leetcode-cn.com)</a></p>
+<p>今天的题目是个模拟题，然而我卡了半天没有做出来……</p>
+<p>这里的一个关键是建立二维映射 <code>rank[x][y]</code> 表示 <code>y</code> 在 <code>x</code> 心中的优先级，数值的话直接按照 <code>preferences[x]</code> 中 <code>y</code> 所处的下标即可。</p>
+<p>对于一个 <code>x</code> 来说，我们可以找到所有位于 <code>rank[x][y]</code> 之前的数 <code>u</code> ，即 <code>x</code> 心中比 <code>y</code> 更加优先匹配的对象，再找到 <code>u</code> 的现有对象 <code>v</code> ，比较 <code>rank[u][x]</code> 和 <code>rank[u][v]</code> 的大小。如果 <code>rank[u][x] &lt; rank[u][v]</code> ，说明 <code>u</code> 也更希望和 <code>x</code> 进行匹配，那么依照题意， <code>x</code> 就是不开心的。</p>
+<p>之前对于不开心的理解，是 <code>x</code> 不开心，则 <code>u</code> 应该也不开心，这样就比较复杂了。我们只考虑 <code>x</code> 开不开心，把 <code>u</code> 放到之后进行考虑，反而简单一些。</p>
+<p>代码就不放了，WA了两次的中等题，我现在属实不怎么开心。</p>
+<h3 id="12-leetcode面试题-0405-合法二叉搜索树">12 LeetCode面试题 04.05. 合法二叉搜索树</h3>
+<p><a href="https://leetcode-cn.com/problems/legal-binary-search-tree-lcci/">https://leetcode-cn.com/problems/legal-binary-search-tree-lcci/</a></p>
+<p>这题属实顶不住了……出题人给那么多 <code>INT_MAX</code> 的测试用例干啥？？？</p>
+<p>希望检查一颗树是否是二叉搜索树，只需要考虑它的左节点是否满足一定范围、右节点是否满足一定范围，然后按照递归的思路向下进行，类似于深搜。</p>
+<p>初始情况下（即考虑根节点的时候），它的数据范围应该是 <code>-INF ~ +INF</code> ，然而，出题人给了很多组 <code>INT_MAX</code> 和 <code>INT_MIN</code> 的测试用例，简单地使用这两个宏作为初始数据范围，会挂掉。（丢雷楼某）</p>
+<p>因此，我们的递归函数中表示数据范围的参数需要定义为 <code>long long</code> 类型，然后在初始传入的时候，传个比 <code>INT_MAX</code> 还大的数 <code>(long)INT_MAX + 1</code> 。</p>
+<p>我giao！</p>
+<p><figure style="flex-grow: 98; flex-basis: 236px">
+		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5.png" data-size="1127x1142"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5.png"
+				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5_hu2d48d50691dd78d191a0e2db6cc4f2aa_142346_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5_hu2d48d50691dd78d191a0e2db6cc4f2aa_142346_1024x0_resize_box_2.png 1024w"
+				width="1127"
+				height="1142"
+				loading="lazy"
+				alt="Performance">
+		</a>
+		
+		<figcaption>Performance</figcaption>
+		
+	</figure></p>
+<h3 id="13-leetcode5845-你能穿过矩阵的最后一天">13 LeetCode5845. 你能穿过矩阵的最后一天</h3>
+<p>题目链接 <a class="link" href="https://leetcode-cn.com/problems/last-day-where-you-can-still-cross/"  target="_blank" rel="noopener"
+    >5845. 你能穿过矩阵的最后一天</a></p>
+<p>《关于思路正确而代码质量太差导致我TLE从而只做出了周赛签到题这件事》</p>
+<p>倒不完全认为它是道困难题，毕竟第一时间是有思路的。</p>
+<p>首先，二分答案是第一想法，TLE的风险也同时存在。</p>
+<p>对于一个答案 <code>day</code> 来说，如何判断在这一天里能否从第一行到达最后一行呢？BFS啊！</p>
+<p>我们在 <code>day</code> 这一天的进行BFS寻路，从第一行的任意一个起点出发，如果某个起点能到达最后一行的某个终点，说明在 <code>day</code> 这一天还能够穿过矩阵，继续进行二分。</p>
+<p>寻路时，在 <code>day</code> 这一天被水淹没的格子就走不了了，这里有一个关键问题：如何验证某个格子是否被水淹没？最开始，我使用了一个 <code>map</code> 来表示某个格子是否被淹，但这样我们需要额外引入 <em>O(logn)</em> 的复杂度，会超时。比赛结束之后查看题解，发现直接用 <code>visited</code> 数组来把被淹过的格子禁用掉即可……</p>
+<p>总之，比赛的时候提交的代码质量确实差了，还得多练练吧。</p>
+<h4 id="ac代码">AC代码</h4>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">g_cells</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">g_row</span><span class="p">,</span> <span class="n">g_col</span><span class="p">;</span>
+    <span class="k">typedef</span> <span class="k">struct</span> <span class="nc">_pos</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span> <span class="p">(</span><span class="k">const</span> <span class="n">_pos</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">_pos</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> 
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">!=</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="p">};</span>
+    <span class="p">}</span> <span class="n">Pos</span><span class="p">,</span> <span class="o">*</span> <span class="n">PPos</span><span class="p">;</span>
+
+
+    <span class="n">map</span><span class="o">&lt;</span><span class="n">Pos</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">watered</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="nf">hasRoute</span><span class="p">(</span><span class="kt">int</span> <span class="n">day</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// cout &lt;&lt; &#34;day &#34; &lt;&lt; day &lt;&lt; endl;
+</span><span class="c1"></span>        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dirs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+        <span class="p">};</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">visited</span><span class="p">(</span><span class="n">g_row</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">g_col</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">queue</span><span class="o">&lt;</span><span class="n">Pos</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+        <span class="n">Pos</span> <span class="n">head</span><span class="p">;</span>
+
+        <span class="c1">// 通过设置visited数组来使得被淹没的方块无法访问
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">day</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">visited</span><span class="p">[</span><span class="n">g_cells</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">g_cells</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="c1">// cout &lt;&lt; g_cells[i][0] - 1 &lt;&lt; &#34;,&#34; &lt;&lt; g_cells[i][1] - 1 &lt;&lt; &#34; watered\n&#34;;
+</span><span class="c1"></span>        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">g_col</span><span class="p">;</span> <span class="n">start</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">head</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">head</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
+            <span class="c1">// 该起点被淹了
+</span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">])</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
+            <span class="n">visited</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="c1">// cout &lt;&lt; head.x &lt;&lt; &#34;,&#34; &lt;&lt; head.y &lt;&lt; endl;
+</span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">g_row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">d</span> <span class="p">:</span> <span class="n">dirs</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">Pos</span> <span class="n">nxt</span><span class="p">;</span>
+                <span class="n">nxt</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">d</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+                <span class="n">nxt</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">d</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+                <span class="c1">// 坐标合法，且还未被淹
+</span><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">nxt</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">g_row</span> <span class="o">&amp;&amp;</span> <span class="n">nxt</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nxt</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">g_col</span> <span class="o">&amp;&amp;</span> <span class="n">nxt</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">nxt</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">nxt</span><span class="p">.</span><span class="n">y</span><span class="p">])</span>
+                <span class="p">{</span>
+                    <span class="c1">// cout &lt;&lt; &#34;goto: &#34; &lt;&lt; nxt.x &lt;&lt; &#34;,&#34; &lt;&lt; nxt.y &lt;&lt; endl;
+</span><span class="c1"></span>                    <span class="c1">// cout &lt;&lt; &#34;This point is watered at day &#34; &lt;&lt; watered[nxt] &lt;&lt; endl;
+</span><span class="c1"></span>                    <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">nxt</span><span class="p">);</span>
+                    <span class="n">visited</span><span class="p">[</span><span class="n">nxt</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">nxt</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">latestDayToCross</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="p">,</span> <span class="kt">int</span> <span class="n">col</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">cells</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">g_row</span> <span class="o">=</span> <span class="n">row</span><span class="p">;</span>
+        <span class="n">g_col</span> <span class="o">=</span> <span class="n">col</span><span class="p">;</span>
+        <span class="n">Pos</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">g_cells</span> <span class="o">=</span> <span class="n">cells</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">cells</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">hasRoute</span><span class="p">(</span><span class="n">mid</span><span class="p">))</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><h3 id="14-leetcode576-出界的路径数">14 LeetCode576. 出界的路径数</h3>
+<p><a class="link" href="https://leetcode-cn.com/problems/out-of-boundary-paths/"  target="_blank" rel="noopener"
+    >576. 出界的路径数</a></p>
+<p>最近总是挂每日一题，心态受到了不小的影响啊……</p>
+<p>wdnmd记忆化搜索还卡时间复杂度是怎么回事？？</p>
+<p>关键剪枝：当使用 <code>maxMove</code> 步直上/直下/直左/直右都无法到达边界的时候，直接返回 <code>0</code> 。</p>
+<p>淦！！</p>
+<h3 id="15-数据库并发导致的问题">15 数据库并发导致的问题</h3>
+<p>在网上若干资料中看到了相互矛盾的解释，直接怒而翻教材，应该是比较权威的了吧……</p>
+<p>由于 <strong>事务是并发控制的基本单位</strong> ，其ACID特性需要得到保证。并发操作带来的数据不一致性包括丢失修改、不可重复读和读“脏”数据。</p>
+<h4 id="151-丢失修改">15.1 丢失修改</h4>
+<p>两个事务 <code>T1</code> 和 <code>T2</code> 读入同一数据并修改， <code>T2</code> 提交的结果破坏了 <code>T1 </code> 提交的结果，导致 <code>T1</code> 的修改被丢失。</p>
+<h4 id="152-不可重复读">15.2 不可重复读</h4>
+<p>事务 <code>T1</code> 读取数据后，事务 <code>T2</code> 执行更新操作，使 <code>T1</code> 无法再现前一次读取结果。根据 <code>T2</code> 执行的操作来看，不可重复读包括三种情况：</p>
+<p>（1）事务 <code>T1</code> 读取某一数据后，事务 <code>T2</code> 对其进行修改。则使得 <code>T1</code> 两次读取的数据是不一样的。</p>
+<p>（2）事务 <code>T1</code> 读取某一数据后，事务 <code>T2</code> 对其进行删除。当 <code>T1</code> 再次读取数据时，发现某些数据消失了。</p>
+<p>（3）事务 <code>T1</code> 读取某一数据后，事务 <code>T2</code> 对其进行增添。当 <code>T1</code> 再次按照相同的条件读取数据时，发现多了一些记录。</p>
+<p>后两种不可重复读有时也称为 <em>幻影</em> 现象。</p>
+<h4 id="153-读脏数据脏读">15.3 读脏数据（脏读）</h4>
+<p>脏读是指事务 <code>T1</code> 修改某一数据并将其写回磁盘，事务 <code>T2</code> 读取同一数据后， <code>T1</code> 由于某种原因被撤销，这时被 <code>T1</code> 修改过的数据恢复原值， <code>T2</code> 读取到的数据与数据库中的数据就不一致了，称这些数据为 <em>脏数据</em> 。</p>
+<h4 id="154-不可重复读和幻读的区别">15.4 不可重复读和幻读的区别</h4>
+<p>根据 [15.2节](#15.2 不可重复读)  中对不可重复读的描述，我们可以将后两种情况称为 <em>幻读</em> 。</p>
+<p>网络上的各种资料，多用 <em>不可重复读</em> 来指代第一种情况，而用 <em>幻读</em> 来指代后两种情况。这样，不可重复读和幻读的区别就在于：不可重复读指的是数据内容的不一致，而幻读指的是数据数量的不一致。</p>
+<p>在使用锁来实现隔离机制的时候，针对不可重复读只需要使用 <em>行锁</em> ，而针对幻读的现象需要使用 <em>表锁</em> 。</p>
+<h4 id="155-四个隔离等级">15.5 四个隔离等级</h4>
+<p>事务的隔离级别有四，它们对脏读、不可重复读和幻读的解决效果分别如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">事务隔离级别</th>
+<th style="text-align:center">脏读</th>
+<th style="text-align:center">不可重复读</th>
+<th style="text-align:center">幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">读未提交</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">读已提交</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">可重复读</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">串行化</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+</tr>
+</tbody>
+</table>
+<h3 id="16-程序装入和链接">16 程序装入和链接</h3>
+<p>创建进程首先要将程序和数据装入内存。将用户源程序变为可在内存中执行的程序，通常需要以下几个步骤：</p>
+<ul>
+<li>预处理。展开头文件、宏替换、去掉注释、条件编译。</li>
+<li>编译。将代码转换成汇编代码，并在这个步骤中完成两件工作：
+<ul>
+<li>每个文件中产生一个函数地址符表，存储着当前文件内包含的各个函数的地址；</li>
+<li>调用函数的代码会编译为 <code>call</code> 指令，而 <code>call</code> 指令跟随的地址上是一条 <code>jmp</code> 指令， <code>jmp</code> 指令跟随的地址才是被调用函数的地址。为 <code>call</code> 指令补充上地址是在链接的时候才完成的。</li>
+</ul>
+</li>
+<li>汇编。将编译出的文件转换成机器码。</li>
+<li>链接。将编译后形成的一组目标模块及所需的库函数链接成一个完整的装入模块。</li>
+<li>装入。将程序装入内存执行。</li>
+</ul>
+<p>程序的链接有三种方式：</p>
+<ul>
+<li>静态链接。在程序运行前，将各目标模块和所需的库函数链接成一个完整的可执行程序，以后不再拆开。</li>
+<li>装入时动态链接。装入内存时边装入边链接。</li>
+<li>运行时动态链接。对于某些目标模块的链接，是在程序执行中需要该目标模块时才执行的。其优点是便于修改和更新，便于实现对目标模块的共享。</li>
+</ul>
+<p>模块在装入内存时，也有三种方式：</p>
+<ul>
+<li>绝对装入。在编译时，若知道程序将驻留在内存的某个位置，则编译程序将产生绝对地址的目标代码。绝对装入程序按照装入模块中的地址，将程序和数据装入内存。该方式只使用于单道程序环境，绝对地址可在编译或汇编时给出，也可由程序员直接赋予。</li>
+<li>可重定位装入。多道程序环境下，模块中使用的地址一般是相对地址（相对于起始地址 <code>0</code> ）。可重定位装入会在装入时将模块中的相对地址修改为绝对地址（相对于装入的位置）。**装入时对目标程序中指令和数据的修改过程称为 <em>重定位</em> ，地址变换通常是在装入时一次性完成的，又称为 <em>静态重定位</em> **。</li>
+<li>运行时动态装入。装入程序把模块装入内存后，并不立即把装入模块中的相对地址替换为绝对地址，而是把这种转换推迟到程序真正要执行时才进行。 <strong>这种方式需要一个重定位寄存器的支持</strong> 。</li>
+</ul>
+<blockquote>
+<p>Reference</p>
+<p>[1] 王道论坛.2021年操作系统考研复习指导[M].北京:电子工业出版社,2020:129::131</p>
+<p>[2] <a class="link" href="https://www.cnblogs.com/mhq-martin/p/11898245.html"  target="_blank" rel="noopener"
+    >编译的整个过程：预编译、编译、汇编、链接 - mhq_martin - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<h3 id="17-设计模式简述">17 设计模式简述</h3>
+<p>设计模式（Design Pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。设计模式是软件开发人员在软件开发过程中面临的一般问题的解决方案。这些解决方案是众多软件开发人员经过相当长的一段时间的试验和错误总结出来的。</p>
+<p>设计模式的目的是为了可重用代码，提高代码的可扩展性和可维护性。</p>
+<p>设计模式主要有几种类型：</p>
+<ul>
+<li><em>创建型模式</em> 。该模式重点关注如何创建对象，在创建对象时隐藏创建逻辑，从而使对象的创建和使用相互分离。</li>
+<li><em>结构型模式</em> 。该模式重点考虑类和对象的组合，目的是获得更好、更灵活的结构。</li>
+<li><em>行为型模式</em> 。该模式重点关注算法和对象之间的职责分配，通过安排对象之间的合理通信来更好地完成整体的任务。</li>
+</ul>
+<p>设计模式有如下几个原则：</p>
+<ul>
+<li>
+<p><em>开闭原则</em> 。软件 <strong>对扩展开放，对修改关闭</strong> 。简而言之，程序在进行升级的时候，只对现有模块进行扩展，而尽量不对原有代码进行修改。</p>
+</li>
+<li>
+<p><em>里氏替换原则</em> 。子类能够完全替换父类。显然，只有当子类替换掉父类，且原有的方法不受影响时，父类才算真正得到了复用。</p>
+</li>
+<li>
+<p><em>依赖倒转原则</em> 。针对接口编程，依赖于抽象而不依赖于具体。</p>
+</li>
+<li>
+<p><em>接口隔离原则</em> 。使用多个隔离的接口，比使用单个接口更好。我认为该原则的思想是将复杂问题拆解，降低类之间的耦合。</p>
+</li>
+<li>
+<p><em>迪米特法则</em> 。又称最小知道原则，一个实体应该尽量少地与其他实体发生作用，使得系统模块相对独立。</p>
+</li>
+<li>
+<p><em>合成复用原则</em> 。尽量使用合成/聚合的方式，而不是使用继承。而若使用继承，则需要遵守里氏替换原则。</p>
+<blockquote>
+<p>注、使用继承的方式进行复用虽然比较简单，但破坏了父类的封装性。使用合成或聚合复用，指的是将已有对象纳入新对象中，使之成为新对象的一部分，该方法又被称为“黑箱”复用。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>Refernence:</p>
+<p>[1] [合成复用原则——面向对象设计原则 (biancheng.net)](<a href="http://c.biancheng.net/view/1333.html#:~:text=">http://c.biancheng.net/view/1333.html#:~:text=</a>合成复用原则的重要性 1 它维持了类的封装性。因为成分对象的内部细节是新对象看不见的，所以这种复用又称为“黑箱”复用。,2 新旧类之间的耦合度低。这种复用所需的依赖较少，新对象存取成分对象的唯一方法是通过成分对象的接口。 3 复用的灵活性高。这种复用可以在运行时动态进行，新对象可以动态地引用与成分对象类型相同的对象。)</p>
+<p>[2] <a class="link" href="https://www.runoob.com/design-pattern/design-pattern-intro.html"  target="_blank" rel="noopener"
+    >设计模式简介 | 菜鸟教程 (runoob.com)</a></p>
+<p>[3] <a class="link" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1264742167474528"  target="_blank" rel="noopener"
+    >设计模式 - 廖雪峰的官方网站 (liaoxuefeng.com)</a></p>
+</blockquote>
+<h3 id="18-c中的const关键字">18 C++中的const关键字</h3>
+<p>无论 <code>const</code> 关键字出现在什么地方，不管它用于修饰指针、变量、函数或类，其核心作用都是防止它修饰的目标受到修改。</p>
+<h4 id="181-const变量">18.1 const变量</h4>
+<p><code>const</code> 关键字指定一个变量的值为常值，编译器将禁止对这一变量的修改。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_values1.cpp
+</span><span class="c1"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="k">const</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>   <span class="c1">// C3892
+</span><span class="c1"></span>   <span class="n">i</span><span class="o">++</span><span class="p">;</span>   <span class="c1">// C2105
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>我们可以使用 <code>const</code> 关键字来代替 <code>#define</code> ，这一做法会使得编译器对这一常变量进行 <strong>类型检查</strong> ，而使用宏定义得到的对象只是在编译之前进行预处理替换，没有类型检查。</p>
+<p>如果此类变量作为一个类的成员变量，则必须使用 <em>初始化列表</em> 来进行初始化。</p>
+<p>在C语言中， <code>const</code> 变量默认为 <em>外部链接</em> 类型，则其只能出现在单个 <strong>源文件</strong> 中；而C++中的 <code>const</code> 变量与之相反，而我们知道内部链接类型的变量可以出现在 <strong>头文件</strong> 中；当然，如果希望其他源文件也访问到这一 <code>const</code> 变量，则需要使用 <code>extern</code> 来声明。</p>
+<p><code>const</code> 关键字也可用于指针的声明当中：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_values3.cpp
+</span><span class="c1"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="kt">char</span> <span class="o">*</span><span class="n">mybuf</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">yourbuf</span><span class="p">;</span>
+   <span class="kt">char</span> <span class="o">*</span><span class="k">const</span> <span class="n">aptr</span> <span class="o">=</span> <span class="n">mybuf</span><span class="p">;</span>
+   <span class="o">*</span><span class="n">aptr</span> <span class="o">=</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>   <span class="c1">// OK
+</span><span class="c1"></span>   <span class="n">aptr</span> <span class="o">=</span> <span class="n">yourbuf</span><span class="p">;</span>   <span class="c1">// C3892
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>以一种简单的方式来区分 <em>常指针</em> 和 <em>常量指针</em> ：如果 <code>const</code> 出现在星号 <code>*</code> 后面，则它修饰的是指针变量本身；如果 <code>const</code> 出现在星号 <code>*</code> 前面，则它修饰的是指针指向的变量。</p>
+<blockquote>
+<p>如果难以区分，不妨从英文的角度出发，观察以下两个变量：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">p1</span><span class="p">;</span>  <span class="c1">// pointer to constant data
+</span><span class="c1"></span><span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">p2</span><span class="p">;</span>  <span class="c1">// constant pointer
+</span></code></pre></div><p>是不是好懂了一些？</p>
+</blockquote>
+<h4 id="182-const成员函数">18.2 const成员函数</h4>
+<p>声明一个带有 <code>const</code> 关键字的成员函数表明该函数是一个“只读”函数，其内部代码将不会改变任何成员变量。这类函数不能修改任何非静态变量、且只能调用其他的 <code>const</code> 函数。</p>
+<p>声明和定义 <code>const</code> 函数的办法是在函数形参的小括号后面加上 <code>const</code> 关键字。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_member_function.cpp
+</span><span class="c1"></span><span class="k">class</span> <span class="nc">Date</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+   <span class="n">Date</span><span class="p">(</span> <span class="kt">int</span> <span class="n">mn</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="p">,</span> <span class="kt">int</span> <span class="n">yr</span> <span class="p">);</span>
+   <span class="kt">int</span> <span class="nf">getMonth</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>     <span class="c1">// A read-only function
+</span><span class="c1"></span>   <span class="kt">void</span> <span class="nf">setMonth</span><span class="p">(</span> <span class="kt">int</span> <span class="n">mn</span> <span class="p">);</span>   <span class="c1">// A write function; can&#39;t be const
+</span><span class="c1"></span><span class="k">private</span><span class="o">:</span>
+   <span class="kt">int</span> <span class="n">month</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">Date</span><span class="o">::</span><span class="n">getMonth</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+   <span class="k">return</span> <span class="n">month</span><span class="p">;</span>        <span class="c1">// Doesn&#39;t modify anything
+</span><span class="c1"></span><span class="p">}</span>
+<span class="kt">void</span> <span class="n">Date</span><span class="o">::</span><span class="n">setMonth</span><span class="p">(</span> <span class="kt">int</span> <span class="n">mn</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="n">month</span> <span class="o">=</span> <span class="n">mn</span><span class="p">;</span>          <span class="c1">// Modifies data member
+</span><span class="c1"></span><span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="n">Date</span> <span class="n">MyDate</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1998</span> <span class="p">);</span>
+   <span class="k">const</span> <span class="n">Date</span> <span class="n">BirthDate</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">1953</span> <span class="p">);</span>
+   <span class="n">MyDate</span><span class="p">.</span><span class="n">setMonth</span><span class="p">(</span> <span class="mi">4</span> <span class="p">);</span>    <span class="c1">// Okay
+</span><span class="c1"></span>   <span class="n">BirthDate</span><span class="p">.</span><span class="n">getMonth</span><span class="p">();</span>    <span class="c1">// Okay
+</span><span class="c1"></span>   <span class="n">BirthDate</span><span class="p">.</span><span class="n">setMonth</span><span class="p">(</span> <span class="mi">4</span> <span class="p">);</span> <span class="c1">// C2662 Error
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><h3 id="19-owasp-top-102017">19 OWASP top 10（2017）</h3>
+<h4 id="191-注入">19.1 注入</h4>
+<p><strong>解释</strong> ：该漏洞的核心是缺乏对Web应用程序使用的数据的验证和清理。任何接受参数作为输入的内容都可能受到注入攻击。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>使用安全的API。</li>
+<li>对输入设置白名单，或者相关输入验证。</li>
+<li>转义特殊记录。</li>
+<li>在查询中使用 <code>LIMIT</code> 或其他SQL控件，防止SQL注入时大量地泄露记录。（考虑最坏情况……）</li>
+</ul>
+<h4 id="192-失效的身份认证">19.2 失效的身份认证</h4>
+<p><strong>解释</strong> ：该漏洞的核心是身份认证机制在某处实现上存在问题。如使用单因素身份认证、使用弱口令、在用户注销之后没有及时清除Session、在URL中暴露会话ID等。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>多因素身份认证。</li>
+<li>弱口令检查。</li>
+<li>统一注册、凭据恢复等接口，防止用户枚举攻击。</li>
+<li>会话ID的合理管理，如登录之后生成高度随机的会话ID、妥善存储（肯定不能出现在URL里……）、登出之后及时销毁。</li>
+</ul>
+<h4 id="193-敏感数据泄露">19.3 敏感数据泄露</h4>
+<p><strong>解释</strong> ：该漏洞的核心是密码算法的失效（<strong>Cryptographic Failures</strong>）。数据在 <em><strong>存储</strong></em> 、 <em><strong>传输</strong></em>  或 <em><strong>交互</strong></em> 过程中没有使用合理的加密算法进行保护，使得其中敏感数据被泄露。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>对没必要存储的敏感数据予以及时销毁，存储的敏感数据确保加密。</li>
+<li>使用最新的、强大的算法、协议、密钥，且密钥妥善管理。</li>
+<li>确保数据传输过程中受到加密保护，如使用HSTS。</li>
+</ul>
+<h4 id="194-xml外部实体xxe">19.4 XML外部实体（XXE）</h4>
+<p><strong>解释</strong> ：许多较早的或配置错误的XML处理器解析了XML文件中的外部实体引用，攻击者可以利用这些外部实体窃取服务侧的内部文件和共享文件、实行内网扫描、远程代码执行和拒绝服务攻击（可以归纳为SSRF吗？）</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>使用简单的数据格式（如JSON），避免对敏感数据进行序列化。</li>
+<li>XML库的版本检查，及时更新修复相关组件。</li>
+<li>在XML解析器上禁用外部实体和DTD（文档定义类型）。</li>
+<li>服务端实施白名单机制，对输入进行过滤和清洗。</li>
+</ul>
+<h4 id="195-失效的访问控制">19.5 失效的访问控制</h4>
+<p><strong>解释</strong> ：<em>Broken Access Control</em> ，和19.2中的 <em>Broken Authentication</em> 是有区别的。个人理解，失效的访问控制主要是指攻击者已经具备了一个合法用户，只是他所对应的访问权限可以经由某种手段进行提升，从而访问某些未经授权的功能或数据。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li><strong>访问控制只有在服务端有效</strong> 。</li>
+<li>除公有资源外，默认情况下拒绝访问其他资源。</li>
+<li>建立一次性的访问控制机制，并在整个应用中不断重用他们。</li>
+<li>建立访问控制模型以强制执行所有权记录，而不是接受用户创建、读取、更新或删除的任何记录（强制访问控制MAC？）。</li>
+<li>记录失败的访问控制，并及时告警。</li>
+</ul>
+<h4 id="196-安全配置错误">19.6 安全配置错误</h4>
+<p><strong>解释</strong> ：顾名思义。这个问题是很常见的安全问题，通常由于不安全的默认配置、不完整的临时环境、开源云存储、错误的HTTP标头配置以及包含敏感信息的详细错误信息所造成的。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>实施安全的安装过程，如开发、测试、生产环境中保持相同安全配置，且口令不同。安装过程尽量自动化，以减小出错的可能。</li>
+<li>搭建最小化平台，移除所有不必要的功能、组件、文件及示例。</li>
+<li>检查和修复安全配置项来适应最新的安全说明、更新和补丁，并将其作为更新管理过程的一部分。检查过程中，特别注意云存储的权限。</li>
+<li>向客户端发送安全指令，如安全标头（想到了CSP、HTTP-Only）。</li>
+</ul>
+<h4 id="197-跨站脚本xss">19.7 跨站脚本（XSS）</h4>
+<p><strong>解释</strong> ：网页中使用了用户提供的参数，且这些参数没有被妥善地转义，可能引发浏览器将这些参数当作原本网页中的脚本，予以执行。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>使用设计上就会自动编码来解决XSS问题的框架，如Ruby 3.0或React JS。了解每个框架XSS保护的局限性，并适当地处理未覆盖的用例。</li>
+<li>根据HTML上下文对所有不受信任的HTTP请求数据进行转义 or 编码。</li>
+<li><a class="link" href="https://developer.mozilla.org/zh-CN/docs/web/http/csp"  target="_blank" rel="noopener"
+    >内容安全策略（CSP）</a> ，如果不存在本地文件上传的其他漏洞，将绝杀。（大致思想是向客户端发送安全指令，限定只执行某些域名下的脚本）。</li>
+</ul>
+<h4 id="198-不安全的反序列化">19.8 不安全的反序列化</h4>
+<p><strong>解释</strong> ：序列化是将对象的状态信息转换为可以存储或传输的形式的过程。在序列号期间，对象将其当前状态写入到临时或持久性存储区。以后，可以通过从存储区中读取或反序列化对象的状态，来重建该对象。不安全的反序列化是指攻击者提供恶意的篡改过的对象，使得应用程序和API变得脆弱。</p>
+<p>针对反序列化漏洞，主要有两种攻击形式：</p>
+<ol>
+<li>在反序列化过程中改变应用逻辑或实现远程代码执行，称为 <strong>对象和数据结构攻击</strong> ；</li>
+<li>篡改序列化之后的数据，实现访问控制相关的攻击；</li>
+</ol>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>唯一安全的架构是不接受来自不受信源的序列化对象。</li>
+<li>可以考虑执行完整性检查，如对序列化对象进行数字签名，防止恶意对象创建或数据篡改。</li>
+<li>将反序列化代码隔离在低特权环境中运行。</li>
+<li>监控反序列化行为，记录反序列化的例外情况和失败信息。</li>
+</ul>
+<h4 id="199-使用含有已知漏洞的组件">19.9 使用含有已知漏洞的组件</h4>
+<p><strong>解释</strong> ：组件（库、框架和其他模块）拥有和应用程序相同的权限。如果应用程序中含有已知漏洞的组件被攻击者利用，可能造成严重的数据丢失或服务器接管。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>移除不使用的依赖、不需要的功能、组件、文档。</li>
+<li>利用各种工具来持续记录客户端和服务端以及它们的依赖库的版本信息。持续监控CVE等信息来判断已有组件是否有漏洞。</li>
+<li>使用官方渠道安全地获取组件，并使用签名机制来降低组件被篡改或加入恶意漏洞的风险。</li>
+<li>监控那些不再维护或不发布安全补丁的库和组件。</li>
+</ul>
+<h4 id="1910-不足的日志记录和监控">19.10 不足的日志记录和监控</h4>
+<p><strong>解释</strong> ：不足的日志记录和监控，使得攻击者在系统中可以更隐蔽地驻留、攻击、横向移动、销毁证据。</p>
+<p><strong>防护</strong> ：</p>
+<ul>
+<li>确保所有登录、访问控制失败、输入验证失败都能被记录到日志中去，并保留足够的用户上下文信息，以识别可疑或恶意账户，并为后期取证留足时间。</li>
+<li>确保日志以一种能够被集中日志管理解决方案使用的形式生成。</li>
+<li>确保高额交易有完整性控制的审计信息，且审计信息必须防止篡改或删除。</li>
+<li>采用有效的监控和告警机制。</li>
+<li>采用一个应急响应机制和恢复计划。</li>
+</ul>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">进程间文件同步写</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1713. 得到子序列的最少操作次数</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode面试题 08.13. 堆箱子</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-08-29 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

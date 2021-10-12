@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>博客搭建手册 on XR_G&#39;s Blog</title>
+    <link>https://xrg.fj.cn/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/</link>
+    <description>Recent content in 博客搭建手册 on XR_G&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 19 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>博客搭建指南——3</title>
+      <link>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/</link>
+      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/</guid>
+      <description>总不能让这个博客老是在记录家常菜啊。
+本篇主要介绍hugo博客的进阶美化方法，根据本篇的讲解，结合自己的主题进行实践，有助于打造一个真正属于自己的博客。
+ 1. CSS和SCSS
+ CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。
+Sass（Syntatically Awesome Style Sheets）是一种CSS预处理器，它可以用来定义一套新的语法规则和函数，以加强和提升CSS。
+举例来说，一个页面中可能需要用到许多次颜色#000，即白色；在原始的CSS代码中这个#000需要不断地出现在各个位置，如color: #000、background: #000等，这就为样式的改变带来了麻烦，假如我们需要整体性地改变页面颜色主题，就只能找到所有的#000并将其修改，实在不够方便。而Sass引入了变量，其概念和C/C++等语言中的变量并无二致，极大地简化了数值的维护。现在可以使用如下的写法来设置页面颜色：
+$WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: $WHITE; } 然而，最初的Sass的语法规则和CSS有太多的出入，后来官方在2010年推出了一个全新的语法，叫做SCSS（Sassy CSS），试图弥合Sass和CSS之间的差别。现在我们看到的代码多数已经是SCSS，而其灵魂就是变量，如此理解便好。
+ 2. hugo和SCSS
+ hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
+你的网站样式存放在根目录下asset/css文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块include/import进来，实现完整的页面样式。
+我的KeepIt主题有一个内容如下的主文件，功能正如我所述：
+main.scss
+按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
+如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为str的类，我们的CSS文件中存在两种定义：
+/* line 11 */ .str { color: #efefef; } ... /* line 20 */ .str { color: #ffdab9; } 那么，位于20行的定义会覆盖位于11行的定义，使得具有str类的标签内容呈现#ffdab9这种颜色。
+这种覆盖原则就是我们自定义hugo样式的基础。
+ 3. 精确定义样式
+ 基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
+在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：</description>
+    </item>
+    
+    <item>
+      <title>博客搭建指南——2</title>
+      <link>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%972/</link>
+      <pubDate>Sat, 19 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%972/</guid>
+      <description>初生的博客，更新就是频繁。 如果你看到这篇博文，应该能注意到这篇博文的背景有了一点小变化。
+没错，在这篇文章里，我要记录一款强大的JS插件particles.js的使用方法，这款应用能让你的网页背景看起来不那么单调（简直非常适合我现在的博客主题）。
+你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
+(https://github.com/VincentGarreau/particles.js)
+话不多说，let&amp;rsquo;s go!
+下载这款插件  你可以直接使用git clone或者从网页上下载它。
+解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
+ 在源码中为插件留出位置  在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在你的页面中为插件留出位置，这个操作非常简单。打开你的footer.html，找一个合适的位置（最好是最外层），加上一个标签：
+&amp;lt;div id=&amp;quot;particles-js&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
+p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
+p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/baseof.html，因为它似乎是所有页面的基本框架，适用性更强一些。
+ 引入插件  你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+我们要在第二步的div底下写入插件。
+为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
+我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&amp;lt;script&amp;gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&amp;lt;div&amp;gt;之前写入几条&amp;lt;script&amp;gt;标签。
+以上方法全部失败。
+因此，你不要小看这篇博文的分量，它可能可以帮助你节省几个小时的试错时间。
+言归正传，我们还是需要把插件的JS文件引入到源码中。要想插件能够工作，你只需要使用两个文件：particles.js和app.js，他们分别在第一步那个项目的根目录里，还有Demo文件夹里。particles.js是发挥功能的文件，而app.js是配置文件，具体能配置些什么，后面再说，总之，先使用别人帮你写好的东西吧。
+接下来的一步很重要：把这两个文件放入public/js文件夹中!
+你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，public文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。
+将两个JS文件引入，记得放在第二步的div后面：
+&amp;lt;script src=&amp;#34;xxxxx/app.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;xxxxx/particles.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
+ 巧妙地获取路径  如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
+我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&amp;quot;/js/app.js&amp;quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了 :(
+正确的获取路径的姿势，你可以直接使用绝对路径，也就是https://yourWeb.github.io/js/app.js这样的方式。
+底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：
+&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;  代码的最终样式及推送  经过一系列的修改后，你的页面的代码就多了如下的东西：
+&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.</description>
+    </item>
+    
+    <item>
+      <title>博客搭建指南——1</title>
+      <link>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/</link>
+      <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/</guid>
+      <description>当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
+如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
+Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac）。
+我们去到下面的这个网址：
+(https://github.com/gohugoio/hugo/releases)
+在里面你可以下载Windows系统下的Hugo，注意是Hugo_extend而不是hugo，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。
+将下载的压缩包解压，得到一个文件夹，里面有hugo.exe。接下来将这个文件夹的位置添加到系统环境变量中，就跟你配置java或者是python完全一样，还需要我再讲吗？
+好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
+ 右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
+ 接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
+ 新建站点   用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+hugo new site [yourSiteName]
+就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
+如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
+新建站点
+ 选择主题   “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
+当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
+就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
+ 配置页面   现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+回到你的网站上吧，看看效果。
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LeetCode on XR_G&#39;s Blog</title>
+    <link>https://xrg.fj.cn/tags/leetcode/</link>
+    <description>Recent content in LeetCode on XR_G&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 02 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>难题本 | LeetCode1713. 得到子序列的最少操作次数</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/</link>
+      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/</guid>
+      <description>题目 给你一个数组 target ，包含若干 互不相同 的整数，以及另一个整数数组 arr ，arr 可能 包含重复元素。
+每一次操作中，你可以在 arr 的任意位置插入任一整数。比方说，如果 arr = [1,4,1,2] ，那么你可以在中间添加 3 得到 [1,4,3,1,2] 。你可以在数组最开始或最后面添加整数。
+请你返回 最少 操作次数，使得 target 成为 arr 的一个子序列。
+一个数组的 子序列 指的是删除原数组的某些元素（可能一个元素都不删除），同时不改变其余元素的相对顺序得到的数组。比方说，[2,7,4] 是 [4,2,3,7,2,1,4] 的子序列（加粗元素），但 [2,4,2] 不是子序列。
+示例1
+ 输入： target = [5,1,3], arr = [9,4,2,3,4] 输出： 2 解释： 你可以添加 5 和 1 ，使得 arr 变为 [5,9,4,1,2,3,4] ，target 为 arr 的子序列。  示例2
+ 输入： target = [6,4,8,1,3,2], arr = [4,7,6,2,3,8,6,1] 输出： 3  数据范围</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode面试题 08.13. 堆箱子</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/</link>
+      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/</guid>
+      <description>这道题有点难，但并不是完全难。
+题目 堆箱子。给你一堆n个箱子，箱子宽 wi、深 di、高 hi。箱子不能翻转，将箱子堆起来时，下面箱子的宽度、高度和深度必须大于上面的箱子。实现一种方法，搭出最高的一堆箱子。箱堆的高度为每个箱子高度的总和。
+输入使用数组 [wi, di, hi]表示每个箱子。
+示例1
+ 输入： box = [[1, 1, 1], [2, 2, 2], [3, 3, 3]] 输出： 6  示例2
+ 输入： box = [[1, 1, 1], [2, 3, 4], [2, 6, 7], [3, 4, 5]] 输出： 10  数据范围
+ 箱子的数目不大于3000个。  分析 箱子有三个维度，一瞬间就让人想到了三维的DP。
+能否降低循环层数呢？我们注意到题目中所说的 下面箱子的宽度、高度和深度必须大于上面的箱子 ，那么，只需要根据任意一个维度进行排序，最终箱子叠起来的顺序就是排序后的顺序（正序或反序）。
+更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &amp;lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/</link>
+      <pubDate>Fri, 07 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/</guid>
+      <description>难题本为数不多的Hard题~
+题目 给你一个 m x n 的矩阵 matrix 和一个整数 k ，找出并返回矩阵内部矩形区域的不超过 k 的最大数值和。
+题目数据保证总会存在一个数值和不超过 k 的矩形区域。
+示例1
+
+ 输入： matrix = [[1,0,1],[0,-2,3]], k = 2 输出： 2 解释： 蓝色边框圈出来的矩形区域 [[0, 1], [-2, 3]] 的数值和是 2，且 2 是不超过 k 的最大数字（k = 2）。  示例2
+ 输入： matrix = [[2,2,-1]], k = 3 输出： 3  数据范围
+ m == matrix.length n == matrix[i].length 1 &amp;lt;= m, n &amp;lt;= 100 -100 &amp;lt;= matrix[i][j] &amp;lt;= 100 -105 &amp;lt;= k &amp;lt;= 105  分析 我们要得到每一个小矩形，则可以：</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode1473. 粉刷房子 III</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/</link>
+      <pubDate>Tue, 04 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/</guid>
+      <description>愉快的五四青年节从遇到一道Hard的动态规划题结束~
+题目链接：1473. 粉刷房子 III - 力扣（LeetCode） (leetcode-cn.com)
+题目 在一个小城市里，有 m 个房子排成一排，你需要给每个房子涂上 n 种颜色之一（颜色编号为 1 到 n ）。有的房子去年夏天已经涂过颜色了，所以这些房子不需要被重新涂色。
+我们将连续相同颜色尽可能多的房子称为一个街区。（比方说 houses = [1,2,2,3,3,2,1,1] ，它包含 5 个街区 [{1}, {2,2}, {3,3}, {2}, {1,1}] 。）
+给你一个数组 houses ，一个 m * n 的矩阵 cost 和一个整数 target ，其中：
+houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色。 cost[i][j]：是将第 i 个房子涂成颜色 j+1 的花费。 请你返回房子涂色方案的最小总花费，使得每个房子都被涂色后，恰好组成 target 个街区。如果没有可用的涂色方案，请返回 -1 。
+示例1
+ 输入： houses = [0,0,0,0,0], cost = [[1,10],[10,1],[10,1],[1,10],[5,1]], m = 5, n = 2, target = 3 输出： 9 解释： 房子涂色方案为 [1,2,2,1,1]，此方案包含 target = 3 个街区，分别是 [{1}, {2,2}, {1,1}]。涂色的总花费为 (1 + 1 + 1 + 1 + 5) = 9。  示例2:</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode220. 存在重复元素 III</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/</link>
+      <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/contains-duplicate-iii/
+这是个中等题？
+题目  给你一个整数数组 nums 和两个整数 k 和 t 。请你判断是否存在 两个不同下标 i 和 j，使得 abs(nums[i] - nums[j]) &amp;lt;= t ，同时又满足 abs(i - j) &amp;lt;= k 。
+如果存在则返回 true，不存在返回 false。
+示例1
+ 输入： nums = [1,2,3,1], k = 3, t = 0 输出： true  示例2
+ 输入： nums = [1,5,9,1,5,9], k = 2, t = 3 输出： false  数据范围
+ 0 &amp;lt;= nums.length &amp;lt;= 2 * 104 -231 &amp;lt;= nums[i] &amp;lt;= 231 - 1 0 &amp;lt;= k &amp;lt;= 104 0 &amp;lt;= t &amp;lt;= 231 - 1   分析 朴素想法：遍历每个满足条件的 i 、 j ，找到符合条件的就退出。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode208. 实现 Trie (前缀树)</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/</link>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/
+定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目  Trie（发音类似 &amp;ldquo;try&amp;rdquo;）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+请你实现 Trie 类：
+  Trie() 初始化前缀树对象。
+  void insert(String word) 向前缀树中插入字符串 word 。
+  boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+  boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+  示例
+  输入：
+[&amp;ldquo;Trie&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;startsWith&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;]
+[[], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;]]
+  输出：</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode80. 删除有序数组中的重复项 II</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/</link>
+      <pubDate>Tue, 06 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/
+题目  给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+示例1
+ 输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。  示例2
+ 输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3]  数据范围
+ 1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列   分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode90. 子集 II</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/subsets-ii/
+题目 给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。
+解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
+示例1
+  输入： nums = [1,2,2]
+  输出： [[],[1],[1,2],[1,2,2],[2],[2,2]]
+  示例2
+  输入： nums = [0]
+  输出： [[],[0]]
+  分析  三个月之前WA过的题，在每日一题里碰见了，而我还是思考了很久 :cry:
+ 原始数组中可能包含重复元素，则对于重复元素的考虑就尤为重要，一般来说，重复元素对于子集的贡献也有重复。
+我们不妨考虑进行以下的模拟，对于一个 不包含重复元素 的集合 [1, 2, 3] ，如何求得它的所有子集呢？
+首先，答案中包含一个空集。
+首先取得第一个元素，将其与当前答案中的所有集合拼接，放入答案中；
+考虑第二个元素，将其与当前答案中的所有集合拼接，放入答案中；
+第三个元素同理。
+示意
+在这个环节中，由于答案是在不断地增长的，我们只需要用一个变量保存添加元素之前的答案集合大小即可。
+这种做法的正确性是 不会证明 理所当然的。
+实际上，根据这种做法我们可以AC掉 LeetCode78. 子集 。
+// LeetCode 78 class Solution { public: vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; subsets(vector&amp;lt;int&amp;gt;&amp;amp; nums) { vector&amp;lt;int&amp;gt; tmp; vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt; res; res.</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode190. 颠倒二进制位</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/</link>
+      <pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/reverse-bits/
+一道简单题，却能引出一个无比骚包的操作。此法前所未见，独自亦难想出，因此大抵也算是难的。
+题目  颠倒给定的 32 位无符号整数的二进制位。
+示例1
+  输入： 00000010100101000001111010011100
+  输出： 00111001011110000010100101000000
+  解释： 输入的二进制串 00000010100101000001111010011100 表示无符号整数 43261596， 因此返回 964176192，其二进制表示形式为 00111001011110000010100101000000。
+  示例2
+ 输入： 11111111111111111111111111111101 输出： 10111111111111111111111111111111   分析  易得简单暴力的32次循环法，在此不表，详见AC代码1。唯有一点值得注意：先加最低位再将 res 移位的时候，只能移动 31 次，否则最高位将溢出。因此，AC代码1中只取31次循环，而将最后一位置于循环外。
+ 对于一个首尾对换的操作，我们可以使用分治的思路。
+考虑对于最大的32位二进制，将前16位与后16位对换。
+考虑高低的16位，将每一部分中的高8位与低8位对换。
+如此进行······
+分治
+那么，我们如何做到这种形式的对换呢？
+不妨以8位二进制为例，对于一个八位二进制数 1011 0011 ，我们首先需要将其高低四位进行对换。示意如下：
+Step 1
+对于一个二进制数，我们可以很简单地使用如下办法取得它的高低四位：
+highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode82. 删除排序链表中的重复元素 II</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/</link>
+      <pubDate>Thu, 25 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
+题目  存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+返回同样按升序排列的结果链表。
+示例1
+  输入： head = [1,2,3,3,4,4,5]
+  输出： [1,2,5]
+  示例2
+  输入： head = [1,1,1,2,3]
+  输出： [2,3]
+  数据范围
+ 链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列   分析  在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
+而两次遍历的办法则更为简单，也是最初浮现在我脑海中的念头。考虑到链表节点的数据范围在 [-100, 100] 区间中，我们在第一次遍历的过程中记录每个数值出现的次数，而在第二次遍历过程中考虑下一个节点（的数值）是否应该存在于最终的结果中即可。
+ 当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
+在有序的数组中取得一段相同元素的子数组，直接考虑滑动窗口。
+我们使用一个指针，指向窗口 左边界的左邻居 ，使用两个指针维护窗口的左右边界。当窗口右边界数值等于左边界数值时，窗口向右扩张，否则进行一定的更新操作。
+容易想象，在不发生重复的情况下，窗口的大小（right - left）始终为 1 ，而发生重复的时候整段窗口需要全部从链表上删除。
+窗口中无重复</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode395. 至少有 K 个重复字符的最长子串</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395.-%E8%87%B3%E5%B0%91%E6%9C%89-k-%E4%B8%AA%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</link>
+      <pubDate>Sat, 27 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395.-%E8%87%B3%E5%B0%91%E6%9C%89-k-%E4%B8%AA%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/</guid>
+      <description>题目链接： https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/
+题目  给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
+示例1
+  输入： s = &amp;ldquo;aaabb&amp;rdquo;, k = 3
+  输出： 3
+  解释： 最长子串为“aaa”，其中”a“重复了3次
+  示例2
+  输入： s = “ababbc”, k = 2
+  输出： 5
+  数据范围
+ 1 &amp;lt;= s.length &amp;lt;= 104 s 仅由小写英文字母组成 1 &amp;lt;= k &amp;lt;= 105   分析  没有任何思路，参照题解的分治法将此题解出，稍作记录。
+首先，对于 s 中的所有字符，我们可以统计它们出现的次数，对于所有出现次数小于 k 的字符，答案中一定不包含它。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode1438. 绝对差不超过限制的最长连续子数组</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Mon, 22 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1438.-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/</guid>
+      <description>定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目链接：https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+题目  给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+如果不存在满足条件的子数组，则返回 0 。
+示例1
+  输入： nums = [8,2,4,7], limit = 4
+  输出： 2
+  解释： 所有子数组如下：
+  [8] 最大绝对差 |8-8| = 0 &amp;lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &amp;gt; 4.
+[2] 最大绝对差 |2-2| = 0 &amp;lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &amp;lt;= 4.</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode567. 字符串的排列</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/</link>
+      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/</guid>
+      <description>今天是农历除夕，然而近年来年味渐淡，凡有亲朋在，便是好时节，也无需对此日特别注重了。
+题目链接：https://leetcode-cn.com/problems/permutation-in-string/
+题目  给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
+换句话说，第一个字符串的排列之一是第二个字符串的子串。
+示例1
+  输入： s1 = &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidbaooo&amp;rdquo;
+  输出： True
+  解释： s2包含s1的排列之一（“ba”）
+  示例2
+  输入： s1= &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidboaoo&amp;rdquo;
+  输出： False
+  数据范围
+ 输入的字符串只包含小写字母 两个字符串的长度都在 [1, 10,000] 之间   分析  s2的某个子串包含s1的排列，即s2的某个子串中字母分布与s1完全一样。
+我最先想到使用一个集合来保存s1的所有字母，使用滑动窗口left ~ right遍历s2中的每个子串：
+ 当某个字符不在集合中时，left = right = right + 1 当某个字符在集合中时，从集合中删除该字符  按照上面的规则，当某个子串完全包含s1中的所有字符时，遍历完这个子串之后集合就变为空。</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode703. 数据流中的第 K 大元素</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/</link>
+      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/</guid>
+      <description>不是吧啊Sir，这种题也错？:cry:
+题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
+题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+请实现 KthLargest 类：
+ KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+  输出： [null, 4, 5, 5, 8, 8]
+  示例2
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode992. K 个不同整数的子数组</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Tue, 09 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/subarrays-with-k-different-integers/
+思路是真难想，想出来之后是真简单。
+已经是我目前的水平无法搞定的程度了，在此稍作记录。
+题目  给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。
+（例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
+返回 A 中好子数组的数目。
+示例1
+  输入： A = [1,2,1,2,3], K = 2
+  输出： 7
+  解释： 恰好由 2 个不同整数组成的子数组：[1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2].
+  示例2
+  输入： A = [1,2,1,3,4], K = 3
+  输出： 3
+  解释： 恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode665. 非递减数列</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665.-%E9%9D%9E%E9%80%92%E5%87%8F%E6%95%B0%E5%88%97/</link>
+      <pubDate>Sun, 07 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode665.-%E9%9D%9E%E9%80%92%E5%87%8F%E6%95%B0%E5%88%97/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/non-decreasing-array/
+看到这题第一感受：简单题！
+做完这题第一感受：简单题？
+题目  给你一个长度为 n 的整数数组，请你判断在 最多 改变 1 个元素的情况下，该数组能否变成一个非递减数列。
+我们是这样定义一个非递减数列的： 对于数组中所有的 i (0 &amp;lt;= i &amp;lt;= n-2)，总满足 nums[i] &amp;lt;= nums[i + 1]。
+示例1
+  输入： nums = [4,2,3]
+  输出： true
+  解释： 你可以通过把第一个4变成1来使得它成为一个非递减数列。
+  示例2
+  输入： nums = [4,2,1]
+  输出： false
+  数据范围
+ 1 &amp;lt;= n &amp;lt;= 10 ^ 4 - 10 ^ 5 &amp;lt;= nums[i] &amp;lt;= 10 ^ 5   分析  简单题毕竟还是简单题，思路初步找起来是比较容易的。</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode888. 公平的糖果棒交换</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/</link>
+      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/</guid>
+      <description>美好的二月从WA一道简单题开始。
+题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
+ 描述
+爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
+因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
+返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
+如果有多个答案，你可以返回其中任何一个。保证答案存在。
+示例1
+  输入： A = [1,1], B = [2,2]
+  输出：[1,2]
+  示例2
+  输入： A = [1,2], B = [2,3]
+  输出：[1,2]
+  数据范围
+ 1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode5667. 你能在你最喜欢的那天吃到你最喜欢的糖果吗？</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667.-%E4%BD%A0%E8%83%BD%E5%9C%A8%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E9%82%A3%E5%A4%A9%E5%90%83%E5%88%B0%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E7%B3%96%E6%9E%9C%E5%90%97/</link>
+      <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode5667.-%E4%BD%A0%E8%83%BD%E5%9C%A8%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E9%82%A3%E5%A4%A9%E5%90%83%E5%88%B0%E4%BD%A0%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E7%B3%96%E6%9E%9C%E5%90%97/</guid>
+      <description>我的第一次LeetCode周赛，本来大有希望AC三道题，结果在这个神坑上趴了半个多小时o(╥﹏╥)o
+题目链接：https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/
+题目  给你一个下标从 0 开始的正整数数组 candiesCount ，其中 candiesCount[i] 表示你拥有的第 i 类糖果的数目。同时给你一个二维数组 queries ，其中 queries[i] = [favoriteTypei, favoriteDayi, dailyCapi] 。
+你按照如下规则进行一场游戏：
+ 你从第 0 天开始吃糖果。 你在吃完 所有 第 i - 1 类糖果之前，不能 吃任何一颗第 i 类糖果。 在吃完所有糖果之前，你必须每天 至少 吃 一颗 糖果。  请你构建一个布尔型数组 answer ，满足 answer.length == queries.length 。answer[i] 为 true 的条件是：在每天吃 不超过 dailyCapi 颗糖果的前提下，你可以在第 favoriteDayi 天吃到第favoriteTypei类糖果；否则 answer[i] 为 false 。注意，只要满足上面 3 条规则中的第二条规则，你就可以在同一天吃不同类型的糖果。
+请你返回得到的数组 answer 。
+示例1
+  输入：candiesCount = [7,4,5,3,8], queries = [[0,2,2],[4,2,4],[2,13,1000000000]]</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode778. 水位上升的泳池中游泳</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/</link>
+      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/swim-in-rising-water/
+又是一道不错的复习题，借此回顾回顾BFS和SPFA。
+BFS Breadth First Search，宽度优先搜素。
+已知图G = (V, E)和一个源顶点s，宽度优先搜索以一种系统的方式探寻G的边，从而“发现”s所能到达的所有顶点，并计算s到所有这些点的距离（最少边数）。
+使用一个数组visited维护每个顶点先前是否被访问过；使用一个数组dist维护源点到每个顶点的距离。visited初始化为全0，dist初始化为全正无穷。
+使用一个队列q维护当前正在访问的点，每次从队首中取出head来进行操作。对于head的邻接点tmp，若我们之前没有访问过它，则源点到它的距离就是源点到head的距离加1。我们记dist[tmp] = dist[head] + 1，然后将tmp放入队列q中，之后的某个时刻，tmp会被取出，然后继续找出与它邻接且没被访问过的点，直到队列为空，所有可达的点都被访问过了。
+BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张，最终遍历结束，涟漪消散。
+使用当年蹭HDU数据结构课的一道作业来进行BFS的回顾：
+ 题目描述
+一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
+输入格式
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&#39;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&#39;。
+输出格式
+输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
+输入1：
+5 5
+..###
+#&amp;hellip;.
+#.#.#
+#.#.#
+#.#..
+输出1： 8
+ 这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&#39;#&#39;）且该点未被访问，则记录它到源点的距离。
+我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
+#include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode959. 由斜杠划分区域</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/</link>
+      <pubDate>Mon, 25 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/regions-cut-by-slashes/
+令我思考很久的一道题，最后还是学着官方题解做出来的([1])。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。
+题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
+（请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
+返回区域的数目。
+分析  将单元格进一步细分，便于并查集操作。
+每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
+图1. 单元格划分
+  格内合并
+ 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
+ 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
+ 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
+ 输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
+图2. 网格</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode1232. 缀点成线</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/</link>
+      <pubDate>Sun, 17 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/
+题目 在一个 XY 坐标系中有一些点，我们用数组 coordinates 来分别记录它们的坐标，其中 coordinates[i] = [x, y] 表示横坐标为 x、纵坐标为 y 的点。
+请你来判断，这些点是否在该坐标系中属于同一条直线上，是则返回 true，否则请返回 false。
+分析 这种题目居然WA了一次。。。
+依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
+这题的特殊情况有两种：
+ 一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。  直接放代码了。
+class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 + b = y1; ax2 + b = y2  // a(x1 - x2) = y1 - y2  // a = (y1 - y2) / (x1 - x2)  // b = y1 - ax1  if (coordinates.</description>
+    </item>
+    
+    <item>
+      <title>错题本 | LeetCode947. 移除最多的同行或同列石头</title>
+      <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/</link>
+      <pubDate>Fri, 15 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/
+题目 n 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。
+如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
+给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
+示例1
+ 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
+分析：
+ 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。</description>
+    </item>
+    
+    <item>
+      <title>难题本 | LeetCode862. 和至少为 K 的最短子数组</title>
+      <link>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/</guid>
+      <description>题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
+这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
+分析：
+ 题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
+最开始想到的是暴力。假设数组长度为n，我们分别求出长度为1、2、&amp;hellip;、n的子数组的最大和，将他们按顺序和K比较，第一个比K大的长度就是答案。这样的做法时间复杂度是O(n2)，有点复杂。
+之后就没有想法了。跟泓泓挣扎了半天，还是只能去看题解。
+不得不说，官方题解真是不讲人话[2]，不到40行代码的思路，硬是能被说成鬼都看不懂的样子。
+首先，为了方便求任意一段连续子数组的和，我们需要使用前缀和数组prefix_sum。在这个题目中，prefix_sum[i]表示的是从A[0]到A[i - 1]的前缀和，注意是A[i - 1]，作用后面会讲。总之，求前缀和的办法是很常规的。
+我们知道，求得了前缀和数组之后，对于两个下标x、y（设y&amp;gt;x），prefix_sum[y] - prefix_sum[x]表示的就是从A[x + 1]到A[y]这段子数组的和。那么，问题就转化为了针对prefix_sum数组，求一对x和y，满足prefix_sum[y] - prefix_sum[x] &amp;gt;= K，且y - x最小。
+朴素的思想是遍历每一对y和x，这样的复杂度还是O(n2)，显然需要用某种更巧妙的办法让我们摆脱两重循环。
+于是引出官方题解中的第一条性质：
+ 对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。  如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
+本条性质的模拟
+我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
+使用下面的代码来进行实现，注意deque的初始元素0。
+// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/
+题目 n 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。
+如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
+给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
+示例1
+ 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
+分析：
+ 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。'><title>错题本 | LeetCode947. 移除最多的同行或同列石头</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='错题本 | LeetCode947. 移除最多的同行或同列石头'>
+<meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/
+题目 n 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。
+如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
+给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
+示例1
+ 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
+分析：
+ 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-15T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-15T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="错题本 | LeetCode947. 移除最多的同行或同列石头">
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/
+题目 n 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。
+如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
+给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
+示例1
+ 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
+分析：
+ 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents"></nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/">错题本 | LeetCode947. 移除最多的同行或同列石头</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jan 15, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/">https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/</a></em></p>
+<h2 id="题目">题目</h2>
+<p><code>n</code> 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。</p>
+<p>如果一块石头的 <strong>同行或者同列</strong> 上有其他石头存在，那么就可以移除这块石头。</p>
+<p>给你一个长度为 <code>n</code> 的数组 <code>stones</code> ，其中 <code>stones[i] = [xi, yi]</code> 表示第 <code>i</code> 块石头的位置，返回 <strong>可以移除的石子</strong> 的最大数量。</p>
+<p><strong>示例1</strong></p>
+<ul>
+<li><strong>输入：</strong> stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]]</li>
+<li><strong>输出：</strong> 5</li>
+<li><strong>解释：</strong> 一种移除 5 块石头的方法如下所示：
+<ol>
+<li>移除石头 [2,2] ，因为它和 [2,1] 同行。</li>
+<li>移除石头 [2,1] ，因为它和 [0,1] 同列。</li>
+<li>移除石头 [1,2] ，因为它和 [1,0] 同行。</li>
+<li>移除石头 [1,0] ，因为它和 [0,0] 同列。</li>
+<li>移除石头 [0,1] ，因为它和 [0,0] 同行。
+石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。</li>
+</ol>
+</li>
+</ul>
+<h2 id="分析">分析</h2>
+<p>其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。</p>
+<p>暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。</p>
+<p><strong>分析：</strong></p>
+<blockquote>
+<p>由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。</p>
+<p>于是题目转化为了以行列为依据的并查集问题。对于一块石头<code>idx</code>，其坐标为<code>(x, y)</code>，如果x行上已经有了先来的石头<code>root_x[x]</code>，那么将<code>idx</code>加入先前就存在的<code>root_x[x]</code>的并查集中；否则表示<code>idx</code>是这一行最先到达的石头，其后的所有石头都要加入<code>idx</code>的并查集中。对于y列来说同理。</p>
+<p>于是实现并查集如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
+</span><span class="c1">// memset(parent, -1, sizeof(parent));
+</span><span class="c1">// 或者
+</span><span class="c1">// for (i = 0; i &lt; 1010; i++) parent[i] = i;
+</span><span class="c1"></span><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">root_p</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent_idx</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">root_s</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">son_idx</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root_p</span> <span class="o">==</span> <span class="n">root_s</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_p</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
+    <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>  <span class="c1">// 路径压缩
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div><p>我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。</p>
+<p>这一轮遍历之后，所有同行同列的石头都处于同一个并查集中；而全局中并查集的个数就是剩余的石头个数。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">root_x</span><span class="p">[</span><span class="mi">10010</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">root_y</span><span class="p">[</span><span class="mi">10010</span><span class="p">];</span>
+    <span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">root_p</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent_idx</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">root_s</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">son_idx</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root_p</span> <span class="o">==</span> <span class="n">root_s</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_p</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>  <span class="c1">// 路径压缩
+</span><span class="c1"></span>        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">removeStones</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">stones</span><span class="p">)</span> <span class="p">{</span>
+        
+        <span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">parent</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">root_x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">root_x</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">root_y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">root_y</span><span class="p">));</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">join</span><span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">join</span><span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">==</span> <span class="n">idx</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">idx</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">cnt</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></blockquote>
+<p><strong>错误记录</strong></p>
+<blockquote>
+<p>并查集中的<code>join</code>函数，原本的写法为：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">parent</span><span class="p">[</span><span class="n">son_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_idx</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>这样的写法是错误的，且非常之离谱。我们知道，两个属于不同并查集的元素的合并意味着两个并查集的合并，显然不能单纯地修改这两个元素本身，而要考虑到这两个并查集的根节点。</p>
+<p>就本题来说，这样的写法无法通过这个测试样例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="na">[[0,1],[1,0],[1,1]]</span>
+</code></pre></div><p>对于最后一块石头<code>(1, 1)</code>，第1行已经有了石头<code>1</code>，第1列已经有了石头<code>0</code>。按照遍历过程的逻辑：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>最后一块石头最终将加入<code>0</code>号并查集。且此时剩余独立的并查集有<code>0</code>和<code>1</code>。</p>
+<p>然而，最后一块石头实际上是<code>0</code>和<code>1</code>的交汇点。按照正确的流程，它根据x坐标首先加入<code>1</code>号并查集后，再加入<code>0</code>号并查集，这时就会将<code>1</code>号石头也带入<code>0</code>号并查集，这也是本题使用并查集思路的正确性所在。</p>
+<p>正确的办法是在合并时考虑根节点的修改，详见前文代码。</p>
+<p>此外，本题使用的并查集还可以进行优化，包括针对本题的封装（参考[1]），和针对并查集这一结构本身的按秩合并和路径压缩（参考[2]）。</p>
+<p>本题还有基于图论的解法，不在本篇讨论范围内。</p>
+</blockquote>
+<p><strong>参考资料</strong></p>
+<p>[1] 小宇.简单思路+优化（超100%）[EB/OL].2021-01-15</p>
+<p><em><a href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/jian-dan-jie-fa-chao-100-by-mantoufan-k3ne/">https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/jian-dan-jie-fa-chao-100-by-mantoufan-k3ne/</a></em></p>
+<p>[2] yex.【详解】并查集[EB/OL].2021-01-15</p>
+<p><em><a href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/tu-jie-bing-cha-ji-by-yexiso-nbcz/">https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/tu-jie-bing-cha-ji-by-yexiso-nbcz/</a></em></p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E9%94%99%E9%A2%98%E6%9C%AC/">错题本</a>
+        
+            <a href="/tags/leetcode/">LeetCode</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode80. 删除有序数组中的重复项 II</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode567. 字符串的排列</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode703. 数据流中的第 K 大元素</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode888. 公平的糖果棒交换</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode1232. 缀点成线</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-01-15 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

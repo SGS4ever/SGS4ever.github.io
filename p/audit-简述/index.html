@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='什么是audit Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。
+简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。
+而较为系统地说，audit框架的组件结构如图所示：
+img
+安装 内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 CONFIG_AUDIT 。
+我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：
+img
+用户层的audit服务可以通过普通的软件安装方式获取，可以使用 systemctl 或 service 命令来控制服务的启停。
+audit内核审计的消息可以由应用或系统活动来触发，而 audit daemon（audit守护进程） 是audit框架中的重要组成部分，它负责处理内核生成的消息，例如将这些消息写入日志中或选择性地忽略。
+我们可以通过若干命令和文件来控制 audit daemon ：
+ auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
+audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
+通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
+对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：'><title>audit 简述</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='audit 简述'>
+<meta property='og:description' content='什么是audit Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。
+简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。
+而较为系统地说，audit框架的组件结构如图所示：
+img
+安装 内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 CONFIG_AUDIT 。
+我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：
+img
+用户层的audit服务可以通过普通的软件安装方式获取，可以使用 systemctl 或 service 命令来控制服务的启停。
+audit内核审计的消息可以由应用或系统活动来触发，而 audit daemon（audit守护进程） 是audit框架中的重要组成部分，它负责处理内核生成的消息，例如将这些消息写入日志中或选择性地忽略。
+我们可以通过若干命令和文件来控制 audit daemon ：
+ auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
+audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
+通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
+对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：'>
+<meta property='og:url' content='https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2021-08-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-08-25T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="audit 简述">
+<meta name="twitter:description" content="什么是audit Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。
+简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。
+而较为系统地说，audit框架的组件结构如图所示：
+img
+安装 内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 CONFIG_AUDIT 。
+我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：
+img
+用户层的audit服务可以通过普通的软件安装方式获取，可以使用 systemctl 或 service 命令来控制服务的启停。
+audit内核审计的消息可以由应用或系统活动来触发，而 audit daemon（audit守护进程） 是audit框架中的重要组成部分，它负责处理内核生成的消息，例如将这些消息写入日志中或选择性地忽略。
+我们可以通过若干命令和文件来控制 audit daemon ：
+ auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
+audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
+通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
+对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#基础">基础</a></li>
+    <li><a href="#对文件和目录访问的审计">对文件和目录访问的审计</a></li>
+    <li><a href="#对系统调用的审计">对系统调用的审计</a></li>
+    <li><a href="#对无用消息的过滤">对无用消息的过滤</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#日志的基本格式">日志的基本格式</a></li>
+    <li><a href="#日志的搜索与分析">日志的搜索与分析</a></li>
+    <li><a href="#值得记录的文件或系统调用">值得记录的文件或系统调用</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#发送日志">发送日志</a></li>
+    <li><a href="#接收日志">接收日志</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" style="background-color: #2a9d8f; color: #fff;">
+                网络安全
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/audit-%E7%AE%80%E8%BF%B0/">audit 简述</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Aug 25, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h2 id="什么是audit">什么是audit</h2>
+<p>Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。</p>
+<p>简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。</p>
+<p>而较为系统地说，audit框架的组件结构如图所示：</p>
+<p><figure style="flex-grow: 140; flex-basis: 338px">
+		<a href="/p/audit-%E7%AE%80%E8%BF%B0/2.png" data-size="1168x829"><img src="/p/audit-%E7%AE%80%E8%BF%B0/2.png"
+				srcset="/p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_480x0_resize_box_2.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_1024x0_resize_box_2.png 1024w"
+				width="1168"
+				height="829"
+				loading="lazy"
+				alt="img">
+		</a>
+		
+		<figcaption>img</figcaption>
+		
+	</figure></p>
+<h2 id="安装">安装</h2>
+<p>内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 <code>CONFIG_AUDIT</code> 。</p>
+<p>我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：</p>
+<p><figure style="flex-grow: 448; flex-basis: 1076px">
+		<a href="/p/audit-%E7%AE%80%E8%BF%B0/1.png" data-size="816x182"><img src="/p/audit-%E7%AE%80%E8%BF%B0/1.png"
+				srcset="/p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_480x0_resize_box_2.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_1024x0_resize_box_2.png 1024w"
+				width="816"
+				height="182"
+				loading="lazy"
+				alt="img">
+		</a>
+		
+		<figcaption>img</figcaption>
+		
+	</figure></p>
+<p>用户层的audit服务可以通过普通的软件安装方式获取，可以使用 <code>systemctl</code> 或 <code>service</code> 命令来控制服务的启停。</p>
+<p>audit内核审计的消息可以由应用或系统活动来触发，而 <em>audit daemon（audit守护进程）</em> 是audit框架中的重要组成部分，它负责处理内核生成的消息，例如将这些消息写入日志中或选择性地忽略。</p>
+<p>我们可以通过若干命令和文件来控制 <em>audit daemon</em> ：</p>
+<ul>
+<li><em>auditctl</em> ：直接控制守护进程的行为，如添加规则等；</li>
+<li><code>/etc/audit/audit.rules</code> ：内含audit守护进程的规则和各种变量；</li>
+<li><em>aureport</em> ：生成系统活动的审计报告；</li>
+<li><em>ausearch</em> ：在审计日志中对各类事件进行搜索；</li>
+<li><em>auditspd</em> ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了；</li>
+<li><em>autrace</em> ：用于追踪某一进程的命令，类似 <code>strace</code> ；</li>
+<li><code>etc/audit/auditd.conf</code> ：关于日志记录的配置文件。</li>
+</ul>
+<h2 id="添加规则">添加规则</h2>
+<h3 id="基础">基础</h3>
+<p><em>注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。</em></p>
+<p>audit规则的加载可以通过命令行工具 <code>auditctl</code> 或使用命令 <code>auditctl -R /etc/audit/audit.rules</code> 从规则文件中批量读取。</p>
+<p>通过 <code>auditctl</code> 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 <code>/etc/audit/audit.rules</code> 文件中，通过命令 <code>rcauditd resatrt</code> 重启audit服务使规则文件生效。</p>
+<h3 id="对文件和目录访问的审计">对文件和目录访问的审计</h3>
+<p>监控某一特定文件的访问行为属于audit框架的基础用法。使用 <code>-w</code> 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 <code>passwd</code> 文件的访问：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa</span>
+</code></pre></div><p>也可以监控对某一路径的访问：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/security/</span>
+</code></pre></div><p>上面给出的第一条规则监控了对 <code>etc/passwd</code> 文件的所有读操作 <code>r</code> 、写操作 <code>w</code> 、执行 <code>x</code> 和属性变更操作 <code>a</code> ，此类规则指定的文件需要事先存在；</p>
+<p>第二条规则监控了对 <code>etc/security</code> 目录的所有访问，默认情况下，目录相关的规则只记录这一目录下的文件创建/删除，希望对其下的文件进行进一步的监控，就使用第一条规则来指定具体文件。</p>
+<p>可以通过以下命令来查看所有处于活动状态的规则：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -l</span>
+</code></pre></div><p>可以通过以下命令来删除 <strong>所有</strong> 规则：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -D</span>
+</code></pre></div><p>当确认规则无误之后，可以将它们添加到 <code>/etc/audit/audit.rules</code> 文件末尾：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">-w /etc/passwd -p rwxa
+-w /etc/security/
+</code></pre></div><h3 id="对系统调用的审计">对系统调用的审计</h3>
+<p>通过 <code>-a</code> 选项可以对系统调用进行审计。</p>
+<p>例如，对 <code>chmod</code> 调用进行审计，以检测文件属主的变更：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -a entry,always -S chmod</span>
+</code></pre></div><p>可以通过 <a class="link" href="https://man.archlinux.org/man/syscalls.2"  target="_blank" rel="noopener"
+    >syscalls</a> 页面找到所有系统调用。</p>
+<p>对系统调用进行审计时，可以使用 <code>-F</code> 来添加对某个键值的筛选，例如：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 审计所有第二个参数为 4 的 access 调用</span>
+-a entry,always -S access -F <span class="nv">a1</span><span class="o">=</span><span class="m">4</span>
+<span class="c1"># 审计所有不成功的 open 调用</span>
+-a exit,always -S open -F success!<span class="o">=</span><span class="m">0</span>
+</code></pre></div><p>下面这条规则也使用了 <code>-F</code> 选项，但是它的审计内容较为特殊：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">-a task,always -F <span class="nv">auid</span><span class="o">=</span><span class="m">0</span>
+</code></pre></div><p>当一个进程被创建或克隆时， <em>task</em> 规则就起作用了。在上面这条示例中，我们将选中所有具备 <code>auid=0</code> 的任务，并在它们发生时进行记录。每个进程都会在用户登录时被赋予一个 <em>audit ID</em> ，这一ID不随着用户身份的改变而改变，且子进程会继承父进程的 <code>auid</code> ，通过这个ID我们可以唯一确定原始用户。</p>
+<h3 id="对无用消息的过滤">对无用消息的过滤</h3>
+<p>在日志记录过程中，有必要避免对不重要的消息进行记录，从而既方便我们对日志进行分析，也减小日志文件的体积。</p>
+<p>可以添加如下形式的规则来对部分消息进行过滤：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 以下规则添加在 /etc/audit/rules.d/quiet.rules 文件中</span>
+---
+-A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>SERVICE_START
+-A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>SERVICE_STOP
+-A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>BPF
+</code></pre></div><h2 id="audit-日志">audit 日志</h2>
+<h3 id="日志的基本格式">日志的基本格式</h3>
+<p>默认情况下，audit日志存放在 <code>/var/log/audit</code> 目录下。下面先看一条典型的audit日志示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 命令执行审计</span>
+<span class="nv">type</span><span class="o">=</span>SYSCALL <span class="nv">msg</span><span class="o">=</span>audit<span class="o">(</span>1234874638.599:5207<span class="o">)</span>: <span class="nv">arch</span><span class="o">=</span>c000003e <span class="nv">syscall</span><span class="o">=</span><span class="m">2</span> <span class="nv">success</span><span class="o">=</span>yes <span class="nv">exit</span><span class="o">=</span><span class="m">4</span> <span class="nv">a0</span><span class="o">=</span>62fb60 <span class="nv">a1</span><span class="o">=</span><span class="m">0</span> <span class="nv">a2</span><span class="o">=</span><span class="m">31</span> <span class="nv">a3</span><span class="o">=</span><span class="m">0</span> <span class="nv">items</span><span class="o">=</span><span class="m">1</span> <span class="nv">ppid</span><span class="o">=</span><span class="m">25400</span> <span class="nv">pid</span>
+<span class="o">=</span><span class="m">25616</span> <span class="nv">auid</span><span class="o">=</span><span class="m">0</span> <span class="nv">uid</span><span class="o">=</span><span class="m">0</span> <span class="nv">gid</span><span class="o">=</span><span class="m">0</span> <span class="nv">euid</span><span class="o">=</span><span class="m">0</span> <span class="nv">suid</span><span class="o">=</span><span class="m">0</span> <span class="nv">fsuid</span><span class="o">=</span><span class="m">0</span> <span class="nv">egid</span><span class="o">=</span><span class="m">0</span> <span class="nv">sgid</span><span class="o">=</span><span class="m">0</span> <span class="nv">fsgid</span><span class="o">=</span><span class="m">0</span> <span class="nv">tty</span><span class="o">=</span>pts1 <span class="nv">ses</span><span class="o">=</span><span class="m">1164</span> <span class="nv">comm</span><span class="o">=</span><span class="s2">&#34;less&#34;</span> <span class="nv">exe</span><span class="o">=</span><span class="s2">&#34;/usr/bin/less&#34;</span> <span class="nv">key</span><span class="o">=</span><span class="s2">&#34;doc_log&#34;</span>
+<span class="nv">type</span><span class="o">=</span>CWD <span class="nv">msg</span><span class="o">=</span>audit<span class="o">(</span>1234874638.599:5207<span class="o">)</span>:  <span class="nv">cwd</span><span class="o">=</span><span class="s2">&#34;/root&#34;</span>
+<span class="nv">type</span><span class="o">=</span>PATH <span class="nv">msg</span><span class="o">=</span>audit<span class="o">(</span>1234874638.599:5207<span class="o">)</span>: <span class="nv">item</span><span class="o">=</span><span class="m">0</span> <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;/var/log/audit/audit.log&#34;</span> <span class="nv">inode</span><span class="o">=</span><span class="m">1219041</span> <span class="nv">dev</span><span class="o">=</span>08:06 <span class="nv">mode</span><span class="o">=</span><span class="m">0100644</span> <span class="nv">ouid</span><span class="o">=</span><span class="m">0</span> <span class="nv">ogid</span><span class="o">=</span><span class="m">0</span> <span class="nv">rdev</span><span class="o">=</span>00:00
+</code></pre></div><p>这是执行了命令 <code>less /var/log/audit/audit.log</code> 之后得到的日志，audit通过一事件产生了 <strong>三条</strong> 消息，这三条消息紧密联系，单独拎出任何一条来看都是没有意义的。</p>
+<p>我们逐一解释这些日志中的字段。首先是第一条日志，它呈现了如下的信息：</p>
+<ul>
+<li>
+<p><em>type</em> ：事件的类型。第一条消息中的 <code>type=SYSCALL</code> 表明这一消息是由系统调用触发； <code>CWD</code> 表明这一消息记录了命令执行时的工作目录（current working directory）； <code>PATH</code> 消息记录了传递给系统调用的路径。注意， <code>PATH</code> 消息仅仅是忠实地记录了命令执行时传递的路径参数，对于一个相对路径，我们需要结合 <code>CWD</code> 来分析出绝对路径。</p>
+</li>
+<li>
+<p><em>msg</em> ：包裹在小括号之间的内容，表示消息ID。它由两部分组成，冒号 <code>:</code> 前的部分是UNIX时间戳，冒号后的部分是真实的事件ID。同一个系统调用触发的所有消息都具备相同的ID，便于我们进行关联分析。</p>
+</li>
+<li>
+<p><em>arch</em> ：执行系统调用的CPU架构。在使用 <code>ausearch</code> 命令搜寻日志时（下文会提到），使用 <code>-i</code> 选项来解码这一字段的值。</p>
+</li>
+<li>
+<p><em>syscall</em> ：记录了系统调用的编号，一般从 <code>/usr/include/asm/unistd.h</code> 文件中得出，也因此可能随着架构的不同而改变。本例中， <code>syscall=2</code> 表示 <code>less</code> 程序所使用的 <code>open</code> 系统调用。</p>
+</li>
+<li>
+<p><em>success</em> ：事件是否成功。</p>
+</li>
+<li>
+<p><em>exit</em> ：系统调用的返回值，随着不同系统调用的实现而改变。</p>
+</li>
+<li>
+<p><em>a0~a3</em> ：系统调用的前四个参数，以数字形式呈现。这些值也会随着不同系统调用的实现而不同。在本例中，我们记录到如下的值：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">a0</span><span class="o">=</span>62fb60  	<span class="c1"># 文件路径字符串的地址</span>
+<span class="nv">a1</span><span class="o">=</span><span class="m">0</span> 		<span class="c1"># 标志位</span>
+<span class="nv">a2</span><span class="o">=</span><span class="m">31</span> 		<span class="c1"># 工作模式</span>
+<span class="nv">a3</span><span class="o">=</span>0		<span class="c1"># 未使用</span>
+</code></pre></div></li>
+<li>
+<p><em>items</em> ：传递给本应用的字符串个数。</p>
+</li>
+<li>
+<p><em>ppid</em> ：父进程ID。</p>
+</li>
+<li>
+<p><em>pid</em> ：进程ID。</p>
+</li>
+<li>
+<p><em>auid</em> ：在 <a class="link" href="#%e5%af%b9%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e7%9a%84%e5%ae%a1%e8%ae%a1" >对系统调用的审计</a> 一节中提过的 <em>audit ID</em> ，可以作为用户的标识。</p>
+</li>
+<li>
+<p><em>uid</em> ：启动本进程的用户ID， <code>0</code> 表示root用户。</p>
+</li>
+<li>
+<p><em>gid</em> ：启动本进程的用户组ID。</p>
+</li>
+<li>
+<p><em>euid，suid，fsuid，egid，sgid，fsgid</em> ：略。</p>
+</li>
+<li>
+<p><em>tty</em> ：应用启动时使用的终端，本例中使用了一个 <em>伪终端（pseudoterminal）</em> 。</p>
+</li>
+<li>
+<p><em>ses</em> ：登录会话ID。用户登录时将为这一属性赋值，可以用于将进程活动与某一次登录事件联系起来。</p>
+</li>
+<li>
+<p><em>comm</em> ：任务列表中呈现的应用名称。</p>
+</li>
+<li>
+<p><em>exe</em> ：解析得到的二进制文件路径。</p>
+</li>
+<li>
+<p><em>subj</em> ：记录本进程是否属于某个安全上下文，例如在AppArmor中，如果定义了本进程的安全上下文，则其属性也将得到记录。</p>
+</li>
+<li>
+<p><em>key</em> ：如果需要对大量的文件或目录进行监控，可以在规则中添加这一字段，方便后续使用 <em>ausearch</em> 等工具查找。</p>
+</li>
+</ul>
+<p>第二条日志则呈现了 <code>less</code> 命令执行时的工作目录信息，别无其他意义。</p>
+<p>第三条日志呈现的信息解释如下：</p>
+<ul>
+<li><em>item</em> ：在本例中， <em>item</em> 字段表示 <em>a0</em> 参数，即 <code>SYSCALL</code> 消息中记录的系统调用的第一个参数。如果某个系统调用接收了多个路径参数，就会有更多的 <code>PATH</code> 类型的消息产生。</li>
+<li><em>name</em> ：呈现传递给系统调用的具体路径名称。</li>
+<li><em>inode</em> ：表示与 <em>name</em> 相关的 <em>inode</em> 编号。</li>
+<li><em>dev</em> ：文件存储的具体设备。</li>
+<li><em>mode</em> ：文件访问控制权限的数字表示。在本例中，root用户具有读写的权限、root所在的用户组具有读取文件的权限，而其余的所有用户（组）则完全不具备本文件的访问权限。</li>
+<li><em>ouid、ogid</em> ：指向相关 <em>inode</em> 的UID和GID。</li>
+<li><em>rdev</em> ：本例中没有意义。该字段仅适用于块设备或字符设备，与文件无关。</li>
+</ul>
+<h3 id="日志的搜索与分析">日志的搜索与分析</h3>
+<p>audit框架提供了一些日志查找工具，以便查看系统上发生的一系列事件。</p>
+<h4 id="通过pid">通过pid</h4>
+<p>通过进程id来查看特定事件：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -p 1</span>
+</code></pre></div><p>该命令将呈现所有与ID为1的进程相关的事件。</p>
+<h4 id="通过key">通过key</h4>
+<p>通过 <code>key</code> 来管理事件是audit框架中一个很棒的特性，推荐日常使用。</p>
+<p>可以在规则中使用 <code>-k</code> 选项来为相关事件打上标签，方便后续查找：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa -k KEY_pwd</span>
+</code></pre></div><p>紧接着，查找所有带有键值 <code>KEY_pwd</code> 的事件，ausearch将呈现所有与文件 <code>/etc/passwd</code> 相关的事件：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -k KEY_pwd</span>
+</code></pre></div><h4 id="查看异常事件">查看异常事件</h4>
+<p>方才介绍了 <em>ausearch</em> 的基本用法，而此前提及的 <em>aureport</em> 工具更擅长快速地报告系统上的异常事件，例如，网卡工作在混杂模式、进程或线程由于ENOMEM等错误崩溃推出等等。</p>
+<p>最简单的查看异常的命令是：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># aureport -n</span>
+</code></pre></div><p>也可以使用此工具生成自定义报告，详见 <a class="link" href="https://man.archlinux.org/man/aureport.8"  target="_blank" rel="noopener"
+    >aureport 文档</a> 。</p>
+<h3 id="值得记录的文件或系统调用">值得记录的文件或系统调用</h3>
+<p>始终注意，所有列入审计的文件和系统调用都将产生日志，因此要对日志的数量保持谨慎。一般来说，与安全相关的事件和文件都需要被记录，如IDS、IPS、anti-rootkits等等；与此相对地，对于 <code>write</code> 类型的系统调用就没必要进行记录，否则即便是最微不足道的写入操作都会被记录到日志中。</p>
+<p>人们可以设置一系列复杂的规则来实现对审计事件的精细管控，详见 <a class="link" href="https://man.archlinux.org/man/auditctl.8"  target="_blank" rel="noopener"
+    >auditctl文档</a> 。</p>
+<p>本文中给出两份可用度较高的规则文件 [附件1](#附件1 推荐规则（1）) 和 [附件2](#附件2 推荐规则（2）) ，可以直接将它们复制到 <code>/etc/audit/audit.rules</code> 中。</p>
+<h2 id="远程日志传输">远程日志传输</h2>
+<p>audit框架提供了用于实现日志转发的插件，可以将本地日志转发到远程auditd主机上。</p>
+<h3 id="发送日志">发送日志</h3>
+<p>实现日志的发送，需要具备 <code>audisp-remote</code> 插件，该插件由audit安装包默认自带。通过修改如下文件来激活插件：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audisp/plugins.d/au-remote.conf</span>
+---
+<span class="nv">active</span> <span class="o">=</span> yes
+<span class="nv">direction</span> <span class="o">=</span> out
+<span class="nv">path</span> <span class="o">=</span> /usr/bin/audisp-remote
+<span class="nb">type</span> <span class="o">=</span> always
+<span class="nv">format</span> <span class="o">=</span> string
+</code></pre></div><p>并在如下文件中设置目标主机（即日志发送的对象）：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audisp/audisp-remote.conf</span>
+---
+<span class="nv">remote_server</span> <span class="o">=</span> <span class="o">[</span>domain_name <span class="p">|</span> ip<span class="o">]</span>
+<span class="nv">port</span> <span class="o">=</span> <span class="m">60</span>
+<span class="c1">## localport = optional</span>
+<span class="nv">transport</span> <span class="o">=</span> tcp
+</code></pre></div><h3 id="接收日志">接收日志</h3>
+<p>接受日志的配置较为简单：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audit/auditd.conf</span>
+---
+<span class="nv">tcp_listen_port</span> <span class="o">=</span> <span class="m">60</span>
+<span class="nv">tcp_listen_queue</span> <span class="o">=</span> <span class="m">5</span>
+<span class="nv">tcp_max_per_addr</span> <span class="o">=</span> <span class="m">1</span>
+<span class="c1">## tcp_client_ports = 1024-65535  #optional</span>
+<span class="nv">tcp_client_max_idle</span> <span class="o">=</span> <span class="m">0</span>
+</code></pre></div><h2 id="参考资料">参考资料</h2>
+<p>[1] <a class="link" href="https://wiki.archlinux.org/title/Audit_framework"  target="_blank" rel="noopener"
+    >Audit framework - ArchWiki (archlinux.org)</a></p>
+<p>[2] <a class="link" href="https://documentation.suse.com/sles/11-SP4/html/SLES-all/cha-audit-comp.html"  target="_blank" rel="noopener"
+    >Understanding Linux Audit | Security Guide | SUSE Linux Enterprise Server 11 SP4</a></p>
+<h2 id="附件1-推荐规则1">附件1 推荐规则（1）</h2>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># This file contains the auditctl rules that are loaded</span>
+<span class="c1"># whenever the audit daemon is started via the initscripts.</span>
+<span class="c1"># The rules are simply the parameters that would be passed</span>
+<span class="c1"># to auditctl.</span>
+
+<span class="c1"># First rule - delete all</span>
+-D
+
+<span class="c1"># Increase the buffers to survive stress events.</span>
+<span class="c1"># Make this bigger for busy systems</span>
+-b <span class="m">320</span>
+
+<span class="c1"># Feel free to add below this line. See auditctl man page</span>
+
+-w /etc/passwd -p wa -k passwd_changes
+-w /etc/selinux/ -p wa -k selinux_changes
+-w /sbin/insmod -p x -k module_insertion
+-w /etc/shadow -p wa -k shadow_changes
+-w /etc/sysconfig -p wa -k sysconfig_changes
+-w /etc/audit/audit.rules -p wa -k audit_rules_changes
+-w /etc/audit/auditd.conf -p wa -k audit_conf_changes
+-w /usr/sbin/vpnc -k vpnc_exec -p x
+-w /usr/bin/stunnel -k stunnel_exec -p x
+-w /usr/bin/nc -p x -k ncat_exec
+-w /usr/bin/nmap -p x -k nmap_exec
+-w /usr/bin/sudo -p x -k sudo_exec
+-w /usr/bin/su -p x -k su_exec
+-w /etc/group -p wa -k group_changes
+-w /var/log/wtmp -p w -k wtmp_changes
+-w /var/log/btmp -p w -k btmp_changes
+-w /usr/bin/getent -k getent_exec -p x
+-w /etc/rc.d/init.d -p wa -k initd_changes
+-w /etc/security/opasswd -p wa -k opasswd_changes
+-w /etc/gshadow -p wa -k gshadow_changes
+-w /etc/securetty -p wa -k securetty_changes
+-w /etc/login.defs -p wa -k login_defs_changes
+-w /etc/ld.so.conf -p wa -k ld_so_conf_changes
+-w /etc/sudoers -p wa -k sudoers_changes
+-w /etc/profile -p wa -k profile_changes
+-w /etc/hosts -p wa -k hosts_changes
+-w /etc/inittab -p wa -k inittab_changes
+-w /etc/sysconfig/iptables -p wa -k iptables_changes
+-w /etc/hosts.allow -p wa -k hosts_allow_changes
+-w /etc/hosts.deny -p wa -k hosts_deny_changes
+-w /root/.ssh/authorized_keys -p wa -k authorized_keys_changes
+-w /etc/crontab -p wa -k crontab_changes
+-w /etc/ssh/sshd_config -p wa -k sshd_config_changes
+-a always,exit -F <span class="nv">arch</span><span class="o">=</span>b32 -S ptrace -k process_inject
+-a always,exit -F <span class="nv">arch</span><span class="o">=</span>b64 -S ptrace -k process_inject
+-w /usr/bin/rdesktop -p x -k rdesktop_exec
+-w /etc/exports -p wa -k exports_changes
+-w /lib/modules/ -p wa -k lib_modules_changes
+-w /sbin/iptables-multi -p x -k iptables_exec
+-w /var/spool/cron/root -p wa -k spool_cron_root_changes
+-w /etc/resolv.conf -p wa -k resolv_conf_changes
+-a always,exit -S execve -k execve_event
+-a exit,always -S all -F <span class="nv">euid</span><span class="o">=</span><span class="m">0</span> -F <span class="nv">perm</span><span class="o">=</span>awx -k root-commands
+</code></pre></div><h2 id="附件2-推荐规则2">附件2 推荐规则（2）</h2>
+<p><a class="link" href="https://github.com/Neo23x0/auditd/blob/master/audit.rules"  target="_blank" rel="noopener"
+    >auditd/audit.rules at master · Neo23x0/auditd · GitHub</a></p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/owasp-top102021/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">OWASP Top10（2021）</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DoS——拒绝服务攻击</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">安全岗笔试题——1</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">提权技术--绕过UAC</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-08-25 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

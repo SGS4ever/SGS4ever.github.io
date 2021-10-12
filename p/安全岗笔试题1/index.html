@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='&amp;quot;安全岗笔试题——1&amp;quot;  近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+ 答案  ABD  iOS系统也采用了安全引导链，C错误   以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+ 答案  C  中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。   以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+ 答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar'><title>安全岗笔试题——1</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='安全岗笔试题——1'>
+<meta property='og:description' content='&amp;quot;安全岗笔试题——1&amp;quot;  近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+ 答案  ABD  iOS系统也采用了安全引导链，C错误   以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+ 答案  C  中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。   以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+ 答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2021-01-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-29T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="安全岗笔试题——1">
+<meta name="twitter:description" content="&amp;quot;安全岗笔试题——1&amp;quot;  近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+ 答案  ABD  iOS系统也采用了安全引导链，C错误   以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+ 答案  C  中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。   以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+ 答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" style="background-color: #2a9d8f; color: #fff;">
+                网络安全
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/">安全岗笔试题——1</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jan 29, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>&quot;安全岗笔试题——1&quot;</title></head>
+<body>
+<p>近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。</p>
+<ol start='' >
+<li><p>以下哪些说法是正确的？（）</p>
+<p>A、 iOS系统从iOS6开始引入kernel ASLR安全措施</p>
+<p>B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎</p>
+<p>C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用</p>
+<p>D、 Android4.1 系统默认启用了内存ASLR</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        ABD
+    </p>
+    <p>
+        iOS系统也采用了安全引导链，C错误
+    </p>
+</details>
+</li>
+<li><p>以下哪个工具可以用来运行DDoS攻击？（）</p>
+<p>A、 菜刀</p>
+<p>B、 WSI</p>
+<p>C、 Dosend</p>
+<p>D、 Chkrootkit</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        C
+    </p>
+    <p>
+        中国菜刀是一款专业的网站管理软件；
+        WSI是PHP注入工具，具体可以参考<a href="http://www.doc88.com/p-0671743443993.html">这篇文章</a>；
+        Dosend是一款Linux发包工具，可以用来实现DDoS攻击；
+        chkrootkit是用来检查rootkit的。
+    </p>
+</details>
+</li>
+<li><p>以下哪些服务器曾被发现文件解析漏洞？（）</p>
+<p>A、 Apache</p>
+<p>B、 IIS</p>
+<p>C、 nginx</p>
+<p>D、 squid</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        ABC
+    </p>
+    <p>
+        A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如<code>shell.php.owf.rar</code>，其中<code>.owf</code>和<code>.rar</code>是Apache不可解析的，就将此文件最终解析为<code>shell.php</code>
+    </p>
+    <p>
+        B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为<code>.asp/.asa</code>的文件夹，其内的任何文件都被当成asp文件解析并执行；二是<code>123.asp;.jpg</code>会被解析为<code>123.asp</code>。
+    </p>
+    <p>
+        C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为<code>upupimage.jpg</code>，内容为PHP代码的文件，然后访问<code>upupimage.jpg/.php</code>，在这个目录下就会生成一句话木马<code>shell.php</code>；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&lt;=0.7.65,0.8&lt;=0.0.37。
+    </p>
+    <p>
+        squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。
+    </p>
+</details>
+</li>
+<li><p>以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）</p>
+<p>A、 hackbar</p>
+<p>B、 AWVS</p>
+<p>C、 IBM appsacn</p>
+<p>D、 nmap</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        BC
+    </p>
+    <p>
+        hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。
+    </p>
+</details>
+</li>
+<li><p>黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现：</p>
+<blockquote><p>C:\Users\test&gt;ping <a href='http://www.baidu.com' target='_blank' class='url'>www.baidu.com</a> -n 1
+正在 Ping<a href='http://www.a.shifen.com' target='_blank' class='url'>www.a.shifen.com</a> [14.215.177.38] 具有32字节的数据：
+请求超时</p>
+<p>C:\Users\test&gt;telnet <a href='http://www.baidu.com' target='_blank' class='url'>www.baidu.com</a> 80
+正在链接<a href='http://www.baidu.com' target='_blank' class='url'>www.baidu.com</a>…无法打开到主机的连接。
+在端口 80: 连接失败。</p>
+</blockquote>
+<p>通过如上信息判断，一下哪些反弹shell操作会失败</p>
+<p>A、 Windows/meterpreter/reverse_http</p>
+<p>B、 icmp协议的后门</p>
+<p>C、 windows/meterpreter/reverse_https</p>
+<p>D、 windows/meterpreter.reverse_tcp</p>
+<details>
+ <summary>答案</summary>
+    <p>
+        ABCD
+    </p>
+    <p>
+        IE浏览器使用了代理，可能HTTP协议会受到防火墙限制，故A不对；ping不通百度说明ICMP协议也受影响。故http、https、icmp协议的反弹shell都会失败，D也是不对的，对方挂了代理，telnet不通，只有通过插入挂了代理的IE进程反弹，或者通过代理反弹.
+    </p>
+</details>
+</li>
+<li><p>以下哪些工具可以抓取Windows明文密码？（）</p>
+<p>A、 WCE</p>
+<p>B、 minikatz</p>
+<p>C、 Quarks PWdump</p>
+<p>D、 CAIN</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        AB
+    </p>
+    <p>
+        A、WCE是与gethashes和mimikatz齐名的一款hash管理工具，使用wce进行本地和域的hash注入，可以在高权限下获取明文密码
+    </p>
+    <p>
+        B、法国一个牛B的人写的轻量级调试器，可以帮助安全测试人员抓取Windows密码。mimikatz 2.0版本，抓密码命令更加简单了，新功能还包括能够通过获取的kerberos登录凭据，绕过支持RestrictedAdmin模式的win8或win2012svr的远程终端(RDP)的登陆认证
+    </p>
+    <p>
+        C、一个Win32环境下的系统授权信息导出工具，目前除此之外没有任何一款工具可以导出如此全面的信息，支持这么多的OS版本，且相当稳定。
+    </p>
+    <p>
+        D、CAIN主要用于网络数据嗅探，也带有密码破解功能，但是不能抓取windows明文密码
+    </p>
+</details>
+</li>
+<li><p>iOS平台上常见的Hook框架有（）</p>
+<p>A、 Xposed</p>
+<p>B、 Intent Fuzz</p>
+<p>C、 Drozer</p>
+<p>D、 Substrate</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        D
+    </p>
+    <p>
+        A/ 这个是android的hook框架，有不少开发者发布了不错的框架。
+    </p>
+    <p>
+        B/ 这个是android 应用组件模糊测试框架
+    </p>
+    <p>
+        C/ 这个是android 综合渗透测试平台
+    </p>
+    <p>
+        D/ IOS平台的hook的框架。此外，Cydia Substrate是android上的强大而实用的HOOK工具
+    </p>
+</details>
+</li>
+<li><p>执行<code>nmap 10.5.5.1</code>默认会扫描以下哪个端口（）</p>
+<p>A、 21</p>
+<p>B、 3389</p>
+<p>C、 8080</p>
+<p>D、 1024</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        AC
+    </p>
+    <p>
+        nmap默认扫描选项是对常规端口和服务进行探测。其中常规端口是1000个最可能开放的端口。
+    </p>
+</details>
+</li>
+<li><p>【判断】TCP和UDP相比，TCP传送数据更安全（）</p>
+<details>
+    <summary>答案</summary>
+    <p>
+        错。可靠传输不等于更加安全，两者实际上不存在哪个更安全的对比。
+    </p>
+</details>
+</li>
+
+</ol>
+<h3>题目来源</h3>
+<p>[1] daxi0ng.腾讯2016实习招聘-安全岗笔试题答案详细解释[EB/OL].2019-03-13</p>
+<p><em><a href='https://blog.csdn.net/qq_40989258/article/details/88532712' target='_blank' class='url'>https://blog.csdn.net/qq_40989258/article/details/88532712</a></em></p>
+<p>&nbsp;</p>
+</body>
+</html>
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/owasp-top102021/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">OWASP Top10（2021）</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/audit-%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">audit 简述</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DoS——拒绝服务攻击</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">提权技术--绕过UAC</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-01-29 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

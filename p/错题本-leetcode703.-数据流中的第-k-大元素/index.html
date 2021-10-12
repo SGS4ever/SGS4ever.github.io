@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='不是吧啊Sir，这种题也错？:cry:
+题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
+题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+请实现 KthLargest 类：
+ KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+  输出： [null, 4, 5, 5, 8, 8]
+  示例2
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]'><title>错题本 | LeetCode703. 数据流中的第 K 大元素</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='错题本 | LeetCode703. 数据流中的第 K 大元素'>
+<meta property='og:description' content='不是吧啊Sir，这种题也错？:cry:
+题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
+题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+请实现 KthLargest 类：
+ KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+  输出： [null, 4, 5, 5, 8, 8]
+  示例2
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-02-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-02-11T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="错题本 | LeetCode703. 数据流中的第 K 大元素">
+<meta name="twitter:description" content="不是吧啊Sir，这种题也错？:cry:
+题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
+题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+请实现 KthLargest 类：
+ KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+  输出： [null, 4, 5, 5, 8, 8]
+  示例2
+  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#ac代码1">AC代码1</a></li>
+    <li><a href="#ac代码2">AC代码2</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/">错题本 | LeetCode703. 数据流中的第 K 大元素</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Feb 11, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>不是吧啊Sir，这种题也错？:cry:</p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/">https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/</a></em></p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p>设计一个找到数据流中第 <code>k</code> 大元素的类（class）。注意是排序后的第 <code>k</code> 大元素，不是第 <code>k</code> 个不同的元素。</p>
+<p>请实现 <code>KthLargest</code> 类：</p>
+<ul>
+<li><code>KthLargest(int k, int[] nums)</code> 使用整数 <code>k</code> 和整数流 <code>nums</code> 初始化对象。</li>
+<li><code>int add(int val)</code> 将 <code>val</code> 插入数据流 <code>nums</code> 后，返回当前数据流中第 <code>k</code> 大的元素。</li>
+</ul>
+<p><strong>示例1</strong></p>
+<ul>
+<li>
+<p><strong>输入：</strong> [&ldquo;KthLargest&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;, &ldquo;add&rdquo;]
+[[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]</p>
+</li>
+<li>
+<p><strong>输出：</strong> [null, 4, 5, 5, 8, 8]</p>
+</li>
+</ul>
+<p><strong>示例2</strong></p>
+<ul>
+<li>
+<p><strong>输入：</strong> [&ldquo;KthLargest&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;,&ldquo;add&rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]</p>
+</li>
+<li>
+<p><strong>输出：</strong> [null,-1,0,0,0,1]</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="分析">分析</h2>
+<blockquote>
+<p>啪地一下，我就想到了<em>双堆对顶</em>，很快嗷！</p>
+<p>然而又想复杂了o(╥﹏╥)o。要求第K大数，实际上只需要使用一个<strong>小根堆</strong>，堆中一共有K个元素，堆顶就是目标。</p>
+<p>当然，这K个元素不是随随便便的K个元素，而是将<strong>初始数组</strong>中所有元素都放入小根堆后，逐个弹出，直到只剩K个元素。</p>
+<p>当我们希望添加元素时，首先可以比较此元素与堆顶元素的大小关系，当此元素比堆顶元素小时，不会对前K个大数的顺序产生影响，直接返回堆顶元素即可；当此元素大于堆顶元素，第K大数一定会改变，我们将其放入堆中，再从堆中弹出一个元素，此时的堆中还是K个元素，堆顶元素即为答案。</p>
+</blockquote>
+<blockquote>
+<p>我最开始的想法，<em>双堆对顶</em>又是什么呢？这是一种同时使用小根堆和大根堆来维护整个数组的办法，小根堆<code>larger</code>中的所有元素都比堆顶元素更大，大根堆<code>smaller</code>中的所有元素都比堆顶元素小。这样，任何时刻，数组中的数据被组织如下：</p>
+<p><figure style="flex-grow: 194; flex-basis: 466px">
+		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1.png" data-size="818x421"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1.png"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1_hu75259ae14e64cabcef7466089567601a_25306_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1_hu75259ae14e64cabcef7466089567601a_25306_1024x0_resize_box_2.png 1024w"
+				width="818"
+				height="421"
+				loading="lazy"
+				alt="双堆对顶">
+		</a>
+		
+		<figcaption>双堆对顶</figcaption>
+		
+	</figure></p>
+<p>这种办法可以用于<strong>快速求解数据流的中位数</strong>，是个困难题，我还没做。根据中位数的定义，中间部分的数据正需要满足比左边都大，比右边都小的性质，使用双堆对顶的办法可以在 <em>O(1)</em> 的时间内找到数据流中的中位数。</p>
+<p>这题使用双堆对顶是杀鸡用了牛刀了。将小于第K大数的数据保存在smaller堆中并没有什么意义，只是空耗时间罢了。</p>
+<p>而且，这种办法在额外考虑<strong>初始数组为空</strong>的情况、以及<strong>初始数组的大小小于K</strong>的情况时比较繁琐，我在这里WA了两次:cry:</p>
+</blockquote>
+<h3 id="ac代码1">AC代码1</h3>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">less</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">smaller</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="c1">// larger是个小顶堆，堆顶元素是最小的
+</span><span class="c1"></span>    <span class="c1">// smaller是个大顶堆，堆顶元素是最大的
+</span><span class="c1"></span>    <span class="c1">// 第K大数，表示有K - 1个数比他更大
+</span><span class="c1"></span>    <span class="c1">// 有len - K个数比他更小
+</span><span class="c1"></span>    <span class="c1">// e.g 4,5,8,2中的第三大数
+</span><span class="c1"></span>    <span class="c1">// 有两个比他小，有一个比他大
+</span><span class="c1"></span>    <span class="c1">// 我们以larger.top()为第K大数，则smaller里面始终保持len - K个元素
+</span><span class="c1"></span>    <span class="n">KthLargest</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">nums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">);</span>  <span class="c1">// 放入一个极小值，对第K大数无影响
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">t</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// larger里的所有元素都大于堆顶
+</span><span class="c1"></span>        <span class="c1">// 故保持larger个数为K个，即可从堆顶中获取第K大数
+</span><span class="c1"></span>        <span class="c1">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span class="c1"></span>    <span class="p">}</span>
+
+
+    <span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">larger_not_full</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">())</span>  <span class="c1">// 比第K大数还大，第K大数可能改变
+</span><span class="c1"></span>            <span class="p">{</span>
+                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+                <span class="c1">// cout &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span class="c1"></span>                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span>  <span class="c1">// 插入了一个更小的数，不会改变第K大数
+</span><span class="c1"></span>            <span class="p">{</span>
+                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+                <span class="c1">// cout &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span class="c1"></span>                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+</span><span class="cm"> * Your KthLargest object will be instantiated and called as such:
+</span><span class="cm"> * KthLargest* obj = new KthLargest(k, nums);
+</span><span class="cm"> * int param_1 = obj-&gt;add(val);
+</span><span class="cm"> */</span>
+</code></pre></div><h3 id="ac代码2">AC代码2</h3>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">K</span><span class="p">;</span>
+    <span class="n">KthLargest</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">t</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="c1">// larger里的所有元素都大于堆顶
+</span><span class="c1"></span>        <span class="c1">// 故保持larger个数为K个，即可从堆顶中获取第K大数
+</span><span class="c1"></span>        <span class="c1">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
+</span><span class="c1"></span>    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">())</span>  <span class="c1">// 比第K大数还大，第K大数可能改变
+</span><span class="c1"></span>            <span class="p">{</span>
+                <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span>  <span class="c1">// 插入了一个更小的数，不会改变第K大数
+</span><span class="c1"></span>            <span class="p">{</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+</span><span class="cm"> * Your KthLargest object will be instantiated and called as such:
+</span><span class="cm"> * KthLargest* obj = new KthLargest(k, nums);
+</span><span class="cm"> * int param_1 = obj-&gt;add(val);
+</span><span class="cm"> */</span>
+</code></pre></div><p>优化掉<code>smaller</code>堆之后，表现会好一些。</p>
+<p><figure style="flex-grow: 140; flex-basis: 336px">
+		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2.png" data-size="781x557"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2.png"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2_hu74eac785200942c4917c424e31b82985_34333_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2_hu74eac785200942c4917c424e31b82985_34333_1024x0_resize_box_2.png 1024w"
+				width="781"
+				height="557"
+				loading="lazy"
+				alt="Performance-Final">
+		</a>
+		
+		<figcaption>Performance-Final</figcaption>
+		
+	</figure></p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 力扣官方题解.数据流中的第K大元素[EB/OL].2021-02-11</p>
+<p><em><a href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/">https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/</a></em></p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E9%94%99%E9%A2%98%E6%9C%AC/">错题本</a>
+        
+            <a href="/tags/leetcode/">LeetCode</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode80. 删除有序数组中的重复项 II</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode567. 字符串的排列</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode888. 公平的糖果棒交换</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode1232. 缀点成线</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode947. 移除最多的同行或同列石头</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-02-11 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='愉快的五四青年节从遇到一道Hard的动态规划题结束~
+题目链接：1473. 粉刷房子 III - 力扣（LeetCode） (leetcode-cn.com)
+题目 在一个小城市里，有 m 个房子排成一排，你需要给每个房子涂上 n 种颜色之一（颜色编号为 1 到 n ）。有的房子去年夏天已经涂过颜色了，所以这些房子不需要被重新涂色。
+我们将连续相同颜色尽可能多的房子称为一个街区。（比方说 houses = [1,2,2,3,3,2,1,1] ，它包含 5 个街区 [{1}, {2,2}, {3,3}, {2}, {1,1}] 。）
+给你一个数组 houses ，一个 m * n 的矩阵 cost 和一个整数 target ，其中：
+houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色。 cost[i][j]：是将第 i 个房子涂成颜色 j&#43;1 的花费。 请你返回房子涂色方案的最小总花费，使得每个房子都被涂色后，恰好组成 target 个街区。如果没有可用的涂色方案，请返回 -1 。
+示例1
+ 输入： houses = [0,0,0,0,0], cost = [[1,10],[10,1],[10,1],[1,10],[5,1]], m = 5, n = 2, target = 3 输出： 9 解释： 房子涂色方案为 [1,2,2,1,1]，此方案包含 target = 3 个街区，分别是 [{1}, {2,2}, {1,1}]。涂色的总花费为 (1 &#43; 1 &#43; 1 &#43; 1 &#43; 5) = 9。  示例2:'><title>难题本 | LeetCode1473. 粉刷房子 III</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode1473. 粉刷房子 III'>
+<meta property='og:description' content='愉快的五四青年节从遇到一道Hard的动态规划题结束~
+题目链接：1473. 粉刷房子 III - 力扣（LeetCode） (leetcode-cn.com)
+题目 在一个小城市里，有 m 个房子排成一排，你需要给每个房子涂上 n 种颜色之一（颜色编号为 1 到 n ）。有的房子去年夏天已经涂过颜色了，所以这些房子不需要被重新涂色。
+我们将连续相同颜色尽可能多的房子称为一个街区。（比方说 houses = [1,2,2,3,3,2,1,1] ，它包含 5 个街区 [{1}, {2,2}, {3,3}, {2}, {1,1}] 。）
+给你一个数组 houses ，一个 m * n 的矩阵 cost 和一个整数 target ，其中：
+houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色。 cost[i][j]：是将第 i 个房子涂成颜色 j&#43;1 的花费。 请你返回房子涂色方案的最小总花费，使得每个房子都被涂色后，恰好组成 target 个街区。如果没有可用的涂色方案，请返回 -1 。
+示例1
+ 输入： houses = [0,0,0,0,0], cost = [[1,10],[10,1],[10,1],[1,10],[5,1]], m = 5, n = 2, target = 3 输出： 9 解释： 房子涂色方案为 [1,2,2,1,1]，此方案包含 target = 3 个街区，分别是 [{1}, {2,2}, {1,1}]。涂色的总花费为 (1 &#43; 1 &#43; 1 &#43; 1 &#43; 5) = 9。  示例2:'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-05-04T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-05-04T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="难题本 | LeetCode1473. 粉刷房子 III">
+<meta name="twitter:description" content="愉快的五四青年节从遇到一道Hard的动态规划题结束~
+题目链接：1473. 粉刷房子 III - 力扣（LeetCode） (leetcode-cn.com)
+题目 在一个小城市里，有 m 个房子排成一排，你需要给每个房子涂上 n 种颜色之一（颜色编号为 1 到 n ）。有的房子去年夏天已经涂过颜色了，所以这些房子不需要被重新涂色。
+我们将连续相同颜色尽可能多的房子称为一个街区。（比方说 houses = [1,2,2,3,3,2,1,1] ，它包含 5 个街区 [{1}, {2,2}, {3,3}, {2}, {1,1}] 。）
+给你一个数组 houses ，一个 m * n 的矩阵 cost 和一个整数 target ，其中：
+houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色。 cost[i][j]：是将第 i 个房子涂成颜色 j&#43;1 的花费。 请你返回房子涂色方案的最小总花费，使得每个房子都被涂色后，恰好组成 target 个街区。如果没有可用的涂色方案，请返回 -1 。
+示例1
+ 输入： houses = [0,0,0,0,0], cost = [[1,10],[10,1],[10,1],[1,10],[5,1]], m = 5, n = 2, target = 3 输出： 9 解释： 房子涂色方案为 [1,2,2,1,1]，此方案包含 target = 3 个街区，分别是 [{1}, {2,2}, {1,1}]。涂色的总花费为 (1 &#43; 1 &#43; 1 &#43; 1 &#43; 5) = 9。  示例2:">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#ac代码">AC代码</a></li>
+    <li><a href="#参考文章">参考文章</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/">难题本 | LeetCode1473. 粉刷房子 III</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">May 04, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>愉快的五四青年节从遇到一道Hard的动态规划题结束~</p>
+<p>题目链接：<a class="link" href="https://leetcode-cn.com/problems/paint-house-iii/"  target="_blank" rel="noopener"
+    >1473. 粉刷房子 III - 力扣（LeetCode） (leetcode-cn.com)</a></p>
+<h2 id="题目">题目</h2>
+<p>在一个小城市里，有 <code>m</code> 个房子排成一排，你需要给每个房子涂上 <code>n</code> 种颜色之一（颜色编号为 <code>1</code> 到 <code>n</code> ）。有的房子去年夏天已经涂过颜色了，所以这些房子不需要被重新涂色。</p>
+<p>我们将连续相同颜色尽可能多的房子称为一个街区。（比方说 <code>houses = [1,2,2,3,3,2,1,1]</code> ，它包含 <code>5</code> 个街区  <code>[{1}, {2,2}, {3,3}, {2}, {1,1}]</code> 。）</p>
+<p>给你一个数组 <code>houses</code> ，一个 <code>m * n</code> 的矩阵 <code>cost</code> 和一个整数 <code>target</code> ，其中：</p>
+<p><code>houses[i]</code>：是第 <code>i</code> 个房子的颜色，<code>0</code> 表示这个房子还没有被涂色。
+<code>cost[i][j]</code>：是将第 <code>i</code> 个房子涂成颜色 <code>j+1</code> 的花费。
+请你返回房子涂色方案的最小总花费，使得每个房子都被涂色后，恰好组成 <code>target</code> 个街区。如果没有可用的涂色方案，请返回 <code>-1</code> 。</p>
+<p><strong>示例1</strong></p>
+<ul>
+<li><strong>输入：</strong> houses = [0,0,0,0,0], cost = [[1,10],[10,1],[10,1],[1,10],[5,1]], m = 5, n = 2, target = 3</li>
+<li><strong>输出：</strong> 9</li>
+<li><strong>解释：</strong> 房子涂色方案为 [1,2,2,1,1]，此方案包含 target = 3 个街区，分别是 [{1}, {2,2}, {1,1}]。涂色的总花费为 (1 + 1 + 1 + 1 + 5) = 9。</li>
+</ul>
+<p><strong>示例2:</strong></p>
+<ul>
+<li><strong>输入：</strong> houses = [0,2,1,2,0], cost = [[1,10],[10,1],[10,1],[1,10],[5,1]], m = 5, n = 2, target = 3</li>
+<li><strong>输出：</strong> 11</li>
+<li><strong>解释：</strong> 有的房子已经被涂色了，在此基础上涂色方案为 [2,2,1,2,2]，此方案包含 target = 3 个街区，分别是 [{2,2}, {1}, {2,2}]。给第一个和最后一个房子涂色的花费为 (10 + 1) = 11。</li>
+</ul>
+<p><strong>数据范围</strong></p>
+<ul>
+<li><code>m == houses.length == cost.length</code></li>
+<li><code>n == cost[i].length</code></li>
+<li><code>1 &lt;= m &lt;= 100</code></li>
+<li><code>1 &lt;= n &lt;= 20</code></li>
+<li><code>1 &lt;= target &lt;= m</code></li>
+<li><code>0 &lt;= houses[i] &lt;= n</code></li>
+<li><code>1 &lt;= cost[i][j] &lt;= 10^4</code></li>
+</ul>
+<h2 id="分析">分析</h2>
+<p>又是一道全无思路的题目。</p>
+<p>显然本题需要使用动态规划，查看提示，建议我们使用一个三维数组 <code>dp[i][j][k]</code> ，其中 <code>i</code> 表示当前房子的下标， <code>j</code> 表示当前房子应该上的颜色， <code>k</code> 表示算上当前的房子一共有多少街区。 <code>dp[i][j][k]</code> 表示所需的最少花费。</p>
+<p>我们与参考文章 [1] 使用相同的办法来对这些下标进行表示：</p>
+<ul>
+<li>房屋编号从 <code>0 ~ m - 1</code></li>
+<li>颜色编号从 <code>0 ~ n - 1</code></li>
+<li>街区编号从 <code>0 ~ target - 1</code></li>
+<li>对应颜色编号， <code>houses</code> 数组的值全部 <strong>减一</strong> ，则 <strong>使用 <code>-1</code> 来表示原本没有上色的房子</strong> 。</li>
+</ul>
+<p>已经给定了这些数据和下标的含义之后，再来进行思考就比较简单了。使用本文的代码来进行分析，对于下标 <code>idx</code> 的房子以及它被刷上的颜色 <code>color</code> 和现在已有的街区数 <code>district</code> ，我们发现 <code>dp[idx][color][district]</code> 的数值应该取决于当前房屋 <strong>和上一间房屋</strong> 的颜色，假如：</p>
+<ul>
+<li>当前房屋的颜色和上一间房屋的颜色 <code>j0</code> 相同，街区数量不会变化，则 <code>dp[idx][color][district] == dp[idx - 1][color][district]</code> ；</li>
+<li>当前房屋颜色和上一间房屋的颜色 <code>j0</code> 不同，街区数量应该加一，则 <code>dp[idx][color][district] == dp[idx - 1][j0][district - 1]</code> ；</li>
+</ul>
+<p>当然，房子原本的颜色也会影响 <code>dp</code> 值的变化，具体实际上只有两方面：</p>
+<ul>
+<li>房子原本没有颜色，即按照上面的规则 <code>houses[idx] == -1</code> ，那么上面得到的 <code>dp</code> 值全都要加上 <code>cost[idx][color]</code> ；</li>
+<li>房子原本有颜色，如果此颜色与 <code>color</code> 不同，那么这种上色方案无论如何是不可行的；如果此颜色与 <code>color</code> 相同，那么 <code>dp</code> 值就是我们上面分析的情况。</li>
+</ul>
+<p>把这些分析加以实现，我们应该：</p>
+<pre><code class="language-伪代码" data-lang="伪代码">- 枚举房子下标 --&gt; idx: 0 ~ m - 1
+	- 枚举上色方案 --&gt; color: 0 ~ n - 1
+		- 如果房子有颜色且不同于 color，继续枚举颜色
+		- 运行至此有两种情况：房子没有颜色，或房子有颜色且颜色就是 color
+		- 如果房子下标 idx 是 0， 意味着没有上一个房子，dp[idx][color][0] = houses[idx] == -1 ? cost[0][color] : 0;继续枚举颜色
+		- 否则开始枚举街区 --&gt; district: 0 ~ target - 1
+			- 枚举上一间房子的颜色 --&gt; j0: 0 ~ n - 1
+				- 如果上一间房子的颜色和现在的颜色相同，设置 dp 值  // [1]
+				- 如果上一间房子的颜色和现在的颜色不同，设置 dp 值  // [2]
+			- 如果房子原本没有颜色，得到的 dp[idx][color][district] 要加上 cost[idx][color]
+</code></pre><p>根据上面的实现来写代码，应该要注意几个要点：</p>
+<ul>
+<li>在伪代码 [1] 和 [2] 处，由于我们在进行上一间房子颜色的枚举，不能简单地设置 <code>dp[idx][color][district] == dp[idx - 1][j0][district]</code> ，而是应该根据 <code>dp</code> 的定义，取其中的最小值，即AC代码中所做的取 <code>min</code> 。</li>
+<li>由于我们枚举的街区 <code>district</code> 从 <code>0</code> 开始，对于当前房屋和上一间房屋颜色不同的情况，需要判断街区数大于 <code>0</code> 才有意义。</li>
+<li>注意 <code>cost[idx]</code> 添加的位置，枚举完上一间房子的颜色之后就进行添加，因为对于所有的 <code>district</code> 都要考虑这一情况。</li>
+<li>我们如何表示 <code>dp</code> 的初始值：由于随时可能在一个未被修改的 <code>dp</code> 上加上我们的 <code>cost</code> ，那么它的初始值就不能设置得太大，在具体实现中，我们重新定义了一下 <code>INT_MAX</code> 。</li>
+</ul>
+<h3 id="ac代码">AC代码</h3>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="cp">#undef INT_MAX
+</span><span class="cp">#define INT_MAX 0x3f3f3f3f
+</span><span class="cp"></span><span class="c1">// #define DEBUG
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">minCost</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">houses</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">cost</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">district</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span>
+            <span class="n">dp</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">)));</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="nl">hc</span> <span class="p">:</span> <span class="n">houses</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">hc</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">color</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">color</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// this color can not be applied
+</span><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">houses</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">houses</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="n">color</span><span class="p">)</span>
+                    <span class="k">continue</span><span class="p">;</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">houses</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">?</span> <span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">color</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="c1">// enum districts
+</span><span class="c1"></span>                <span class="k">for</span> <span class="p">(</span><span class="n">district</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">district</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">;</span> <span class="n">district</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">// enum the color of house[idx - 1] !!
+</span><span class="c1"></span>                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j0</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j0</span><span class="o">++</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="c1">// same color
+</span><span class="c1"></span>                        <span class="k">if</span> <span class="p">(</span><span class="n">j0</span> <span class="o">==</span> <span class="n">color</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="c1">// the district will not change
+</span><span class="c1"></span>                            <span class="n">dp</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="n">district</span><span class="p">]</span> <span class="o">=</span> 
+                                <span class="n">min</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="n">district</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j0</span><span class="p">][</span><span class="n">district</span><span class="p">]);</span>
+                        <span class="p">}</span>
+                        <span class="k">else</span>
+                        <span class="p">{</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">district</span><span class="p">)</span>
+                                <span class="n">dp</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="n">district</span><span class="p">]</span> <span class="o">=</span> 
+                                    <span class="n">min</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="n">district</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j0</span><span class="p">][</span><span class="n">district</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">houses</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="n">district</span><span class="p">]</span> <span class="o">+=</span> <span class="n">cost</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">];</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="cp"># ifdef DEBUG
+</span><span class="cp"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;House &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">idx</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">color</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">color</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\t&#39;</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Color &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">color</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">district</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">district</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">;</span> <span class="n">district</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="n">district</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="cp">#endif
+</span><span class="cp"></span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">color</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">color</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">color</span><span class="p">][</span><span class="n">target</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ans</span> <span class="o">==</span> <span class="n">INT_MAX</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><p><figure style="flex-grow: 272; flex-basis: 653px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/1.png" data-size="485x178"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/1.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/1_hu09a2c75aa3c00fdaebf8ab88cfc00200_15890_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/1_hu09a2c75aa3c00fdaebf8ab88cfc00200_15890_1024x0_resize_box_2.png 1024w"
+				width="485"
+				height="178"
+				loading="lazy"
+				alt="Performance">
+		</a>
+		
+		<figcaption>Performance</figcaption>
+		
+	</figure></p>
+<h3 id="参考文章">参考文章</h3>
+<p>[1] 力扣官方题解.粉刷房子 III[EB/OL].2021-05-02</p>
+<p><em><a href="https://leetcode-cn.com/problems/paint-house-iii/solution/fen-shua-fang-zi-iii-by-leetcode-solutio-powb/">https://leetcode-cn.com/problems/paint-house-iii/solution/fen-shua-fang-zi-iii-by-leetcode-solutio-powb/</a></em></p>
+<p>[2] 宫水三叶.【宫水三叶】三维动态规划，以及其「状态定义」由来[EB/OL].2020-05-04</p>
+<p><em><a href="https://leetcode-cn.com/problems/paint-house-iii/solution/gong-shui-san-xie-san-wei-dong-tai-gui-h-ud7m/">https://leetcode-cn.com/problems/paint-house-iii/solution/gong-shui-san-xie-san-wei-dong-tai-gui-h-ud7m/</a></em></p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">难题本</a>
+        
+            <a href="/tags/leetcode/">LeetCode</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1713. 得到子序列的最少操作次数</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode面试题 08.13. 堆箱子</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode220. 存在重复元素 III</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode208. 实现 Trie (前缀树)</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-05-04 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

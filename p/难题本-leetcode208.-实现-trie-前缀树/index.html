@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/
+定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目  Trie（发音类似 &amp;ldquo;try&amp;rdquo;）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+请你实现 Trie 类：
+  Trie() 初始化前缀树对象。
+  void insert(String word) 向前缀树中插入字符串 word 。
+  boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+  boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+  示例
+  输入：
+[&amp;ldquo;Trie&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;startsWith&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;]
+[[], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;]]
+  输出：'><title>难题本 | LeetCode208. 实现 Trie (前缀树)</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode208. 实现 Trie (前缀树)'>
+<meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/
+定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目  Trie（发音类似 &amp;ldquo;try&amp;rdquo;）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+请你实现 Trie 类：
+  Trie() 初始化前缀树对象。
+  void insert(String word) 向前缀树中插入字符串 word 。
+  boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+  boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+  示例
+  输入：
+[&amp;ldquo;Trie&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;startsWith&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;]
+[[], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;]]
+  输出：'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-04-14T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-14T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="难题本 | LeetCode208. 实现 Trie (前缀树)">
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/
+定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
+题目  Trie（发音类似 &amp;ldquo;try&amp;rdquo;）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+请你实现 Trie 类：
+  Trie() 初始化前缀树对象。
+  void insert(String word) 向前缀树中插入字符串 word 。
+  boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+  boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+  示例
+  输入：
+[&amp;ldquo;Trie&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;startsWith&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;]
+[[], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;]]
+  输出：">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#原理--插入">原理 —— 插入</a></li>
+    <li><a href="#原理--查询">原理 —— 查询</a></li>
+    <li><a href="#原理--构造">原理 —— 构造</a></li>
+    <li><a href="#ac代码1">AC代码1</a></li>
+    <li><a href="#ac代码2">AC代码2</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/">难题本 | LeetCode208. 实现 Trie (前缀树)</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Apr 14, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/implement-trie-prefix-tree/">https://leetcode-cn.com/problems/implement-trie-prefix-tree/</a></em></p>
+<p>定场句：<em>人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。</em></p>
+<h2 id="题目">题目</h2>
+<blockquote>
+<p><code>Trie</code>（发音类似 &ldquo;try&rdquo;）或者说 <strong>前缀树</strong> 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。</p>
+<p>请你实现 <code>Trie</code> 类：</p>
+<ul>
+<li>
+<p><code>Trie()</code> 初始化前缀树对象。</p>
+</li>
+<li>
+<p><code>void insert(String word)</code> 向前缀树中插入字符串 <code>word</code> 。</p>
+</li>
+<li>
+<p><code>boolean search(String word)</code> 如果字符串 <code>word</code> 在前缀树中，返回 <code>true</code>（即，在检索之前已经插入）；否则，返回 <code>false</code> 。</p>
+</li>
+<li>
+<p><code>boolean startsWith(String prefix)</code> 如果之前已经插入的字符串 <code>word</code> 的前缀之一为 <code>prefix</code> ，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+</li>
+</ul>
+<p><strong>示例</strong></p>
+<ul>
+<li>
+<p><strong>输入：</strong></p>
+<p>[&ldquo;Trie&rdquo;, &ldquo;insert&rdquo;, &ldquo;search&rdquo;, &ldquo;search&rdquo;, &ldquo;startsWith&rdquo;, &ldquo;insert&rdquo;, &ldquo;search&rdquo;]</p>
+<p>[[], [&ldquo;apple&rdquo;], [&ldquo;apple&rdquo;], [&ldquo;app&rdquo;], [&ldquo;app&rdquo;], [&ldquo;app&rdquo;], [&ldquo;app&rdquo;]]</p>
+</li>
+<li>
+<p><strong>输出：</strong></p>
+<p>[null, null, true, false, true, null, true]</p>
+</li>
+<li>
+<p><strong>解释：</strong></p>
+<p>Trie trie = new Trie();</p>
+<p>trie.insert(&ldquo;apple&rdquo;);</p>
+<p>trie.search(&ldquo;apple&rdquo;);   // 返回 True</p>
+<p>trie.search(&ldquo;app&rdquo;);     // 返回 False</p>
+<p>trie.startsWith(&ldquo;app&rdquo;); // 返回 True</p>
+<p>trie.insert(&ldquo;app&rdquo;);</p>
+<p>trie.search(&ldquo;app&rdquo;);     // 返回 True</p>
+</li>
+<li>
+<p><strong>数据范围：</strong></p>
+<p><code>1 &lt;= word.length, prefix.length &lt;= 2000</code></p>
+<p><code>word</code> 和 <code>prefix</code> 仅由小写英文字母组成</p>
+<p><code>insert</code>、<code>search</code> 和 <code>startsWith</code> 调用次数 <strong>总计</strong> 不超过 <code>30000</code> 次</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="分析">分析</h2>
+<p>是一个全新的知识点呢 (#^.^#)</p>
+<p>前缀树 <code>Trie</code> 是一种高效的用于信息检索（information re<strong>trie</strong>val）的数据结构，可以将搜索复杂度降到最低（关键字长度）。如果我们要在一堆字符串中寻找一个子串，常见的使用 <em>二分搜索树</em>  的思路时间复杂度为 <em>O(M * log N)</em> ，其中 <code>M</code> 是最长子串的长度，<code>N</code> 是现有的字符串个数。而使用前缀树，时间复杂度可以降为 <em>O(M)</em> 。</p>
+<h3 id="原理--插入">原理 —— 插入</h3>
+<p>前缀树是一颗 <strong>多叉树</strong> ，它的每一个节点可以分出若干个子节点，每一条边表示一个字符。你可以发现，从根节点开始向下走去，每走过一条边我们就得到了一个字符，遍历到一个 <strong>终止节点</strong> 时，我们就得到了一个 <strong>单词（字符串）</strong> 。</p>
+<p>比如，单词 <code>dog</code> 就能组成这么一颗前缀树：</p>
+<p><figure style="flex-grow: 103; flex-basis: 249px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png" data-size="532x512"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_1024x0_resize_box_2.png 1024w"
+				width="532"
+				height="512"
+				loading="lazy"
+				alt="Trie &ldquo;dog&rdquo;">
+		</a>
+		
+		<figcaption>Trie “dog”</figcaption>
+		
+	</figure></p>
+<p>从根节点向下遍历，到了节点 <code>3</code> ，它应该被标记为 <strong>终止节点</strong> ，我们就得到了 <code>dog</code> 。</p>
+<p>现在我们希望插入一个单词 <code>doge</code> ，要怎么做呢？</p>
+<p>我们还是进行遍历，从根节点出发，依次获取 <code>d</code> 、 <code>o</code> 、 <code>g</code> ，来到了节点 <code>3</code> ，只需要再插入一条边表示 <code>e</code> 就可以了！</p>
+<p><figure style="flex-grow: 90; flex-basis: 217px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png" data-size="568x628"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_1024x0_resize_box_2.png 1024w"
+				width="568"
+				height="628"
+				loading="lazy"
+				alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo;">
+		</a>
+		
+		<figcaption>Trie “dog” &amp; “doge”</figcaption>
+		
+	</figure></p>
+<p>在上面的图中，我标出了 <strong>终止节点</strong> ，当我们遍历到 <code>3</code> 或 <code>4</code> 时，我们知道它们表示的是一个切实存在的字符串；而当我们遍历到 <code>2</code> 或 <code>1</code> 时，我们知道 <code>do</code> 或者 <code>d</code> 不是一个切实存在的字符串，它们只是某个单词的前缀而已。</p>
+<p>从这个模拟中可以看到， <code>doge</code> 和 <code>dog</code> 使用的是同一些字母前缀，这就是 <em>前缀树</em> 的意思。</p>
+<p>我们再插入一个单词 <code>do</code> ，这时根据我们遍历的结果发现，到达节点 <code>2</code> 的路径就能表示这个单词！那么我们不用再申请一个新的节点，直接将 <code>2</code> 标记为 <strong>终止节点</strong> 即可。</p>
+<p><figure style="flex-grow: 94; flex-basis: 226px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png" data-size="593x627"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_1024x0_resize_box_2.png 1024w"
+				width="593"
+				height="627"
+				loading="lazy"
+				alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo; & &ldquo;do&rdquo;">
+		</a>
+		
+		<figcaption>Trie “dog” &amp; “doge” &amp; “do”</figcaption>
+		
+	</figure></p>
+<p>最后，插入一个 <code>bye</code> 吧，相信读者已经能够模拟出这个过程了！（也可以点开下面的动图看看答案）</p>
+<p><figure style="flex-grow: 170; flex-basis: 409px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5.gif" data-size="1124x659"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5.gif"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_480x0_resize_box.gif 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_1024x0_resize_box.gif 1024w"
+				width="1124"
+				height="659"
+				loading="lazy"
+				alt="Trie.insert(&ldquo;bye&rdquo;)">
+		</a>
+		
+		<figcaption>Trie.insert(“bye”)</figcaption>
+		
+	</figure></p>
+<p><figure style="flex-grow: 163; flex-basis: 393px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png" data-size="1017x621"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_1024x0_resize_box_2.png 1024w"
+				width="1017"
+				height="621"
+				loading="lazy"
+				alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo; & &ldquo;do&rdquo; & &ldquo;bye&rdquo;">
+		</a>
+		
+		<figcaption>Trie “dog” &amp; “doge” &amp; “do” &amp; “bye”</figcaption>
+		
+	</figure></p>
+<h3 id="原理--查询">原理 —— 查询</h3>
+<p>我们能够插入一个单词（字符串），当然也就需要能够查询某个单词。对于一个给出的字符串 <code>s</code> ，我们从 <code>Trie</code> 的根节点出发，沿着它的每一个字符向下遍历，如果能够到达一个 <strong>终止节点</strong> ，那么这个字符串 <code>s</code> 就存在于我们的集合中，否则它就是不存在的。</p>
+<p>例如我们要查询单词 <code>bye</code> ，从根节点出发，沿着每个字符对应的路径依次来到了 <code>5</code> 、 <code>6</code> 、 <code>7</code> ，最后我们发现节点 <code>7</code> 是个终止节点，太好了，这个单词就是存在的。</p>
+<p>而当我们要查询单词 <code>by</code> ，从根节点出发，依次来到 <code>5</code> 、 <code>6</code> ,节点 <code>6</code> 不是终止节点，那么这个单词就不存在于我们的集合中。</p>
+<h3 id="原理--构造">原理 —— 构造</h3>
+<p>现在，我们能够将一个单词插入 <code>Trie</code> 中，也能查询一个单词是否存在于 <code>Trie</code> 中了，最后的问题是，如何构造这颗前缀树呢？</p>
+<p>从上面的例子中，你应该想到，这颗前缀树应该是一颗 <strong>多叉树</strong> ，正如一开始所说的那样，而且，它每一个节点所分出来的边必须能够表示我们的 <strong>字符集</strong> ，也就是说，假如我们的字符集记做 <code>Σ</code> ，那么前缀树的每个节点就应该有 <code>len(Σ)</code> 数量的边。在这道题中（你可能已经忘了题目了~），每个节点分出来的边数量就是 <code>26</code> ，表示 <code>a ~ z</code> 是也。</p>
+<h4 id="方法一">方法一</h4>
+<p>如果我们对节点进行编号，就可以用一个 <strong>二维数组</strong> 来保存整个 <code>Trie</code> 了，我们声明一个 <code>trie[NODE_NUM][26]</code> ，第一个下标表示节点编号，第二个下标表示分出来的26条边，每个边表示一个字母。</p>
+<p>如何表示终止节点呢？很简单，再声明一个 <code>mark[NODE_NUM]</code> 即可，对于任意一个节点的编号 <code>p</code> ，当 <code>mark[p]</code> 为 <code>1</code> 的时候表示它是终止节点。</p>
+<p>根节点编号是 <code>0</code> ，对于我们上面的例子来说，<code>bye</code> 这个单词对应的路径是这样的：</p>
+<ul>
+<li><code>trie[0][1] = 5</code></li>
+<li><code>trie[5][24] = 6</code></li>
+<li><code>trie[6][4] = 7</code></li>
+</ul>
+<p>每一个字符 <code>ch</code> 对应的第二个下标就简单地用 <code>ch - 'a'</code>来表示就行了。</p>
+<h4 id="方法二">方法二</h4>
+<p>第一种构造方法胜在简单，节点下标和延伸出的边含义很直观，但是所耗费的空间比较大，即使某条路径是不存在的（如单词 <code>hello</code> ），它所对应的空间还是存在于数组中（只不过都被写为了 <code>0</code> 来表示不存在）。</p>
+<p>如果我们用链表的思想 + 动态申请内存的办法，效果则大不相同。使用一个数据结构来表示节点，它含有一个长度为 <code>26</code> 的 <strong>指针数组</strong> ，每一个单元表示对应的边，指向下一个节点。同时，这个结构顺便定义了一个成员变量来表示该节点是否为终止节点，这种办法就简洁多了。</p>
+<h3 id="ac代码1">AC代码1</h3>
+<p>此代码对应构造方法1</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">tire</span><span class="p">[</span><span class="mi">100000</span><span class="p">][</span><span class="mi">26</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">mark</span><span class="p">[</span><span class="mi">100000</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
+    <span class="cm">/** Initialize your data structure here. */</span>
+    <span class="n">Trie</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">tire</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tire</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">mark</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">mark</span><span class="p">));</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/** Inserts a word into the trie. */</span>
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ch</span> <span class="p">:</span> <span class="n">word</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>  <span class="c1">// 编号从1开始
+</span><span class="c1"></span>                <span class="n">k</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">mark</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/** Returns if the word is in the trie. */</span>
+    <span class="kt">bool</span> <span class="nf">search</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ch</span> <span class="p">:</span> <span class="n">word</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mark</span><span class="p">[</span><span class="n">p</span><span class="p">])</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/** Returns if there is any word in the trie that starts with the given prefix. */</span>
+    <span class="kt">bool</span> <span class="nf">startsWith</span><span class="p">(</span><span class="n">string</span> <span class="n">prefix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ch</span> <span class="p">:</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">tire</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+</span><span class="cm"> * Your Trie object will be instantiated and called as such:
+</span><span class="cm"> * Trie* obj = new Trie();
+</span><span class="cm"> * obj-&gt;insert(word);
+</span><span class="cm"> * bool param_2 = obj-&gt;search(word);
+</span><span class="cm"> * bool param_3 = obj-&gt;startsWith(prefix);
+</span><span class="cm"> */</span>
+</code></pre></div><h3 id="ac代码2">AC代码2</h3>
+<p>此代码对应构造方法2</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">typedef</span> <span class="k">struct</span> <span class="nc">n</span> <span class="p">{</span>
+        <span class="k">struct</span> <span class="nc">n</span><span class="o">*</span> <span class="n">childen</span><span class="p">[</span><span class="mi">26</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">mark</span><span class="p">;</span>
+    <span class="p">}</span> <span class="n">Node</span><span class="p">,</span> <span class="o">*</span><span class="n">PNode</span><span class="p">;</span>
+    <span class="n">PNode</span> <span class="n">root</span><span class="p">;</span>
+    <span class="cm">/** Initialize your data structure here. */</span>
+    <span class="n">Trie</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">(</span><span class="o">*</span><span class="n">root</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/** Inserts a word into the trie. */</span>
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">PNode</span> <span class="n">p</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ch</span> <span class="p">:</span> <span class="n">word</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">p</span><span class="o">-&gt;</span><span class="n">mark</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">mark</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/** Returns if the word is in the trie. */</span>
+    <span class="kt">bool</span> <span class="nf">search</span><span class="p">(</span><span class="n">string</span> <span class="n">word</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">PNode</span> <span class="n">p</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ch</span> <span class="p">:</span> <span class="n">word</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">mark</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/** Returns if there is any word in the trie that starts with the given prefix. */</span>
+    <span class="kt">bool</span> <span class="nf">startsWith</span><span class="p">(</span><span class="n">string</span> <span class="n">prefix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">PNode</span> <span class="n">p</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ch</span> <span class="p">:</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">).</span><span class="n">childen</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**
+</span><span class="cm"> * Your Trie object will be instantiated and called as such:
+</span><span class="cm"> * Trie* obj = new Trie();
+</span><span class="cm"> * obj-&gt;insert(word);
+</span><span class="cm"> * bool param_2 = obj-&gt;search(word);
+</span><span class="cm"> * bool param_3 = obj-&gt;startsWith(prefix);
+</span><span class="cm"> */</span>
+</code></pre></div><p><figure style="flex-grow: 382; flex-basis: 917px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png" data-size="791x207"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_1024x0_resize_box_2.png 1024w"
+				width="791"
+				height="207"
+				loading="lazy"
+				alt="Performance——方法2">
+		</a>
+		
+		<figcaption>Performance——方法2</figcaption>
+		
+	</figure></p>
+<p><figure style="flex-grow: 423; flex-basis: 1016px">
+		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png" data-size="868x205"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_1024x0_resize_box_2.png 1024w"
+				width="868"
+				height="205"
+				loading="lazy"
+				alt="Performance Compare">
+		</a>
+		
+		<figcaption>Performance Compare</figcaption>
+		
+	</figure></p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 向前走别回头.字典树（前缀树）[EB/OL].2018-08-24</p>
+<p><em><a href="https://blog.csdn.net/weixin_39778570/article/details/81990417">https://blog.csdn.net/weixin_39778570/article/details/81990417</a></em></p>
+<p>[2] GeeksforGeeks.Trie | (Insert and Search)[EB/OL].2019-09-04</p>
+<p><em><a href="https://www.geeksforgeeks.org/trie-insert-and-search/">https://www.geeksforgeeks.org/trie-insert-and-search/</a></em></p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/">难题本</a>
+        
+            <a href="/tags/leetcode/">LeetCode</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1713. 得到子序列的最少操作次数</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode面试题 08.13. 堆箱子</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1473.-%E7%B2%89%E5%88%B7%E6%88%BF%E5%AD%90-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1473. 粉刷房子 III</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode220. 存在重复元素 III</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-04-14 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

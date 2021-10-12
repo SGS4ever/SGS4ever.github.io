@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='这段期间没学到任何完整的、值得记录的东西，因此好久没有更新博客了，凑巧中午一边喝大红袍一边搞出了一点东西，虽然不太完整，也不妨一记。
+最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
+由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
+答案就是文件锁。
+ 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
+显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
+于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
+本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
+这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
+ 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
+首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
+既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
+在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
+该API详见此文档。
+我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
+const char* logPath = &amp;#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&amp;#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
+ 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;amp;overlapped)) { DWORD err = GetLastError(); printf(&amp;#34;Error %i\n&amp;#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。'><title>进程间文件同步写</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='进程间文件同步写'>
+<meta property='og:description' content='这段期间没学到任何完整的、值得记录的东西，因此好久没有更新博客了，凑巧中午一边喝大红袍一边搞出了一点东西，虽然不太完整，也不妨一记。
+最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
+由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
+答案就是文件锁。
+ 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
+显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
+于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
+本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
+这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
+ 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
+首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
+既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
+在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
+该API详见此文档。
+我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
+const char* logPath = &amp;#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&amp;#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
+ 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;amp;overlapped)) { DWORD err = GetLastError(); printf(&amp;#34;Error %i\n&amp;#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='学习' /><meta property='article:published_time' content='2020-09-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-27T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="进程间文件同步写">
+<meta name="twitter:description" content="这段期间没学到任何完整的、值得记录的东西，因此好久没有更新博客了，凑巧中午一边喝大红袍一边搞出了一点东西，虽然不太完整，也不妨一记。
+最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
+由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
+答案就是文件锁。
+ 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
+显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
+于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
+本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
+这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
+ 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
+首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
+既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
+在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
+该API详见此文档。
+我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
+const char* logPath = &amp;#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&amp;#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
+ 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;amp;overlapped)) { DWORD err = GetLastError(); printf(&amp;#34;Error %i\n&amp;#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents"></nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/">进程间文件同步写</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Sep 27, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>这段期间没学到任何完整的、值得记录的东西，因此好久没有更新博客了，凑巧中午一边喝大红袍一边搞出了一点东西，虽然不太完整，也不妨一记。</p>
+<p>最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。</p>
+<p>由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？</p>
+<p>答案就是<strong>文件锁</strong>。</p>
+<ol>
+<li>锁</li>
+</ol>
+<blockquote>
+<p><strong>互斥锁</strong>是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望<strong>进程1写完之后再让进程2写</strong>，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&hellip;50,101,102&hellip;</p>
+<p>显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。</p>
+<p>于是操作系统为我们提供了<strong>互斥锁</strong>，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。</p>
+<p>本篇中的<strong>文件锁</strong>其实就是<em>作用在文件上的互斥锁</em>。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为<strong>无法获得文件锁</strong>而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。</p>
+<p>这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。</p>
+</blockquote>
+<ol start="2">
+<li>创建文件</li>
+</ol>
+<blockquote>
+<p>初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以<code>C++</code>为主体，但是<strong>核心部分完全兼容C语言</strong>。</p>
+<p>首先要明确一点，<strong>C++的文件流操作无法实现文件锁</strong>。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。</p>
+<p>既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。</p>
+<p>在这里，由于WindowsAPI提供的文件锁函数需要一个<code>HANDLE</code>类型作为参数，我们只能使用<code>CreateFile</code>函数去创建文件了。</p>
+<p>该API详见<a class="link" href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea"  target="_blank" rel="noopener"
+    >此文档</a>。</p>
+<p>我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
+<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span>
+    <span class="n">logPath</span><span class="p">,</span>
+    <span class="n">GENERIC_WRITE</span><span class="p">,</span>
+    <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="n">OPEN_ALWAYS</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">0</span>
+<span class="p">);</span>
+</code></pre></div><p>值得注意的是CreateFileA的参数<code>OPEN_ALWAYS</code>，该参数指定了文件的打开方式：<strong>当文件不存在时，创建它；当文件存在时，打开它。</strong></p>
+</blockquote>
+<ol start="3">
+<li>文件上锁</li>
+</ol>
+<blockquote>
+<p>文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，<strong>为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁</strong>。这里使用Windows提供的一个关键函数<code>LockFileEx()</code>。</p>
+<p>该API详见<!-- raw HTML omitted -->此文档<!-- raw HTML omitted --></p>
+<p>我们使用以下几句话为文件上了个锁，这里的<code>overlapped</code>变量是API要求我们传入的，没有很大的用处，将其置零即可。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
+<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>	<span class="c1">// 上锁的字节数，没有很大的意义，非零即可。
+</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
+<span class="p">{</span>
+	<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>当文件上锁失败，<code>if</code>判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被<strong>阻塞</strong>而非直接报错。在我的试验中，进入这个分支的情况是<strong>第一步CreateFile的时候得到了一个无效的句柄</strong>，而非无法获取当前文件的锁。</p>
+<p><code>LickFileEx()</code>函数的第二个参数比较关键，当它被指定为<code>LOCKFILE_FAIL_IMMEDIATELY</code> 的时候会直接返回失败，而不是阻塞当前进程。在这里，我们当然不选这个参数。</p>
+<p>文件上锁成功之后，就可以进行文件的写入了。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">else</span>
+<span class="p">{</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+	<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 1 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+    <span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span class="c1"></span>	<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>
+	<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+	<span class="n">getchar</span><span class="p">();</span>	<span class="c1">// 在此处停止，先不释放文件锁
+</span><span class="c1"></span>	<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
+	<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>将以上的三个部分结合起来，就是第一个进程的代码：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
+	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+		<span class="n">OPEN_ALWAYS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+	<span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
+	<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
+	<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+		<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 1 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+        <span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span class="c1"></span>		<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>
+		<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+		<span class="n">getchar</span><span class="p">();</span>	<span class="c1">// 在此处停止，先不释放文件锁
+</span><span class="c1"></span>		<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
+		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></blockquote>
+<ol start="4">
+<li>第二个进程</li>
+</ol>
+<blockquote>
+<p>第二个进程被我们用来验证这个锁的可行性，即当第一个进程为文件上了锁，且还没释放的时候，第二个进程究竟能否对文件进行写入。</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
+	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+		<span class="n">OPEN_ALWAYS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+	<span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
+	<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
+	<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Get lock.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+		<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 2 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+		<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>		<span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span><span class="c1"></span>		<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+		<span class="c1">// getchar();	// 在此处停止，先不释放文件锁
+</span><span class="c1"></span>		<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
+		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+</code></pre></div></blockquote>
+<ol start="5">
+<li>验证</li>
+</ol>
+<blockquote>
+<ul>
+<li>首先运行第一个进程，它将在<code>getchar()</code>函数部分停止，此时还没有释放文件锁；</li>
+<li>转为运行第二个进程，此时它无法对文件进行上锁操作；</li>
+<li>在第一个进程窗口按下任意键，它将释放文件锁，并关闭文件句柄；</li>
+<li>观察第二个进程输出，发现它已经得到文件锁，并在文件中写入了对应信息。</li>
+</ul>
+<p><figure style="flex-grow: 262; flex-basis: 629px">
+		<a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1.png" data-size="742x283"><img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1.png"
+				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1_hu7c5e8510ad0a4f5e67c1aa655a5c3ef3_10788_480x0_resize_box_2.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1_hu7c5e8510ad0a4f5e67c1aa655a5c3ef3_10788_1024x0_resize_box_2.png 1024w"
+				width="742"
+				height="283"
+				loading="lazy"
+				alt="先后打开两个进程">
+		</a>
+		
+		<figcaption>先后打开两个进程</figcaption>
+		
+	</figure></p>
+<p><figure style="flex-grow: 259; flex-basis: 623px">
+		<a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2.png" data-size="940x362"><img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2.png"
+				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2_huc066464f6cc7570c8afb77e6bbf0c26a_16971_480x0_resize_box_2.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2_huc066464f6cc7570c8afb77e6bbf0c26a_16971_1024x0_resize_box_2.png 1024w"
+				width="940"
+				height="362"
+				loading="lazy"
+				alt="第一个进程释放锁">
+		</a>
+		
+		<figcaption>第一个进程释放锁</figcaption>
+		
+	</figure></p>
+<p><figure style="flex-grow: 241; flex-basis: 579px">
+		<a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3.png" data-size="657x272"><img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3.png"
+				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3_hu88acb6cf79108b7b53f541bdc2d08309_10184_480x0_resize_box_2.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3_hu88acb6cf79108b7b53f541bdc2d08309_10184_1024x0_resize_box_2.png 1024w"
+				width="657"
+				height="272"
+				loading="lazy"
+				alt="文件内容实现同步">
+		</a>
+		
+		<figcaption>文件内容实现同步</figcaption>
+		
+	</figure></p>
+</blockquote>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">秋招 | 一些知识点</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1713. 得到子序列的最少操作次数</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode面试题 08.13. 堆箱子</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2020-09-27 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

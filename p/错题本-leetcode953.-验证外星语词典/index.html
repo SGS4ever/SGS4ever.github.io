@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
+题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
+解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
+错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+AC代码：
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组  for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比  { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &amp;gt; 0) // cmp返回正数，前者比后者大  { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低  } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !'><title>错题本 | LeetCode953. 验证外星语词典</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953.-%E9%AA%8C%E8%AF%81%E5%A4%96%E6%98%9F%E8%AF%AD%E8%AF%8D%E5%85%B8/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='错题本 | LeetCode953. 验证外星语词典'>
+<meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
+题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
+解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
+错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+AC代码：
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组  for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比  { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &amp;gt; 0) // cmp返回正数，前者比后者大  { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低  } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953.-%E9%AA%8C%E8%AF%81%E5%A4%96%E6%98%9F%E8%AF%AD%E8%AF%8D%E5%85%B8/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2021-01-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-12T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="错题本 | LeetCode953. 验证外星语词典">
+<meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
+题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
+解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
+错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+AC代码：
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组  for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比  { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &amp;gt; 0) // cmp返回正数，前者比后者大  { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低  } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents"></nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953.-%E9%AA%8C%E8%AF%81%E5%A4%96%E6%98%9F%E8%AF%AD%E8%AF%8D%E5%85%B8/">错题本 | LeetCode953. 验证外星语词典</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jan 12, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/verifying-an-alien-dictionary/">https://leetcode-cn.com/problems/verifying-an-alien-dictionary/</a></em></p>
+<p>题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。</p>
+<p>解题思路：定义一个数组<code>order_rank[26]</code>，给定某个字符<code>c</code>, <code>order_rank['a' - c]</code>表示该字符在order中的位置。</p>
+<p>错误记录：程序第<code>32</code>行，原本写作：<code>while (words1[idx] == words2[idx])</code>，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的<code>\0</code>符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。</p>
+<p>更正：循环中判断两个字符的终止，改为<code>while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != '\0' &amp;&amp; words2[idx] != '\0')</code>。</p>
+<p>AC代码：</p>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">order_rank</span><span class="p">[</span><span class="mi">26</span><span class="p">];</span>
+    <span class="kt">bool</span> <span class="nf">isAlienSorted</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">,</span> <span class="n">string</span> <span class="n">order</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">ite</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">ret</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">set_rank</span><span class="p">(</span><span class="n">order</span><span class="p">);</span>  <span class="c1">// 设置order_rank数组
+</span><span class="c1"></span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">ite</span> <span class="o">=</span> <span class="n">words</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">ite</span> <span class="o">!=</span> <span class="n">words</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">ite</span><span class="p">)</span>  <span class="c1">// 两两对比
+</span><span class="c1"></span>        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ite</span> <span class="o">!=</span> <span class="n">words</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="o">*</span><span class="n">ite</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">ite</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1">// cmp返回正数，前者比后者大
+</span><span class="c1"></span>                <span class="p">{</span>
+                    <span class="n">ret</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">set_rank</span><span class="p">(</span><span class="n">string</span> <span class="n">order</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">;</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">order_rank</span><span class="p">[</span><span class="n">order</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>  <span class="c1">// 得到每个字母的顺序，rank越小，出现越早，等级越低
+</span><span class="c1"></span>        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">string</span> <span class="n">words1</span><span class="p">,</span> <span class="n">string</span> <span class="n">words2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">words1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="n">words2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">words1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">words2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="o">++</span><span class="n">idx</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 循环结束，word1[idx] != words2[idx]
+</span><span class="c1"></span>        <span class="c1">// 分三种情况
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">words1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>  <span class="c1">// words1到达末尾
+</span><span class="c1"></span>        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">words2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  <span class="c1">// word1 &lt; words2
+</span><span class="c1"></span>        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">words2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>  <span class="c1">// words2 到达末尾
+</span><span class="c1"></span>        <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// word1 &gt; words2
+</span><span class="c1"></span>        <span class="p">}</span>
+        <span class="k">else</span>  <span class="c1">// 出现不相等，比较两者字符的rank，越低的越小
+</span><span class="c1"></span>            <span class="k">return</span> <span class="n">order_rank</span><span class="p">[</span><span class="n">words1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">order_rank</span><span class="p">[</span><span class="n">words2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">];</span>
+            <span class="c1">// words1[idx]的rank更小，返回负数
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+</section>
+
+    
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">秋招 | 一些知识点</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode1713.-%E5%BE%97%E5%88%B0%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode1713. 得到子序列的最少操作次数</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode面试题 08.13. 堆箱子</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode363.-%E7%9F%A9%E5%BD%A2%E5%8C%BA%E5%9F%9F%E4%B8%8D%E8%B6%85%E8%BF%87-k-%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E5%80%BC%E5%92%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">难题本 | LeetCode363. 矩形区域不超过 K 的最大数值和</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-01-12 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

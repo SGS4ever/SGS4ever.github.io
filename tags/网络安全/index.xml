@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>网络安全 on XR_G&#39;s Blog</title>
+    <link>https://xrg.fj.cn/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</link>
+    <description>Recent content in 网络安全 on XR_G&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 29 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OWASP Top10（2021）</title>
+      <link>https://xrg.fj.cn/p/owasp-top102021/</link>
+      <pubDate>Wed, 29 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/owasp-top102021/</guid>
+      <description>2021版本的OWASP Top10已经出炉，目前处于同行评审阶段。本博客上已有2017版本的归纳总结，考虑到后面几年时间内，该版本（2021版）的Top10将可能对行业产生较大的影响，现单列一篇，总结其内容。
+ 截至本文发布，该版本已经定稿
+ 0 总览 新版本相较于2017版，引入了3个新类别（Insecure Design、Software and Data Integrity Failures、SSRF），修改了原有4个类的名称，以及进行了一些类别的整合。
+变化
+这一版Top10综合考虑了大数据和行业调查的结果；由于安全人员需要对大数据分析得到的漏洞进行验证和测试，为了保证结论的与时俱进，该机构对一线安全人员进行了问卷调查，由他们来对大数据分析的结果进行补充。
+1 Broken Access Control 失效的访问控制 是原榜单的 No. 5 ，现在来到了第一位。在 秋招 | 一些知识点 (gitee.io) 这篇文章中已经对这一安全问题进行了解释，在此不妨再重复一遍。
+访问控制策略使得所有用户都只能在其对应的权限之下行动，而失效的访问控制将导致未授权信息的读取、修改、销毁，或导致用户执行其权限之外的功能函数。一般的访问控制漏洞包括以下几点：
+ 攻击者可以通过修改URL、应用内部状态、HTML页面或使用API攻击工具来绕过访问控制检查； 允许攻击者将数据库主键设置为其他用户，从而导致查看或修改其他用户的信息； 提权。未登录时能够执行已登录用户的操作，或已登录用户执行管理员操作； 修改元数据，例如JSON Web Token（JWT）的重放或伪造，cookie或隐藏元数据字段的伪造，从而进行提权； CORS（跨域资源共享）配置不当，从而导致未授权的API调用； 在未登录状态下通过目录遍历找到了需要登录才能访问的界面，或同理找到了管理员界面。  防护措施 ：
+ 只开放公共资源，其余资源默认禁止访问； 只实现一种访问控制机制，贯彻落实到整个应用中； 访问控制模型要明确每一条记录的拥有者，不允许用户随便创建、读取、更新、删除记录； 记录失败的访问控制，并及时告警。  2 Cryptographic Failures 密码算法失效 旧称 敏感数据泄露 ，是原榜单的 No. 3 ，现在来到了第二位。敏感数据泄露是现象而非本质，新版本将其表达修改为更加接近问题根源的形式。
+人们总是需要考虑数据传输、存储、处理过程中的保护需求，诸如口令、信用卡号、个人信息等数据需要提供额外的保护；一般来说，只要是法律规定的敏感数据都需要进行严密的保护。参照欧盟的GDPR、金融业的PCI DSS等文件，数据保护要考虑如下的问题：
+ 数据明文明文传输问题； 在默认配置或较老的代码中使用了脆弱的密码算法； 使用了默认的/脆弱的/重复使用的密钥，或密钥没有得到妥善的保管； 没有强制进行加密； 客户端没有对服务端证书进行验证。  防护措施 ：</description>
+    </item>
+    
+    <item>
+      <title>audit 简述</title>
+      <link>https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/</link>
+      <pubDate>Wed, 25 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/</guid>
+      <description>什么是audit Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。
+简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。
+而较为系统地说，audit框架的组件结构如图所示：
+img
+安装 内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 CONFIG_AUDIT 。
+我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：
+img
+用户层的audit服务可以通过普通的软件安装方式获取，可以使用 systemctl 或 service 命令来控制服务的启停。
+audit内核审计的消息可以由应用或系统活动来触发，而 audit daemon（audit守护进程） 是audit框架中的重要组成部分，它负责处理内核生成的消息，例如将这些消息写入日志中或选择性地忽略。
+我们可以通过若干命令和文件来控制 audit daemon ：
+ auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
+audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
+通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
+对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：</description>
+    </item>
+    
+    <item>
+      <title>DoS——拒绝服务攻击</title>
+      <link>https://xrg.fj.cn/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/</guid>
+      <description>网络安全理论复习开始了！
+今天从最简单的开始，目标是在寒假期间整理完成《网络安全》这门课所涉及的知识。希望本系列文章能以清晰的思路将安全理论表述出来。
+DoS Denial of Service，拒绝服务，是现代网络安全领域很常见的一种攻击。所谓拒绝服务，就是通过一系列手段使得原本正常运行的服务器无法再为用户的请求提供服务与应答，从而使目标业务停滞。
+我们经常能看到拒绝服务的例子：使用”呼死你“软件不断地拨打某人的电话，则其他人正常呼叫的时候他永远是占线的状态；网络”水军“控评，正常的评论和留言就无法被看到；黄牛使用恶意的抢票软件抢占所有电影票，使得正常渠道无法获得``````
+在计算机网络的世界中，拒绝服务攻击可以是非常粗暴的物理攻击：砸毁服务器、切断网线等；更为常见且稍微有点技术含量的是利用计算机本身的漏洞，构造恶意的网络请求来使目标系统崩溃、主机宕机、重启等。
+下面介绍一些常见的DoS攻击手法。
+Ping of Death Ping of Death（死亡之Ping）的原理是构造一个超大的IP包来使目标主机瘫痪。在详细解释这个手法之前，需要从ICMP协议入手，介绍Ping的基本知识。
+ICMP 网际控制报文协议（ICMP）用于让主机或路由器报告差错和异常情况。ICMP报文包含在IP数据报中，作为IP数据报的数据部分，加上IP首部发送出去，因此，ICMP是一个网络层协议。
+ICMP报文的种类有两种，ICMP差错报告报文和ICMP询问报文。
+ICMP差错报告报文用于目标主机或到目标主机路径上的路由器向源主机报告差错和异常情况，共有5种类型：
+ 终点不可达。 源点抑制。由于拥塞而丢弃数据报时，要求源主机减小发送速率。 时间超过。 参数问题。路由器或目的主机收到的数据报首部中有的字段不正确。 改变路由（重定向）。路由器把重定向信息发给主机，下一次使用更好的路由。  ICMP询问报文有4种类型：
+ 回送请求和应答。主机向目标发送ICMP请求，如果途中没有异常，则目标收到消息后恢复ICMP响应、 时间戳请求和应答。测试来回一次的传输时间。主机填充原始时间戳，接收方受到后填充时间戳返回。 掩码地址请求和回答。 路由器询问和通告。  PING PING工作在应用层。它直接使用网络层的ICMP询问报文，而未使用传输层的TCP或UDP。如果一台主机能PING通另一台主机，证明至少存在着一条可用的物理通路。
+Ping of Death 死亡之Ping攻击利用了计算机实现IP协议时存在的缺陷。早期操作系统处理IP分组时，只开辟了64KB的缓冲区用来存放收到的数据包。如果攻击者故意在ICMP Echo（即PING数据报）之后附加非常多的冗余信息，使最终的IP包的大小超过65535字节的上限，接收方在处理这么大的IP包时就会产生内存分配错误，引起系统崩溃、挂起或重启。
+可以看到这种攻击的实现主要是由于IP协议栈的漏洞，那为什么叫做死亡之Ping呢？因为使用PING工具太容易完成这种攻击，以至于它也成为了这种攻击的首选武器。当然，除了PING之外的任何能够构造超大IP包的程序都能实现这个攻击。
+Ping of Death攻击不好预防，因为IP存在分组机制，每个IP包看起来都非常正常。最好的办法是在系统实现层面进行完善，使内核不再对超过规定长度的包进行重组。
+TearDrop 又是IP协议实现的问题。故事从IP分片讲起。
+分片 我们知道，数据链路层的每个数据报能够承载的数据量是有上限的，这个上限称为最大传送单元（MTU）。因为IP数据报被封装在数据链路层的数据报中，因此链路层的MTU严格地限制着IP数据报的长度。IP包传送的路径上，有许许多多的链路，可能使用不同的链路层协议，而同时也可能有大小不一的MTU。当IP数据报的总长度大于链路MTU时，需要能够将IP数据报中的数据分装在两个或多个较小的IP数据报中，然后再作为链路层数据进行传送。这些较小的数据报称为片。
+片在目的地网络层被重新组装。对于一大堆杂乱无章的片，我们如何正确地重装成一个个独立的IP数据报呢？
+IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：
+IP Header
+第二行的标识字段占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。
+标志位有3比特。实际上只有后面2个比特有意义。它们分别是：
+ MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&amp;rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。  片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。</description>
+    </item>
+    
+    <item>
+      <title>安全岗笔试题——1</title>
+      <link>https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/</link>
+      <pubDate>Fri, 29 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/</guid>
+      <description>&amp;quot;安全岗笔试题——1&amp;quot;  近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+ 答案  ABD  iOS系统也采用了安全引导链，C错误   以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+ 答案  C  中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。   以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+ 答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar</description>
+    </item>
+    
+    <item>
+      <title>提权技术--绕过UAC</title>
+      <link>https://xrg.fj.cn/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/</guid>
+      <description>最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。
+话不多说，总结本次的提权办法——绕过UAC。
+1 UAC  UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。
+然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。
+当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。
+如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。
+不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。
+ 2 绕过UAC  根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：
+ 该函数首选验证路径是否在白名单中 接着将结果传递给consent.exe进程 该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认 UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。  对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。
+ 2.1 基于白名单的Bypass　UAC  有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。
+针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。
+我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：
+#include &amp;lt;Windows.h&amp;gt; BOOL SetReg(char* lpszExePath) { HKEY hKey = NULL; // 创建项  ::RegCreateKeyEx(HKEY_CURRENT_USER, &amp;#34;Software\\Classes\\mscfile\\Shell\\Open\\Command&amp;#34;, 0, NULL, 0, KEY_WOW64_64KEY | KEY_ALL_ACCESS, NULL, &amp;amp;hKey, NULL); // 设置键值  ::RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)lpszExePath, (1 + ::lstrlen(lpszExePath))); // 关闭注册表  ::RegCloseKey(hKey); return TRUE; } int main() { BOOL bRet = FALSE; PVOID OldValue = NULL; // 关闭文件重定位  ::Wow64DisableWow64FsRedirection(&amp;amp;OldValue); // 修改注册表，设置我们的程序为启动目标  bRet = SetReg(&amp;#34;F:\\RemoteCtrl_Win10.</description>
+    </item>
+    
+  </channel>
+</rss>
