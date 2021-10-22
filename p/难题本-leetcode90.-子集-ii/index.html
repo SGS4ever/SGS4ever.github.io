@@ -297,7 +297,8 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/subsets-ii/">https://leetcode-cn.com/problems/subsets-ii/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/subsets-ii/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/subsets-ii/</a></em></p>
 <h2 id="题目">题目</h2>
 <p>给你一个整数数组 <code>nums</code> ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。</p>
 <p>解集 不能 包含重复的子集。返回的解集中，子集可以按 <strong>任意顺序</strong> 排列。</p>
@@ -331,7 +332,7 @@
 <p>第三个元素同理。</p>
 <p><figure style="flex-grow: 188; flex-basis: 452px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/1.png" data-size="1087x577"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/1_huc2368015d188f5d2c1896a53cb739bda_38503_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/1_huc2368015d188f5d2c1896a53cb739bda_38503_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/1_huc2368015d188f5d2c1896a53cb739bda_38503_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/1_huc2368015d188f5d2c1896a53cb739bda_38503_1024x0_resize_box_3.png 1024w"
 				width="1087"
 				height="577"
 				loading="lazy"
@@ -345,7 +346,7 @@
 <p>这种做法的正确性是 <del>不会证明</del> 理所当然的。</p>
 <p>实际上，根据这种做法我们可以AC掉 <a class="link" href="https://leetcode-cn.com/problems/subsets/"  target="_blank" rel="noopener"
     >LeetCode78. 子集</a> 。</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// LeetCode 78
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// LeetCode 78
 </span><span class="c1"></span><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">subsets</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
@@ -375,7 +376,7 @@
 <p>在上面的做法中，重复数据产生的答案会有相当一部分重复，我们考虑集合 <code>[1, 2, 2]</code> ：</p>
 <p><figure style="flex-grow: 184; flex-basis: 442px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/2.png" data-size="1050x570"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/2_hu5145aff31931efcbcc896d046966e4cc_39175_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/2_hu5145aff31931efcbcc896d046966e4cc_39175_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/2_hu5145aff31931efcbcc896d046966e4cc_39175_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/2_hu5145aff31931efcbcc896d046966e4cc_39175_1024x0_resize_box_3.png 1024w"
 				width="1050"
 				height="570"
 				loading="lazy"
@@ -390,7 +391,7 @@
 <p>答案就是 <strong>上一步新加入的子集</strong> ！</p>
 <p><figure style="flex-grow: 188; flex-basis: 453px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/3.png" data-size="1092x578"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/3_hucf0f37569e7baab63debaa2da63c5c3e_38954_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/3_hucf0f37569e7baab63debaa2da63c5c3e_38954_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/3_hucf0f37569e7baab63debaa2da63c5c3e_38954_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/3_hucf0f37569e7baab63debaa2da63c5c3e_38954_1024x0_resize_box_3.png 1024w"
 				width="1092"
 				height="578"
 				loading="lazy"
@@ -405,7 +406,7 @@
 <p>于是，使用一个变量 <code>start</code> 来记录本轮需要合并的子集起点，当当前的数是重复的， <code>start</code> 就被设置为 <code>sze</code> ，然后更新新的 <code>sze</code> ，否则 <code>start</code> 直接设置为 <code>0</code> 。</p>
 </blockquote>
 <h3 id="ac代码">AC代码</h3>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">subsetsWithDup</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">res</span><span class="p">;</span>
@@ -439,7 +440,7 @@
 <span class="p">};</span>
 </code></pre></div><p><figure style="flex-grow: 154; flex-basis: 371px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/4.png" data-size="636x411"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/4_hud53bead5b182e9cf2bd20233bf8e50a8_24111_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/4_hud53bead5b182e9cf2bd20233bf8e50a8_24111_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/4_hud53bead5b182e9cf2bd20233bf8e50a8_24111_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode90.-%E5%AD%90%E9%9B%86-ii/4_hud53bead5b182e9cf2bd20233bf8e50a8_24111_1024x0_resize_box_3.png 1024w"
 				width="636"
 				height="411"
 				loading="lazy"

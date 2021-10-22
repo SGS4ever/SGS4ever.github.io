@@ -259,7 +259,8 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/">https://leetcode-cn.com/problems/contains-duplicate-iii/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/</a></em></p>
 <p><em>这是个中等题？</em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
@@ -302,7 +303,7 @@
 <p>记住，是 <strong>第一个大于</strong> <code>nums[i] - t</code> 的元素！</p>
 <p>非常不错地，<code>set.lower_bound()</code> 干的就是这份工作。</p>
 <h4 id="ac代码1">AC代码1</h4>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">bool</span> <span class="n">containsNearbyAlmostDuplicate</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">set</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
@@ -338,7 +339,7 @@
 </ul>
 <p><figure style="flex-grow: 243; flex-basis: 583px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1.png" data-size="450x185"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_1024x0_resize_box_3.png 1024w"
 				width="450"
 				height="185"
 				loading="lazy"
@@ -364,7 +365,7 @@
 <p>进行了理论上的证明，我们可以再来看看直观的模拟，设 <code>t = 3</code> ，我们希望找到距离 <strong>不大于3</strong> 的一对数，根据上面的分析，我们应该计算 <code>nums[i] / (3 + 1)</code> 的值。</p>
 <p><figure style="flex-grow: 462; flex-basis: 1109px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2.png" data-size="1350x292"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_1024x0_resize_box_3.png 1024w"
 				width="1350"
 				height="292"
 				loading="lazy"
@@ -381,7 +382,7 @@
 <p>你会发现，引入了负数之后，如果还是计算 <code>n / (t + 1)</code> 的话，会出现一些尴尬的情况，还是以 <code>t = 3</code> 为例：</p>
 <p><figure style="flex-grow: 372; flex-basis: 893px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3.png" data-size="1042x280"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_1024x0_resize_box_3.png 1024w"
 				width="1042"
 				height="280"
 				loading="lazy"
@@ -400,7 +401,7 @@
 <p>首先，负数和正数都可能计算出编号为 <code>0</code> 的桶，我们直接令 <strong>负数</strong> 的计算结果 <strong>减一</strong> ，这样做对于我们的桶编号没有影响，但是可以把负数的计算结果和正数的计算结果分开。</p>
 <p><figure style="flex-grow: 380; flex-basis: 914px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4.png" data-size="1055x277"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_1024x0_resize_box_3.png 1024w"
 				width="1055"
 				height="277"
 				loading="lazy"
@@ -414,7 +415,7 @@
 <p>这样， <code>-1 ~ -4</code> 就都属于同一个桶中了。</p>
 <p><figure style="flex-grow: 337; flex-basis: 808px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5.png" data-size="1001x297"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_1024x0_resize_box_3.png 1024w"
 				width="1001"
 				height="297"
 				loading="lazy"
@@ -427,7 +428,7 @@
 <hr>
 <p>综合以上分析，我们在具体实现中使用一个 <code>map&lt;int, int&gt;</code> 来保存 <strong>桶编号 —— 数值</strong> 这一映射，遍历数组，计算对应数值的桶编号，查看 <code>map</code> 中是否已经有了相同编号或相邻编号的桶；根据题意，我们一次只能保存 <code>k</code> 个桶，那么只需要重新计算边界数值对应的桶编号，将其删除之后再继续进行循环。</p>
 <h4 id="ac代码2">AC代码2</h4>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">getID</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span>
     <span class="p">{</span>
@@ -483,11 +484,14 @@
 </code></pre></div><p>表现烂爆，就不放图了。一些题解中使用 <code>map.count()</code> 来判断桶是否存在，我使用 <code>map.find()</code> ，这样代码就冗长了一些。不过既然本题的核心算法实现了，其余细节了解便好。</p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.存在重复元素 III[EB/OL].2021-04-17</p>
-<p><em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/">https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/</a></em></p>
 <p>[2] 宫水三叶.【宫水三叶】一题双解：「滑动窗口 &amp; 二分」&amp;「桶排序」解法[EB/OL].2021-04-17</p>
-<p><em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/">https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/</a></em></p>
 <p>[3] 黎猫大侠.C++利用桶分组，详细解释[EB/OL].2021-04-17</p>
-<p><em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/">https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/</a></em></p>
 
 </section>
 

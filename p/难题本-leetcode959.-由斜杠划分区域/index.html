@@ -276,7 +276,8 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/regions-cut-by-slashes/">https://leetcode-cn.com/problems/regions-cut-by-slashes/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/regions-cut-by-slashes/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/regions-cut-by-slashes/</a></em></p>
 <p>令我思考很久的一道题，最后还是学着官方题解做出来的(<em>[1]</em>)。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。</p>
 <h2 id="题目">题目</h2>
 <p>在由 1 x 1 方格组成的 N x N 网格 <code>grid</code> 中，每个 1 x 1 方块由 <code>/</code>、<code>\</code> 或空格构成。这些字符会将方块划分为一些共边的区域。</p>
@@ -288,7 +289,7 @@
 <p>每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是<code>/</code>还是<code>\</code>，合并不同的小三角形。</p>
 <p><figure style="flex-grow: 101; flex-basis: 244px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1.png" data-size="512x503"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_1024x0_resize_box_3.png 1024w"
 				width="512"
 				height="503"
 				loading="lazy"
@@ -333,7 +334,7 @@
 <p>网格如下：</p>
 <p><figure style="flex-grow: 100; flex-basis: 240px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2.png" data-size="326x326"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_1024x0_resize_box_3.png 1024w"
 				width="326"
 				height="326"
 				loading="lazy"
@@ -347,7 +348,7 @@
 <p>首先第一个单元格进行格内合并：</p>
 <p><figure style="flex-grow: 98; flex-basis: 236px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3.png" data-size="312x316"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_1024x0_resize_box_3.png 1024w"
 				width="312"
 				height="316"
 				loading="lazy"
@@ -360,7 +361,7 @@
 <p>第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。</p>
 <p><figure style="flex-grow: 101; flex-basis: 244px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4.png" data-size="323x317"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_1024x0_resize_box_3.png 1024w"
 				width="323"
 				height="317"
 				loading="lazy"
@@ -373,7 +374,7 @@
 <p>第二个单元格的格内合并：</p>
 <p><figure style="flex-grow: 100; flex-basis: 241px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5.png" data-size="310x308"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_1024x0_resize_box_3.png 1024w"
 				width="310"
 				height="308"
 				loading="lazy"
@@ -386,7 +387,7 @@
 <p>格间合并，此时它已经没有右邻居：</p>
 <p><figure style="flex-grow: 103; flex-basis: 247px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6.png" data-size="321x311"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_1024x0_resize_box_3.png 1024w"
 				width="321"
 				height="311"
 				loading="lazy"
@@ -399,7 +400,7 @@
 <p>第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：</p>
 <p><figure style="flex-grow: 105; flex-basis: 254px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7.png" data-size="336x317"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_1024x0_resize_box_3.png 1024w"
 				width="336"
 				height="317"
 				loading="lazy"
@@ -416,7 +417,7 @@
 <p>最终，坐标<code>(x, y)</code>的单元格位于<code>4 * (n * x + y)</code>到<code>4 * (n * x + y) + 3</code>的下标位置。</p>
 <p>则最终的一维数组即并查集需要开辟的大小为<code>4 * n * n</code>。</p>
 </blockquote>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">UnionFind</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">UnionFind</span> <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
     <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
@@ -503,7 +504,7 @@
 </code></pre></div><p>表现还不错，叉会儿腰。</p>
 <p><figure style="flex-grow: 474; flex-basis: 1138px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8.png" data-size="811x171"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_1024x0_resize_box_3.png 1024w"
 				width="811"
 				height="171"
 				loading="lazy"
@@ -515,7 +516,8 @@
 	</figure></p>
 <h4 id="参考资料">参考资料</h4>
 <p>[1] 力扣官方题解.由斜杠划分区域[EB/OL].2021-01-24</p>
-<p><em><a href="https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/">https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/</a></em></p>
 
 </section>
 

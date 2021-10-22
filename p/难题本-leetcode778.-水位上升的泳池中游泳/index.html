@@ -308,7 +308,8 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/swim-in-rising-water/">https://leetcode-cn.com/problems/swim-in-rising-water/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/swim-in-rising-water/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/swim-in-rising-water/</a></em></p>
 <p>又是一道不错的复习题，借此回顾回顾BFS和SPFA。</p>
 <h2 id="bfs">BFS</h2>
 <p>Breadth First Search，宽度优先搜素。</p>
@@ -336,7 +337,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 </blockquote>
 <p>这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（'#'）且该点未被访问，则记录它到源点的距离。</p>
 <p>我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
@@ -419,7 +420,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 <p>但是，BFS的“距离”实际上是指源节点到当前节点的“跳数”，也就是从源节点出发需要经过几个节点才能到达当前节点。这在一个<strong>带权</strong>图中是不适用的。考虑以下情况：</p>
 <p><figure style="flex-grow: 145; flex-basis: 349px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1.png" data-size="562x386"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_1024x0_resize_box_3.png 1024w"
 				width="562"
 				height="386"
 				loading="lazy"
@@ -447,7 +448,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 <p>但是，在一个更加复杂的图中，这样做就不完全正确了。考虑这个有向图：</p>
 <p><figure style="flex-grow: 119; flex-basis: 286px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2.png" data-size="671x562"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_1024x0_resize_box_3.png 1024w"
 				width="671"
 				height="562"
 				loading="lazy"
@@ -489,7 +490,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 </blockquote>
 <p>这道题可以使用变相的SPFA来解决。我们的<code>dist</code>不再是源点到任一点的距离，而是<strong>源点到达任一点所需要的时间</strong>。对于一个点的邻接点，如果自己的高度比它高，则说明我们到达当前这个点的时候，水面已经没过了这个邻接点；如果自己的高度比它低，说明我们到达当前这个点的时候还没办法到达邻接点，因为至少需要等待水面没过它；所以采用当前这条路径，要到达这个邻接点的时间就是<code>max(grid[tmp.x][tmp.y], distance[head.x][head.y])</code>。</p>
 <p>那么根据SPFA的逻辑，就能得到如下的代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
         <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
@@ -553,7 +554,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 </code></pre></div><p>表现一般，主要是由于SPFA算法在<strong>稀疏图</strong>的情况下表现更好，在这种稠密图中时间复杂度退化了。</p>
 <p><figure style="flex-grow: 458; flex-basis: 1100px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3.png" data-size="587x128"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_1024x0_resize_box_3.png 1024w"
 				width="587"
 				height="128"
 				loading="lazy"
@@ -566,11 +567,14 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 <p>这题实际上还是使用Dijkstra算法会好一些，官方还提供了二分答案（思路简单！）、并查集等骚操作，不在本文的讨论范围内。</p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.水位上升的泳池中游泳[EB/OL].2021-01-30</p>
-<p><em><a href="https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/">https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/</a></em></p>
 <p>[2] SHHHS.SPFA算法[EB/OL].2016-09-14</p>
-<p><em><a href="https://www.cnblogs.com/shadowland/p/5870640.html">https://www.cnblogs.com/shadowland/p/5870640.html</a></em></p>
+<p><em><a class="link" href="https://www.cnblogs.com/shadowland/p/5870640.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/shadowland/p/5870640.html</a></em></p>
 <p>[3] 360百科.宽度优先搜索[EB/OL]</p>
-<p><em><a href="https://baike.so.com/doc/7806949-8081044.html">https://baike.so.com/doc/7806949-8081044.html</a></em></p>
+<p><em><a class="link" href="https://baike.so.com/doc/7806949-8081044.html"  target="_blank" rel="noopener"
+    >https://baike.so.com/doc/7806949-8081044.html</a></em></p>
 
 </section>
 

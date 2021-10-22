@@ -295,7 +295,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <p>而较为系统地说，audit框架的组件结构如图所示：</p>
 <p><figure style="flex-grow: 140; flex-basis: 338px">
 		<a href="/p/audit-%E7%AE%80%E8%BF%B0/2.png" data-size="1168x829"><img src="/p/audit-%E7%AE%80%E8%BF%B0/2.png"
-				srcset="/p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_480x0_resize_box_2.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_1024x0_resize_box_2.png 1024w"
+				srcset="/p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_480x0_resize_box_3.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_1024x0_resize_box_3.png 1024w"
 				width="1168"
 				height="829"
 				loading="lazy"
@@ -310,7 +310,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <p>我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：</p>
 <p><figure style="flex-grow: 448; flex-basis: 1076px">
 		<a href="/p/audit-%E7%AE%80%E8%BF%B0/1.png" data-size="816x182"><img src="/p/audit-%E7%AE%80%E8%BF%B0/1.png"
-				srcset="/p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_480x0_resize_box_2.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_1024x0_resize_box_2.png 1024w"
+				srcset="/p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_480x0_resize_box_3.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_1024x0_resize_box_3.png 1024w"
 				width="816"
 				height="182"
 				loading="lazy"
@@ -339,36 +339,36 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <p>通过 <code>auditctl</code> 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 <code>/etc/audit/audit.rules</code> 文件中，通过命令 <code>rcauditd resatrt</code> 重启audit服务使规则文件生效。</p>
 <h3 id="对文件和目录访问的审计">对文件和目录访问的审计</h3>
 <p>监控某一特定文件的访问行为属于audit框架的基础用法。使用 <code>-w</code> 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 <code>passwd</code> 文件的访问：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa</span>
 </code></pre></div><p>也可以监控对某一路径的访问：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/security/</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/security/</span>
 </code></pre></div><p>上面给出的第一条规则监控了对 <code>etc/passwd</code> 文件的所有读操作 <code>r</code> 、写操作 <code>w</code> 、执行 <code>x</code> 和属性变更操作 <code>a</code> ，此类规则指定的文件需要事先存在；</p>
 <p>第二条规则监控了对 <code>etc/security</code> 目录的所有访问，默认情况下，目录相关的规则只记录这一目录下的文件创建/删除，希望对其下的文件进行进一步的监控，就使用第一条规则来指定具体文件。</p>
 <p>可以通过以下命令来查看所有处于活动状态的规则：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -l</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -l</span>
 </code></pre></div><p>可以通过以下命令来删除 <strong>所有</strong> 规则：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -D</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -D</span>
 </code></pre></div><p>当确认规则无误之后，可以将它们添加到 <code>/etc/audit/audit.rules</code> 文件末尾：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">-w /etc/passwd -p rwxa
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">-w /etc/passwd -p rwxa
 -w /etc/security/
 </code></pre></div><h3 id="对系统调用的审计">对系统调用的审计</h3>
 <p>通过 <code>-a</code> 选项可以对系统调用进行审计。</p>
 <p>例如，对 <code>chmod</code> 调用进行审计，以检测文件属主的变更：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -a entry,always -S chmod</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -a entry,always -S chmod</span>
 </code></pre></div><p>可以通过 <a class="link" href="https://man.archlinux.org/man/syscalls.2"  target="_blank" rel="noopener"
     >syscalls</a> 页面找到所有系统调用。</p>
 <p>对系统调用进行审计时，可以使用 <code>-F</code> 来添加对某个键值的筛选，例如：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 审计所有第二个参数为 4 的 access 调用</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 审计所有第二个参数为 4 的 access 调用</span>
 -a entry,always -S access -F <span class="nv">a1</span><span class="o">=</span><span class="m">4</span>
 <span class="c1"># 审计所有不成功的 open 调用</span>
 -a exit,always -S open -F success!<span class="o">=</span><span class="m">0</span>
 </code></pre></div><p>下面这条规则也使用了 <code>-F</code> 选项，但是它的审计内容较为特殊：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">-a task,always -F <span class="nv">auid</span><span class="o">=</span><span class="m">0</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">-a task,always -F <span class="nv">auid</span><span class="o">=</span><span class="m">0</span>
 </code></pre></div><p>当一个进程被创建或克隆时， <em>task</em> 规则就起作用了。在上面这条示例中，我们将选中所有具备 <code>auid=0</code> 的任务，并在它们发生时进行记录。每个进程都会在用户登录时被赋予一个 <em>audit ID</em> ，这一ID不随着用户身份的改变而改变，且子进程会继承父进程的 <code>auid</code> ，通过这个ID我们可以唯一确定原始用户。</p>
 <h3 id="对无用消息的过滤">对无用消息的过滤</h3>
 <p>在日志记录过程中，有必要避免对不重要的消息进行记录，从而既方便我们对日志进行分析，也减小日志文件的体积。</p>
 <p>可以添加如下形式的规则来对部分消息进行过滤：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 以下规则添加在 /etc/audit/rules.d/quiet.rules 文件中</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 以下规则添加在 /etc/audit/rules.d/quiet.rules 文件中</span>
 ---
 -A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>SERVICE_START
 -A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>SERVICE_STOP
@@ -376,7 +376,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 </code></pre></div><h2 id="audit-日志">audit 日志</h2>
 <h3 id="日志的基本格式">日志的基本格式</h3>
 <p>默认情况下，audit日志存放在 <code>/var/log/audit</code> 目录下。下面先看一条典型的audit日志示例：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 命令执行审计</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 命令执行审计</span>
 <span class="nv">type</span><span class="o">=</span>SYSCALL <span class="nv">msg</span><span class="o">=</span>audit<span class="o">(</span>1234874638.599:5207<span class="o">)</span>: <span class="nv">arch</span><span class="o">=</span>c000003e <span class="nv">syscall</span><span class="o">=</span><span class="m">2</span> <span class="nv">success</span><span class="o">=</span>yes <span class="nv">exit</span><span class="o">=</span><span class="m">4</span> <span class="nv">a0</span><span class="o">=</span>62fb60 <span class="nv">a1</span><span class="o">=</span><span class="m">0</span> <span class="nv">a2</span><span class="o">=</span><span class="m">31</span> <span class="nv">a3</span><span class="o">=</span><span class="m">0</span> <span class="nv">items</span><span class="o">=</span><span class="m">1</span> <span class="nv">ppid</span><span class="o">=</span><span class="m">25400</span> <span class="nv">pid</span>
 <span class="o">=</span><span class="m">25616</span> <span class="nv">auid</span><span class="o">=</span><span class="m">0</span> <span class="nv">uid</span><span class="o">=</span><span class="m">0</span> <span class="nv">gid</span><span class="o">=</span><span class="m">0</span> <span class="nv">euid</span><span class="o">=</span><span class="m">0</span> <span class="nv">suid</span><span class="o">=</span><span class="m">0</span> <span class="nv">fsuid</span><span class="o">=</span><span class="m">0</span> <span class="nv">egid</span><span class="o">=</span><span class="m">0</span> <span class="nv">sgid</span><span class="o">=</span><span class="m">0</span> <span class="nv">fsgid</span><span class="o">=</span><span class="m">0</span> <span class="nv">tty</span><span class="o">=</span>pts1 <span class="nv">ses</span><span class="o">=</span><span class="m">1164</span> <span class="nv">comm</span><span class="o">=</span><span class="s2">&#34;less&#34;</span> <span class="nv">exe</span><span class="o">=</span><span class="s2">&#34;/usr/bin/less&#34;</span> <span class="nv">key</span><span class="o">=</span><span class="s2">&#34;doc_log&#34;</span>
 <span class="nv">type</span><span class="o">=</span>CWD <span class="nv">msg</span><span class="o">=</span>audit<span class="o">(</span>1234874638.599:5207<span class="o">)</span>:  <span class="nv">cwd</span><span class="o">=</span><span class="s2">&#34;/root&#34;</span>
@@ -404,7 +404,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 </li>
 <li>
 <p><em>a0~a3</em> ：系统调用的前四个参数，以数字形式呈现。这些值也会随着不同系统调用的实现而不同。在本例中，我们记录到如下的值：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">a0</span><span class="o">=</span>62fb60  	<span class="c1"># 文件路径字符串的地址</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">a0</span><span class="o">=</span>62fb60  	<span class="c1"># 文件路径字符串的地址</span>
 <span class="nv">a1</span><span class="o">=</span><span class="m">0</span> 		<span class="c1"># 标志位</span>
 <span class="nv">a2</span><span class="o">=</span><span class="m">31</span> 		<span class="c1"># 工作模式</span>
 <span class="nv">a3</span><span class="o">=</span>0		<span class="c1"># 未使用</span>
@@ -464,18 +464,18 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <p>audit框架提供了一些日志查找工具，以便查看系统上发生的一系列事件。</p>
 <h4 id="通过pid">通过pid</h4>
 <p>通过进程id来查看特定事件：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -p 1</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -p 1</span>
 </code></pre></div><p>该命令将呈现所有与ID为1的进程相关的事件。</p>
 <h4 id="通过key">通过key</h4>
 <p>通过 <code>key</code> 来管理事件是audit框架中一个很棒的特性，推荐日常使用。</p>
 <p>可以在规则中使用 <code>-k</code> 选项来为相关事件打上标签，方便后续查找：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa -k KEY_pwd</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa -k KEY_pwd</span>
 </code></pre></div><p>紧接着，查找所有带有键值 <code>KEY_pwd</code> 的事件，ausearch将呈现所有与文件 <code>/etc/passwd</code> 相关的事件：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -k KEY_pwd</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -k KEY_pwd</span>
 </code></pre></div><h4 id="查看异常事件">查看异常事件</h4>
 <p>方才介绍了 <em>ausearch</em> 的基本用法，而此前提及的 <em>aureport</em> 工具更擅长快速地报告系统上的异常事件，例如，网卡工作在混杂模式、进程或线程由于ENOMEM等错误崩溃推出等等。</p>
 <p>最简单的查看异常的命令是：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># aureport -n</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># aureport -n</span>
 </code></pre></div><p>也可以使用此工具生成自定义报告，详见 <a class="link" href="https://man.archlinux.org/man/aureport.8"  target="_blank" rel="noopener"
     >aureport 文档</a> 。</p>
 <h3 id="值得记录的文件或系统调用">值得记录的文件或系统调用</h3>
@@ -487,7 +487,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <p>audit框架提供了用于实现日志转发的插件，可以将本地日志转发到远程auditd主机上。</p>
 <h3 id="发送日志">发送日志</h3>
 <p>实现日志的发送，需要具备 <code>audisp-remote</code> 插件，该插件由audit安装包默认自带。通过修改如下文件来激活插件：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audisp/plugins.d/au-remote.conf</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audisp/plugins.d/au-remote.conf</span>
 ---
 <span class="nv">active</span> <span class="o">=</span> yes
 <span class="nv">direction</span> <span class="o">=</span> out
@@ -495,7 +495,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <span class="nb">type</span> <span class="o">=</span> always
 <span class="nv">format</span> <span class="o">=</span> string
 </code></pre></div><p>并在如下文件中设置目标主机（即日志发送的对象）：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audisp/audisp-remote.conf</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audisp/audisp-remote.conf</span>
 ---
 <span class="nv">remote_server</span> <span class="o">=</span> <span class="o">[</span>domain_name <span class="p">|</span> ip<span class="o">]</span>
 <span class="nv">port</span> <span class="o">=</span> <span class="m">60</span>
@@ -503,7 +503,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <span class="nv">transport</span> <span class="o">=</span> tcp
 </code></pre></div><h3 id="接收日志">接收日志</h3>
 <p>接受日志的配置较为简单：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audit/auditd.conf</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audit/auditd.conf</span>
 ---
 <span class="nv">tcp_listen_port</span> <span class="o">=</span> <span class="m">60</span>
 <span class="nv">tcp_listen_queue</span> <span class="o">=</span> <span class="m">5</span>
@@ -516,7 +516,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <p>[2] <a class="link" href="https://documentation.suse.com/sles/11-SP4/html/SLES-all/cha-audit-comp.html"  target="_blank" rel="noopener"
     >Understanding Linux Audit | Security Guide | SUSE Linux Enterprise Server 11 SP4</a></p>
 <h2 id="附件1-推荐规则1">附件1 推荐规则（1）</h2>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># This file contains the auditctl rules that are loaded</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># This file contains the auditctl rules that are loaded</span>
 <span class="c1"># whenever the audit daemon is started via the initscripts.</span>
 <span class="c1"># The rules are simply the parameters that would be passed</span>
 <span class="c1"># to auditctl.</span>

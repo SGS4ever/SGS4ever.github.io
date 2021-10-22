@@ -250,13 +250,14 @@ class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;st
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/verifying-an-alien-dictionary/">https://leetcode-cn.com/problems/verifying-an-alien-dictionary/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/verifying-an-alien-dictionary/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/verifying-an-alien-dictionary/</a></em></p>
 <p>题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。</p>
 <p>解题思路：定义一个数组<code>order_rank[26]</code>，给定某个字符<code>c</code>, <code>order_rank['a' - c]</code>表示该字符在order中的位置。</p>
 <p>错误记录：程序第<code>32</code>行，原本写作：<code>while (words1[idx] == words2[idx])</code>，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的<code>\0</code>符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。</p>
 <p>更正：循环中判断两个字符的终止，改为<code>while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != '\0' &amp;&amp; words2[idx] != '\0')</code>。</p>
 <p>AC代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">order_rank</span><span class="p">[</span><span class="mi">26</span><span class="p">];</span>
     <span class="kt">bool</span> <span class="nf">isAlienSorted</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">words</span><span class="p">,</span> <span class="n">string</span> <span class="n">order</span><span class="p">)</span> <span class="p">{</span>

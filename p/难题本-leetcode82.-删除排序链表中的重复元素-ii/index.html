@@ -288,7 +288,8 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/">https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/</a></em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
 <p>存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。</p>
@@ -329,7 +330,7 @@
 <p>容易想象，在不发生重复的情况下，窗口的大小（<code>right - left</code>）始终为 <code>1</code> ，而发生重复的时候整段窗口需要全部从链表上删除。</p>
 <p><figure style="flex-grow: 503; flex-basis: 1208px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/1.png" data-size="967x192"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/1_huaf37361c9e80db221fd3bca9e3c67bb7_5111_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/1_huaf37361c9e80db221fd3bca9e3c67bb7_5111_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/1_huaf37361c9e80db221fd3bca9e3c67bb7_5111_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/1_huaf37361c9e80db221fd3bca9e3c67bb7_5111_1024x0_resize_box_3.png 1024w"
 				width="967"
 				height="192"
 				loading="lazy"
@@ -341,7 +342,7 @@
 	</figure></p>
 <p><figure style="flex-grow: 395; flex-basis: 949px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/2.png" data-size="957x242"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/2_hue33346c6cc51aaf7ccea9e971185406e_5484_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/2_hue33346c6cc51aaf7ccea9e971185406e_5484_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/2_hue33346c6cc51aaf7ccea9e971185406e_5484_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/2_hue33346c6cc51aaf7ccea9e971185406e_5484_1024x0_resize_box_3.png 1024w"
 				width="957"
 				height="242"
 				loading="lazy"
@@ -356,7 +357,7 @@
 <p>我们注意到，当 <code>right == left-&gt;next</code> 时，即 <code>winSize == 1</code> 时，不需要对窗口中的元素进行操作，则将三个指针往后移动，直接进入下一步的窗口更新环节即可。</p>
 <p><figure style="flex-grow: 188; flex-basis: 452px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/3.png" data-size="982x521"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/3_hu27ebc263f19d5faf47c80df46d9ed51f_11416_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/3_hu27ebc263f19d5faf47c80df46d9ed51f_11416_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/3_hu27ebc263f19d5faf47c80df46d9ed51f_11416_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/3_hu27ebc263f19d5faf47c80df46d9ed51f_11416_1024x0_resize_box_3.png 1024w"
 				width="982"
 				height="521"
 				loading="lazy"
@@ -369,7 +370,7 @@
 <p>而窗口大小大于1时，就比较有趣了。我们直接将窗口 <strong>左边界的左邻居</strong> ，即此处的 <code>Out-left</code> 指向的元素链向 <code>right</code> 元素，这样就直接跳过了整个重复的部分，示意如下：</p>
 <p><figure style="flex-grow: 189; flex-basis: 453px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/4.png" data-size="1017x538"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/4_hue124f35d10bfa39dfdb638f525fc70dd_12709_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/4_hue124f35d10bfa39dfdb638f525fc70dd_12709_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/4_hue124f35d10bfa39dfdb638f525fc70dd_12709_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/4_hue124f35d10bfa39dfdb638f525fc70dd_12709_1024x0_resize_box_3.png 1024w"
 				width="1017"
 				height="538"
 				loading="lazy"
@@ -387,7 +388,7 @@
 <p>同理进行 <code>Out-left</code> 指针的判断。</p>
 </blockquote>
 <h3 id="ac代码1">AC代码1</h3>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
 </span><span class="cm"> * Definition for singly-linked list.
 </span><span class="cm"> * struct ListNode {
 </span><span class="cm"> *     int val;
@@ -467,7 +468,7 @@
 <span class="p">};</span>
 </code></pre></div><p><figure style="flex-grow: 176; flex-basis: 422px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/5.png" data-size="1088x618"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/5.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/5_hu2eeb21a4acfc8c6a85223074d27e3ddd_28133_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/5_hu2eeb21a4acfc8c6a85223074d27e3ddd_28133_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/5_hu2eeb21a4acfc8c6a85223074d27e3ddd_28133_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/5_hu2eeb21a4acfc8c6a85223074d27e3ddd_28133_1024x0_resize_box_3.png 1024w"
 				width="1088"
 				height="618"
 				loading="lazy"
@@ -485,7 +486,7 @@
 <p>于是一种较为简洁的思想诞生了：使用 <code>pre</code> 、 <code>now</code> 、 <code>nxt</code> 三个指针来标识前一个节点、现在的节点和下一个节点。还是按照之前的办法对 <code>now</code> （即之前的 <code>left</code> ）和 <code>nxt</code> （即之前的 <code>right</code> ）进行更新。由于 <code>pre</code> 被初始化为 <code>dummy</code> 节点，故一轮遍历之后，<code>dummy-&gt;next</code> 所指向的节点一定是第一次符合条件的节点，为返回的链表头部。</p>
 </blockquote>
 <h3 id="ac代码2">AC代码2</h3>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
 </span><span class="cm"> * Definition for singly-linked list.
 </span><span class="cm"> * struct ListNode {
 </span><span class="cm"> *     int val;
@@ -540,7 +541,7 @@
 <span class="p">};</span>
 </code></pre></div><p><figure style="flex-grow: 174; flex-basis: 417px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/6.png" data-size="1091x627"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/6.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/6_huafa00fedb82e9cb7a96fb61b4ae08d2f_28111_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/6_huafa00fedb82e9cb7a96fb61b4ae08d2f_28111_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/6_huafa00fedb82e9cb7a96fb61b4ae08d2f_28111_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/6_huafa00fedb82e9cb7a96fb61b4ae08d2f_28111_1024x0_resize_box_3.png 1024w"
 				width="1091"
 				height="627"
 				loading="lazy"
@@ -552,7 +553,8 @@
 	</figure></p>
 <h2 id="参考资料">参考资料</h2>
 <p>[1] 力扣官方题解.删除排序链表中的重复元素 II[EB/OL].2021-03-24</p>
-<p><em><a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/solution/shan-chu-pai-xu-lian-biao-zhong-de-zhong-oayn/">https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/solution/shan-chu-pai-xu-lian-biao-zhong-de-zhong-oayn/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/solution/shan-chu-pai-xu-lian-biao-zhong-de-zhong-oayn/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/solution/shan-chu-pai-xu-lian-biao-zhong-de-zhong-oayn/</a></em></p>
 
 </section>
 

@@ -277,7 +277,8 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/">https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/</a></em></p>
 <p>这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了<!-- raw HTML omitted -->[1]<!-- raw HTML omitted -->。</p>
 <p><strong>分析：</strong></p>
 <blockquote>
@@ -295,7 +296,7 @@
 <p>如果我没有讲清楚，不妨看看参考[1]中的模拟大法：</p>
 <p><figure style="flex-grow: 193; flex-basis: 463px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/1.png" data-size="892x462"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/1_hua2295e08dc8c3f23b05c3db9b735c89f_66780_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/1_hua2295e08dc8c3f23b05c3db9b735c89f_66780_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/1_hua2295e08dc8c3f23b05c3db9b735c89f_66780_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/1_hua2295e08dc8c3f23b05c3db9b735c89f_66780_1024x0_resize_box_3.png 1024w"
 				width="892"
 				height="462"
 				loading="lazy"
@@ -307,7 +308,7 @@
 	</figure></p>
 <p>我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&hellip;始终满足<code>prefix_sum[x0] &lt; prefix_sum[x1] &lt; ...</code>；注意，由于下标是从前往后走的，当出现了某个<code>prefix_sum[x_m] &lt; prefix_sum[deque.back()]</code>的时候，说明对于<strong>之后</strong>的下标<code>y</code>来说，<code>x_m</code>是更为合适的选择，也因此可以直接将队尾的元素剔除。</p>
 <p>使用下面的代码来进行实现，注意deque的初始元素0。</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// deque&lt;int&gt; monoq;			// 变量名与官方题解保持一致
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// deque&lt;int&gt; monoq;			// 变量名与官方题解保持一致
 </span><span class="c1"></span><span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>    		 	<span class="c1">// 放入一个0
 </span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  <span class="c1">// 下标从前往后走 
 </span><span class="c1"></span><span class="p">{</span>
@@ -323,7 +324,7 @@
 </ul>
 <p>我们的下标从前往后走的时候，<strong>当前下标既是<code>x</code>，也是<code>y</code></strong>。更确切地说，设当前下标为<code>i</code>，它<strong>向前</strong>需要看能否满足<code>prefix_sum[i] - prefix_sum[x] &gt;= K</code>；<strong>向后</strong>需要考虑自己作为区间起点的情况，也就是作为一个<code>x</code>，淘汰掉队列中现有的满足性质一的那些元素。</p>
 <p>上面的代码已经成功利用了性质一，现在只需要再从队首去找满足性质二的元素即可：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="cm">/* 性质一、当前下标作为区间起点的情况 */</span>
     <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -341,7 +342,7 @@
 <span class="p">}</span>
 </code></pre></div></blockquote>
 <p><strong>AC代码：</strong></p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">shortestSubarray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">int</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="mi">50010</span><span class="p">];</span>  <span class="c1">// 前缀和数组
@@ -381,15 +382,17 @@
 </code></pre></div><p><strong>一些细节</strong></p>
 <blockquote>
 <p>在之前的分析中我们提到过，在这个题目中，<code>prefix_sum[i]</code>表示的是<strong>从A[0]到A[i - 1]的前缀和</strong>。这里的前缀和数组的表示方法主要是为了满足区间长度为<code>A.size()</code>时的情况。我们的<code>monoq</code>需要有个初始元素0，这使得<code>prefix_sum[0]</code>也受到考虑。当答案区间长度为<code>A.size()</code>的时候，如样例3：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="err">输入：</span><span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">K</span> <span class="o">=</span> <span class="mi">3</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="err">输入：</span><span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">K</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="err">输出：</span><span class="mi">3</span>
 </code></pre></div><p>如果没有一个<code>prefix_sum[monoq.front()] == 0</code>，前缀和<code>prefix_sum[3]</code>会直接减掉<code>prefix_sum[1]</code>，造成输出为-1。</p>
 </blockquote>
 <p><strong>参考文章</strong></p>
 <p>[1] 王琛.Leetcode 862 Shortest Subarray with Sum at Least K[EB/OL].2018-07-02</p>
-<p><em><a href="https://buptwc.github.io/2018/07/02/Leetcode-862-Shortest-Subarray-with-Sum-at-Least-K/">https://buptwc.github.io/2018/07/02/Leetcode-862-Shortest-Subarray-with-Sum-at-Least-K/</a></em></p>
+<p><em><a class="link" href="https://buptwc.github.io/2018/07/02/Leetcode-862-Shortest-Subarray-with-Sum-at-Least-K/"  target="_blank" rel="noopener"
+    >https://buptwc.github.io/2018/07/02/Leetcode-862-Shortest-Subarray-with-Sum-at-Least-K/</a></em></p>
 <p>[2] LeetCode.和至少为 K 的最短子数组[EB/OL].2019-08-13</p>
-<p><em><a href="https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/solution/he-zhi-shao-wei-k-de-zui-duan-zi-shu-zu-by-leetcod/">https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/solution/he-zhi-shao-wei-k-de-zui-duan-zi-shu-zu-by-leetcod/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/solution/he-zhi-shao-wei-k-de-zui-duan-zi-shu-zu-by-leetcod/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/solution/he-zhi-shao-wei-k-de-zui-duan-zi-shu-zu-by-leetcod/</a></em></p>
 
 </section>
 

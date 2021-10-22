@@ -294,7 +294,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。</p>
 <p>Sass（Syntatically Awesome Style Sheets）是一种CSS预处理器，它可以用来定义一套新的语法规则和函数，以加强和提升CSS。</p>
 <p>举例来说，一个页面中可能需要用到许多次颜色<code>#000</code>，即白色；在原始的CSS代码中这个<code>#000</code>需要不断地出现在各个位置，如<code>color: #000</code>、<code>background: #000</code>等，这就为样式的改变带来了麻烦，假如我们需要整体性地改变页面颜色主题，就只能找到所有的<code>#000</code>并将其修改，实在不够方便。而Sass引入了变量，其概念和C/C++等语言中的变量并无二致，极大地简化了数值的维护。现在可以使用如下的写法来设置页面颜色：</p>
-<div class="highlight"><pre class="chroma"><code class="language-CSS" data-lang="CSS"><span class="o">$</span><span class="nt">WHITE</span><span class="o">:</span> <span class="p">#</span><span class="nn">000</span><span class="o">;</span>  <span class="c">/* 设置变量 */</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-CSS" data-lang="CSS"><span class="o">$</span><span class="nt">WHITE</span><span class="o">:</span> <span class="p">#</span><span class="nn">000</span><span class="o">;</span>  <span class="c">/* 设置变量 */</span>
 <span class="p">.</span><span class="nc">code</span> <span class="p">{</span>
 	<span class="k">background</span><span class="p">:</span> <span class="err">$</span><span class="n">WHITE</span><span class="p">;</span>
 <span class="p">}</span>
@@ -310,7 +310,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>我的KeepIt主题有一个内容如下的主文件，功能正如我所述：</p>
 <p><figure style="flex-grow: 106; flex-basis: 256px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1.png" data-size="873x816"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_1024x0_resize_box_3.png 1024w"
 				width="873"
 				height="816"
 				loading="lazy"
@@ -322,7 +322,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 	</figure></p>
 <p>按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。</p>
 <p>如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为<code>str</code>的类，我们的CSS文件中存在两种定义：</p>
-<div class="highlight"><pre class="chroma"><code class="language-CSS" data-lang="CSS"><span class="c">/* line 11 */</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-CSS" data-lang="CSS"><span class="c">/* line 11 */</span>
 <span class="p">.</span><span class="nc">str</span> <span class="p">{</span>
     <span class="k">color</span><span class="p">:</span> <span class="mh">#efefef</span><span class="p">;</span>
 <span class="p">}</span>
@@ -342,7 +342,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>在我所知道的hugo主题中，<code>asset/css</code>目录中都有<code>_custom.scss</code>文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看<code>main.scss</code>的最后几行：</p>
 <p><figure style="flex-grow: 266; flex-basis: 639px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2.png" data-size="815x306"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_1024x0_resize_box_3.png 1024w"
 				width="815"
 				height="306"
 				loading="lazy"
@@ -358,7 +358,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>例如，在我的博客中有这样的元素已经让我不爽很久了：</p>
 <p><figure style="flex-grow: 194; flex-basis: 467px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3.png" data-size="1921x987"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_1024x0_resize_box_3.png 1024w"
 				width="1921"
 				height="987"
 				loading="lazy"
@@ -372,7 +372,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p><strong>现在我们希望这样的元素以后都单独位居一行</strong>。可以在右边开发者工具的下半部分看到这个元素对应的CSS，试着改改它的样式，结果真是令人高兴！</p>
 <p><figure style="flex-grow: 224; flex-basis: 538px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1.png" data-size="687x306"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_1024x0_resize_box_3.png 1024w"
 				width="687"
 				height="306"
 				loading="lazy"
@@ -384,7 +384,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 	</figure></p>
 <p><figure style="flex-grow: 267; flex-basis: 641px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1.png" data-size="1117x418"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_1024x0_resize_box_3.png 1024w"
 				width="1117"
 				height="418"
 				loading="lazy"
@@ -398,7 +398,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>效果已经这么好了，我们不妨就将这部分代码（选择器+样式）直接放入<code>_custom.scss</code>，那么理论上来说，这部分样式将覆盖主题原有的效果：</p>
 <p><figure style="flex-grow: 213; flex-basis: 512px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2.png" data-size="1170x548"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_1024x0_resize_box_3.png 1024w"
 				width="1170"
 				height="548"
 				loading="lazy"
@@ -411,7 +411,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>使用<code>hugo server</code>在本地试试，<em>Hmm&hellip;Not bad！</em></p>
 <p><figure style="flex-grow: 360; flex-basis: 865px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2.png" data-size="1922x533"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_1024x0_resize_box_3.png 1024w"
 				width="1922"
 				height="533"
 				loading="lazy"
@@ -423,7 +423,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 	</figure></p>
 <p><figure style="flex-grow: 241; flex-basis: 578px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3.png" data-size="1030x427"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_1024x0_resize_box_3.png 1024w"
 				width="1030"
 				height="427"
 				loading="lazy"
@@ -437,11 +437,14 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <hr>
 <p><strong>参考文献</strong></p>
 <p>[1] 新西兰程序员.CSS,Sass,SCSS关系[EB/OL].2018-10-10</p>
-<p><em><a href="https://www.cnblogs.com/wphl-27/p/9765647.html">https://www.cnblogs.com/wphl-27/p/9765647.html</a></em></p>
+<p><em><a class="link" href="https://www.cnblogs.com/wphl-27/p/9765647.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/wphl-27/p/9765647.html</a></em></p>
 <p>[2] 选择远方.css强制不换行[EB/OL].2019-03-11</p>
-<p><em><a href="https://blog.csdn.net/qq_40713392/article/details/88411432">https://blog.csdn.net/qq_40713392/article/details/88411432</a></em></p>
+<p><em><a class="link" href="https://blog.csdn.net/qq_40713392/article/details/88411432"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/qq_40713392/article/details/88411432</a></em></p>
 <p>[3] 百度百科.CSS（层叠样式表）[EB/OL]</p>
-<p><em><a href="https://baike.baidu.com/item/CSS/5457?fr=aladdin">https://baike.baidu.com/item/CSS/5457?fr=aladdin</a></em></p>
+<p><em><a class="link" href="https://baike.baidu.com/item/CSS/5457?fr=aladdin"  target="_blank" rel="noopener"
+    >https://baike.baidu.com/item/CSS/5457?fr=aladdin</a></em></p>
 
 </section>
 
