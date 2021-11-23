@@ -311,7 +311,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 <p>该API详见<a class="link" href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea"  target="_blank" rel="noopener"
     >此文档</a>。</p>
 <p>我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
 <span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span>
     <span class="n">logPath</span><span class="p">,</span>
     <span class="n">GENERIC_WRITE</span><span class="p">,</span>
@@ -330,7 +330,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 <p>文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，<strong>为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁</strong>。这里使用Windows提供的一个关键函数<code>LockFileEx()</code>。</p>
 <p>该API详见<!-- raw HTML omitted -->此文档<!-- raw HTML omitted --></p>
 <p>我们使用以下几句话为文件上了个锁，这里的<code>overlapped</code>变量是API要求我们传入的，没有很大的用处，将其置零即可。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
 <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
 <span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>	<span class="c1">// 上锁的字节数，没有很大的意义，非零即可。
 </span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
@@ -341,7 +341,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 </code></pre></div><p>当文件上锁失败，<code>if</code>判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被<strong>阻塞</strong>而非直接报错。在我的试验中，进入这个分支的情况是<strong>第一步CreateFile的时候得到了一个无效的句柄</strong>，而非无法获取当前文件的锁。</p>
 <p><code>LickFileEx()</code>函数的第二个参数比较关键，当它被指定为<code>LOCKFILE_FAIL_IMMEDIATELY</code> 的时候会直接返回失败，而不是阻塞当前进程。在这里，我们当然不选这个参数。</p>
 <p>文件上锁成功之后，就可以进行文件的写入了。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">else</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">else</span>
 <span class="p">{</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
 	<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 1 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
@@ -354,7 +354,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div><p>将以上的三个部分结合起来，就是第一个进程的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
 	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
 	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -389,7 +389,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 </ol>
 <blockquote>
 <p>第二个进程被我们用来验证这个锁的可行性，即当第一个进程为文件上了锁，且还没释放的时候，第二个进程究竟能否对文件进行写入。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
 	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
 	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
@@ -432,7 +432,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 </ul>
 <p><figure style="flex-grow: 262; flex-basis: 629px">
 		<a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1.png" data-size="742x283"><img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1.png"
-				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1_hu7c5e8510ad0a4f5e67c1aa655a5c3ef3_10788_480x0_resize_box_3.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1_hu7c5e8510ad0a4f5e67c1aa655a5c3ef3_10788_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1_hu7c5e8510ad0a4f5e67c1aa655a5c3ef3_10788_480x0_resize_box_2.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex1_hu7c5e8510ad0a4f5e67c1aa655a5c3ef3_10788_1024x0_resize_box_2.png 1024w"
 				width="742"
 				height="283"
 				loading="lazy"
@@ -444,7 +444,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 	</figure></p>
 <p><figure style="flex-grow: 259; flex-basis: 623px">
 		<a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2.png" data-size="940x362"><img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2.png"
-				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2_huc066464f6cc7570c8afb77e6bbf0c26a_16971_480x0_resize_box_3.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2_huc066464f6cc7570c8afb77e6bbf0c26a_16971_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2_huc066464f6cc7570c8afb77e6bbf0c26a_16971_480x0_resize_box_2.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex2_huc066464f6cc7570c8afb77e6bbf0c26a_16971_1024x0_resize_box_2.png 1024w"
 				width="940"
 				height="362"
 				loading="lazy"
@@ -456,7 +456,7 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 	</figure></p>
 <p><figure style="flex-grow: 241; flex-basis: 579px">
 		<a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3.png" data-size="657x272"><img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3.png"
-				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3_hu88acb6cf79108b7b53f541bdc2d08309_10184_480x0_resize_box_3.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3_hu88acb6cf79108b7b53f541bdc2d08309_10184_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3_hu88acb6cf79108b7b53f541bdc2d08309_10184_480x0_resize_box_2.png 480w, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/mutex3_hu88acb6cf79108b7b53f541bdc2d08309_10184_1024x0_resize_box_2.png 1024w"
 				width="657"
 				height="272"
 				loading="lazy"

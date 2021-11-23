@@ -256,8 +256,7 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/</a></em></p>
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/">https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/</a></em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
 <p>给你一个有序数组 <code>nums</code> ，请你 <strong>原地</strong> 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。</p>
@@ -288,7 +287,7 @@
 <p>这是我最初的想法。根据题意，最终相同的数字最多只有 <strong>两个</strong> ，那么我们使用一个指针向前移动，当它和它的 <strong>下一位</strong> 元素值相同时，它的 <strong>下下位</strong> 元素的数值就必须和它不同了。即，当我们向后看去，发现下一个元素与当前元素相同时，可以直接确定下下位元素的值；并且确定了之后，需要从确定的点开始，将后面的元素都向前移动。</p>
 <p><figure style="flex-grow: 190; flex-basis: 458px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/1.png" data-size="1161x608"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/1.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/1_hu2862784932d00c4c2d65d47bc51f6efc_20182_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/1_hu2862784932d00c4c2d65d47bc51f6efc_20182_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/1_hu2862784932d00c4c2d65d47bc51f6efc_20182_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/1_hu2862784932d00c4c2d65d47bc51f6efc_20182_1024x0_resize_box_2.png 1024w"
 				width="1161"
 				height="608"
 				loading="lazy"
@@ -309,7 +308,7 @@
 </ul>
 <p>不得不说，我最开始、最朴素的想法反而特别的复杂，根据上面的内容能写出如下的代码：</p>
 <h4 id="ac代码1">AC代码1</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">p_now</span><span class="p">;</span>
@@ -375,7 +374,7 @@
 <p>对于原地修改来说，我的 <code>pop_back()</code> 操作实际上显得多余，表现是很一般的：</p>
 <p><figure style="flex-grow: 166; flex-basis: 400px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/2.png" data-size="1406x842"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/2.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/2_hu10465582ad579e58df82d373a8e83be3_47646_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/2_hu10465582ad579e58df82d373a8e83be3_47646_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/2_hu10465582ad579e58df82d373a8e83be3_47646_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/2_hu10465582ad579e58df82d373a8e83be3_47646_1024x0_resize_box_2.png 1024w"
 				width="1406"
 				height="842"
 				loading="lazy"
@@ -405,7 +404,7 @@
 <p>注意当 <code>slow</code> 指向了第三个 <code>2</code> 的时候，<code>*slow == *(slow - 2)</code> ，则 <code>slow</code> 不再继续前移，只移动 <code>fast</code> ，且只当 <code>*fast ！= *slow</code> 的时候才会继续移动 <code>slow</code> 。在本例中，将 <code>*slow</code> 更新为 <code>3</code> 之后， <code>fast</code> 和 <code>slow</code> 都要继续移动，然而 <code>fast</code> 已经走完了整个数组，故循环结束了。</p>
 <p>由此写出AC代码2.</p>
 <h4 id="ac代码2">AC代码2</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">slow</span><span class="p">;</span>
@@ -442,7 +441,7 @@
 <span class="p">};</span>
 </code></pre></div><blockquote>
 <p>我将调试代码都留在了此处，这是因为AC代码中有一步细节需要注意：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">fast</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">fast</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">fast</span><span class="o">++</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">fast</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">fast</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">fast</span><span class="o">++</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="o">*</span><span class="n">slow</span> <span class="o">=</span> <span class="o">*</span><span class="n">fast</span><span class="p">;</span>
     <span class="c1">// --- snip ---
@@ -451,7 +450,7 @@
 </blockquote>
 <p><figure style="flex-grow: 231; flex-basis: 555px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/4.png" data-size="560x242"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/4.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/4_hu4fd9f0c536d481b356792966a13185e8_17090_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/4_hu4fd9f0c536d481b356792966a13185e8_17090_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/4_hu4fd9f0c536d481b356792966a13185e8_17090_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/4_hu4fd9f0c536d481b356792966a13185e8_17090_1024x0_resize_box_2.png 1024w"
 				width="560"
 				height="242"
 				loading="lazy"
@@ -463,11 +462,9 @@
 	</figure></p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.删除排序数组中的重复项 II[EB/OL].2021-04-05</p>
-<p><em><a class="link" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-yec2/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-yec2/</a></em></p>
+<p><em><a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-yec2/">https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-yec2/</a></em></p>
 <p>[2] 负雪明烛.【负雪明烛】动画题解，帮助理清思路[EB/OL].2021-04-06</p>
-<p><em><a class="link" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/fu-xue-ming-zhu-dong-hua-ti-jie-bang-zhu-yrx5/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/fu-xue-ming-zhu-dong-hua-ti-jie-bang-zhu-yrx5/</a></em></p>
+<p><em><a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/fu-xue-ming-zhu-dong-hua-ti-jie-bang-zhu-yrx5/">https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/solution/fu-xue-ming-zhu-dong-hua-ti-jie-bang-zhu-yrx5/</a></em></p>
 
 </section>
 

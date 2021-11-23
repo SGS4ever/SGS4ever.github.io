@@ -263,8 +263,7 @@
 
     <section class="article-content">
     <p>不是吧啊Sir，这种题也错？:cry:</p>
-<p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/</a></em></p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/">https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/</a></em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
 <p>设计一个找到数据流中第 <code>k</code> 大元素的类（class）。注意是排序后的第 <code>k</code> 大元素，不是第 <code>k</code> 个不同的元素。</p>
@@ -304,7 +303,7 @@
 <p>我最开始的想法，<em>双堆对顶</em>又是什么呢？这是一种同时使用小根堆和大根堆来维护整个数组的办法，小根堆<code>larger</code>中的所有元素都比堆顶元素更大，大根堆<code>smaller</code>中的所有元素都比堆顶元素小。这样，任何时刻，数组中的数据被组织如下：</p>
 <p><figure style="flex-grow: 194; flex-basis: 466px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1.png" data-size="818x421"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1_hu75259ae14e64cabcef7466089567601a_25306_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1_hu75259ae14e64cabcef7466089567601a_25306_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1_hu75259ae14e64cabcef7466089567601a_25306_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/1_hu75259ae14e64cabcef7466089567601a_25306_1024x0_resize_box_2.png 1024w"
 				width="818"
 				height="421"
 				loading="lazy"
@@ -319,7 +318,7 @@
 <p>而且，这种办法在额外考虑<strong>初始数组为空</strong>的情况、以及<strong>初始数组的大小小于K</strong>的情况时比较繁琐，我在这里WA了两次:cry:</p>
 </blockquote>
 <h3 id="ac代码1">AC代码1</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
     <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">less</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">smaller</span><span class="p">;</span>
@@ -388,7 +387,7 @@
 </span><span class="cm"> * int param_1 = obj-&gt;add(val);
 </span><span class="cm"> */</span>
 </code></pre></div><h3 id="ac代码2">AC代码2</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">K</span><span class="p">;</span>
@@ -439,7 +438,7 @@
 </code></pre></div><p>优化掉<code>smaller</code>堆之后，表现会好一些。</p>
 <p><figure style="flex-grow: 140; flex-basis: 336px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2.png" data-size="781x557"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2_hu74eac785200942c4917c424e31b82985_34333_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2_hu74eac785200942c4917c424e31b82985_34333_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2_hu74eac785200942c4917c424e31b82985_34333_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/2_hu74eac785200942c4917c424e31b82985_34333_1024x0_resize_box_2.png 1024w"
 				width="781"
 				height="557"
 				loading="lazy"
@@ -451,8 +450,7 @@
 	</figure></p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.数据流中的第K大元素[EB/OL].2021-02-11</p>
-<p><em><a class="link" href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/</a></em></p>
+<p><em><a href="https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/">https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/solution/shu-ju-liu-zhong-de-di-k-da-yuan-su-by-l-woz8/</a></em></p>
 
 </section>
 

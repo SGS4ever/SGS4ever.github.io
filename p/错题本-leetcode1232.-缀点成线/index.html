@@ -253,8 +253,7 @@ class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/</a></em></p>
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/">https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/</a></em></p>
 <h2 id="题目">题目</h2>
 <p>在一个 XY 坐标系中有一些点，我们用数组 <code>coordinates</code> 来分别记录它们的坐标，其中 <code>coordinates[i] = [x, y]</code> 表示横坐标为 <code>x</code>、纵坐标为 <code>y</code> 的点。</p>
 <p>请你来判断，这些点是否在该坐标系中属于同一条直线上，是则返回 <code>true</code>，否则请返回 <code>false</code>。</p>
@@ -267,7 +266,7 @@ class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&
 <li>所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。</li>
 </ul>
 <p>直接放代码了。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">bool</span> <span class="n">checkStraightLine</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">coordinates</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// ax1 + b = y1; ax2 + b = y2

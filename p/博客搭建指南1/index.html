@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。
+搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
 本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
 如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
-Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+Then, let&amp;rsquo;s go!
+下载Hugo  Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
 但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac）。
 我们去到下面的这个网址：
 (https://github.com/gohugoio/hugo/releases)
@@ -13,18 +15,22 @@ Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工
 好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
  右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
  接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
- 新建站点   用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+ 新建站点  用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
 hugo new site [yourSiteName]
 就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
 如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
 新建站点
- 选择主题   “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+ 选择主题  “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
 你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
 当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
 就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
- 配置页面   现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+ 配置页面  现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
 回到你的网站上吧，看看效果。
-什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。'><title>博客搭建指南——1</title>
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
+打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
+现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。
+OK，一步一步来。首先，根目录底下有一个文件config.toml，打开它，以keepit主题为例，里面是一系列参数名称和数值。
+从上往下看，在第四行有个title = xxx，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。'><title>博客搭建指南——1</title>
 
 <link rel="canonical" href="https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/" />
 <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
@@ -35,10 +41,12 @@ hugo new site [yourSiteName]
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='博客搭建指南——1'>
-<meta property='og:description' content='当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+<meta property='og:description' content='当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。
+搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
 本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
 如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
-Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+Then, let&amp;rsquo;s go!
+下载Hugo  Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
 但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac）。
 我们去到下面的这个网址：
 (https://github.com/gohugoio/hugo/releases)
@@ -47,26 +55,32 @@ Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工
 好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
  右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
  接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
- 新建站点   用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+ 新建站点  用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
 hugo new site [yourSiteName]
 就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
 如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
 新建站点
- 选择主题   “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+ 选择主题  “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
 你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
 当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
 就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
- 配置页面   现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+ 配置页面  现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
 回到你的网站上吧，看看效果。
-什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。'>
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
+打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
+现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。
+OK，一步一步来。首先，根目录底下有一个文件config.toml，打开它，以keepit主题为例，里面是一系列参数名称和数值。
+从上往下看，在第四行有个title = xxx，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2020-09-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-18T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="博客搭建指南——1">
-<meta name="twitter:description" content="当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。 搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+<meta name="twitter:description" content="当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。
+搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
 本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
 如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
-Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+Then, let&amp;rsquo;s go!
+下载Hugo  Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
 但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac）。
 我们去到下面的这个网址：
 (https://github.com/gohugoio/hugo/releases)
@@ -75,18 +89,22 @@ Then, let&amp;rsquo;s go!  下载Hugo   Hugo 是一款基于Go语言的建站工
 好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
  右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
  接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
- 新建站点   用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+ 新建站点  用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
 hugo new site [yourSiteName]
 就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
 如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
 新建站点
- 选择主题   “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+ 选择主题  “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
 你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
 当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
 就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
- 配置页面   现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+ 配置页面  现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
 回到你的网站上吧，看看效果。
-什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。">
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
+打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
+现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。
+OK，一步一步来。首先，根目录底下有一个文件config.toml，打开它，以keepit主题为例，里面是一系列参数名称和数值。
+从上往下看，在第四行有个title = xxx，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。">
     </head>
     <body class="">
     <script>
@@ -262,7 +280,13 @@ hugo new site [yourSiteName]
     <aside class="my-toc">
         <nav id="TableOfContents">
   <ul>
-    <li></li>
+    <li><a href="#下载hugo">下载Hugo</a></li>
+    <li><a href="#新建站点">新建站点</a></li>
+    <li><a href="#选择主题">选择主题</a></li>
+    <li><a href="#配置页面">配置页面</a></li>
+    <li><a href="#进一步配置页面">进一步配置页面</a></li>
+    <li><a href="#将页面部署到github上">将页面部署到GitHub上</a></li>
+    <li><a href="#写在最后">写在最后</a></li>
   </ul>
 </nav>
     </aside>
@@ -280,8 +304,8 @@ hugo new site [yourSiteName]
     
     <header class="article-category">
         
-            <a href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C/" style="background-color: #2a9d8f; color: #fff;">
-                博客搭建手册
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
             </a>
         
     </header>
@@ -305,15 +329,12 @@ hugo new site [yourSiteName]
 </header>
 
     <section class="article-content">
-    <h5 id="当你见到这篇文章的时候意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了">当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。</h5>
+    <p><em>当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。</em></p>
 <p>搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。</p>
-<p>本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题<!-- raw HTML omitted --><a class="link" href="https://themes.gohugo.io/keepit/"  target="_blank" rel="noopener"
-    >https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted -->。</p>
+<p>本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题<!-- raw HTML omitted --><a href="https://themes.gohugo.io/keepit/">https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted -->。</p>
 <p>如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。</p>
-<h4 id="then-lets-go">Then, let&rsquo;s go!</h4>
-<ol>
-<li>下载Hugo</li>
-</ol>
+<p>Then, let&rsquo;s go!</p>
+<h3 id="下载hugo">下载Hugo</h3>
 <blockquote>
 <p>Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。</p>
 <p>但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（<del>主要是我没有Mac</del>）。</p>
@@ -327,9 +348,7 @@ hugo new site [yourSiteName]
 </blockquote>
 <p>接下来打开你的命令行窗口，试着执行<code>hugo version</code>，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！</p>
 </blockquote>
-<ol start="2">
-<li>新建站点</li>
-</ol>
+<h3 id="新建站点">新建站点</h3>
 <blockquote>
 <p>用hugo新建站点实在是<strong>非常简单</strong>。在你电脑上某个位置打开你的命令行，敲上命令：</p>
 <p><code>hugo new site [yourSiteName]</code></p>
@@ -337,7 +356,7 @@ hugo new site [yourSiteName]
 <p>如果顺利的话，你将会得到一个名字为<em>yourSiteName</em>的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用<code>ls</code>查看它们。</p>
 <p><figure style="flex-grow: 138; flex-basis: 331px">
 		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1.png" data-size="1092x791"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1_hu4d1a923f200524e5bef1801853ce0452_80119_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1_hu4d1a923f200524e5bef1801853ce0452_80119_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1_hu4d1a923f200524e5bef1801853ce0452_80119_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1_hu4d1a923f200524e5bef1801853ce0452_80119_1024x0_resize_box_2.png 1024w"
 				width="1092"
 				height="791"
 				loading="lazy"
@@ -348,20 +367,15 @@ hugo new site [yourSiteName]
 		
 	</figure></p>
 </blockquote>
-<ol start="3">
-<li>选择主题</li>
-</ol>
+<h3 id="选择主题">选择主题</h3>
 <blockquote>
 <p>“一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德</p>
-<p>你现在浏览的——也就是我的博客——主题是：<!-- raw HTML omitted --><a class="link" href="https://themes.gohugo.io/keepit/"  target="_blank" rel="noopener"
-    >https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted --></p>
+<p>你现在浏览的——也就是我的博客——主题是：<!-- raw HTML omitted --><a href="https://themes.gohugo.io/keepit/">https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted --></p>
 <p>实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ</p>
 <p>当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是<strong>安装</strong>指南o(╥﹏╥)o）。</p>
 <p>就以这款<em>KeepIt</em>主题为例，我们的网站根目录下有一个<code>themes</code>文件夹，你只需要进入这个文件夹，使用命令<code>git clone https://github.com/Fastbyte01/KeepIt.git</code>，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。</p>
 </blockquote>
-<ol start="4">
-<li>配置页面</li>
-</ol>
+<h3 id="配置页面">配置页面</h3>
 <blockquote>
 <p>现在让你的命令行回到网站的根目录下，写下命令<code>hugo server --theme=keepit -D</code>，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将<code>--theme</code>这个参数指定为你想用的主题的名字，就问你简单不？</p>
 <p>回到你的网站上吧，看看效果。</p>
@@ -375,9 +389,7 @@ hugo new site [yourSiteName]
 <p>主页的底下有四个链接按钮，你在<code>[params.social]</code>字段下可以找到对应的配置。比如我，就把里面的<code>Instagram</code>、<code>Linkedin</code>都注释掉了，只保留了<code>Twitter</code>和<code>Github</code>，所以你在我的主页上只能找到这两个链接。</p>
 <p>继续往下，就是一些无关紧要的参数了，你可以暂且忽略它们。当你走到这里，你的网站已经初步具有你的个人特色了，但我还要带你继续配置你的网站。</p>
 </blockquote>
-<ol start="5">
-<li>进一步配置页面</li>
-</ol>
+<h3 id="进一步配置页面">进一步配置页面</h3>
 <blockquote>
 <p>从你的主页上点击头像或者右上角进入<code>post</code>，你会发现里面的文章都是一些别人已经写好的东西，你一定会希望把它们换掉，但是它们在哪里？</p>
 <p>打开网站的根目录，进入<code>content</code>，你会看到一个<code>posts</code>文件夹和一个<code>projects</code>文件夹，还有一个<code>aboutme.md</code>文件，它们是什么？</p>
@@ -410,9 +422,7 @@ name = &ldquo;Hugo Authors&rdquo;</p>
 <p>换一个文件，比如<code>footer.html</code>，你应该可以悟到这一页掌管着主页下方的版权说明！如果你不满意主页底下的copyright，不妨对其进行修改。</p>
 <p>这里的文件不可能逐一讲解，自己去阅读它们，时刻牢记你配置文件里的东西，你完全可以配置一个很漂亮的页面。</p>
 </blockquote>
-<ol start="6">
-<li>将页面部署到GitHub上</li>
-</ol>
+<h3 id="将页面部署到github上">将页面部署到GitHub上</h3>
 <blockquote>
 <p>对于页面的配置，我目前讲的完全是够用了（主要是其他的操作我也不会 x）。如果之后有更多的需求，完全可以新开一篇博文，在此就不多赘述了。</p>
 <p>我们现在需要将页面部署到GitHub上，为什么不用Gitee？因为Gitee会出现<strong>一大堆路径问题</strong>。你不要觉得我在造谣，也不要觉得网上一堆博客可供参考，事实就是我尝试了几天，看了一大堆文章，但是我的Gitee上的博客完全无法加载样式。</p>
@@ -420,7 +430,7 @@ name = &ldquo;Hugo Authors&rdquo;</p>
 <p>如果你成功在Gitee上部署了自己的博客，欢迎联系我，我非常乐意学习，并将自己的博客迁移到Gitee上。</p>
 <p>回到主题，首先要在GitHub上建立一个仓库，这个仓库的名字非常特殊，它必须是<code>username.github.io</code>，其中的<code>username</code>就是你的GitHub用户名。比如我的用户名是<code>SGS4ever</code>，那么我的仓库就是<code>SGS4ever.github.io</code>。</p>
 <p>建立完成后，在站点根目录下使用命令<code>hugo --theme=keepit --baseUrl=&quot;https://SGS4ever.github.io -D&quot;</code>你就会得到一个文件夹<code>public</code>，进入它，在里面打开GitBash，进行一系列操作：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">git</span> <span class="n">init</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">git</span> <span class="n">init</span>
 <span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
 <span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&#34;Your comment&#34;</span>
 <span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">origin</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">xxxxxxxxxxx</span>
@@ -428,9 +438,7 @@ name = &ldquo;Hugo Authors&rdquo;</p>
 <span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">master</span>
 </code></pre></div><p>这些操作之后，你的GitHub仓库里就多了很多东西了，完全不需要任何操作，直接打开浏览器访问<code>https://username.github.io</code>吧！</p>
 </blockquote>
-<ol start="7">
-<li>写在最后</li>
-</ol>
+<h3 id="写在最后">写在最后</h3>
 <blockquote>
 <p>搭建博客真的是费了很大的功夫，但我万万没想到这些无用功实际上是Gitee的问题，实在是愤意难平。</p>
 <p>国产的很多东西——并不止Gitee——希望与国外的东西竞争，还需要非常努力。有些情况下并不是你实现了同样的功能，你就具备了同样的竞争力，还需要考虑到这些功能的易用性、稳定性。当你的东西用起来比别人更繁琐，以至于这种繁琐给用户带来的负面感受压过了爱国情怀的正面加持，你的竞争就注定失败了。</p>
@@ -480,6 +488,42 @@ name = &ldquo;Hugo Authors&rdquo;</p>
 
         <div class="article-details">
             <h2 class="article-title">博客搭建指南——2</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">TCP加速之环境搭建（WANem）</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">尝尝鲜——为自己装一台Mac OS虚拟机</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">桌面美化方案-Rainmeter</h2>
         </div>
     </a>
 </article>

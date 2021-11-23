@@ -6,7 +6,32 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>TCP加速之环境搭建（WANem）</title>
+      <link>https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/</link>
+      <pubDate>Tue, 23 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/</guid>
+      <description>我们可能遇到这样的情景：有一些实验需要在广域网环境下（存在一定的延迟、丢包等）完成，但我们不希望花费成本去租借一台云服务器，只希望在虚拟机网络中模拟出广域网的环境，应该如何实现呢？
+本文是TCP加速系列总结的一部分 ，我们希望完成TCP加速的实验，这时要求我们的实验环境不仅是一个广域网，还需要是一个存在 一定拥塞 、会发生 一定丢包 的广域网，这种情况下，如果我们不使用模拟环境，而使用真实服务器的话，实验效果就可能受到服务器地理位置、实验时间段等等因素的影响了。
+好在，我们可以使用WANem这一稳定、易用的广域网模拟器来解决我们的问题。
+简介 WANem基于iptables和tc（Traffic Control）实现，可以实现对网络延迟、丢包率、抖动、噪音等的模拟，使用者可以简单地设定并复现出某个特定的网络环境，因而逐渐替代软件仿真成为新一代的网络测试床。与之具备类似概念的工具有微软的Network Emulator for Windows Toolkit（NEWT）、Linux 2.6自带的Netem等。事实上，此前说的tc（Traffic Control）就是用来控制Netem工作的，因此可以理解为WANem是基于Netem所构建。
+安装与访问 WANem类似于一台虚拟机，可以直接 下载 iso文件，并在VMWare中安装。Linux类型选择 其他Linux 64位 即可。
+启动之后，可以使用DHCP获取IP，或者手动配置IP；虚拟机会要求你设置口令，你可以使用用户名 perc 和你设置的口令来远程登录到系统上。
+成功启动之后，会出现 WANemControl@PERC&amp;gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
+一般来说，你现在就可以在另一台机器的浏览器上使用 http://&amp;lt;WANem IP&amp;gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
+成功访问WANem
+配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
+点击导航栏中的 Advanced Mode 进入高级配置，我们看到如下的界面：
+Advanced Mode
+界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
+可以指定我们的规则的适用范围，如果你只希望你配置的规则在两台特定主机之间生效，那么就填写下图红框框出的一行，否则保留原样即可。
+规则
+使用 保存我们设置好的规则，即刻开始使用它吧。
+我们的两台实验机器分别是 CentOS7 192.</description>
+    </item>
+    
     <item>
       <title>OWASP Top10（2021）</title>
       <link>https://xrg.fj.cn/p/owasp-top102021/</link>
@@ -101,8 +126,7 @@ Step2 现在先不要急着运行，我们需要做一些运行之前的准备�
       <description>谁能想到我在考试前一天还在写桌面美化的博客呢？
 电脑桌面是每天开机后进入工作之前第一眼看到的东西，一个美观的桌面能从心情上给人以振奋。我在整机重装之后学习了一下如何美化桌面，现在我的Window10系统桌面长成这样：
 桌面效果
-1. rainmeter
- rainmeter实际上是一个系统状态监视软件，由于其强大的可定制性及扩展性，诸多使用者在原来的基础上开发了成百上千的插件程序和皮肤样式，使得现在的rainmeter几乎成为一款完美的系统美化工具。你可以从官网上下载它：
+1. rainmeter  rainmeter实际上是一个系统状态监视软件，由于其强大的可定制性及扩展性，诸多使用者在原来的基础上开发了成百上千的插件程序和皮肤样式，使得现在的rainmeter几乎成为一款完美的系统美化工具。你可以从官网上下载它：
  Rainmeter, desktop customization tool
  下载安装完成之后，打开这个程序，自带一个简单的样式，使得你可以在桌面上看到CPU使用率、磁盘使用情况等等。
 要达到美化的效果，仅仅使用自带的组件样式是不够的。我们需要从网络上寻找好看的rainmeter皮肤资源，这里首先给出官方的社区，本次桌面的效果就是使用社区中michaelpuerses大佬做的Sonder皮肤：
@@ -116,8 +140,7 @@ rainmeter的皮肤有两种形式：
  放张效果图吧，除了我现在使用的桌面外，rainmeter还能这样玩：
 Enigma主题效果图
 看完是不是很想开启自己的皮肤邂逅之旅了？
- 2. TaskbarX
- 实际上，我的桌面还有处地方值得注意：任务栏图标居中。看似细小处，实则是整个和谐的视觉体系中不可或缺的一部分。在很多Windows的美化教程中，都使用各式各样的软件来制作出类似MacOS的dock效果，而且实际上rainmeter也能制作dock效果，不过michaelpuerses大佬没有在我这款皮肤中实现dock。
+ 2. TaskbarX  实际上，我的桌面还有处地方值得注意：任务栏图标居中。看似细小处，实则是整个和谐的视觉体系中不可或缺的一部分。在很多Windows的美化教程中，都使用各式各样的软件来制作出类似MacOS的dock效果，而且实际上rainmeter也能制作dock效果，不过michaelpuerses大佬没有在我这款皮肤中实现dock。
 就我个人而言，完全仿照MacOS进行美化实在是有点过头了。很多好看的主题，只需要将任务栏透明化、图标居中之后就会产生画龙点睛的效果。
 于是引出我们要下载的第二款软件：TaskbarX。这款软件能使你的任务栏图标始终保持居中状态，其原理大概是每隔固定的时间进行检查与调整（我猜的）。链接如下：
  TaskbarX | Center taskbar icons (chrisandriessen.</description>

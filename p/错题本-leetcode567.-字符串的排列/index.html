@@ -282,8 +282,7 @@
 
     <section class="article-content">
     <p>今天是农历除夕，然而近年来年味渐淡，凡有亲朋在，便是好时节，也无需对此日特别注重了。</p>
-<p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/permutation-in-string/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/permutation-in-string/</a></em></p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/permutation-in-string/">https://leetcode-cn.com/problems/permutation-in-string/</a></em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
 <p>给定两个字符串 <strong>s1</strong> 和 <strong>s2</strong>，写一个函数来判断 <strong>s2</strong> 是否包含 <strong>s1</strong> 的排列。</p>
@@ -334,7 +333,7 @@
 <p>可以看到，当窗口<code>right == 2</code>时，这个字符<code>d</code>已经在第<code>0</code>位被删除，故认为此字符不在s1中，窗口直接指向最后一个字符，输出为<code>False</code>。然而，这个<code>d</code>是在最开始被占用掉了，它实际上存在于s1中，窗口不应如此移动。</p>
 </blockquote>
 <h3 id="wa代码1">WA代码1</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">bool</span> <span class="n">checkInclusion</span><span class="p">(</span><span class="n">string</span> <span class="n">s1</span><span class="p">,</span> <span class="n">string</span> <span class="n">s2</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">multiset</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">s1_set</span><span class="p">;</span>
@@ -375,7 +374,7 @@
 <p>这样能写出第一个AC代码：</p>
 </blockquote>
 <h3 id="ac代码1">AC代码1</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">bool</span> <span class="n">checkInclusion</span><span class="p">(</span><span class="n">string</span> <span class="n">s1</span><span class="p">,</span> <span class="n">string</span> <span class="n">s2</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">multiset</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">s1_set</span><span class="p">;</span>
@@ -419,7 +418,7 @@
 <span class="p">};</span>
 </code></pre></div><p><figure style="flex-grow: 527; flex-basis: 1265px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/1.png" data-size="712x135"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/1.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/1_hucdfe2e304f585d4fd59fab7f180fb982_14171_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/1_hucdfe2e304f585d4fd59fab7f180fb982_14171_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/1_hucdfe2e304f585d4fd59fab7f180fb982_14171_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/1_hucdfe2e304f585d4fd59fab7f180fb982_14171_1024x0_resize_box_2.png 1024w"
 				width="712"
 				height="135"
 				loading="lazy"
@@ -440,7 +439,7 @@
 <p>故有AC代码2。（就这种简单的思路还WA了两次）</p>
 </blockquote>
 <h3 id="ac代码2">AC代码2</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">bool</span> <span class="n">checkInclusion</span><span class="p">(</span><span class="n">string</span> <span class="n">s1</span><span class="p">,</span> <span class="n">string</span> <span class="n">s2</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">int</span> <span class="n">len1</span> <span class="o">=</span> <span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
@@ -483,7 +482,7 @@
 <span class="p">};</span>
 </code></pre></div><p><figure style="flex-grow: 482; flex-basis: 1158px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/2.png" data-size="637x132"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/2.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/2_hu6421c3e2202849703efb75e079b12017_14535_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/2_hu6421c3e2202849703efb75e079b12017_14535_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/2_hu6421c3e2202849703efb75e079b12017_14535_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/2_hu6421c3e2202849703efb75e079b12017_14535_1024x0_resize_box_2.png 1024w"
 				width="637"
 				height="132"
 				loading="lazy"
@@ -497,7 +496,7 @@
 <p>官方题解中还能进行优化：</p>
 <p><figure style="flex-grow: 272; flex-basis: 653px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/3.png" data-size="988x363"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/3.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/3_hub722d3550169cb256f41c5b7ceed9101_60463_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/3_hub722d3550169cb256f41c5b7ceed9101_60463_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/3_hub722d3550169cb256f41c5b7ceed9101_60463_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/3_hub722d3550169cb256f41c5b7ceed9101_60463_1024x0_resize_box_2.png 1024w"
 				width="988"
 				height="363"
 				loading="lazy"
@@ -512,8 +511,7 @@
 </blockquote>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.字符串的排列[EB/OL].2021-02-11</p>
-<p><em><a class="link" href="https://leetcode-cn.com/problems/permutation-in-string/solution/zi-fu-chuan-de-pai-lie-by-leetcode-solut-7k7u/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/permutation-in-string/solution/zi-fu-chuan-de-pai-lie-by-leetcode-solut-7k7u/</a></em></p>
+<p><em><a href="https://leetcode-cn.com/problems/permutation-in-string/solution/zi-fu-chuan-de-pai-lie-by-leetcode-solut-7k7u/">https://leetcode-cn.com/problems/permutation-in-string/solution/zi-fu-chuan-de-pai-lie-by-leetcode-solut-7k7u/</a></em></p>
 
 </section>
 
