@@ -4,17 +4,42 @@
   
   <url>
     <loc>https://xrg.fj.cn/categories/</loc>
-    <lastmod>2021-11-23T00:00:00+00:00</lastmod>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://xrg.fj.cn/post/</loc>
-    <lastmod>2021-11-23T00:00:00+00:00</lastmod>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://xrg.fj.cn/tags/</loc>
-    <lastmod>2021-11-23T00:00:00+00:00</lastmod>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/</loc>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://xrg.fj.cn/</loc>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://xrg.fj.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+    <lastmod>2021-11-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -23,22 +48,7 @@
   </url>
   
   <url>
-    <loc>https://xrg.fj.cn/</loc>
-    <lastmod>2021-11-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/</loc>
-    <lastmod>2021-11-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
-    <lastmod>2021-11-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://xrg.fj.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2021-11-23T00:00:00+00:00</lastmod>
   </url>
   
@@ -84,11 +94,6 @@
   
   <url>
     <loc>https://xrg.fj.cn/tags/%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2021-08-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2021-08-29T00:00:00+00:00</lastmod>
   </url>
   

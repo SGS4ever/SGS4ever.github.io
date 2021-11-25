@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='传输控制协议（TCP）是我们的老朋友了，它力求在不可靠的IP网络上实现可靠的数据传输，也就是使得数据包有序、无丢失和不重复，因此，引入了如校验、序号、确认、重传等机制。同时，这位老朋友也是比较负责任的，在网络拥挤时，为了不使情况雪上加霜，它引入了慢启动、拥塞避免等机制。
+现在的网络世界中，我们日常进行的网页浏览、游戏、视频等活动都离不开TCP。随着网络的发展，网络上面承载的数据包越来越多，在为多数人所共享的广域网上，在人们上网的高峰期，网络会存在一定的拥塞，反映到我们的上网体验上，就是延迟和丢包。加载个网页要花掉十几秒、玩个王者荣耀时不时延迟200&#43;、看视频卡顿等，除了设备的问题，恐怕网络拥塞难辞其咎。在这样的背景之下，TCP加速技术也就产生和发展了。
+实际上，TCP加速也不是一个新的概念了，十几年前就有相关的研究，但是这一理念在现今的背景下显得较有意义，我们对其进行一些学习和实践，大概不算是浪费时间的。
+两种方案 TCP加速可以从几个角度来进行分类，较为常见且易懂的是从加速方案的部署位置来分。如果只在客户/服务器的某一边来部署TCP加速，就叫做 单边加速 ，如果双方都要部署，就叫做 双边加速 。两种方案一般有不同的使用场景，单边加速常部署在服务端上，这样就能透明地提升用户的访问体验；双边加速常常是双方协商好的一套加速方案，因此不能做到透明，可以用在客户端和服务端都可控的场景中，比如在个人云服务器上运行着某项服务，此时可以在自己的客户端PC和服务端都部署TCP加速，来改善访问体验。
+单边加速概述 单边加速方案只需要由客户或服务端的一方来部署，比较简单，且对对方是透明的。我们首先要知道TCP是怎么工作的：在 协议规定 的运行模式下，发送方的系统 产生和处理数据 、 把数据交给网卡 、网卡发送数据，接收方接收数据、把数据交给系统、处理数据。从这一套流程中，我们应该发现几个可以下手的地方，每个地方都尝试一下，我们对TCP加速的认识也就差不多了。
+数据包处理优化 说是数据包处理优化，其实就是所谓的“网络性能优化”。这个概念跟TCP协议本身没有太多关系，主要是针对收发数据双方的硬件、操作系统等进行优化。
+减少复制 按照上面说过的流程，发送方的系统要产生和处理数据，然后把数据交给网卡。这一步是一个复制的过程，也就是将数据从系统或者应用程序所在的内存空间复制了一份到网卡的内存空间。这一步是可以优化的，有下面这几种办法。
+直接访问网卡存储空间 。这种方案取消了复制，而采用地址映射或直接访问的办法，相当于将网卡看作了操作系统的一部分。为了实现这种方案，网卡要具备一定的智能性，否则无法支持多应用的访问，也无法在合适的时机传递数据。
+与网卡共享存储区域 。让网卡用DMA或其他什么方式来访问内核内存空间，比上面的方案简单一些，对网卡的要求少一些。
+其他各种内存映射方案 。内存映射可以实现应用、网卡和内核三者的内存共享，无论是什么内存映射方案，核心都是减少复制。
+减少中断 系统要把数据交给网卡，或者网卡收到数据要交给系统的时候，一般都会触发中断。操作系统处理中断是需要花费时间的，因此这一步也是可以优化的。
+将异步触发变为轮询 。有些研究者将TCP/IP的处理放置到一台单独的设备上，这样，就可以将协议数据的收发处理由中断的方式改变为比较简单的系统轮询。轮询的频率是要仔细调整的，太慢则数据处理产生延迟，太快则系统负载过大。
+中断合并 。中断合并就是将多个中断合并到一起处理，也就是不在每次收到数据时产生中断，而是在数据积累到一定的量时再产生一次中断。这种方案使得延迟跟报文长度有关系了，且在处理数据的时候可能一次处理了多个报文，应用程序的调度也受到一些影响。
+增加单个报文的长度 。思想和中断合并是类似的，就是将报文数据积累到一定长度再发送。但这一步是交给上层协议来完成的，跟中断合并时有区别的。
+报文过滤 。总会有一些报文是没意义的，比如一些广播数据、一些没用的UDP报文，这些数据直接交给网卡来过滤，就能够减少中断。
+用户级传输协议 传统的协议处理是在用户空间内完成的，因此要减少复制，只能引入各种内存映射或共享的方案。人们可以在用户空间实现传输层的协议，节省了数据复制的时间。
+TCP卸载引擎 将软件执行转移到硬件执行，一直是性能优化的不二法门。如果在网卡硬件上运行一些特殊的系统，使得数据处理等步骤直接由网卡完成，那末系统的负载就小了，执行起来就快了。
+TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要与系统其他硬件保持同步，否则还是可能成为传输速度的瓶颈；当然，要在网卡上实现数据处理的系统，本身的硬件和软件的设计难度也是很大的。
+协议细节优化 数据包处理优化实际上就是针对机器本身的“网络性能优化”，而协议细节的优化才真正关乎TCP协议本身。
+拥塞控制优化 TCP的拥塞控制机制我们是熟悉的，那就是：慢启动、拥塞避免（加法增加、乘法减少）。其实在这两个机制的基础上，延伸出的快重传和快恢复也属于拥塞控制的优化，当然我们还要有更多的尝试。
+针对拥塞状态的判断 。我们如何判断网络是否拥塞呢？TCP协议一般以超时和重复ACK为标准。超时意味着不仅自己的数据没有到达，对方的重复ACK也没有到达，网络的拥塞情况已经比较严重了，因此传统的处理方法是将发送窗口减到 1 ，阈值减半，重新开始慢启动。重复ACK意味着自己的数据没有到达，对方的ACK可以到达，网络的拥塞情况还不那么严重，因此传统的处理方法是将阈值减半，发送窗口减到阈值大小，重新加法增加。慢启动和加法增加都是保守的，对带宽不一定有充分的利用，尤其当网络出现了小波动的时候，如果误判为拥塞，就会导致传输速度骤降，而带宽空闲。
+有若干种针对拥塞状态的判断方案，例如zetaTCP使用了动态学习的方法判断拥塞，过滤非拥塞情况引起的丢包现象，预判拥塞丢包的概率并基于这一概率直接重传。Fast TCP结合延迟信息反馈来判断拥塞，Westwood结合带宽测量的技术来判断拥塞。
+参数调节 TCP协议的参数是指预先写好的、控制协议工作的一些参数，如用于进行拥塞避免的拥塞窗口阈值，用于传输数据的MTU，用于判断超时的超时时间等。针对这些参数进行仔细的调节，可以一定程度达到TCP加速的目的。
+并行TCP 并行TCP的理念是将原本的一条TCP连接修改为多条TCP连接，将原本使用一条连接来传输的数据放在多条连接上传输。这种思路归根到底是对拥塞避免算法的改造，原本一条连接上的拥塞避免算法，其强度在改为多条连接之后得到了削弱。例如原本的拥塞窗口是 N ，改成 k 条连接之后就成了 kN ，每次在拥塞避免时还是只把阈值减少 N/2 ，对总的窗口的影响就没那么大了。
+双边加速——以UDP Speeder为例 双边加速要求在客户端和服务端都部署相同的加速方案，常规思路是把复杂的TCP协议转化为私有的协议。使用私有协议，可以对数据包处理、重传/拥塞避免等机制进行调整，从而达到加速的目的。
+以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。'><title>TCP加速技术简述</title>
+
+<link rel="canonical" href="https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/" />
+<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='TCP加速技术简述'>
+<meta property='og:description' content='传输控制协议（TCP）是我们的老朋友了，它力求在不可靠的IP网络上实现可靠的数据传输，也就是使得数据包有序、无丢失和不重复，因此，引入了如校验、序号、确认、重传等机制。同时，这位老朋友也是比较负责任的，在网络拥挤时，为了不使情况雪上加霜，它引入了慢启动、拥塞避免等机制。
+现在的网络世界中，我们日常进行的网页浏览、游戏、视频等活动都离不开TCP。随着网络的发展，网络上面承载的数据包越来越多，在为多数人所共享的广域网上，在人们上网的高峰期，网络会存在一定的拥塞，反映到我们的上网体验上，就是延迟和丢包。加载个网页要花掉十几秒、玩个王者荣耀时不时延迟200&#43;、看视频卡顿等，除了设备的问题，恐怕网络拥塞难辞其咎。在这样的背景之下，TCP加速技术也就产生和发展了。
+实际上，TCP加速也不是一个新的概念了，十几年前就有相关的研究，但是这一理念在现今的背景下显得较有意义，我们对其进行一些学习和实践，大概不算是浪费时间的。
+两种方案 TCP加速可以从几个角度来进行分类，较为常见且易懂的是从加速方案的部署位置来分。如果只在客户/服务器的某一边来部署TCP加速，就叫做 单边加速 ，如果双方都要部署，就叫做 双边加速 。两种方案一般有不同的使用场景，单边加速常部署在服务端上，这样就能透明地提升用户的访问体验；双边加速常常是双方协商好的一套加速方案，因此不能做到透明，可以用在客户端和服务端都可控的场景中，比如在个人云服务器上运行着某项服务，此时可以在自己的客户端PC和服务端都部署TCP加速，来改善访问体验。
+单边加速概述 单边加速方案只需要由客户或服务端的一方来部署，比较简单，且对对方是透明的。我们首先要知道TCP是怎么工作的：在 协议规定 的运行模式下，发送方的系统 产生和处理数据 、 把数据交给网卡 、网卡发送数据，接收方接收数据、把数据交给系统、处理数据。从这一套流程中，我们应该发现几个可以下手的地方，每个地方都尝试一下，我们对TCP加速的认识也就差不多了。
+数据包处理优化 说是数据包处理优化，其实就是所谓的“网络性能优化”。这个概念跟TCP协议本身没有太多关系，主要是针对收发数据双方的硬件、操作系统等进行优化。
+减少复制 按照上面说过的流程，发送方的系统要产生和处理数据，然后把数据交给网卡。这一步是一个复制的过程，也就是将数据从系统或者应用程序所在的内存空间复制了一份到网卡的内存空间。这一步是可以优化的，有下面这几种办法。
+直接访问网卡存储空间 。这种方案取消了复制，而采用地址映射或直接访问的办法，相当于将网卡看作了操作系统的一部分。为了实现这种方案，网卡要具备一定的智能性，否则无法支持多应用的访问，也无法在合适的时机传递数据。
+与网卡共享存储区域 。让网卡用DMA或其他什么方式来访问内核内存空间，比上面的方案简单一些，对网卡的要求少一些。
+其他各种内存映射方案 。内存映射可以实现应用、网卡和内核三者的内存共享，无论是什么内存映射方案，核心都是减少复制。
+减少中断 系统要把数据交给网卡，或者网卡收到数据要交给系统的时候，一般都会触发中断。操作系统处理中断是需要花费时间的，因此这一步也是可以优化的。
+将异步触发变为轮询 。有些研究者将TCP/IP的处理放置到一台单独的设备上，这样，就可以将协议数据的收发处理由中断的方式改变为比较简单的系统轮询。轮询的频率是要仔细调整的，太慢则数据处理产生延迟，太快则系统负载过大。
+中断合并 。中断合并就是将多个中断合并到一起处理，也就是不在每次收到数据时产生中断，而是在数据积累到一定的量时再产生一次中断。这种方案使得延迟跟报文长度有关系了，且在处理数据的时候可能一次处理了多个报文，应用程序的调度也受到一些影响。
+增加单个报文的长度 。思想和中断合并是类似的，就是将报文数据积累到一定长度再发送。但这一步是交给上层协议来完成的，跟中断合并时有区别的。
+报文过滤 。总会有一些报文是没意义的，比如一些广播数据、一些没用的UDP报文，这些数据直接交给网卡来过滤，就能够减少中断。
+用户级传输协议 传统的协议处理是在用户空间内完成的，因此要减少复制，只能引入各种内存映射或共享的方案。人们可以在用户空间实现传输层的协议，节省了数据复制的时间。
+TCP卸载引擎 将软件执行转移到硬件执行，一直是性能优化的不二法门。如果在网卡硬件上运行一些特殊的系统，使得数据处理等步骤直接由网卡完成，那末系统的负载就小了，执行起来就快了。
+TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要与系统其他硬件保持同步，否则还是可能成为传输速度的瓶颈；当然，要在网卡上实现数据处理的系统，本身的硬件和软件的设计难度也是很大的。
+协议细节优化 数据包处理优化实际上就是针对机器本身的“网络性能优化”，而协议细节的优化才真正关乎TCP协议本身。
+拥塞控制优化 TCP的拥塞控制机制我们是熟悉的，那就是：慢启动、拥塞避免（加法增加、乘法减少）。其实在这两个机制的基础上，延伸出的快重传和快恢复也属于拥塞控制的优化，当然我们还要有更多的尝试。
+针对拥塞状态的判断 。我们如何判断网络是否拥塞呢？TCP协议一般以超时和重复ACK为标准。超时意味着不仅自己的数据没有到达，对方的重复ACK也没有到达，网络的拥塞情况已经比较严重了，因此传统的处理方法是将发送窗口减到 1 ，阈值减半，重新开始慢启动。重复ACK意味着自己的数据没有到达，对方的ACK可以到达，网络的拥塞情况还不那么严重，因此传统的处理方法是将阈值减半，发送窗口减到阈值大小，重新加法增加。慢启动和加法增加都是保守的，对带宽不一定有充分的利用，尤其当网络出现了小波动的时候，如果误判为拥塞，就会导致传输速度骤降，而带宽空闲。
+有若干种针对拥塞状态的判断方案，例如zetaTCP使用了动态学习的方法判断拥塞，过滤非拥塞情况引起的丢包现象，预判拥塞丢包的概率并基于这一概率直接重传。Fast TCP结合延迟信息反馈来判断拥塞，Westwood结合带宽测量的技术来判断拥塞。
+参数调节 TCP协议的参数是指预先写好的、控制协议工作的一些参数，如用于进行拥塞避免的拥塞窗口阈值，用于传输数据的MTU，用于判断超时的超时时间等。针对这些参数进行仔细的调节，可以一定程度达到TCP加速的目的。
+并行TCP 并行TCP的理念是将原本的一条TCP连接修改为多条TCP连接，将原本使用一条连接来传输的数据放在多条连接上传输。这种思路归根到底是对拥塞避免算法的改造，原本一条连接上的拥塞避免算法，其强度在改为多条连接之后得到了削弱。例如原本的拥塞窗口是 N ，改成 k 条连接之后就成了 kN ，每次在拥塞避免时还是只把阈值减少 N/2 ，对总的窗口的影响就没那么大了。
+双边加速——以UDP Speeder为例 双边加速要求在客户端和服务端都部署相同的加速方案，常规思路是把复杂的TCP协议转化为私有的协议。使用私有协议，可以对数据包处理、重传/拥塞避免等机制进行调整，从而达到加速的目的。
+以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2021-11-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-11-25T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="TCP加速技术简述">
+<meta name="twitter:description" content="传输控制协议（TCP）是我们的老朋友了，它力求在不可靠的IP网络上实现可靠的数据传输，也就是使得数据包有序、无丢失和不重复，因此，引入了如校验、序号、确认、重传等机制。同时，这位老朋友也是比较负责任的，在网络拥挤时，为了不使情况雪上加霜，它引入了慢启动、拥塞避免等机制。
+现在的网络世界中，我们日常进行的网页浏览、游戏、视频等活动都离不开TCP。随着网络的发展，网络上面承载的数据包越来越多，在为多数人所共享的广域网上，在人们上网的高峰期，网络会存在一定的拥塞，反映到我们的上网体验上，就是延迟和丢包。加载个网页要花掉十几秒、玩个王者荣耀时不时延迟200&#43;、看视频卡顿等，除了设备的问题，恐怕网络拥塞难辞其咎。在这样的背景之下，TCP加速技术也就产生和发展了。
+实际上，TCP加速也不是一个新的概念了，十几年前就有相关的研究，但是这一理念在现今的背景下显得较有意义，我们对其进行一些学习和实践，大概不算是浪费时间的。
+两种方案 TCP加速可以从几个角度来进行分类，较为常见且易懂的是从加速方案的部署位置来分。如果只在客户/服务器的某一边来部署TCP加速，就叫做 单边加速 ，如果双方都要部署，就叫做 双边加速 。两种方案一般有不同的使用场景，单边加速常部署在服务端上，这样就能透明地提升用户的访问体验；双边加速常常是双方协商好的一套加速方案，因此不能做到透明，可以用在客户端和服务端都可控的场景中，比如在个人云服务器上运行着某项服务，此时可以在自己的客户端PC和服务端都部署TCP加速，来改善访问体验。
+单边加速概述 单边加速方案只需要由客户或服务端的一方来部署，比较简单，且对对方是透明的。我们首先要知道TCP是怎么工作的：在 协议规定 的运行模式下，发送方的系统 产生和处理数据 、 把数据交给网卡 、网卡发送数据，接收方接收数据、把数据交给系统、处理数据。从这一套流程中，我们应该发现几个可以下手的地方，每个地方都尝试一下，我们对TCP加速的认识也就差不多了。
+数据包处理优化 说是数据包处理优化，其实就是所谓的“网络性能优化”。这个概念跟TCP协议本身没有太多关系，主要是针对收发数据双方的硬件、操作系统等进行优化。
+减少复制 按照上面说过的流程，发送方的系统要产生和处理数据，然后把数据交给网卡。这一步是一个复制的过程，也就是将数据从系统或者应用程序所在的内存空间复制了一份到网卡的内存空间。这一步是可以优化的，有下面这几种办法。
+直接访问网卡存储空间 。这种方案取消了复制，而采用地址映射或直接访问的办法，相当于将网卡看作了操作系统的一部分。为了实现这种方案，网卡要具备一定的智能性，否则无法支持多应用的访问，也无法在合适的时机传递数据。
+与网卡共享存储区域 。让网卡用DMA或其他什么方式来访问内核内存空间，比上面的方案简单一些，对网卡的要求少一些。
+其他各种内存映射方案 。内存映射可以实现应用、网卡和内核三者的内存共享，无论是什么内存映射方案，核心都是减少复制。
+减少中断 系统要把数据交给网卡，或者网卡收到数据要交给系统的时候，一般都会触发中断。操作系统处理中断是需要花费时间的，因此这一步也是可以优化的。
+将异步触发变为轮询 。有些研究者将TCP/IP的处理放置到一台单独的设备上，这样，就可以将协议数据的收发处理由中断的方式改变为比较简单的系统轮询。轮询的频率是要仔细调整的，太慢则数据处理产生延迟，太快则系统负载过大。
+中断合并 。中断合并就是将多个中断合并到一起处理，也就是不在每次收到数据时产生中断，而是在数据积累到一定的量时再产生一次中断。这种方案使得延迟跟报文长度有关系了，且在处理数据的时候可能一次处理了多个报文，应用程序的调度也受到一些影响。
+增加单个报文的长度 。思想和中断合并是类似的，就是将报文数据积累到一定长度再发送。但这一步是交给上层协议来完成的，跟中断合并时有区别的。
+报文过滤 。总会有一些报文是没意义的，比如一些广播数据、一些没用的UDP报文，这些数据直接交给网卡来过滤，就能够减少中断。
+用户级传输协议 传统的协议处理是在用户空间内完成的，因此要减少复制，只能引入各种内存映射或共享的方案。人们可以在用户空间实现传输层的协议，节省了数据复制的时间。
+TCP卸载引擎 将软件执行转移到硬件执行，一直是性能优化的不二法门。如果在网卡硬件上运行一些特殊的系统，使得数据处理等步骤直接由网卡完成，那末系统的负载就小了，执行起来就快了。
+TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要与系统其他硬件保持同步，否则还是可能成为传输速度的瓶颈；当然，要在网卡上实现数据处理的系统，本身的硬件和软件的设计难度也是很大的。
+协议细节优化 数据包处理优化实际上就是针对机器本身的“网络性能优化”，而协议细节的优化才真正关乎TCP协议本身。
+拥塞控制优化 TCP的拥塞控制机制我们是熟悉的，那就是：慢启动、拥塞避免（加法增加、乘法减少）。其实在这两个机制的基础上，延伸出的快重传和快恢复也属于拥塞控制的优化，当然我们还要有更多的尝试。
+针对拥塞状态的判断 。我们如何判断网络是否拥塞呢？TCP协议一般以超时和重复ACK为标准。超时意味着不仅自己的数据没有到达，对方的重复ACK也没有到达，网络的拥塞情况已经比较严重了，因此传统的处理方法是将发送窗口减到 1 ，阈值减半，重新开始慢启动。重复ACK意味着自己的数据没有到达，对方的ACK可以到达，网络的拥塞情况还不那么严重，因此传统的处理方法是将阈值减半，发送窗口减到阈值大小，重新加法增加。慢启动和加法增加都是保守的，对带宽不一定有充分的利用，尤其当网络出现了小波动的时候，如果误判为拥塞，就会导致传输速度骤降，而带宽空闲。
+有若干种针对拥塞状态的判断方案，例如zetaTCP使用了动态学习的方法判断拥塞，过滤非拥塞情况引起的丢包现象，预判拥塞丢包的概率并基于这一概率直接重传。Fast TCP结合延迟信息反馈来判断拥塞，Westwood结合带宽测量的技术来判断拥塞。
+参数调节 TCP协议的参数是指预先写好的、控制协议工作的一些参数，如用于进行拥塞避免的拥塞窗口阈值，用于传输数据的MTU，用于判断超时的超时时间等。针对这些参数进行仔细的调节，可以一定程度达到TCP加速的目的。
+并行TCP 并行TCP的理念是将原本的一条TCP连接修改为多条TCP连接，将原本使用一条连接来传输的数据放在多条连接上传输。这种思路归根到底是对拥塞避免算法的改造，原本一条连接上的拥塞避免算法，其强度在改为多条连接之后得到了削弱。例如原本的拥塞窗口是 N ，改成 k 条连接之后就成了 kN ，每次在拥塞避免时还是只把阈值减少 N/2 ，对总的窗口的影响就没那么大了。
+双边加速——以UDP Speeder为例 双边加速要求在客户端和服务端都部署相同的加速方案，常规思路是把复杂的TCP协议转化为私有的协议。使用私有协议，可以对数据包处理、重传/拥塞避免等机制进行调整，从而达到加速的目的。
+以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。">
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>博文</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a onclick="javascript: history.back(-1);" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <script>
+        
+        document.getElementsByTagName("aside")[0].style.display='none'
+    </script>
+
+    <aside class="my-toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#两种方案">两种方案</a></li>
+    <li><a href="#单边加速概述">单边加速概述</a></li>
+    <li><a href="#双边加速以udp-speeder为例">双边加速——以UDP Speeder为例</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </aside>
+
+    <script>
+        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        window.onresize = function() {
+            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
+        }
+    </script>
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/">TCP加速技术简述</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Nov 25, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>传输控制协议（TCP）是我们的老朋友了，它力求在不可靠的IP网络上实现可靠的数据传输，也就是使得数据包有序、无丢失和不重复，因此，引入了如校验、序号、确认、重传等机制。同时，这位老朋友也是比较负责任的，在网络拥挤时，为了不使情况雪上加霜，它引入了慢启动、拥塞避免等机制。</p>
+<p>现在的网络世界中，我们日常进行的网页浏览、游戏、视频等活动都离不开TCP。随着网络的发展，网络上面承载的数据包越来越多，在为多数人所共享的广域网上，在人们上网的高峰期，网络会存在一定的拥塞，反映到我们的上网体验上，就是延迟和丢包。加载个网页要花掉十几秒、玩个王者荣耀时不时延迟200+、看视频卡顿等，除了设备的问题，恐怕网络拥塞难辞其咎。在这样的背景之下，TCP加速技术也就产生和发展了。</p>
+<p>实际上，TCP加速也不是一个新的概念了，十几年前就有相关的研究，但是这一理念在现今的背景下显得较有意义，我们对其进行一些学习和实践，大概不算是浪费时间的。</p>
+<h3 id="两种方案">两种方案</h3>
+<p>TCP加速可以从几个角度来进行分类，较为常见且易懂的是从加速方案的部署位置来分。如果只在客户/服务器的某一边来部署TCP加速，就叫做 <em>单边加速</em> ，如果双方都要部署，就叫做 <em>双边加速</em> 。两种方案一般有不同的使用场景，单边加速常部署在服务端上，这样就能透明地提升用户的访问体验；双边加速常常是双方协商好的一套加速方案，因此不能做到透明，可以用在客户端和服务端都可控的场景中，比如在个人云服务器上运行着某项服务，此时可以在自己的客户端PC和服务端都部署TCP加速，来改善访问体验。</p>
+<h3 id="单边加速概述">单边加速概述</h3>
+<p>单边加速方案只需要由客户或服务端的一方来部署，比较简单，且对对方是透明的。我们首先要知道TCP是怎么工作的：在 <strong>协议规定</strong> 的运行模式下，发送方的系统 <strong>产生和处理数据</strong> 、 <strong>把数据交给网卡</strong> 、网卡发送数据，接收方接收数据、把数据交给系统、处理数据。从这一套流程中，我们应该发现几个可以下手的地方，每个地方都尝试一下，我们对TCP加速的认识也就差不多了。</p>
+<h4 id="数据包处理优化">数据包处理优化</h4>
+<p>说是数据包处理优化，其实就是所谓的“网络性能优化”。这个概念跟TCP协议本身没有太多关系，主要是针对收发数据双方的硬件、操作系统等进行优化。</p>
+<h5 id="减少复制">减少复制</h5>
+<p>按照上面说过的流程，发送方的系统要产生和处理数据，然后把数据交给网卡。这一步是一个复制的过程，也就是将数据从系统或者应用程序所在的内存空间复制了一份到网卡的内存空间。这一步是可以优化的，有下面这几种办法。</p>
+<p><em>直接访问网卡存储空间</em> 。这种方案取消了复制，而采用地址映射或直接访问的办法，相当于将网卡看作了操作系统的一部分。为了实现这种方案，网卡要具备一定的智能性，否则无法支持多应用的访问，也无法在合适的时机传递数据。</p>
+<p><em>与网卡共享存储区域</em> 。让网卡用DMA或其他什么方式来访问内核内存空间，比上面的方案简单一些，对网卡的要求少一些。</p>
+<p><em>其他各种内存映射方案</em> 。内存映射可以实现应用、网卡和内核三者的内存共享，无论是什么内存映射方案，核心都是减少复制。</p>
+<h5 id="减少中断">减少中断</h5>
+<p>系统要把数据交给网卡，或者网卡收到数据要交给系统的时候，一般都会触发中断。操作系统处理中断是需要花费时间的，因此这一步也是可以优化的。</p>
+<p><em>将异步触发变为轮询</em> 。有些研究者将TCP/IP的处理放置到一台单独的设备上，这样，就可以将协议数据的收发处理由中断的方式改变为比较简单的系统轮询。轮询的频率是要仔细调整的，太慢则数据处理产生延迟，太快则系统负载过大。</p>
+<p><em>中断合并</em> 。中断合并就是将多个中断合并到一起处理，也就是不在每次收到数据时产生中断，而是在数据积累到一定的量时再产生一次中断。这种方案使得延迟跟报文长度有关系了，且在处理数据的时候可能一次处理了多个报文，应用程序的调度也受到一些影响。</p>
+<p><em>增加单个报文的长度</em> 。思想和中断合并是类似的，就是将报文数据积累到一定长度再发送。但这一步是交给上层协议来完成的，跟中断合并时有区别的。</p>
+<p><em>报文过滤</em> 。总会有一些报文是没意义的，比如一些广播数据、一些没用的UDP报文，这些数据直接交给网卡来过滤，就能够减少中断。</p>
+<h5 id="用户级传输协议">用户级传输协议</h5>
+<p>传统的协议处理是在用户空间内完成的，因此要减少复制，只能引入各种内存映射或共享的方案。人们可以在用户空间实现传输层的协议，节省了数据复制的时间。</p>
+<h5 id="tcp卸载引擎">TCP卸载引擎</h5>
+<p>将软件执行转移到硬件执行，一直是性能优化的不二法门。如果在网卡硬件上运行一些特殊的系统，使得数据处理等步骤直接由网卡完成，那末系统的负载就小了，执行起来就快了。</p>
+<p>TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要与系统其他硬件保持同步，否则还是可能成为传输速度的瓶颈；当然，要在网卡上实现数据处理的系统，本身的硬件和软件的设计难度也是很大的。</p>
+<h4 id="协议细节优化">协议细节优化</h4>
+<p>数据包处理优化实际上就是针对机器本身的“网络性能优化”，而协议细节的优化才真正关乎TCP协议本身。</p>
+<h5 id="拥塞控制优化">拥塞控制优化</h5>
+<p>TCP的拥塞控制机制我们是熟悉的，那就是：慢启动、拥塞避免（加法增加、乘法减少）。其实在这两个机制的基础上，延伸出的快重传和快恢复也属于拥塞控制的优化，当然我们还要有更多的尝试。</p>
+<p><em>针对拥塞状态的判断</em> 。我们如何判断网络是否拥塞呢？TCP协议一般以超时和重复ACK为标准。超时意味着不仅自己的数据没有到达，对方的重复ACK也没有到达，网络的拥塞情况已经比较严重了，因此传统的处理方法是将发送窗口减到 <code>1</code> ，阈值减半，重新开始慢启动。重复ACK意味着自己的数据没有到达，对方的ACK可以到达，网络的拥塞情况还不那么严重，因此传统的处理方法是将阈值减半，发送窗口减到阈值大小，重新加法增加。慢启动和加法增加都是保守的，对带宽不一定有充分的利用，尤其当网络出现了小波动的时候，如果误判为拥塞，就会导致传输速度骤降，而带宽空闲。</p>
+<p>有若干种针对拥塞状态的判断方案，例如zetaTCP使用了动态学习的方法判断拥塞，过滤非拥塞情况引起的丢包现象，预判拥塞丢包的概率并基于这一概率直接重传。Fast TCP结合延迟信息反馈来判断拥塞，Westwood结合带宽测量的技术来判断拥塞。</p>
+<h5 id="参数调节">参数调节</h5>
+<p>TCP协议的参数是指预先写好的、控制协议工作的一些参数，如用于进行拥塞避免的拥塞窗口阈值，用于传输数据的MTU，用于判断超时的超时时间等。针对这些参数进行仔细的调节，可以一定程度达到TCP加速的目的。</p>
+<h5 id="并行tcp">并行TCP</h5>
+<p>并行TCP的理念是将原本的一条TCP连接修改为多条TCP连接，将原本使用一条连接来传输的数据放在多条连接上传输。这种思路归根到底是对拥塞避免算法的改造，原本一条连接上的拥塞避免算法，其强度在改为多条连接之后得到了削弱。例如原本的拥塞窗口是 <code>N</code> ，改成 <code>k</code> 条连接之后就成了 <code>kN</code> ，每次在拥塞避免时还是只把阈值减少 <code>N/2</code> ，对总的窗口的影响就没那么大了。</p>
+<h3 id="双边加速以udp-speeder为例">双边加速——以UDP Speeder为例</h3>
+<p>双边加速要求在客户端和服务端都部署相同的加速方案，常规思路是把复杂的TCP协议转化为私有的协议。使用私有协议，可以对数据包处理、重传/拥塞避免等机制进行调整，从而达到加速的目的。</p>
+<p>以开源的 <a class="link" href="https://github.com/wangyu-/UDPspeeder/"  target="_blank" rel="noopener"
+    >UDP Speeder</a> 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。</p>
+<p>在客户端，UDP Speeder会开放一个监听端口，监听用户给到的数据；会开放一个发送端口，用于把数据发送到远端服务。监听端口收到数据之后，首先进行编码等处理，然后将数据通过发送端口发送出去。</p>
+<p>在服务端，UDP Speeder也会开放一个监听端口，监听来自广域网的数据；根据收到的数据管理连接，每个连接对应一个独立的发送端口，用于把该连接的数据发送给服务程序。监听端口收到广域网传来的数据后，首先进行解码，纠错/恢复传输过程中收到影响的部分，然后送到该连接对应的发送端口，发送给服务程序。</p>
+<p>从UDP Speeder中，我们看到双边TCP加速的基本理念，就是针对数据进行一个双方协商好的处理，其目的是提高带宽的利用效率，减少不必要的数据重传等。UDP Speeder只能实现针对UDP数据的加速，但是配合基于UDP的VPN程序，如Open VPN等，可以实现对TCP的加速。</p>
+<p>我对UDP Speeder的源码进行了分析，如果希望更加细致的了解它的工作流程，下面的两张图可以起到帮助：</p>
+<p><figure style="flex-grow: 352; flex-basis: 845px">
+		<a href="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1.png" data-size="1522x432"><img src="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1.png"
+				srcset="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1_huf66ac7774a042e3cacb2a8c0a44a9981_66794_480x0_resize_box_2.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1_huf66ac7774a042e3cacb2a8c0a44a9981_66794_1024x0_resize_box_2.png 1024w"
+				width="1522"
+				height="432"
+				loading="lazy"
+				alt="客户端">
+		</a>
+		
+		<figcaption>客户端</figcaption>
+		
+	</figure></p>
+<p><figure style="flex-grow: 327; flex-basis: 785px">
+		<a href="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2.png" data-size="1463x447"><img src="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2.png"
+				srcset="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2_hu261e99c416bbf82d1d3113fc9a419c89_59556_480x0_resize_box_2.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2_hu261e99c416bbf82d1d3113fc9a419c89_59556_1024x0_resize_box_2.png 1024w"
+				width="1463"
+				height="447"
+				loading="lazy"
+				alt="服务端">
+		</a>
+		
+		<figcaption>服务端</figcaption>
+		
+	</figure></p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] 王圣,苏金树.TCP加速技术研究综述[J].软件学报,2004,15(11):1689-1697</p>
+<p>[2] 王建新,彭娜.广域网加速技术研究综述[J].技术交流.2009,5</p>
+<p>[3] 钟琳华.深度解析ZetaTCP单边加速技术[J].技术研发.2015</p>
+<p>[4] David X. Wei,Cheng Jin,Steven H. Low, et al.FAST TCP: Motivation, Architecture, Algorithms,Performance[J].IEEE/ACM TRANSACTIONS ON NETWORKING,2006,14(6):1246-1258</p>
+<p>[5] Giuseppe Siracusano,Roberto Bifulco,Simon Kuenzer et al.On-the-Fly TCP Acceleration with Miniproxy[J].Extended version of paper published in ACM HotMiddlebox.2016,5.</p>
+<p>[6] Tom Kelly.Scalable TCP: Improving Performance in Highspeed Wide Area Networks[J].2002,12.</p>
+<p>[7] 蒋建军,陆平.基于 TCP 协议加速的单边加速模型研究与实现[J].信息技术,2015(2):160-164</p>
+<p>[8] 林睿.基于 4G 核心网透明代理进行 TCP加速的效果分析[J].通信设计与应用.2020,2.</p>
+<p>[9] 彭娜.并行TCP在广域网加速系统中的研究与实现[D].中南大学.2009.</p>
+<p>[10] 赵欣,时向泉,吴纯青.支持TCP/IP卸载引擎的协议栈的设计与实现[J].微电子学与计算机,2006(S1)</p>
+<p>[11] S.Floyd.RFC.3649.HighSpeed TCP.2003</p>
+
+</section>
+
+    
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+        
+    </section>
+
+
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">传输层协议——TCP</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/oauth2.0%E6%B5%85%E6%9E%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">OAuth2.0浅析</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">TCP加速之环境搭建（WANem）</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">秋招 | 一些知识点</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script> 
+
+
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+        var gitalk  = new Gitalk({
+                id: '2021-11-25 00:00:00 \u002b0000 UTC',
+                clientID: '60cf432a89bc92763c12',
+                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
+                repo: 'BlogComments',      
+                owner: 'SGS4ever',
+                admin: ['SGS4ever']
+        });
+        gitalk.render('gitalk-container');
+</script>
+<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
