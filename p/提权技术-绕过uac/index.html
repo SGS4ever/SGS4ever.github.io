@@ -299,7 +299,7 @@
 <p>有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。</p>
 <p>针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。</p>
 <p>我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="n">BOOL</span> <span class="nf">SetReg</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">lpszExePath</span><span class="p">)</span>
 <span class="p">{</span>
@@ -341,7 +341,7 @@
 </code></pre></div><p>然而，修改注册表的提权方式过于简陋，会被WinDefender拦截下来。</p>
 <p><figure style="flex-grow: 128; flex-basis: 307px">
 		<a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/UAC1.png" data-size="602x470"><img src="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/UAC1.png"
-				srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/UAC1_hu04ebefb6f76c4aed95f1f126051a7c4a_27226_480x0_resize_box_2.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/UAC1_hu04ebefb6f76c4aed95f1f126051a7c4a_27226_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/UAC1_hu04ebefb6f76c4aed95f1f126051a7c4a_27226_480x0_resize_box_3.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/UAC1_hu04ebefb6f76c4aed95f1f126051a7c4a_27226_1024x0_resize_box_3.png 1024w"
 				width="602"
 				height="470"
 				loading="lazy"
@@ -362,7 +362,7 @@
 <p>文章[1]还指出，如果执行COM提升名称代码的程序身份是不可信的，则会触发UAC弹窗；若可信，则不会触发UAC弹窗。所以，要想Bypass UAC，则需要想办法让这段代码在Windows的可信程序中运行。其中，可信程序有计算器、记事本、资源管理器、rundll32.exe等。</p>
 <p>我们仅仅希望以管理员权限启动我们的远控程序，则直接制作一个DLL交给rundll32.exe运行即可。按照上面的思路，我们的DLL应该先实例化一个管理员权限的COM组件，这个提权后的组件调用ShellExcute来启动远控程序。</p>
 <p>DLL项目的代码如下：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// File: CBypassUAC.h
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// File: CBypassUAC.h
 </span><span class="c1"></span><span class="cp">#pragma once
 </span><span class="cp">#ifndef BYPASS_UAC_H
 </span><span class="cp">#define BYPASS_UAC_H
@@ -478,7 +478,7 @@
 
 <span class="cp">#endif
 </span></code></pre></div><hr>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// File: CBypassUAC.c
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// File: CBypassUAC.c
 </span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;pch.h&#34;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&#34;CBypassUAC.h&#34;</span><span class="cp">
 </span><span class="cp"></span>
@@ -554,7 +554,7 @@
 </code></pre></div><p>这里需要注意，我们要在头文件中将目标函数<code>BypassUAC</code>导出，否则rundll32.exe程序无法正确获取这个函数。具体方法就是在函数声明时加上<code>extern &quot;C&quot; __declspec(dllexport)</code>前缀。</p>
 <p>对于DLL项目中的dllmain.cpp文件，保持默认即可。编译此程序，生成一个DLL。现在我们还需要编写一个程序用来调用rundll32.exe，使其执行链接库中的<code>BypassUAC</code>函数。</p>
 <p>新建一个Launcher项目，只有一个源文件：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// File: Launcher.cpp
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// File: Launcher.cpp
 </span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp"></span>
@@ -580,7 +580,7 @@
 </code></pre></div><p>运行此Launcher，将以管理员权限打开我们的远控程序。</p>
 <p><figure style="flex-grow: 202; flex-basis: 486px">
 		<a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/bypassUAC.png" data-size="1422x702"><img src="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/bypassUAC.png"
-				srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/bypassUAC_hufbd15da8cf50e726ab9722cba2e46860_102846_480x0_resize_box_2.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/bypassUAC_hufbd15da8cf50e726ab9722cba2e46860_102846_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/bypassUAC_hufbd15da8cf50e726ab9722cba2e46860_102846_480x0_resize_box_3.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/bypassUAC_hufbd15da8cf50e726ab9722cba2e46860_102846_1024x0_resize_box_3.png 1024w"
 				width="1422"
 				height="702"
 				loading="lazy"
@@ -593,7 +593,7 @@
 <p>而没有提权时我们的程序无法执行这个指令。</p>
 <p><figure style="flex-grow: 202; flex-basis: 485px">
 		<a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/no_UAC.png" data-size="1460x721"><img src="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/no_UAC.png"
-				srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/no_UAC_huec842714bbafa68d87198d6c839cf4cf_87757_480x0_resize_box_2.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/no_UAC_huec842714bbafa68d87198d6c839cf4cf_87757_1024x0_resize_box_2.png 1024w"
+				srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/no_UAC_huec842714bbafa68d87198d6c839cf4cf_87757_480x0_resize_box_3.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF-%E7%BB%95%E8%BF%87uac/no_UAC_huec842714bbafa68d87198d6c839cf4cf_87757_1024x0_resize_box_3.png 1024w"
 				width="1460"
 				height="721"
 				loading="lazy"
@@ -607,15 +607,20 @@
 </blockquote>
 <h4 id="参考文章">参考文章</h4>
 <p>[1] 酷扯儿.Windows编程技术：提权技术(下)[EB/OL].2020-09-22</p>
-<p><a href="https://baijiahao.baidu.com/s?id=1678518589760092233&amp;wfr=spider&amp;for=pc">https://baijiahao.baidu.com/s?id=1678518589760092233&amp;wfr=spider&amp;for=pc</a></p>
+<p><a class="link" href="https://baijiahao.baidu.com/s?id=1678518589760092233&amp;wfr=spider&amp;for=pc"  target="_blank" rel="noopener"
+    >https://baijiahao.baidu.com/s?id=1678518589760092233&wfr=spider&for=pc</a></p>
 <p>[2] FDCFDMin.COM（Componet Object Model_组件对象模型）技术概述[EB/OL].2018-09-17</p>
-<p><a href="https://blog.csdn.net/weixin_39743893/article/details/82500563">https://blog.csdn.net/weixin_39743893/article/details/82500563</a></p>
+<p><a class="link" href="https://blog.csdn.net/weixin_39743893/article/details/82500563"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/weixin_39743893/article/details/82500563</a></p>
 <p>[3] Microsoft.COM Technical Overview[EB/OL].2018-05-31</p>
-<p><a href="https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview">https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview</a></p>
+<p><a class="link" href="https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview"  target="_blank" rel="noopener"
+    >https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview</a></p>
 <p>[4] 自己的小白.基于COM组件接口ICMLuaUtil的Bypass UAC[EB/OL].2020-04-24</p>
-<p><a href="https://www.cnblogs.com/ndyxb/p/12770289.html">https://www.cnblogs.com/ndyxb/p/12770289.html</a></p>
+<p><a class="link" href="https://www.cnblogs.com/ndyxb/p/12770289.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/ndyxb/p/12770289.html</a></p>
 <h4 id="本文中使用的远控程序">本文中使用的远控程序</h4>
-<p><a href="https://github.com/SGS4ever/RemoteCtrl">https://github.com/SGS4ever/RemoteCtrl</a></p>
+<p><a class="link" href="https://github.com/SGS4ever/RemoteCtrl"  target="_blank" rel="noopener"
+    >https://github.com/SGS4ever/RemoteCtrl</a></p>
 
 </section>
 

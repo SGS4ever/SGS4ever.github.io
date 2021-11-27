@@ -256,7 +256,8 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/">https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/</a></em></p>
 <h2 id="题目">题目</h2>
 <p><code>n</code> 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。</p>
 <p>如果一块石头的 <strong>同行或者同列</strong> 上有其他石头存在，那么就可以移除这块石头。</p>
@@ -284,7 +285,7 @@
 <p>由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。</p>
 <p>于是题目转化为了以行列为依据的并查集问题。对于一块石头<code>idx</code>，其坐标为<code>(x, y)</code>，如果x行上已经有了先来的石头<code>root_x[x]</code>，那么将<code>idx</code>加入先前就存在的<code>root_x[x]</code>的并查集中；否则表示<code>idx</code>是这一行最先到达的石头，其后的所有石头都要加入<code>idx</code>的并查集中。对于y列来说同理。</p>
 <p>于是实现并查集如下：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
 </span><span class="c1">// memset(parent, -1, sizeof(parent));
 </span><span class="c1">// 或者
 </span><span class="c1">// for (i = 0; i &lt; 1010; i++) parent[i] = i;
@@ -306,7 +307,7 @@
 <span class="p">}</span>
 </code></pre></div><p>我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。</p>
 <p>这一轮遍历之后，所有同行同列的石头都处于同一个并查集中；而全局中并查集的个数就是剩余的石头个数。</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
 </span><span class="c1"></span>    <span class="kt">int</span> <span class="n">root_x</span><span class="p">[</span><span class="mi">10010</span><span class="p">];</span>
@@ -372,15 +373,15 @@
 <p><strong>错误记录</strong></p>
 <blockquote>
 <p>并查集中的<code>join</code>函数，原本的写法为：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">parent</span><span class="p">[</span><span class="n">son_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_idx</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div><p>这样的写法是错误的，且非常之离谱。我们知道，两个属于不同并查集的元素的合并意味着两个并查集的合并，显然不能单纯地修改这两个元素本身，而要考虑到这两个并查集的根节点。</p>
 <p>就本题来说，这样的写法无法通过这个测试样例：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="na">[[0,1],[1,0],[1,1]]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="na">[[0,1],[1,0],[1,1]]</span>
 </code></pre></div><p>对于最后一块石头<code>(1, 1)</code>，第1行已经有了石头<code>1</code>，第1列已经有了石头<code>0</code>。按照遍历过程的逻辑：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
 <span class="p">{</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
@@ -409,9 +410,11 @@
 </blockquote>
 <p><strong>参考资料</strong></p>
 <p>[1] 小宇.简单思路+优化（超100%）[EB/OL].2021-01-15</p>
-<p><em><a href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/jian-dan-jie-fa-chao-100-by-mantoufan-k3ne/">https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/jian-dan-jie-fa-chao-100-by-mantoufan-k3ne/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/jian-dan-jie-fa-chao-100-by-mantoufan-k3ne/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/jian-dan-jie-fa-chao-100-by-mantoufan-k3ne/</a></em></p>
 <p>[2] yex.【详解】并查集[EB/OL].2021-01-15</p>
-<p><em><a href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/tu-jie-bing-cha-ji-by-yexiso-nbcz/">https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/tu-jie-bing-cha-ji-by-yexiso-nbcz/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/tu-jie-bing-cha-ji-by-yexiso-nbcz/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/most-stones-removed-with-same-row-or-column/solution/tu-jie-bing-cha-ji-by-yexiso-nbcz/</a></em></p>
 
 </section>
 

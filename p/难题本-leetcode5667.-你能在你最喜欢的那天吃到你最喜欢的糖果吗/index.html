@@ -259,7 +259,8 @@
 
     <section class="article-content">
     <p>我的第一次LeetCode周赛，本来大有希望AC三道题，结果在这个神坑上趴了半个多小时o(╥﹏╥)o</p>
-<p>题目链接：<em><a href="https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/">https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/</a></em></p>
+<p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/can-you-eat-your-favorite-candy-on-your-favorite-day/</a></em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
 <p>给你一个下标从 0 开始的正整数数组 <code>candiesCount </code>，其中 <code>candiesCount[i]</code> 表示你拥有的第 <code>i</code> 类糖果的数目。同时给你一个二维数组 <code>queries</code> ，其中 <code>queries[i] = [favoriteTypei, favoriteDayi, dailyCapi] </code>。</p>
@@ -324,7 +325,7 @@
 <p>使用前缀和数组保存<code>favType</code>之前的糖果数量和，<code>prefix_sum[i]</code>表示<strong>第i类糖果之前的糖果和（不包括第i类）</strong>。</p>
 </blockquote>
 <h2 id="ac代码">AC代码</h2>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">canEat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candiesCount</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">prefix_sum</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -341,16 +342,16 @@
             <span class="c1"># 敞开了吃，都不能在favDay结束的时候把前面的糖果吃完</span>
             <span class="c1"># 这里需要算上favDay，一共吃favDay + 1天</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">favDay</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">dayCap</span> <span class="o">&lt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">favType</span><span class="p">]:</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">continue</span>
             <span class="c1"># 省着吃，在favDay之前就已经把favType吃完</span>
             <span class="k">if</span> <span class="n">favDay</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">favType</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">continue</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
             
         <span class="k">return</span> <span class="n">res</span>
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
     
