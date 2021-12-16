@@ -6,7 +6,25 @@
     <description>Recent content in Tags on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 26 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 16 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LeetCode</title>
+      <link>https://xrg.fj.cn/tags/leetcode/</link>
+      <pubDate>Thu, 16 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/tags/leetcode/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>错题本</title>
+      <link>https://xrg.fj.cn/tags/%E9%94%99%E9%A2%98%E6%9C%AC/</link>
+      <pubDate>Thu, 16 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/tags/%E9%94%99%E9%A2%98%E6%9C%AC/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>日常</title>
       <link>https://xrg.fj.cn/tags/%E6%97%A5%E5%B8%B8/</link>
@@ -71,29 +89,11 @@
     </item>
     
     <item>
-      <title>LeetCode</title>
-      <link>https://xrg.fj.cn/tags/leetcode/</link>
-      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://xrg.fj.cn/tags/leetcode/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>难题本</title>
       <link>https://xrg.fj.cn/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/</link>
       <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>https://xrg.fj.cn/tags/%E9%9A%BE%E9%A2%98%E6%9C%AC/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>错题本</title>
-      <link>https://xrg.fj.cn/tags/%E9%94%99%E9%A2%98%E6%9C%AC/</link>
-      <pubDate>Tue, 06 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://xrg.fj.cn/tags/%E9%94%99%E9%A2%98%E6%9C%AC/</guid>
       <description></description>
     </item>
     

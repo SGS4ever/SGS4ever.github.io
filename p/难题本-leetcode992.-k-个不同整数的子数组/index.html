@@ -275,8 +275,7 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/subarrays-with-k-different-integers/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/subarrays-with-k-different-integers/</a></em></p>
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/subarrays-with-k-different-integers/">https://leetcode-cn.com/problems/subarrays-with-k-different-integers/</a></em></p>
 <p>思路是真难想，想出来之后是真简单。</p>
 <p>已经是我目前的水平无法搞定的程度了，在此稍作记录。</p>
 <h2 id="题目">题目</h2>
@@ -342,7 +341,7 @@
 <p>我们特别地考虑<code>left = 0, right = 3</code>的情况，窗口内不同元素的个数还是2，我们看看它到底是不是贡献了<code>3 - 2 + 1 = 4</code>个子数组。</p>
 <p><figure style="flex-grow: 204; flex-basis: 490px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/1.png" data-size="638x312"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/1_hubb1d0de0e0a7cc6b45a594cd103d40ca_5314_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/1_hubb1d0de0e0a7cc6b45a594cd103d40ca_5314_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/1_hubb1d0de0e0a7cc6b45a594cd103d40ca_5314_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/1_hubb1d0de0e0a7cc6b45a594cd103d40ca_5314_1024x0_resize_box_2.png 1024w"
 				width="638"
 				height="312"
 				loading="lazy"
@@ -355,7 +354,7 @@
 <p>是的，我们从<code>right</code>向左延伸，包括<code>right</code>所指的元素本身在内，一共能找到<code>right - left + 1 = 4</code>个子数组。</p>
 <p>注意是从<code>right</code><strong>向左延伸</strong>，因为右边界小于<code>right</code>的子数组一定在更早的循环被考虑过了。比如图中的中间子数组<code>[2, 1]</code>，在我们的<code>right = 2</code>时已经考虑过它。</p>
 <p>因此，能够写出至多包含K个子元素的滑动窗口代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">subarrayWithMostKDistinct</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">subarrayWithMostKDistinct</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
@@ -387,7 +386,7 @@
 <span class="p">}</span>
 </code></pre></div></blockquote>
 <h2 id="ac代码">AC代码</h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">subarrayWithMostKDistinct</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span>
     <span class="p">{</span>
@@ -431,7 +430,7 @@
 </code></pre></div><p>表现效果莫名其妙:smirk:</p>
 <p><figure style="flex-grow: 447; flex-basis: 1074px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/2.png" data-size="716x160"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/2_hu533c56e4fcf0b90e3b29e8135e1b1779_17734_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/2_hu533c56e4fcf0b90e3b29e8135e1b1779_17734_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/2_hu533c56e4fcf0b90e3b29e8135e1b1779_17734_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode992.-k-%E4%B8%AA%E4%B8%8D%E5%90%8C%E6%95%B4%E6%95%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/2_hu533c56e4fcf0b90e3b29e8135e1b1779_17734_1024x0_resize_box_2.png 1024w"
 				width="716"
 				height="160"
 				loading="lazy"
@@ -446,8 +445,7 @@
 </blockquote>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣（LeetCode）.K个不同整数的子数组[EB/OL].2021-02-08</p>
-<p><em><a class="link" href="https://leetcode-cn.com/problems/subarrays-with-k-different-integers/solution/k-ge-bu-tong-zheng-shu-de-zi-shu-zu-by-l-ud34/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/subarrays-with-k-different-integers/solution/k-ge-bu-tong-zheng-shu-de-zi-shu-zu-by-l-ud34/</a></em></p>
+<p><em><a href="https://leetcode-cn.com/problems/subarrays-with-k-different-integers/solution/k-ge-bu-tong-zheng-shu-de-zi-shu-zu-by-l-ud34/">https://leetcode-cn.com/problems/subarrays-with-k-different-integers/solution/k-ge-bu-tong-zheng-shu-de-zi-shu-zu-by-l-ud34/</a></em></p>
 
 </section>
 

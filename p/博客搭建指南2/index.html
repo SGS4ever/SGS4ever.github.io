@@ -330,8 +330,7 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 <p>如果你看到这篇博文，应该能注意到这篇博文的背景有了一点小变化。</p>
 <p>没错，在这篇文章里，我要记录一款强大的JS插件<code>particles.js</code>的使用方法，这款应用能让你的网页背景看起来不那么单调（简直非常适合我现在的博客主题）。</p>
 <p>你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。</p>
-<p>(<a class="link" href="https://github.com/VincentGarreau/particles.js"  target="_blank" rel="noopener"
-    >https://github.com/VincentGarreau/particles.js</a>)</p>
+<p>(<a href="https://github.com/VincentGarreau/particles.js">https://github.com/VincentGarreau/particles.js</a>)</p>
 <p>话不多说，let&rsquo;s go!</p>
 <h4 id="下载这款插件">下载这款插件</h4>
 <blockquote>
@@ -359,7 +358,7 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 <p>接下来的一步很重要：<strong>把这两个文件放入<code>public/js</code>文件夹中!</strong></p>
 <p>你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，<code>public</code>文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。</p>
 <p>将两个JS文件引入，记得放在第二步的div后面：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;xxxxx/app.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;xxxxx/app.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;xxxxx/particles.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div><p>这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。</p>
 </blockquote>
@@ -369,20 +368,20 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 <p>我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用<code>src=&quot;/js/app.js&quot;</code>这样的语句，当你打开网站的主页，它会找到<code>https://yourWeb.github.io/js/app.js</code>，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找<code>https://yourWeb.github.io/post/article1/js/app.js</code>，必然是失败的，于是你的博文就不能有漂亮的背景了 :(</p>
 <p>正确的获取路径的姿势，你可以直接使用绝对路径，也就是<code>https://yourWeb.github.io/js/app.js</code>这样的方式。</p>
 <p>底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/particles.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/particles.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/app.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div></blockquote>
 <h4 id="代码的最终样式及推送">代码的最终样式及推送</h4>
 <blockquote>
 <p>经过一系列的修改后，你的页面的代码就多了如下的东西：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;particles-js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;particles-js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/particles.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/app.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div><p>此外，你的<code>public/js</code>文件夹中还多了两个文件<code>app.js</code>和<code>particles.js</code>。</p>
 <p>现在，不要以为一切已经结束了，因为你的这个div，你的页面现在多了一个元素，如果它位于footer上方，那它会使得你的页面被撑得很长，我们要在主页面的CSS文件里修改它。</p>
 <p>进入<code>public/css</code>文件夹，如果是Keepit主题，就只有一个文件，打开它；如果是其他主题，你需要找到能发挥作用的CSS。</p>
 <p>在文件最末尾补上这样的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">particles-js-canvas-el</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">particles-js-canvas-el</span> <span class="p">{</span>
     <span class="k">position</span><span class="p">:</span><span class="kc">fixed</span><span class="p">;</span>
     <span class="k">top</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span>
     <span class="k">left</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span>
@@ -406,8 +405,7 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 <p>如果一切顺利，你的背景已经很不错了。现在你可以通过配置<code>app.js</code>的方法进一步修改它。</p>
 <p><code>app.js</code>文件是配置背景的文件，它可以改变背景中每个粒子的形状、颜色、移动方式等等。</p>
 <p>下面这个链接将每一个字段的取值和含义写得非常清楚：</p>
-<p>(<a class="link" href="https://www.jb51.net/article/123594.htm"  target="_blank" rel="noopener"
-    >https://www.jb51.net/article/123594.htm</a>)</p>
+<p>(<a href="https://www.jb51.net/article/123594.htm">https://www.jb51.net/article/123594.htm</a>)</p>
 <p>例如我的<code>particles.color.value = &quot;random&quot;</code>，这是为了在白色主题的情况下也可以看到背景特效。</p>
 </blockquote>
 <h4 id="一些细节">一些细节</h4>

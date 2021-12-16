@@ -281,8 +281,7 @@
 
     <section class="article-content">
     <p><del>美好的</del>二月从WA一道简单题开始。</p>
-<p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/fair-candy-swap/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/fair-candy-swap/</a></em></p>
+<p>题目链接：<em><a href="https://leetcode-cn.com/problems/fair-candy-swap/">https://leetcode-cn.com/problems/fair-candy-swap/</a></em></p>
 <blockquote>
 <p><strong>描述</strong></p>
 <p>爱丽丝和鲍勃有不同大小的糖果棒：<code>A[i]</code> 是爱丽丝拥有的第 <code>i</code> 根糖果棒的大小，<code>B[j]</code> 是鲍勃拥有的第 <code>j</code> 根糖果棒的大小。</p>
@@ -334,7 +333,7 @@
 <p>使用二分搜索，一层循环<code>changeA</code>，每个<code>changeA</code>搜索对应的<code>changeB</code>只需要花费<em>logn</em>，则总复杂度是<em>O(nlogn)</em>，可以一试。</p>
 <p>第一次WA，二分写错了&hellip;</p>
 <h4 id="暴力二分ac代码">暴力二分，AC代码：</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
 
@@ -408,7 +407,7 @@
 <p>不过表现就烂成蛇皮了。</p>
 <p><figure style="flex-grow: 1249; flex-basis: 2998px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/1.png" data-size="812x65"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/1.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/1_hu3214cd1c9a2a94e0286d7e841b8e2584_6384_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/1_hu3214cd1c9a2a94e0286d7e841b8e2584_6384_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/1_hu3214cd1c9a2a94e0286d7e841b8e2584_6384_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/1_hu3214cd1c9a2a94e0286d7e841b8e2584_6384_1024x0_resize_box_2.png 1024w"
 				width="812"
 				height="65"
 				loading="lazy"
@@ -429,7 +428,7 @@
 <p>此法的正确性主要来自于集合的有序性。第一种情况出现时，说明<code>pB</code>指向的元素太小了，<code>changeB</code>需要再大一点，故将<code>pB</code>向后移动；当第二种情况出现的时候，说明<code>pA</code>指向的元素太小了，<code>changeA</code>需要再大一点。</p>
 <p>二分和双指针法的最大复杂度其实都是<em>O(nlogn)</em>（排序），但是在查找过程中显然双指针更快一些。</p>
 <h4 id="ac代码">AC代码：</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
     
@@ -474,7 +473,7 @@
 </code></pre></div><p>表现还不错。</p>
 <p><figure style="flex-grow: 413; flex-basis: 991px">
 		<a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/2.png" data-size="686x166"><img src="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/2.png"
-				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/2_huf3071d5f57545e4e6fa753f0c3f17f6b_17781_480x0_resize_box_3.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/2_huf3071d5f57545e4e6fa753f0c3f17f6b_17781_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/2_huf3071d5f57545e4e6fa753f0c3f17f6b_17781_480x0_resize_box_2.png 480w, /p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/2_huf3071d5f57545e4e6fa753f0c3f17f6b_17781_1024x0_resize_box_2.png 1024w"
 				width="686"
 				height="166"
 				loading="lazy"
@@ -488,8 +487,7 @@
 <p>题解中有个老哥与我的双指针方法一毛一样，但是我的做法是独立想出来的，故不将其放入参考资料中。</p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.公平的糖果交换[EB/OL].2021-02-01</p>
-<p><em><a class="link" href="https://leetcode-cn.com/problems/fair-candy-swap/solution/gong-ping-de-tang-guo-jiao-huan-by-leetc-tlam/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/fair-candy-swap/solution/gong-ping-de-tang-guo-jiao-huan-by-leetc-tlam/</a></em></p>
+<p><em><a href="https://leetcode-cn.com/problems/fair-candy-swap/solution/gong-ping-de-tang-guo-jiao-huan-by-leetc-tlam/">https://leetcode-cn.com/problems/fair-candy-swap/solution/gong-ping-de-tang-guo-jiao-huan-by-leetc-tlam/</a></em></p>
 
 </section>
 
@@ -516,6 +514,18 @@
         <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1610.-%E5%8F%AF%E8%A7%81%E7%82%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode1610. 可见点的最大数目</h2>
+        </div>
+    </a>
+</article>
                 
                     
 <article class="">
@@ -561,18 +571,6 @@
 
         <div class="article-details">
             <h2 class="article-title">错题本 | LeetCode1232. 缀点成线</h2>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">错题本 | LeetCode947. 移除最多的同行或同列石头</h2>
         </div>
     </a>
 </article>

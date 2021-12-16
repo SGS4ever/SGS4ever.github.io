@@ -277,8 +277,7 @@
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/implement-trie-prefix-tree/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/implement-trie-prefix-tree/</a></em></p>
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/implement-trie-prefix-tree/">https://leetcode-cn.com/problems/implement-trie-prefix-tree/</a></em></p>
 <p>定场句：<em>人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。</em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
@@ -335,7 +334,7 @@
 <p>比如，单词 <code>dog</code> 就能组成这么一颗前缀树：</p>
 <p><figure style="flex-grow: 103; flex-basis: 249px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png" data-size="532x512"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_1024x0_resize_box_2.png 1024w"
 				width="532"
 				height="512"
 				loading="lazy"
@@ -350,7 +349,7 @@
 <p>我们还是进行遍历，从根节点出发，依次获取 <code>d</code> 、 <code>o</code> 、 <code>g</code> ，来到了节点 <code>3</code> ，只需要再插入一条边表示 <code>e</code> 就可以了！</p>
 <p><figure style="flex-grow: 90; flex-basis: 217px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png" data-size="568x628"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_1024x0_resize_box_2.png 1024w"
 				width="568"
 				height="628"
 				loading="lazy"
@@ -365,7 +364,7 @@
 <p>我们再插入一个单词 <code>do</code> ，这时根据我们遍历的结果发现，到达节点 <code>2</code> 的路径就能表示这个单词！那么我们不用再申请一个新的节点，直接将 <code>2</code> 标记为 <strong>终止节点</strong> 即可。</p>
 <p><figure style="flex-grow: 94; flex-basis: 226px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png" data-size="593x627"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_1024x0_resize_box_2.png 1024w"
 				width="593"
 				height="627"
 				loading="lazy"
@@ -390,7 +389,7 @@
 	</figure></p>
 <p><figure style="flex-grow: 163; flex-basis: 393px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png" data-size="1017x621"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_1024x0_resize_box_2.png 1024w"
 				width="1017"
 				height="621"
 				loading="lazy"
@@ -422,7 +421,7 @@
 <p>如果我们用链表的思想 + 动态申请内存的办法，效果则大不相同。使用一个数据结构来表示节点，它含有一个长度为 <code>26</code> 的 <strong>指针数组</strong> ，每一个单元表示对应的边，指向下一个节点。同时，这个结构顺便定义了一个成员变量来表示该节点是否为终止节点，这种办法就简洁多了。</p>
 <h3 id="ac代码1">AC代码1</h3>
 <p>此代码对应构造方法1</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">tire</span><span class="p">[</span><span class="mi">100000</span><span class="p">][</span><span class="mi">26</span><span class="p">];</span>
     <span class="kt">int</span> <span class="n">mark</span><span class="p">[</span><span class="mi">100000</span><span class="p">];</span>
@@ -506,7 +505,7 @@
 </span><span class="cm"> */</span>
 </code></pre></div><h3 id="ac代码2">AC代码2</h3>
 <p>此代码对应构造方法2</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="k">typedef</span> <span class="k">struct</span> <span class="nc">n</span> <span class="p">{</span>
         <span class="k">struct</span> <span class="nc">n</span><span class="o">*</span> <span class="n">childen</span><span class="p">[</span><span class="mi">26</span><span class="p">];</span>
@@ -598,7 +597,7 @@
 </span><span class="cm"> */</span>
 </code></pre></div><p><figure style="flex-grow: 382; flex-basis: 917px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png" data-size="791x207"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_1024x0_resize_box_2.png 1024w"
 				width="791"
 				height="207"
 				loading="lazy"
@@ -610,7 +609,7 @@
 	</figure></p>
 <p><figure style="flex-grow: 423; flex-basis: 1016px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png" data-size="868x205"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_1024x0_resize_box_2.png 1024w"
 				width="868"
 				height="205"
 				loading="lazy"
@@ -622,11 +621,9 @@
 	</figure></p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 向前走别回头.字典树（前缀树）[EB/OL].2018-08-24</p>
-<p><em><a class="link" href="https://blog.csdn.net/weixin_39778570/article/details/81990417"  target="_blank" rel="noopener"
-    >https://blog.csdn.net/weixin_39778570/article/details/81990417</a></em></p>
+<p><em><a href="https://blog.csdn.net/weixin_39778570/article/details/81990417">https://blog.csdn.net/weixin_39778570/article/details/81990417</a></em></p>
 <p>[2] GeeksforGeeks.Trie | (Insert and Search)[EB/OL].2019-09-04</p>
-<p><em><a class="link" href="https://www.geeksforgeeks.org/trie-insert-and-search/"  target="_blank" rel="noopener"
-    >https://www.geeksforgeeks.org/trie-insert-and-search/</a></em></p>
+<p><em><a href="https://www.geeksforgeeks.org/trie-insert-and-search/">https://www.geeksforgeeks.org/trie-insert-and-search/</a></em></p>
 
 </section>
 

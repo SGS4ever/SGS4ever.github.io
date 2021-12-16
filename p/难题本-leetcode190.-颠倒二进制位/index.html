@@ -292,8 +292,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/reverse-bits/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/reverse-bits/</a></em></p>
+    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/reverse-bits/">https://leetcode-cn.com/problems/reverse-bits/</a></em></p>
 <p>一道简单题，却能引出一个无比骚包的操作。此法前所未见，独自亦难想出，因此大抵也算是难的。</p>
 <h2 id="题目">题目</h2>
 <blockquote>
@@ -327,7 +326,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 <p>如此进行······</p>
 <p><figure style="flex-grow: 213; flex-basis: 511px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1.png" data-size="1102x517"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_1024x0_resize_box_2.png 1024w"
 				width="1102"
 				height="517"
 				loading="lazy"
@@ -341,7 +340,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 <p>不妨以8位二进制为例，对于一个八位二进制数 <code>1011 0011</code> ，我们首先需要将其高低四位进行对换。示意如下：</p>
 <p><figure style="flex-grow: 205; flex-basis: 493px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2.png" data-size="1287x626"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_1024x0_resize_box_2.png 1024w"
 				width="1287"
 				height="626"
 				loading="lazy"
@@ -363,7 +362,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 <p>紧接着，对于两部分4位来说，每4位中需要进行高低二位的对换。示意如下：</p>
 <p><figure style="flex-grow: 193; flex-basis: 465px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3.png" data-size="1290x665"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_1024x0_resize_box_2.png 1024w"
 				width="1290"
 				height="665"
 				loading="lazy"
@@ -379,7 +378,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 <p>8位如此解决，16位当然也可，32位亦然。</p>
 </blockquote>
 <h3 id="ac代码1">AC代码1</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">uint32_t</span> <span class="n">reverseBits</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">uint32_t</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -396,7 +395,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
     <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div><h3 id="ac代码2">AC代码2</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">uint32_t</span> <span class="n">reverseBits</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// 注意！由于移位操作的优先级高于按位与，需要在与操作部分添加括号
@@ -411,7 +410,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 <span class="p">};</span>
 </code></pre></div><p><figure style="flex-grow: 129; flex-basis: 310px">
 		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4.png" data-size="552x427"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_1024x0_resize_box_3.png 1024w"
+				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_1024x0_resize_box_2.png 1024w"
 				width="552"
 				height="427"
 				loading="lazy"
@@ -423,8 +422,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 	</figure></p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 负雪明烛.「循环」与「分治」解法[EB/OL].2021-03-29</p>
-<p><em><a class="link" href="https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/"  target="_blank" rel="noopener"
-    >https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/</a></em></p>
+<p><em><a href="https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/">https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/</a></em></p>
 
 </section>
 
