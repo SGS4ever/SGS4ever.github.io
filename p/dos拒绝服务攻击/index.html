@@ -20,20 +20,31 @@ TearDrop 又是IP协议实现的问题。故事从IP分片讲起。
 分片 我们知道，数据链路层的每个数据报能够承载的数据量是有上限的，这个上限称为最大传送单元（MTU）。因为IP数据报被封装在数据链路层的数据报中，因此链路层的MTU严格地限制着IP数据报的长度。IP包传送的路径上，有许许多多的链路，可能使用不同的链路层协议，而同时也可能有大小不一的MTU。当IP数据报的总长度大于链路MTU时，需要能够将IP数据报中的数据分装在两个或多个较小的IP数据报中，然后再作为链路层数据进行传送。这些较小的数据报称为片。
 片在目的地网络层被重新组装。对于一大堆杂乱无章的片，我们如何正确地重装成一个个独立的IP数据报呢？
 IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：
-IP Header
+ IP Header 
 第二行的标识字段占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。
 标志位有3比特。实际上只有后面2个比特有意义。它们分别是：
  MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&amp;rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。  片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。'><title>DoS——拒绝服务攻击</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='DoS——拒绝服务攻击'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='DoS——拒绝服务攻击'>
 <meta property='og:description' content='网络安全理论复习开始了！
 今天从最简单的开始，目标是在寒假期间整理完成《网络安全》这门课所涉及的知识。希望本系列文章能以清晰的思路将安全理论表述出来。
 DoS Denial of Service，拒绝服务，是现代网络安全领域很常见的一种攻击。所谓拒绝服务，就是通过一系列手段使得原本正常运行的服务器无法再为用户的请求提供服务与应答，从而使目标业务停滞。
@@ -53,7 +64,7 @@ TearDrop 又是IP协议实现的问题。故事从IP分片讲起。
 分片 我们知道，数据链路层的每个数据报能够承载的数据量是有上限的，这个上限称为最大传送单元（MTU）。因为IP数据报被封装在数据链路层的数据报中，因此链路层的MTU严格地限制着IP数据报的长度。IP包传送的路径上，有许许多多的链路，可能使用不同的链路层协议，而同时也可能有大小不一的MTU。当IP数据报的总长度大于链路MTU时，需要能够将IP数据报中的数据分装在两个或多个较小的IP数据报中，然后再作为链路层数据进行传送。这些较小的数据报称为片。
 片在目的地网络层被重新组装。对于一大堆杂乱无章的片，我们如何正确地重装成一个个独立的IP数据报呢？
 IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：
-IP Header
+ IP Header 
 第二行的标识字段占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。
 标志位有3比特。实际上只有后面2个比特有意义。它们分别是：
  MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&amp;rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。  片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。'>
@@ -80,12 +91,16 @@ TearDrop 又是IP协议实现的问题。故事从IP分片讲起。
 分片 我们知道，数据链路层的每个数据报能够承载的数据量是有上限的，这个上限称为最大传送单元（MTU）。因为IP数据报被封装在数据链路层的数据报中，因此链路层的MTU严格地限制着IP数据报的长度。IP包传送的路径上，有许许多多的链路，可能使用不同的链路层协议，而同时也可能有大小不一的MTU。当IP数据报的总长度大于链路MTU时，需要能够将IP数据报中的数据分装在两个或多个较小的IP数据报中，然后再作为链路层数据进行传送。这些较小的数据报称为片。
 片在目的地网络层被重新组装。对于一大堆杂乱无章的片，我们如何正确地重装成一个个独立的IP数据报呢？
 IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：
-IP Header
+ IP Header 
 第二行的标识字段占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。
 标志位有3比特。实际上只有后面2个比特有意义。它们分别是：
  MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&amp;rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。  片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -102,185 +117,32 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#ping-of-death">Ping of Death</a></li>
-    <li><a href="#teardrop">TearDrop</a></li>
-    <li><a href="#land攻击">LAND攻击</a></li>
-    <li><a href="#syn-flood">SYN FLOOD</a></li>
-    <li><a href="#smurf">Smurf</a></li>
-    <li><a href="#http-flood">HTTP Flood</a></li>
-    <li><a href="#http-慢速攻击">HTTP 慢速攻击</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#cc攻击challenge-collapsar">CC攻击（Challenge Collapsar）</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -299,8 +161,28 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
         <a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/">DoS——拒绝服务攻击</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 02, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -308,8 +190,14 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 
 
 
-        <time class="article-time--published">Feb 02, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -352,18 +240,25 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 <p>我们知道，数据链路层的每个数据报能够承载的数据量是有上限的，这个上限称为<em>最大传送单元（MTU）</em>。因为IP数据报被封装在数据链路层的数据报中，因此链路层的MTU严格地限制着IP数据报的长度。IP包传送的路径上，有许许多多的链路，可能使用不同的链路层协议，而同时也可能有大小不一的MTU。当IP数据报的总长度大于链路MTU时，需要能够将IP数据报中的数据分装在两个或多个较小的<strong>IP数据报中</strong>，然后再作为链路层数据进行传送。这些较小的数据报称为<strong>片</strong>。</p>
 <p>片在目的地网络层被重新<strong>组装</strong>。对于一大堆杂乱无章的片，我们如何正确地重装成一个个独立的IP数据报呢？</p>
 <p>IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：</p>
-<p><figure style="flex-grow: 174; flex-basis: 419px">
-		<a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1.png" data-size="906x518"><img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1.png"
-				srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_huad1b783e413552ffb544bede6d79cde8_294723_480x0_resize_box_2.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_huad1b783e413552ffb544bede6d79cde8_294723_1024x0_resize_box_2.png 1024w"
-				width="906"
-				height="518"
-				loading="lazy"
-				alt="IP Header">
-		</a>
-		
-		<figcaption>IP Header</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 174; 
+			flex-basis: 419px"
+	>
+	<a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1.png" data-size="906x518">
+		<img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1.png"
+			width="906"
+			height="518"
+			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_huad1b783e413552ffb544bede6d79cde8_294723_480x0_resize_box_3.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_huad1b783e413552ffb544bede6d79cde8_294723_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="IP Header">
+	</a>
+	
+	<figcaption>IP Header</figcaption>
+	
+</figure></p>
 <p>第二行的<strong>标识字段</strong>占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。</p>
 <p><strong>标志位</strong>有3比特。实际上只有后面2个比特有意义。它们分别是：</p>
 <ul>
@@ -374,18 +269,25 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 <h4 id="teardrop-1">Teardrop</h4>
 <p>该攻击的原理是向目标主机发送一些分片的IP报文，并故意将<strong>片偏移</strong>字段设置成错误的值（与上一片<strong>重叠</strong>或<strong>错开</strong>）。某些操作系统在处理这类分片的时候会出现系统崩溃、重启等现象。</p>
 <p>这里主要以重叠为例。<em>重叠</em>是指第二片IP包的偏移量小于第一片的尾部，且算上第二片的长度也没有超过第一片的尾部。我认为更加准确的描述应该是<em>IP分片的镶嵌</em>，如下所示：</p>
-<p><figure style="flex-grow: 238; flex-basis: 571px">
-		<a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2.png" data-size="681x286"><img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2.png"
-				srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu8e9566d9328d471df5fc6103fa022397_11247_480x0_resize_box_2.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu8e9566d9328d471df5fc6103fa022397_11247_1024x0_resize_box_2.png 1024w"
-				width="681"
-				height="286"
-				loading="lazy"
-				alt="分片重叠（镶嵌）">
-		</a>
-		
-		<figcaption>分片重叠（镶嵌）</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 238; 
+			flex-basis: 571px"
+	>
+	<a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2.png" data-size="681x286">
+		<img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2.png"
+			width="681"
+			height="286"
+			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu8e9566d9328d471df5fc6103fa022397_11247_480x0_resize_box_3.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu8e9566d9328d471df5fc6103fa022397_11247_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="分片重叠（镶嵌）">
+	</a>
+	
+	<figcaption>分片重叠（镶嵌）</figcaption>
+	
+</figure></p>
 <p>这时，我们要求第二个分片的长度，如果使用<code>len2 = end2 - end1</code>来计算，就产生了一个负值。</p>
 <p>如果进一步使用<code>memcpy(ip_package_start_addr + offset2, buffer, len2)</code>来将第二个分片从缓冲区拷贝到重组IP包中，由于长度是一个负值，也就相当于一个<code>unsigned</code>的超大正值，就产生了溢出。</p>
 <blockquote>
@@ -418,18 +320,25 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 <h3 id="smurf">Smurf</h3>
 <p>Smurf攻击是一种病毒攻击，以最初发动这种攻击的程序“Smurf”来命名。这种攻击方法结合使用了IP欺骗和ICMP回复的办法，使得大量流量涌向目标网络或系统，造成拒绝服务的效果。</p>
 <p>攻击者向一个具有大量主机和因特网连接的<strong>广播地址</strong>发送ICMP Echo请求，并用受害者的IP作为源地址；广播上的每台机器响应这些Echo请求，同时向受害者发送ICMP Echo-Reply应答；受害主机会被这些大量的应答包淹没。</p>
-<p><figure style="flex-grow: 163; flex-basis: 393px">
-		<a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3.png" data-size="1117x682"><img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3.png"
-				srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu87c83953a84d7a3420c3455bff1e29f8_139545_480x0_resize_box_2.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu87c83953a84d7a3420c3455bff1e29f8_139545_1024x0_resize_box_2.png 1024w"
-				width="1117"
-				height="682"
-				loading="lazy"
-				alt="Smurf">
-		</a>
-		
-		<figcaption>Smurf</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 163; 
+			flex-basis: 393px"
+	>
+	<a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3.png" data-size="1117x682">
+		<img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3.png"
+			width="1117"
+			height="682"
+			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu87c83953a84d7a3420c3455bff1e29f8_139545_480x0_resize_box_3.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu87c83953a84d7a3420c3455bff1e29f8_139545_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Smurf">
+	</a>
+	
+	<figcaption>Smurf</figcaption>
+	
+</figure></p>
 <p>这种攻击已经很少见，大多数的网络已经对这种攻击免疫了。挫败一个Smurf攻击的最简单的方法就让路由器在收到向一个广播地址的ICMP Echo信息时丢弃它。</p>
 <h3 id="http-flood">HTTP Flood</h3>
 <p>常见的服务器在处理对某些URI的访问时需要消耗计算资源或系统资源，如果攻击者通过代理或僵尸主机向目标URI进行大量HTTP请求，将造成服务器资源的耗尽。以最典型的HTTP GET请求为例，针对服务器上某个文件进行快速的反复的读取，能造成服务器资源的减少；除了Web服务器之外，大量的HTTP请求可能产生大量的数据库查询，可以在几秒内使数据库停止响应。</p>
@@ -457,36 +366,50 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 <p>篇幅有限，对于DoS的检测就不详细展开了。目前，常见的DoS检测是基于异常的检测，即通过监视审计系统记录系统上的异常情况。比如当日志记录到某一时段爆发大量的流量，超出了平时的统计阈值时，可能表示此时段系统受到了DoS攻击。</p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 百度百科.ping（网络诊断工具）[EB/OL]</p>
-<p><em><a href="https://baike.baidu.com/item/ping/6235">https://baike.baidu.com/item/ping/6235</a></em></p>
+<p><em><a class="link" href="https://baike.baidu.com/item/ping/6235"  target="_blank" rel="noopener"
+    >https://baike.baidu.com/item/ping/6235</a></em></p>
 <p>[2] 百度百科.ICMP[EB/OL]</p>
-<p><em><a href="https://baike.baidu.com/item/ICMP/572452">https://baike.baidu.com/item/ICMP/572452</a></em></p>
+<p><em><a class="link" href="https://baike.baidu.com/item/ICMP/572452"  target="_blank" rel="noopener"
+    >https://baike.baidu.com/item/ICMP/572452</a></em></p>
 <p>[3] 百度百科.Ping of Death[EB/OL]</p>
-<p><em><a href="https://baike.baidu.com/item/Ping%20of%20Death">https://baike.baidu.com/item/Ping%20of%20Death</a></em></p>
+<p><em><a class="link" href="https://baike.baidu.com/item/Ping%20of%20Death"  target="_blank" rel="noopener"
+    >https://baike.baidu.com/item/Ping%20of%20Death</a></em></p>
 <p>[4] 小白教程.死亡之ping的工作原理以及如何预防[EB/OL]</p>
-<p><em><a href="https://www.schoolw3c.com/ping-of-death/">https://www.schoolw3c.com/ping-of-death/</a></em></p>
+<p><em><a class="link" href="https://www.schoolw3c.com/ping-of-death/"  target="_blank" rel="noopener"
+    >https://www.schoolw3c.com/ping-of-death/</a></em></p>
 <p>[5] 王道论坛.2021年计算机网络考研复习指导[M].北京:电子工业出版社,2020:147-157</p>
 <p>[6] 孤君.IP首部[EB/OL].2019-03-17</p>
-<p><em><a href="https://blog.csdn.net/Wu000999/article/details/88617237">https://blog.csdn.net/Wu000999/article/details/88617237</a></em></p>
+<p><em><a class="link" href="https://blog.csdn.net/Wu000999/article/details/88617237"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/Wu000999/article/details/88617237</a></em></p>
 <p>[7] 快快网络.什么是Teardrop攻击？我们要如何防御Teardrop攻击？[EB/OL].2019-03-13</p>
-<p><em><a href="https://www.jianshu.com/p/3ac57cfb3743">https://www.jianshu.com/p/3ac57cfb3743</a></em></p>
+<p><em><a class="link" href="https://www.jianshu.com/p/3ac57cfb3743"  target="_blank" rel="noopener"
+    >https://www.jianshu.com/p/3ac57cfb3743</a></em></p>
 <p>[8] 一只IT小小鸟.DDoS攻击&ndash;Syn_Flood攻击防护详解（TCP）[EB/OL].2018-08-22</p>
-<p><em><a href="https://blog.csdn.net/qq_34777600/article/details/81946514">https://blog.csdn.net/qq_34777600/article/details/81946514</a></em></p>
+<p><em><a class="link" href="https://blog.csdn.net/qq_34777600/article/details/81946514"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/qq_34777600/article/details/81946514</a></em></p>
 <p>[9] Java.Sheng.SYN Flood原理及防护[EB/OL].2016-04-16</p>
-<p><em><a href="https://blog.csdn.net/woaigaolaoshi/article/details/51166340">https://blog.csdn.net/woaigaolaoshi/article/details/51166340</a></em></p>
+<p><em><a class="link" href="https://blog.csdn.net/woaigaolaoshi/article/details/51166340"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/woaigaolaoshi/article/details/51166340</a></em></p>
 <p>[10] 百度百科.land攻击[EB/OL]</p>
-<p><em><a href="https://baike.baidu.com/item/land%E6%94%BB%E5%87%BB/4759470?fr=aladdin">https://baike.baidu.com/item/land%E6%94%BB%E5%87%BB/4759470?fr=aladdin</a></em></p>
+<p><em><a class="link" href="https://baike.baidu.com/item/land%E6%94%BB%E5%87%BB/4759470?fr=aladdin"  target="_blank" rel="noopener"
+    >https://baike.baidu.com/item/land%E6%94%BB%E5%87%BB/4759470?fr=aladdin</a></em></p>
 <p>[11] 百度百科.Smurf攻击[EB/OL]</p>
-<p><em><a href="https://baike.baidu.com/item/Smurf%E6%94%BB%E5%87%BB/9112141?fr=aladdin">https://baike.baidu.com/item/Smurf%E6%94%BB%E5%87%BB/9112141?fr=aladdin</a></em></p>
+<p><em><a class="link" href="https://baike.baidu.com/item/Smurf%E6%94%BB%E5%87%BB/9112141?fr=aladdin"  target="_blank" rel="noopener"
+    >https://baike.baidu.com/item/Smurf%E6%94%BB%E5%87%BB/9112141?fr=aladdin</a></em></p>
 <p>[12] fcm.HTTP Flood攻击与防御原理[EB/OL].2015-10-19</p>
-<p><em><a href="https://forum.huawei.com/enterprise/zh/thread-293931.html">https://forum.huawei.com/enterprise/zh/thread-293931.html</a></em></p>
+<p><em><a class="link" href="https://forum.huawei.com/enterprise/zh/thread-293931.html"  target="_blank" rel="noopener"
+    >https://forum.huawei.com/enterprise/zh/thread-293931.html</a></em></p>
 <p>[13] 中国网科技.Mirai僵尸网络再作乱 360：物联网设备成隐私泄露重灾区[EB/OL].2020-12-07</p>
-<p><em><a href="http://tech.china.com.cn/roll/20201207/372546.shtml">http://tech.china.com.cn/roll/20201207/372546.shtml</a></em></p>
+<p><em><a class="link" href="http://tech.china.com.cn/roll/20201207/372546.shtml"  target="_blank" rel="noopener"
+    >http://tech.china.com.cn/roll/20201207/372546.shtml</a></em></p>
 <p>[14] wpjamer.CC攻击原理及防范方法[EB/OL].2018-05-12</p>
-<p><em><a href="https://www.cnblogs.com/wpjamer/p/9030259.html">https://www.cnblogs.com/wpjamer/p/9030259.html</a></em></p>
+<p><em><a class="link" href="https://www.cnblogs.com/wpjamer/p/9030259.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/wpjamer/p/9030259.html</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -500,8 +423,12 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -563,26 +490,39 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-02-02 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -592,16 +532,19 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -678,7 +621,64 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#ping-of-death">Ping of Death</a>
+      <ul>
+        <li><a href="#icmp">ICMP</a></li>
+        <li><a href="#ping">PING</a></li>
+        <li><a href="#ping-of-death-1">Ping of Death</a></li>
+      </ul>
+    </li>
+    <li><a href="#teardrop">TearDrop</a>
+      <ul>
+        <li><a href="#分片">分片</a></li>
+        <li><a href="#teardrop-1">Teardrop</a></li>
+      </ul>
+    </li>
+    <li><a href="#land攻击">LAND攻击</a></li>
+    <li><a href="#syn-flood">SYN FLOOD</a></li>
+    <li><a href="#smurf">Smurf</a></li>
+    <li><a href="#http-flood">HTTP Flood</a></li>
+    <li><a href="#http-慢速攻击">HTTP 慢速攻击</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#cc攻击challenge-collapsar">CC攻击（Challenge Collapsar）</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

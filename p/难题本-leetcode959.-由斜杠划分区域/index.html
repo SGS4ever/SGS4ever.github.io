@@ -8,23 +8,34 @@
 返回区域的数目。
 分析  将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
-图1. 单元格划分
+ 图1. 单元格划分 
   格内合并
  当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
  格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
  遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
  输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
-图2. 网格'><title>难题本 | LeetCode959. 由斜杠划分区域</title>
+ 图2. 网格'><title>难题本 | LeetCode959. 由斜杠划分区域</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode959. 由斜杠划分区域'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='难题本 | LeetCode959. 由斜杠划分区域'>
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/regions-cut-by-slashes/
 令我思考很久的一道题，最后还是学着官方题解做出来的([1])。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。
 题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
@@ -32,13 +43,13 @@
 返回区域的数目。
 分析  将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
-图1. 单元格划分
+ 图1. 单元格划分 
   格内合并
  当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
  格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
  遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
  输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
-图2. 网格'>
+ 图2. 网格'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-25T00:00:00&#43;00:00'/>
@@ -50,15 +61,19 @@
 返回区域的数目。
 分析  将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
-图1. 单元格划分
+ 图1. 单元格划分 
   格内合并
  当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
  格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
  遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
  输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
-图2. 网格">
+ 图2. 网格">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -75,175 +90,32 @@
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#模拟">模拟</a></li>
-    <li><a href="#ac代码">AC代码</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -262,8 +134,28 @@
         <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/">难题本 | LeetCode959. 由斜杠划分区域</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 25, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -271,12 +163,19 @@
 
 
 
-        <time class="article-time--published">Jan 25, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/regions-cut-by-slashes/">https://leetcode-cn.com/problems/regions-cut-by-slashes/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/regions-cut-by-slashes/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/regions-cut-by-slashes/</a></em></p>
 <p>令我思考很久的一道题，最后还是学着官方题解做出来的(<em>[1]</em>)。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。</p>
 <h2 id="题目">题目</h2>
 <p>在由 1 x 1 方格组成的 N x N 网格 <code>grid</code> 中，每个 1 x 1 方块由 <code>/</code>、<code>\</code> 或空格构成。这些字符会将方块划分为一些共边的区域。</p>
@@ -286,18 +185,25 @@
 <blockquote>
 <p>将单元格进一步细分，便于并查集操作。</p>
 <p>每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是<code>/</code>还是<code>\</code>，合并不同的小三角形。</p>
-<p><figure style="flex-grow: 101; flex-basis: 244px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1.png" data-size="512x503"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_1024x0_resize_box_2.png 1024w"
-				width="512"
-				height="503"
-				loading="lazy"
-				alt="图1. 单元格划分">
-		</a>
-		
-		<figcaption>图1. 单元格划分</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 101; 
+			flex-basis: 244px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1.png" data-size="512x503">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1.png"
+			width="512"
+			height="503"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图1. 单元格划分">
+	</a>
+	
+	<figcaption>图1. 单元格划分</figcaption>
+	
+</figure></p>
 <ul>
 <li>
 <p>格内合并</p>
@@ -331,84 +237,126 @@
 <li><strong>输出：</strong><code>5</code></li>
 </ul>
 <p>网格如下：</p>
-<p><figure style="flex-grow: 100; flex-basis: 240px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2.png" data-size="326x326"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_1024x0_resize_box_2.png 1024w"
-				width="326"
-				height="326"
-				loading="lazy"
-				alt="图2. 网格">
-		</a>
-		
-		<figcaption>图2. 网格</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 100; 
+			flex-basis: 240px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2.png" data-size="326x326">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2.png"
+			width="326"
+			height="326"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图2. 网格">
+	</a>
+	
+	<figcaption>图2. 网格</figcaption>
+	
+</figure></p>
 <p>我们从左上到右下进行遍历。</p>
 <p>首先第一个单元格进行格内合并：</p>
-<p><figure style="flex-grow: 98; flex-basis: 236px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3.png" data-size="312x316"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_1024x0_resize_box_2.png 1024w"
-				width="312"
-				height="316"
-				loading="lazy"
-				alt="Step1">
-		</a>
-		
-		<figcaption>Step1</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 98; 
+			flex-basis: 236px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3.png" data-size="312x316">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3.png"
+			width="312"
+			height="316"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Step1">
+	</a>
+	
+	<figcaption>Step1</figcaption>
+	
+</figure></p>
 <p>第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。</p>
-<p><figure style="flex-grow: 101; flex-basis: 244px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4.png" data-size="323x317"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_1024x0_resize_box_2.png 1024w"
-				width="323"
-				height="317"
-				loading="lazy"
-				alt="Step2">
-		</a>
-		
-		<figcaption>Step2</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 101; 
+			flex-basis: 244px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4.png" data-size="323x317">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4.png"
+			width="323"
+			height="317"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Step2">
+	</a>
+	
+	<figcaption>Step2</figcaption>
+	
+</figure></p>
 <p>第二个单元格的格内合并：</p>
-<p><figure style="flex-grow: 100; flex-basis: 241px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5.png" data-size="310x308"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_1024x0_resize_box_2.png 1024w"
-				width="310"
-				height="308"
-				loading="lazy"
-				alt="Step3">
-		</a>
-		
-		<figcaption>Step3</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 100; 
+			flex-basis: 241px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5.png" data-size="310x308">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5.png"
+			width="310"
+			height="308"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Step3">
+	</a>
+	
+	<figcaption>Step3</figcaption>
+	
+</figure></p>
 <p>格间合并，此时它已经没有右邻居：</p>
-<p><figure style="flex-grow: 103; flex-basis: 247px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6.png" data-size="321x311"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_1024x0_resize_box_2.png 1024w"
-				width="321"
-				height="311"
-				loading="lazy"
-				alt="Step4">
-		</a>
-		
-		<figcaption>Step4</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 103; 
+			flex-basis: 247px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6.png" data-size="321x311">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6.png"
+			width="321"
+			height="311"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Step4">
+	</a>
+	
+	<figcaption>Step4</figcaption>
+	
+</figure></p>
 <p>第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：</p>
-<p><figure style="flex-grow: 105; flex-basis: 254px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7.png" data-size="336x317"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_1024x0_resize_box_2.png 1024w"
-				width="336"
-				height="317"
-				loading="lazy"
-				alt="Final">
-		</a>
-		
-		<figcaption>Final</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 105; 
+			flex-basis: 254px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7.png" data-size="336x317">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7.png"
+			width="336"
+			height="317"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Final">
+	</a>
+	
+	<figcaption>Final</figcaption>
+	
+</figure></p>
 </blockquote>
 <h3 id="ac代码">AC代码</h3>
 <blockquote>
@@ -416,7 +364,7 @@
 <p>最终，坐标<code>(x, y)</code>的单元格位于<code>4 * (n * x + y)</code>到<code>4 * (n * x + y) + 3</code>的下标位置。</p>
 <p>则最终的一维数组即并查集需要开辟的大小为<code>4 * n * n</code>。</p>
 </blockquote>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">UnionFind</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">UnionFind</span> <span class="p">{</span>
 <span class="k">private</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
     <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
@@ -501,25 +449,34 @@
 <span class="p">};</span>
 
 </code></pre></div><p>表现还不错，叉会儿腰。</p>
-<p><figure style="flex-grow: 474; flex-basis: 1138px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8.png" data-size="811x171"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_1024x0_resize_box_2.png 1024w"
-				width="811"
-				height="171"
-				loading="lazy"
-				alt="Performance">
-		</a>
-		
-		<figcaption>Performance</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 474; 
+			flex-basis: 1138px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8.png" data-size="811x171">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8.png"
+			width="811"
+			height="171"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Performance">
+	</a>
+	
+	<figcaption>Performance</figcaption>
+	
+</figure></p>
 <h4 id="参考资料">参考资料</h4>
 <p>[1] 力扣官方题解.由斜杠划分区域[EB/OL].2021-01-24</p>
-<p><em><a href="https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/">https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/regions-cut-by-slashes/solution/you-xie-gang-hua-fen-qu-yu-by-leetcode-s-ztob/</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -533,8 +490,12 @@
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -608,26 +569,39 @@
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-01-25 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -637,16 +611,19 @@
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -723,7 +700,47 @@
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#模拟">模拟</a></li>
+    <li><a href="#ac代码">AC代码</a>
+      <ul>
+        <li><a href="#参考资料">参考资料</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

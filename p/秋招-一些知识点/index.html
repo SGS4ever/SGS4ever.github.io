@@ -14,15 +14,26 @@
   间接引用。指针可以有多重嵌套，而引用不行。
 In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &amp;amp;p; // Whereas in references,  int &amp;amp;p = a; int &amp;amp;&amp;amp;q = p; //it is reference to reference, so it is an error.'><title>秋招 | 一些知识点</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='秋招 | 一些知识点'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='秋招 | 一些知识点'>
 <meta property='og:description' content='2021-07-20，正式拉开了秋招备战的序幕。
 我一直以来都深以为然的一个句子是，人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。 这个句子的意思是，如果你的学习能力比不上他人，那就花费百倍的精力去学，能够做到这一点的人，即使是一个愚者，也能够明了很多的知识。
 1 C&#43;&#43;引用和指针的区别 这个问题出现在昨天的面试中，在此予以学习和记录。
@@ -51,8 +62,12 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
   是否为空。指针可以设置为NULL，而引用不行（基于第一点和第二点区别）。
   间接引用。指针可以有多重嵌套，而引用不行。
 In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &amp;amp;p; // Whereas in references,  int &amp;amp;p = a; int &amp;amp;&amp;amp;q = p; //it is reference to reference, so it is an error.">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -69,199 +84,32 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#1-c引用和指针的区别">1 C++引用和指针的区别</a></li>
-    <li><a href="#2-https流程">2 HTTPS流程</a></li>
-    <li><a href="#3-死锁">3 死锁</a></li>
-    <li><a href="#4-malloc和new的区别">4 malloc和new的区别</a></li>
-    <li><a href="#5-虚函数">5 虚函数</a></li>
-    <li><a href="#2021-07-26">2021-07-26</a></li>
-    <li><a href="#2021-07-27">2021-07-27</a></li>
-    <li><a href="#2021-07-28">2021-07-28</a></li>
-    <li><a href="#2021-07-29">2021-07-29</a></li>
-    <li><a href="#6-ftp与sftp">6 FTP与SFTP</a></li>
-    <li><a href="#7-leetcode-987-二叉树的垂序遍历">7 LeetCode 987. 二叉树的垂序遍历</a></li>
-    <li><a href="#2021-08-01">2021-08-01</a></li>
-    <li><a href="#8-c中的static关键字">8 C++中的static关键字</a></li>
-    <li><a href="#9-分组密码des">9 分组密码——DES</a></li>
-    <li><a href="#10-笔试复盘">10 笔试复盘</a></li>
-    <li><a href="#2021-08-03">2021-08-03</a></li>
-    <li><a href="#2021-08-14">2021-08-14</a></li>
-    <li><a href="#11-leetcode-1583-统计不开心的朋友">11 LeetCode 1583. 统计不开心的朋友</a></li>
-    <li><a href="#12-leetcode面试题-0405-合法二叉搜索树">12 LeetCode面试题 04.05. 合法二叉搜索树</a></li>
-    <li><a href="#13-leetcode5845-你能穿过矩阵的最后一天">13 LeetCode5845. 你能穿过矩阵的最后一天</a></li>
-    <li><a href="#14-leetcode576-出界的路径数">14 LeetCode576. 出界的路径数</a></li>
-    <li><a href="#15-数据库并发导致的问题">15 数据库并发导致的问题</a></li>
-    <li><a href="#16-程序装入和链接">16 程序装入和链接</a></li>
-    <li><a href="#17-设计模式简述">17 设计模式简述</a></li>
-    <li><a href="#18-c中的const关键字">18 C++中的const关键字</a></li>
-    <li><a href="#19-owasp-top-102017">19 OWASP top 10（2017）</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -280,8 +128,28 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
         <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">秋招 | 一些知识点</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 29, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -289,8 +157,14 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 
 
 
-        <time class="article-time--published">Aug 29, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 10 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -316,15 +190,15 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 </li>
 <li>
 <p><strong>间接引用</strong>。指针可以有多重嵌套，而引用不行。</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">In</span> <span class="n">Pointers</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">In</span> <span class="n">Pointers</span><span class="p">,</span>
 <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
 <span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
 <span class="kt">int</span> <span class="o">**</span><span class="n">q</span><span class="p">;</span>  <span class="c1">//it is valid.
 </span><span class="c1"></span><span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">;</span>
 <span class="n">q</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">;</span>
-  
+
 <span class="c1">// Whereas in references,
-</span><span class="c1"></span>  
+</span><span class="c1"></span>
 <span class="kt">int</span> <span class="o">&amp;</span><span class="n">p</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
 <span class="kt">int</span> <span class="o">&amp;&amp;</span><span class="n">q</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span> <span class="c1">//it is reference to reference, so it is an error.
 </span></code></pre></div></li>
@@ -417,7 +291,7 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <h3 id="4-malloc和new的区别">4 malloc和new的区别</h3>
 <p>C++经典问题之一。</p>
 <p><em><strong>（1）是否调用构造函数。</strong></em> <code>malloc</code> 为一个对象申请空间时，不会自动调用它的构造函数；而 <code>new</code> 会自动调用构造函数。同时，使用 <code>new</code> 申请一个对象数组时，会对每一个单元进行构造函数的调用，如下所示：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">A</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>		<span class="c1">// 对每一个对象调用构造函数
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">A</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>		<span class="c1">// 对每一个对象调用构造函数
 </span><span class="c1"></span><span class="k">delete</span><span class="p">[]</span> <span class="n">ptr</span><span class="p">;</span>			<span class="c1">// new数组的时候要搭配 delete[]
 </span></code></pre></div><p><em><strong>（2）一个是函数，一个是运算符（operator new）。</strong></em> <code>malloc</code> 虽然是函数，但是它不允许重载；而 <code>new</code> 可以被重载。</p>
 <p><em><strong>（3）返回类型不同。</strong></em> <code>malloc</code> 返回一个 <code>void*</code> 类型的指针，指向申请的那块空间；而 <code>new</code> 返回的是一个 <strong>确切的</strong> 对象指针。</p>
@@ -463,7 +337,8 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>答案里还有人直接使用 <code>set</code> ，属于是把STL玩明白了，我以后也要好好再学一下STL o(╥﹏╥)o</p>
 <h3 id="2021-07-28">2021-07-28</h3>
 <p>今天公司留宿，不更新是理所当然的吧~
-今日的每日一题是 <a href="https://leetcode-cn.com/problems/all-nodes-distance-k-in-binary-tree/">https://leetcode-cn.com/problems/all-nodes-distance-k-in-binary-tree/</a> ，中等题，一时间没有思路；看了题解之后发现二叉树可以转为图，这样就比较简单了。
+今日的每日一题是 <a class="link" href="https://leetcode-cn.com/problems/all-nodes-distance-k-in-binary-tree/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/all-nodes-distance-k-in-binary-tree/</a> ，中等题，一时间没有思路；看了题解之后发现二叉树可以转为图，这样就比较简单了。
 一开始想用邻接矩阵，但是一个节点实际上只可能有三条边，那就使用dfs先存下这个节点的父节点，这样一个节点的所有邻居就全都可以找到了（两个子节点加上一个父节点，最多只有三个邻居）；构造完了一个抽象意义上的“图”，使用BFS找目标距离的节点即可。</p>
 <h3 id="2021-07-29">2021-07-29</h3>
 <p>谌龙翻盘李梓嘉！姜还是老的辣！</p>
@@ -483,7 +358,7 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>今天的每日一题是 <a class="link" href="https://leetcode-cn.com/problems/vertical-order-traversal-of-a-binary-tree/"  target="_blank" rel="noopener"
     >987. 二叉树的垂序遍历 - 力扣（LeetCode） (leetcode-cn.com)</a></p>
 <p>题目给的数据属于是少了，针对一千个二叉树节点，我们使用一个 <code>multimap</code> 来进行 <strong>列</strong> → <strong>Node</strong> 的映射，注意这里的 <strong>Node</strong> 指的是自定义的数据结构：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">typedef</span> <span class="k">struct</span> <span class="nc">_node</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">typedef</span> <span class="k">struct</span> <span class="nc">_node</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">row</span><span class="p">;</span>
 <span class="p">}</span> <span class="n">Node</span><span class="p">,</span> <span class="o">*</span><span class="n">PNode</span><span class="p">;</span>
@@ -492,10 +367,10 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>二叉树的 <strong>垂序遍历</strong> 从最左边的列开始直到最右边的列结束，按列索引每一列上的所有结点，形成一个按出现位置从上到下排序的有序列表。如果同行同列上有多个结点，则按结点的值从小到大进行排序。</p>
 </blockquote>
 <p>这里注意 <code>multimap</code> 的几个用法：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="n">multimap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>  <span class="c1">// 插入值
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">multimap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>  <span class="c1">// 插入值
 </span><span class="c1"></span><span class="n">multimap</span><span class="p">.</span><span class="n">equal_range</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>  <span class="c1">// 返回key值对应的所有value，返回值是一个pair，首元素是区间起点，次元素是区间终点的后面
 </span></code></pre></div><p>独立自主完成的困难题，AC代码还是要贴一下~</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
 </span><span class="cm"> * Definition for a binary tree node.
 </span><span class="cm"> * struct TreeNode {
 </span><span class="cm"> *     int val;
@@ -571,7 +446,7 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>我们知道，函数的局部变量空间分配在栈上，函数运行结束之后这些变量的空间就会被释放掉；当我们需要保存函数上一次调用时变量的状态，就需要将这个变量放到另一块存储空间上，这就是 <code>static</code> 关键字的作用。</p>
 <p><code>static</code> 变量存储在静态存储区，在程序结束之前都不会被释放。即使一个函数被多次调用，其中的 <code>static</code> 变量也始终只进行了一次内存分配，且它的值可以保持上一次调用时的样子。</p>
 <p><code>static</code> 关键字用于定义一个类中的成员变量的时候，有其独特的影响。由于 <code>static</code> 变量存储在一块独立的区域，所有类对象都共享这一个变量。如以下的例子所示，所有 <code>GfG</code> 类型的实例都共享 <code>static</code> 变量 <code>i</code> 。</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// C++ program to demonstrate static
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// C++ program to demonstrate static
 </span><span class="c1">// variables inside a class
 </span><span class="c1"></span>  
 <span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp">
@@ -660,60 +535,88 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <h4 id="93-des">9.3 DES</h4>
 <p>DES的初始密钥长度为64位，但有效密钥为56位，其中第8/16/24/32/40/48/56位是奇偶校验位。</p>
 <p>流程如下图所示：</p>
-<p><figure style="flex-grow: 121; flex-basis: 291px">
-		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1.png" data-size="810x666"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1.png"
-				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1_huad2ac91fca89a541a9478ab4b39f59e0_221573_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1_huad2ac91fca89a541a9478ab4b39f59e0_221573_1024x0_resize_box_2.png 1024w"
-				width="810"
-				height="666"
-				loading="lazy"
-				alt="DES">
-		</a>
-		
-		<figcaption>DES</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 121; 
+			flex-basis: 291px"
+	>
+	<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1.png" data-size="810x666">
+		<img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1.png"
+			width="810"
+			height="666"
+			srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1_huad2ac91fca89a541a9478ab4b39f59e0_221573_480x0_resize_box_3.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/1_huad2ac91fca89a541a9478ab4b39f59e0_221573_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="DES">
+	</a>
+	
+	<figcaption>DES</figcaption>
+	
+</figure></p>
 <p>DES的初始置换Initial Permutation是固定的，它的作用是将原明文块的位进行换位。完成加密之后，要使用它的逆置换将其换回来，置换表如图所示：</p>
-<p><figure style="flex-grow: 191; flex-basis: 460px">
-		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2.png" data-size="712x371"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2.png"
-				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2_hu3a17fb41486db7ed6cc8f813cae4acd7_125837_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2_hu3a17fb41486db7ed6cc8f813cae4acd7_125837_1024x0_resize_box_2.png 1024w"
-				width="712"
-				height="371"
-				loading="lazy"
-				alt="DES IP">
-		</a>
-		
-		<figcaption>DES IP</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 191; 
+			flex-basis: 460px"
+	>
+	<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2.png" data-size="712x371">
+		<img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2.png"
+			width="712"
+			height="371"
+			srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2_hu3a17fb41486db7ed6cc8f813cae4acd7_125837_480x0_resize_box_3.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/2_hu3a17fb41486db7ed6cc8f813cae4acd7_125837_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="DES IP">
+	</a>
+	
+	<figcaption>DES IP</figcaption>
+	
+</figure></p>
 <p>DES一轮迭代过程如图所示，其遵循了Feistel网络结构，轮函数总共经历了扩展置换-密钥加-非线性代换-线性置换四个步骤。</p>
-<p><figure style="flex-grow: 136; flex-basis: 328px">
-		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3.png" data-size="878x642"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3.png"
-				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3_hu18323e30fcbd13f298a76d722638509a_181449_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3_hu18323e30fcbd13f298a76d722638509a_181449_1024x0_resize_box_2.png 1024w"
-				width="878"
-				height="642"
-				loading="lazy"
-				alt="DES Round">
-		</a>
-		
-		<figcaption>DES Round</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 136; 
+			flex-basis: 328px"
+	>
+	<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3.png" data-size="878x642">
+		<img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3.png"
+			width="878"
+			height="642"
+			srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3_hu18323e30fcbd13f298a76d722638509a_181449_480x0_resize_box_3.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/3_hu18323e30fcbd13f298a76d722638509a_181449_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="DES Round">
+	</a>
+	
+	<figcaption>DES Round</figcaption>
+	
+</figure></p>
 <p>扩展置换又称E盒，将32位输入扩展为48位输出。E盒在DES算法上最基本地是要将输入扩展为与轮密钥相同的48比特，而更进一步，由于E盒的1位输入可能影响2个S盒的输入，能够更快地实现血崩效应。</p>
 <p>代换盒又称S盒，是DES中唯一的非线性部分。经过S盒的代换，E盒扩展生成的48位数又压缩回32位。</p>
 <p>最后的P盒没有太多探讨的意义，就是一个32位的置换表。</p>
 <p>DES的密钥编排如下图所示，首先将64位密钥进行PC-1置换，然后根据轮数进行左移，其中，第1/2/9/16只移动1位，其余轮数移动2位。最后，56位密钥经过PC-2置换得到48位密钥。</p>
-<p><figure style="flex-grow: 118; flex-basis: 284px">
-		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4.png" data-size="785x662"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4.png"
-				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4_huffcf7b0d6cbf0fcc28969c1b085110f5_46417_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4_huffcf7b0d6cbf0fcc28969c1b085110f5_46417_1024x0_resize_box_2.png 1024w"
-				width="785"
-				height="662"
-				loading="lazy"
-				alt="DES Key Generation">
-		</a>
-		
-		<figcaption>DES Key Generation</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 118; 
+			flex-basis: 284px"
+	>
+	<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4.png" data-size="785x662">
+		<img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4.png"
+			width="785"
+			height="662"
+			srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4_huffcf7b0d6cbf0fcc28969c1b085110f5_46417_480x0_resize_box_3.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/4_huffcf7b0d6cbf0fcc28969c1b085110f5_46417_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="DES Key Generation">
+	</a>
+	
+	<figcaption>DES Key Generation</figcaption>
+	
+</figure></p>
 <p>关于DES的安全性问题，暂且不予记录了~</p>
 <h3 id="10-笔试复盘">10 笔试复盘</h3>
 <p>晚上参加了Shopee的笔试，果然安全拉胯，编程AK……</p>
@@ -726,7 +629,7 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>这题我使用了三维记忆化搜索，<code>rec[n][k][startswith]</code> 表示将 <code>n</code> 分成 <code>k</code> 份，每一份的元素至少要大于 <code>startswith</code> 。</p>
 <p>假设要将 <code>7</code> 分成 <code>3</code> 份，我们可以将其转化为将 <code>6</code> 分为 <code>2</code> 份，每份至少从 <code>1</code> 开始，或者将 <code>5</code> 分为两份，每份至少从 <code>2</code> 开始……</p>
 <p>不好解释，直接放代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp">
 </span><span class="cp"></span>
@@ -786,24 +689,32 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>之前对于不开心的理解，是 <code>x</code> 不开心，则 <code>u</code> 应该也不开心，这样就比较复杂了。我们只考虑 <code>x</code> 开不开心，把 <code>u</code> 放到之后进行考虑，反而简单一些。</p>
 <p>代码就不放了，WA了两次的中等题，我现在属实不怎么开心。</p>
 <h3 id="12-leetcode面试题-0405-合法二叉搜索树">12 LeetCode面试题 04.05. 合法二叉搜索树</h3>
-<p><a href="https://leetcode-cn.com/problems/legal-binary-search-tree-lcci/">https://leetcode-cn.com/problems/legal-binary-search-tree-lcci/</a></p>
+<p><a class="link" href="https://leetcode-cn.com/problems/legal-binary-search-tree-lcci/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/legal-binary-search-tree-lcci/</a></p>
 <p>这题属实顶不住了……出题人给那么多 <code>INT_MAX</code> 的测试用例干啥？？？</p>
 <p>希望检查一颗树是否是二叉搜索树，只需要考虑它的左节点是否满足一定范围、右节点是否满足一定范围，然后按照递归的思路向下进行，类似于深搜。</p>
 <p>初始情况下（即考虑根节点的时候），它的数据范围应该是 <code>-INF ~ +INF</code> ，然而，出题人给了很多组 <code>INT_MAX</code> 和 <code>INT_MIN</code> 的测试用例，简单地使用这两个宏作为初始数据范围，会挂掉。（丢雷楼某）</p>
 <p>因此，我们的递归函数中表示数据范围的参数需要定义为 <code>long long</code> 类型，然后在初始传入的时候，传个比 <code>INT_MAX</code> 还大的数 <code>(long)INT_MAX + 1</code> 。</p>
 <p>我giao！</p>
-<p><figure style="flex-grow: 98; flex-basis: 236px">
-		<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5.png" data-size="1127x1142"><img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5.png"
-				srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5_hu2d48d50691dd78d191a0e2db6cc4f2aa_142346_480x0_resize_box_2.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5_hu2d48d50691dd78d191a0e2db6cc4f2aa_142346_1024x0_resize_box_2.png 1024w"
-				width="1127"
-				height="1142"
-				loading="lazy"
-				alt="Performance">
-		</a>
-		
-		<figcaption>Performance</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 98; 
+			flex-basis: 236px"
+	>
+	<a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5.png" data-size="1127x1142">
+		<img src="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5.png"
+			width="1127"
+			height="1142"
+			srcset="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5_hu2d48d50691dd78d191a0e2db6cc4f2aa_142346_480x0_resize_box_3.png 480w, /p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/5_hu2d48d50691dd78d191a0e2db6cc4f2aa_142346_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Performance">
+	</a>
+	
+	<figcaption>Performance</figcaption>
+	
+</figure></p>
 <h3 id="13-leetcode5845-你能穿过矩阵的最后一天">13 LeetCode5845. 你能穿过矩阵的最后一天</h3>
 <p>题目链接 <a class="link" href="https://leetcode-cn.com/problems/last-day-where-you-can-still-cross/"  target="_blank" rel="noopener"
     >5845. 你能穿过矩阵的最后一天</a></p>
@@ -815,7 +726,7 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>寻路时，在 <code>day</code> 这一天被水淹没的格子就走不了了，这里有一个关键问题：如何验证某个格子是否被水淹没？最开始，我使用了一个 <code>map</code> 来表示某个格子是否被淹，但这样我们需要额外引入 <em>O(logn)</em> 的复杂度，会超时。比赛结束之后查看题解，发现直接用 <code>visited</code> 数组来把被淹过的格子禁用掉即可……</p>
 <p>总之，比赛的时候提交的代码质量确实差了，还得多练练吧。</p>
 <h4 id="ac代码">AC代码</h4>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">g_cells</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">g_row</span><span class="p">,</span> <span class="n">g_col</span><span class="p">;</span>
@@ -1037,7 +948,8 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 </ul>
 <blockquote>
 <p>Refernence:</p>
-<p>[1] [合成复用原则——面向对象设计原则 (biancheng.net)](<a href="http://c.biancheng.net/view/1333.html#:~:text=">http://c.biancheng.net/view/1333.html#:~:text=</a>合成复用原则的重要性 1 它维持了类的封装性。因为成分对象的内部细节是新对象看不见的，所以这种复用又称为“黑箱”复用。,2 新旧类之间的耦合度低。这种复用所需的依赖较少，新对象存取成分对象的唯一方法是通过成分对象的接口。 3 复用的灵活性高。这种复用可以在运行时动态进行，新对象可以动态地引用与成分对象类型相同的对象。)</p>
+<p>[1] [合成复用原则——面向对象设计原则 (biancheng.net)](<a class="link" href="http://c.biancheng.net/view/1333.html#:~:text="  target="_blank" rel="noopener"
+    >http://c.biancheng.net/view/1333.html#:~:text=</a>合成复用原则的重要性 1 它维持了类的封装性。因为成分对象的内部细节是新对象看不见的，所以这种复用又称为“黑箱”复用。,2 新旧类之间的耦合度低。这种复用所需的依赖较少，新对象存取成分对象的唯一方法是通过成分对象的接口。 3 复用的灵活性高。这种复用可以在运行时动态进行，新对象可以动态地引用与成分对象类型相同的对象。)</p>
 <p>[2] <a class="link" href="https://www.runoob.com/design-pattern/design-pattern-intro.html"  target="_blank" rel="noopener"
     >设计模式简介 | 菜鸟教程 (runoob.com)</a></p>
 <p>[3] <a class="link" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1264742167474528"  target="_blank" rel="noopener"
@@ -1047,7 +959,7 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>无论 <code>const</code> 关键字出现在什么地方，不管它用于修饰指针、变量、函数或类，其核心作用都是防止它修饰的目标受到修改。</p>
 <h4 id="181-const变量">18.1 const变量</h4>
 <p><code>const</code> 关键字指定一个变量的值为常值，编译器将禁止对这一变量的修改。</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_values1.cpp
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_values1.cpp
 </span><span class="c1"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
    <span class="k">const</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
    <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>   <span class="c1">// C3892
@@ -1057,7 +969,7 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 <p>如果此类变量作为一个类的成员变量，则必须使用 <em>初始化列表</em> 来进行初始化。</p>
 <p>在C语言中， <code>const</code> 变量默认为 <em>外部链接</em> 类型，则其只能出现在单个 <strong>源文件</strong> 中；而C++中的 <code>const</code> 变量与之相反，而我们知道内部链接类型的变量可以出现在 <strong>头文件</strong> 中；当然，如果希望其他源文件也访问到这一 <code>const</code> 变量，则需要使用 <code>extern</code> 来声明。</p>
 <p><code>const</code> 关键字也可用于指针的声明当中：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_values3.cpp
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_values3.cpp
 </span><span class="c1"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
    <span class="kt">char</span> <span class="o">*</span><span class="n">mybuf</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">yourbuf</span><span class="p">;</span>
    <span class="kt">char</span> <span class="o">*</span><span class="k">const</span> <span class="n">aptr</span> <span class="o">=</span> <span class="n">mybuf</span><span class="p">;</span>
@@ -1067,14 +979,14 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 </code></pre></div><p>以一种简单的方式来区分 <em>常指针</em> 和 <em>常量指针</em> ：如果 <code>const</code> 出现在星号 <code>*</code> 后面，则它修饰的是指针变量本身；如果 <code>const</code> 出现在星号 <code>*</code> 前面，则它修饰的是指针指向的变量。</p>
 <blockquote>
 <p>如果难以区分，不妨从英文的角度出发，观察以下两个变量：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">p1</span><span class="p">;</span>  <span class="c1">// pointer to constant data
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">p1</span><span class="p">;</span>  <span class="c1">// pointer to constant data
 </span><span class="c1"></span><span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">p2</span><span class="p">;</span>  <span class="c1">// constant pointer
 </span></code></pre></div><p>是不是好懂了一些？</p>
 </blockquote>
 <h4 id="182-const成员函数">18.2 const成员函数</h4>
 <p>声明一个带有 <code>const</code> 关键字的成员函数表明该函数是一个“只读”函数，其内部代码将不会改变任何成员变量。这类函数不能修改任何非静态变量、且只能调用其他的 <code>const</code> 函数。</p>
 <p>声明和定义 <code>const</code> 函数的办法是在函数形参的小括号后面加上 <code>const</code> 关键字。</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_member_function.cpp
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// constant_member_function.cpp
 </span><span class="c1"></span><span class="k">class</span> <span class="nc">Date</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
@@ -1201,7 +1113,8 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -1213,8 +1126,12 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -1288,26 +1205,39 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-08-29 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -1317,16 +1247,19 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -1403,7 +1336,109 @@ In Pointers, int a = 10; int *p; int **q; //it is valid. p = &amp;amp;a; q = &am
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-c引用和指针的区别">1 C++引用和指针的区别</a></li>
+    <li><a href="#2-https流程">2 HTTPS流程</a></li>
+    <li><a href="#3-死锁">3 死锁</a>
+      <ul>
+        <li><a href="#31-定义">3.1 定义</a></li>
+        <li><a href="#32-死锁产生的原因和必要条件">3.2 死锁产生的原因和必要条件</a></li>
+        <li><a href="#33-死锁的处理策略">3.3 死锁的处理策略</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-malloc和new的区别">4 malloc和new的区别</a></li>
+    <li><a href="#5-虚函数">5 虚函数</a></li>
+    <li><a href="#2021-07-26">2021-07-26</a></li>
+    <li><a href="#2021-07-27">2021-07-27</a></li>
+    <li><a href="#2021-07-28">2021-07-28</a></li>
+    <li><a href="#2021-07-29">2021-07-29</a></li>
+    <li><a href="#6-ftp与sftp">6 FTP与SFTP</a></li>
+    <li><a href="#7-leetcode-987-二叉树的垂序遍历">7 LeetCode 987. 二叉树的垂序遍历</a></li>
+    <li><a href="#2021-08-01">2021-08-01</a></li>
+    <li><a href="#8-c中的static关键字">8 C++中的static关键字</a></li>
+    <li><a href="#9-分组密码des">9 分组密码——DES</a>
+      <ul>
+        <li><a href="#91-简介">9.1 简介</a></li>
+        <li><a href="#92-分组密码的迭代结构">9.2 分组密码的迭代结构</a></li>
+        <li><a href="#93-des">9.3 DES</a></li>
+      </ul>
+    </li>
+    <li><a href="#10-笔试复盘">10 笔试复盘</a></li>
+    <li><a href="#2021-08-03">2021-08-03</a></li>
+    <li><a href="#2021-08-14">2021-08-14</a></li>
+    <li><a href="#11-leetcode-1583-统计不开心的朋友">11 LeetCode 1583. 统计不开心的朋友</a></li>
+    <li><a href="#12-leetcode面试题-0405-合法二叉搜索树">12 LeetCode面试题 04.05. 合法二叉搜索树</a></li>
+    <li><a href="#13-leetcode5845-你能穿过矩阵的最后一天">13 LeetCode5845. 你能穿过矩阵的最后一天</a>
+      <ul>
+        <li><a href="#ac代码">AC代码</a></li>
+      </ul>
+    </li>
+    <li><a href="#14-leetcode576-出界的路径数">14 LeetCode576. 出界的路径数</a></li>
+    <li><a href="#15-数据库并发导致的问题">15 数据库并发导致的问题</a>
+      <ul>
+        <li><a href="#151-丢失修改">15.1 丢失修改</a></li>
+        <li><a href="#152-不可重复读">15.2 不可重复读</a></li>
+        <li><a href="#153-读脏数据脏读">15.3 读脏数据（脏读）</a></li>
+        <li><a href="#154-不可重复读和幻读的区别">15.4 不可重复读和幻读的区别</a></li>
+        <li><a href="#155-四个隔离等级">15.5 四个隔离等级</a></li>
+      </ul>
+    </li>
+    <li><a href="#16-程序装入和链接">16 程序装入和链接</a></li>
+    <li><a href="#17-设计模式简述">17 设计模式简述</a></li>
+    <li><a href="#18-c中的const关键字">18 C++中的const关键字</a>
+      <ul>
+        <li><a href="#181-const变量">18.1 const变量</a></li>
+        <li><a href="#182-const成员函数">18.2 const成员函数</a></li>
+      </ul>
+    </li>
+    <li><a href="#19-owasp-top-102017">19 OWASP top 10（2017）</a>
+      <ul>
+        <li><a href="#191-注入">19.1 注入</a></li>
+        <li><a href="#192-失效的身份认证">19.2 失效的身份认证</a></li>
+        <li><a href="#193-敏感数据泄露">19.3 敏感数据泄露</a></li>
+        <li><a href="#194-xml外部实体xxe">19.4 XML外部实体（XXE）</a></li>
+        <li><a href="#195-失效的访问控制">19.5 失效的访问控制</a></li>
+        <li><a href="#196-安全配置错误">19.6 安全配置错误</a></li>
+        <li><a href="#197-跨站脚本xss">19.7 跨站脚本（XSS）</a></li>
+        <li><a href="#198-不安全的反序列化">19.8 不安全的反序列化</a></li>
+        <li><a href="#199-使用含有已知漏洞的组件">19.9 使用含有已知漏洞的组件</a></li>
+        <li><a href="#1910-不足的日志记录和监控">19.10 不足的日志记录和监控</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

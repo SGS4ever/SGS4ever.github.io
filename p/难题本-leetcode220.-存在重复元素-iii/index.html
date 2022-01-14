@@ -10,15 +10,26 @@
  输入： nums = [1,5,9,1,5,9], k = 2, t = 3 输出： false  数据范围
  0 &amp;lt;= nums.length &amp;lt;= 2 * 104 -231 &amp;lt;= nums[i] &amp;lt;= 231 - 1 0 &amp;lt;= k &amp;lt;= 104 0 &amp;lt;= t &amp;lt;= 231 - 1   分析 朴素想法：遍历每个满足条件的 i 、 j ，找到符合条件的就退出。'><title>难题本 | LeetCode220. 存在重复元素 III</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode220. 存在重复元素 III'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='难题本 | LeetCode220. 存在重复元素 III'>
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/contains-duplicate-iii/
 这是个中等题？
 题目  给你一个整数数组 nums 和两个整数 k 和 t 。请你判断是否存在 两个不同下标 i 和 j，使得 abs(nums[i] - nums[j]) &amp;lt;= t ，同时又满足 abs(i - j) &amp;lt;= k 。
@@ -39,8 +50,12 @@
  输入： nums = [1,2,3,1], k = 3, t = 0 输出： true  示例2
  输入： nums = [1,5,9,1,5,9], k = 2, t = 3 输出： false  数据范围
  0 &amp;lt;= nums.length &amp;lt;= 2 * 104 -231 &amp;lt;= nums[i] &amp;lt;= 231 - 1 0 &amp;lt;= k &amp;lt;= 104 0 &amp;lt;= t &amp;lt;= 231 - 1   分析 朴素想法：遍历每个满足条件的 i 、 j ，找到符合条件的就退出。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -57,176 +72,32 @@
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#method-1滑动窗口--有序集合">Method 1、滑动窗口 + 有序集合</a></li>
-    <li><a href="#method-2桶排序">Method 2、桶排序</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -245,8 +116,28 @@
         <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/">难题本 | LeetCode220. 存在重复元素 III</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 18, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -254,12 +145,19 @@
 
 
 
-        <time class="article-time--published">Apr 18, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/">https://leetcode-cn.com/problems/contains-duplicate-iii/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/</a></em></p>
 <p><em>这是个中等题？</em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
@@ -302,7 +200,7 @@
 <p>记住，是 <strong>第一个大于</strong> <code>nums[i] - t</code> 的元素！</p>
 <p>非常不错地，<code>set.lower_bound()</code> 干的就是这份工作。</p>
 <h4 id="ac代码1">AC代码1</h4>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">bool</span> <span class="n">containsNearbyAlmostDuplicate</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">set</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
@@ -336,18 +234,25 @@
 <li><strong>数据类型！</strong> 这个题真是坑的不能再坑了，既然数据范围那么大的话，给出的输入数组就不要用 <code>int</code> 嘛（手动擦汗）。我们的集合类型是 <code>long</code> ，每次加减法之前也都要将数据转为 <code>long</code> 。</li>
 <li>删除范围外的数据。我们每一轮循环的时候是 <strong>先判断，再插入，再删除</strong> ，因此注意边界条件是 <code>i - k &gt;= 0</code> 。</li>
 </ul>
-<p><figure style="flex-grow: 243; flex-basis: 583px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1.png" data-size="450x185"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_1024x0_resize_box_2.png 1024w"
-				width="450"
-				height="185"
-				loading="lazy"
-				alt="Performance1">
-		</a>
-		
-		<figcaption>Performance1</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 243; 
+			flex-basis: 583px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1.png" data-size="450x185">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1.png"
+			width="450"
+			height="185"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/1_hu44e34440ccdd16dae75d550e913e1908_14530_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Performance1">
+	</a>
+	
+	<figcaption>Performance1</figcaption>
+	
+</figure></p>
 <h3 id="method-2桶排序">Method 2、桶排序</h3>
 <p>基本上所有的题解都说是桶排序，那我也就跟着说是桶排序吧，它的实际做法与我对桶排的认知还是有一定的区别的。</p>
 <p>我们知道，在计算机中两个整型相除，结果还是整型，默认 <strong>向下取整</strong> ，如 <code>1 / 4 = 0</code> ， <code>3 / 4 = 0</code> ， <code>4 / 4 = 1</code> 。</p>
@@ -362,35 +267,49 @@
 <p>将这个定理结合题目进行分析，我们希望使得 <code>abs(nums[i] - nums[j]) &lt;= t</code> ，若是 <code>nums[i] / (t + 1) == nums[j] / (t + 1)</code> ，则它们一定满足条件。</p>
 <hr>
 <p>进行了理论上的证明，我们可以再来看看直观的模拟，设 <code>t = 3</code> ，我们希望找到距离 <strong>不大于3</strong> 的一对数，根据上面的分析，我们应该计算 <code>nums[i] / (3 + 1)</code> 的值。</p>
-<p><figure style="flex-grow: 462; flex-basis: 1109px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2.png" data-size="1350x292"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_1024x0_resize_box_2.png 1024w"
-				width="1350"
-				height="292"
-				loading="lazy"
-				alt="一些正数除以4的值">
-		</a>
-		
-		<figcaption>一些正数除以4的值</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 462; 
+			flex-basis: 1109px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2.png" data-size="1350x292">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2.png"
+			width="1350"
+			height="292"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/2_hu4554ab9d1d357532eeb6fadd1c487150_5453_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="一些正数除以4的值">
+	</a>
+	
+	<figcaption>一些正数除以4的值</figcaption>
+	
+</figure></p>
 <p>我们将下面的绿色框框称为 <strong>桶</strong> ，上面的数字根据自己除以 <code>4</code> 的值来决定自己应该在哪一个桶里。非常容易发现，同一个桶中的数字满足 <strong>差的绝对值不大于3</strong> 这一要求。</p>
 <p>除了同一个桶中的数字，显然相邻桶中的数字也可能满足要求。例如对于 <code>1</code> 号桶中的数字 <code>5</code> 来说，隔壁 <code>0</code> 号桶中的 <code>3</code> 或者隔壁 <code>2</code> 号桶中的 <code>8</code> 也是满足要求的。</p>
 <p>我们对给出的整型数组进行遍历，得到一个数之后就去计算它所属的 <strong>桶编号</strong> ，然后将这一对 <strong>桶编号 —— 数值</strong> 的映射保存起来。对于任意一个数，如果它的桶编号已经存在于我们的记录中，那么显然我们已经找到了 <strong>同一个桶中的两个数字</strong> ，就可以 <code>return true;</code> 了；如果它的桶编号不存在于我们的记录中，我们还要看看它两边的桶是否存在，存在的话就取出其中的数值来比较一下大小，判断是否满足题意。</p>
 <p>至此，仅剩最后一个细节了：负数。</p>
 <p>你会发现，引入了负数之后，如果还是计算 <code>n / (t + 1)</code> 的话，会出现一些尴尬的情况，还是以 <code>t = 3</code> 为例：</p>
-<p><figure style="flex-grow: 372; flex-basis: 893px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3.png" data-size="1042x280"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_1024x0_resize_box_2.png 1024w"
-				width="1042"
-				height="280"
-				loading="lazy"
-				alt="引入负数的桶编号计算结果">
-		</a>
-		
-		<figcaption>引入负数的桶编号计算结果</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 372; 
+			flex-basis: 893px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3.png" data-size="1042x280">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3.png"
+			width="1042"
+			height="280"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/3_hud84b8e3c211d2aa73937ce18c230b279_5978_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="引入负数的桶编号计算结果">
+	</a>
+	
+	<figcaption>引入负数的桶编号计算结果</figcaption>
+	
+</figure></p>
 <p>有几点问题：</p>
 <ul>
 <li><code>-3</code> 和 <code>3</code> 的计算结果竟然都是 <code>0</code> ，它们属于同一个桶，但是显然不符合 <code>abs(3 - (-3)) &lt;= 3</code> 这一要求</li>
@@ -398,36 +317,50 @@
 </ul>
 <p>我们一一来进行解决。</p>
 <p>首先，负数和正数都可能计算出编号为 <code>0</code> 的桶，我们直接令 <strong>负数</strong> 的计算结果 <strong>减一</strong> ，这样做对于我们的桶编号没有影响，但是可以把负数的计算结果和正数的计算结果分开。</p>
-<p><figure style="flex-grow: 380; flex-basis: 914px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4.png" data-size="1055x277"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_1024x0_resize_box_2.png 1024w"
-				width="1055"
-				height="277"
-				loading="lazy"
-				alt="负数的计算结果减一">
-		</a>
-		
-		<figcaption>负数的计算结果减一</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 380; 
+			flex-basis: 914px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4.png" data-size="1055x277">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4.png"
+			width="1055"
+			height="277"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/4_hu7707497c064c2e4bcbaa21f4d80df454_4688_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="负数的计算结果减一">
+	</a>
+	
+	<figcaption>负数的计算结果减一</figcaption>
+	
+</figure></p>
 <p>其次，我们已经将 <code>0 ~ 3</code> 归于正整数的计算中了（0号桶），则不必再将 <code>0</code> 放入到负数的队伍中；这样来说，全体负数应该先 <strong>加上1</strong> 再进行计算，补上 <code>0</code> 的位置。</p>
 <p>这样， <code>-1 ~ -4</code> 就都属于同一个桶中了。</p>
-<p><figure style="flex-grow: 337; flex-basis: 808px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5.png" data-size="1001x297"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_1024x0_resize_box_2.png 1024w"
-				width="1001"
-				height="297"
-				loading="lazy"
-				alt="负数先加一再进行后续计算">
-		</a>
-		
-		<figcaption>负数先加一再进行后续计算</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 337; 
+			flex-basis: 808px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5.png" data-size="1001x297">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5.png"
+			width="1001"
+			height="297"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode220.-%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-iii/5_hu7625126e84341fa384a5e8a0dbe8c432_4426_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="负数先加一再进行后续计算">
+	</a>
+	
+	<figcaption>负数先加一再进行后续计算</figcaption>
+	
+</figure></p>
 <hr>
 <p>综合以上分析，我们在具体实现中使用一个 <code>map&lt;int, int&gt;</code> 来保存 <strong>桶编号 —— 数值</strong> 这一映射，遍历数组，计算对应数值的桶编号，查看 <code>map</code> 中是否已经有了相同编号或相邻编号的桶；根据题意，我们一次只能保存 <code>k</code> 个桶，那么只需要重新计算边界数值对应的桶编号，将其删除之后再继续进行循环。</p>
 <h4 id="ac代码2">AC代码2</h4>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">getID</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span>
     <span class="p">{</span>
@@ -483,15 +416,19 @@
 </code></pre></div><p>表现烂爆，就不放图了。一些题解中使用 <code>map.count()</code> 来判断桶是否存在，我使用 <code>map.find()</code> ，这样代码就冗长了一些。不过既然本题的核心算法实现了，其余细节了解便好。</p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.存在重复元素 III[EB/OL].2021-04-17</p>
-<p><em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/">https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/solution/cun-zai-zhong-fu-yuan-su-iii-by-leetcode-bbkt/</a></em></p>
 <p>[2] 宫水三叶.【宫水三叶】一题双解：「滑动窗口 &amp; 二分」&amp;「桶排序」解法[EB/OL].2021-04-17</p>
-<p><em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/">https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/solution/gong-shui-san-xie-yi-ti-shuang-jie-hua-d-dlnv/</a></em></p>
 <p>[3] 黎猫大侠.C++利用桶分组，详细解释[EB/OL].2021-04-17</p>
-<p><em><a href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/">https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/contains-duplicate-iii/solution/c-li-yong-tong-fen-zu-xiang-xi-jie-shi-b-ofj6/</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -505,8 +442,12 @@
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -580,26 +521,39 @@
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-04-18 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -609,16 +563,19 @@
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -695,7 +652,52 @@
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#method-1滑动窗口--有序集合">Method 1、滑动窗口 + 有序集合</a>
+      <ul>
+        <li><a href="#ac代码1">AC代码1</a></li>
+      </ul>
+    </li>
+    <li><a href="#method-2桶排序">Method 2、桶排序</a>
+      <ul>
+        <li><a href="#ac代码2">AC代码2</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

@@ -14,23 +14,34 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
 但是，这里还有一些细节需要思考：
  QQ会说，我这么没牌面的吗？谁想从我这请求资源我就给他？ 在上面的例子中，我们从网易云音乐去找QQ，拿到授权码之后回去找网易云音乐。但是，在真实的浏览器和Web服务器交互的过程中，我们的浏览器可没这么聪明，我们要给它规划好路线才行。  针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。
 而针对第二个问题，我们在向QQ请求授权码的时候，需要提供redirect_uri（或callback_uri）字段，表明浏览器拿到授权码之后要交给谁。于是，授权码模式的完整交互流程如下：
-授权码工作模式
+ 授权码工作模式 
  4. 简化模式  看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：
-简化模式
+ 简化模式 
 在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。
 这样的模式对一些纯前端的网络服务比较友好，因为它不需要资源请求者与资源提供者进行认证交互，直接拿着访问令牌找上门就好了。
 但是它叫简化模式，就是因为它存在安全问题。试想：重要的访问令牌就这样在浏览器和资源提供方之间传递，假设攻击者截获了访问令牌，就能够获取到你的资源。
  5. 密码模式  在密码模式中，用户向客户端提供自己的用户名和密码。客户端使用这些信息向资源服务器索要授权。这就是我们开头讲过的模式，它要求用户提供自己的用户名和密码，但是客户端不得存储这些信息。显然该模式建立在用户对客户端的高度信任上，通常这里的客户端属于操作系统的一部分，或者由著名的公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才考虑使用这种模式。'><title>OAuth2.0浅析</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/oauth2.0%E6%B5%85%E6%9E%90/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/oauth2.0%E6%B5%85%E6%9E%90/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='OAuth2.0浅析'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='OAuth2.0浅析'>
 <meta property='og:description' content='本文将介绍开放授权协议的概念，OAuth协议解决的问题以及OAuth协议的设计方案与应用情况。
 1. 背景  在生活中，我们接触的各种网络服务通常需要使用我们的个人资源。例如，我们使用网易云音乐，但是选择QQ登录，这时网易云需要获取我们的QQ账号信息，如果双方之间没有一个有效的授权机制，就会对我们的隐私安全造成威胁。试想：网易云音乐如何获取我们的QQ账号信息呢？无非是让我们给出我们的账号密码吧。但是这样做有如下严重的缺点：
  我们需要把QQ账号密码告诉网易云音乐，增加了泄露的风险； 网易云音乐拥有了对你的QQ账号的操作权限——想想都头皮发麻； 需要收回网易云音乐对QQ的访问权限时，只能通过修改密码的方式，但是这样做会使其他使用同样方式访问QQ的应用全部失效。  基于此，开放授权（Open Authorization）希望能够使得第三方无需知道用户的账号及密码，就可以获取用户的授权信息。
@@ -44,9 +55,9 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
 但是，这里还有一些细节需要思考：
  QQ会说，我这么没牌面的吗？谁想从我这请求资源我就给他？ 在上面的例子中，我们从网易云音乐去找QQ，拿到授权码之后回去找网易云音乐。但是，在真实的浏览器和Web服务器交互的过程中，我们的浏览器可没这么聪明，我们要给它规划好路线才行。  针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。
 而针对第二个问题，我们在向QQ请求授权码的时候，需要提供redirect_uri（或callback_uri）字段，表明浏览器拿到授权码之后要交给谁。于是，授权码模式的完整交互流程如下：
-授权码工作模式
+ 授权码工作模式 
  4. 简化模式  看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：
-简化模式
+ 简化模式 
 在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。
 这样的模式对一些纯前端的网络服务比较友好，因为它不需要资源请求者与资源提供者进行认证交互，直接拿着访问令牌找上门就好了。
 但是它叫简化模式，就是因为它存在安全问题。试想：重要的访问令牌就这样在浏览器和资源提供方之间传递，假设攻击者截获了访问令牌，就能够获取到你的资源。
@@ -68,15 +79,19 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
 但是，这里还有一些细节需要思考：
  QQ会说，我这么没牌面的吗？谁想从我这请求资源我就给他？ 在上面的例子中，我们从网易云音乐去找QQ，拿到授权码之后回去找网易云音乐。但是，在真实的浏览器和Web服务器交互的过程中，我们的浏览器可没这么聪明，我们要给它规划好路线才行。  针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。
 而针对第二个问题，我们在向QQ请求授权码的时候，需要提供redirect_uri（或callback_uri）字段，表明浏览器拿到授权码之后要交给谁。于是，授权码模式的完整交互流程如下：
-授权码工作模式
+ 授权码工作模式 
  4. 简化模式  看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：
-简化模式
+ 简化模式 
 在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。
 这样的模式对一些纯前端的网络服务比较友好，因为它不需要资源请求者与资源提供者进行认证交互，直接拿着访问令牌找上门就好了。
 但是它叫简化模式，就是因为它存在安全问题。试想：重要的访问令牌就这样在浏览器和资源提供方之间传递，假设攻击者截获了访问令牌，就能够获取到你的资源。
  5. 密码模式  在密码模式中，用户向客户端提供自己的用户名和密码。客户端使用这些信息向资源服务器索要授权。这就是我们开头讲过的模式，它要求用户提供自己的用户名和密码，但是客户端不得存储这些信息。显然该模式建立在用户对客户端的高度信任上，通常这里的客户端属于操作系统的一部分，或者由著名的公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才考虑使用这种模式。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -93,175 +108,32 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li></li>
-    <li><a href="#参考资料">参考资料：</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -280,8 +152,28 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
         <a href="/p/oauth2.0%E6%B5%85%E6%9E%90/">OAuth2.0浅析</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 12, 2020</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -289,8 +181,14 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
 
 
 
-        <time class="article-time--published">Oct 12, 2020</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -340,34 +238,48 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
 </ul>
 <p>针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。</p>
 <p>而针对第二个问题，我们在向QQ请求授权码的时候，需要提供<code>redirect_uri</code>（或callback_uri）字段，表明浏览器拿到授权码之后要交给谁。于是，授权码模式的完整交互流程如下：</p>
-<p><figure style="flex-grow: 193; flex-basis: 464px">
-		<a href="/p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode.png" data-size="1112x575"><img src="/p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode.png"
-				srcset="/p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode_hu2d6e43e95a6571b210cffc5e2fbe1a0f_381488_480x0_resize_box_2.png 480w, /p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode_hu2d6e43e95a6571b210cffc5e2fbe1a0f_381488_1024x0_resize_box_2.png 1024w"
-				width="1112"
-				height="575"
-				loading="lazy"
-				alt="授权码工作模式">
-		</a>
-		
-		<figcaption>授权码工作模式</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 193; 
+			flex-basis: 464px"
+	>
+	<a href="/p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode.png" data-size="1112x575">
+		<img src="/p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode.png"
+			width="1112"
+			height="575"
+			srcset="/p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode_hu2d6e43e95a6571b210cffc5e2fbe1a0f_381488_480x0_resize_box_3.png 480w, /p/oauth2.0%E6%B5%85%E6%9E%90/AuthorizationCode_hu2d6e43e95a6571b210cffc5e2fbe1a0f_381488_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="授权码工作模式">
+	</a>
+	
+	<figcaption>授权码工作模式</figcaption>
+	
+</figure></p>
 </blockquote>
 <h5 id="4-简化模式">4. 简化模式</h5>
 <blockquote>
 <p>看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：</p>
-<p><figure style="flex-grow: 213; flex-basis: 513px">
-		<a href="/p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant.png" data-size="712x333"><img src="/p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant.png"
-				srcset="/p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant_hu080c076300cc75711d94656442733acd_92887_480x0_resize_box_2.png 480w, /p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant_hu080c076300cc75711d94656442733acd_92887_1024x0_resize_box_2.png 1024w"
-				width="712"
-				height="333"
-				loading="lazy"
-				alt="简化模式">
-		</a>
-		
-		<figcaption>简化模式</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 213; 
+			flex-basis: 513px"
+	>
+	<a href="/p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant.png" data-size="712x333">
+		<img src="/p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant.png"
+			width="712"
+			height="333"
+			srcset="/p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant_hu080c076300cc75711d94656442733acd_92887_480x0_resize_box_3.png 480w, /p/oauth2.0%E6%B5%85%E6%9E%90/ImplicitGrant_hu080c076300cc75711d94656442733acd_92887_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="简化模式">
+	</a>
+	
+	<figcaption>简化模式</figcaption>
+	
+</figure></p>
 <p>在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。</p>
 <p>这样的模式对一些<strong>纯前端</strong>的网络服务比较友好，因为它不需要资源请求者与资源提供者进行认证交互，直接拿着访问令牌找上门就好了。</p>
 <p>但是它叫<strong>简化模式</strong>，就是因为它存在安全问题。试想：重要的访问令牌就这样在浏览器和资源提供方之间传递，假设攻击者截获了访问令牌，就能够获取到你的资源。</p>
@@ -385,12 +297,15 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
 <p>本文简要介绍了OAuth2.0的四种工作方式，通过网易云音乐和QQ的认证交互，希望能使读者对此有初步的认识。关于具体的交互URL，本文没有给出，可以参考文末的一些博客。关于针对OAuth2.0的一些攻击手段，请见下回分解。</p>
 <h3 id="参考资料">参考资料：</h3>
 <p>[1]  石瑞生，吴旭. 大数据安全与隐私保护[M]. 北京：北京邮电大学出版社，2019</p>
-<p>[2]  十八岁的夏天. OAuth2.0的简介. [EB/OL]. [2019-08-19]. <a href="https://www.cnblogs.com/xiaofengwang/p/11376881.html">https://www.cnblogs.com/xiaofengwang/p/11376881.html</a></p>
-<p>[3]  阮一峰. 理解OAuth2.0. [EB/OL]. [2014-05-12]. <a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html">http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html</a></p>
+<p>[2]  十八岁的夏天. OAuth2.0的简介. [EB/OL]. [2019-08-19]. <a class="link" href="https://www.cnblogs.com/xiaofengwang/p/11376881.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/xiaofengwang/p/11376881.html</a></p>
+<p>[3]  阮一峰. 理解OAuth2.0. [EB/OL]. [2014-05-12]. <a class="link" href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html"  target="_blank" rel="noopener"
+    >http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html</a></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -402,8 +317,12 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -477,26 +396,39 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2020-10-12 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -506,16 +438,19 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -592,7 +527,47 @@ OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：�
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料：</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

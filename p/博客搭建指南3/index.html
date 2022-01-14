@@ -10,7 +10,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
  2. hugo和SCSS  hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
 你的网站样式存放在根目录下asset/css文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块include/import进来，实现完整的页面样式。
 我的KeepIt主题有一个内容如下的主文件，功能正如我所述：
-main.scss
+ main.scss 
 按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
 如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为str的类，我们的CSS文件中存在两种定义：
 /* line 11 */ .str { color: #efefef; } ... /* line 20 */ .str { color: #ffdab9; } 那么，位于20行的定义会覆盖位于11行的定义，使得具有str类的标签内容呈现#ffdab9这种颜色。
@@ -18,15 +18,26 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
  3. 精确定义样式  基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
 在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：'><title>博客搭建指南——3</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='博客搭建指南——3'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='博客搭建指南——3'>
 <meta property='og:description' content='总不能让这个博客老是在记录家常菜啊。
 本篇主要介绍hugo博客的进阶美化方法，根据本篇的讲解，结合自己的主题进行实践，有助于打造一个真正属于自己的博客。
  1. CSS和SCSS  CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。
@@ -36,7 +47,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
  2. hugo和SCSS  hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
 你的网站样式存放在根目录下asset/css文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块include/import进来，实现完整的页面样式。
 我的KeepIt主题有一个内容如下的主文件，功能正如我所述：
-main.scss
+ main.scss 
 按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
 如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为str的类，我们的CSS文件中存在两种定义：
 /* line 11 */ .str { color: #efefef; } ... /* line 20 */ .str { color: #ffdab9; } 那么，位于20行的定义会覆盖位于11行的定义，使得具有str类的标签内容呈现#ffdab9这种颜色。
@@ -56,15 +67,19 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
  2. hugo和SCSS  hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
 你的网站样式存放在根目录下asset/css文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块include/import进来，实现完整的页面样式。
 我的KeepIt主题有一个内容如下的主文件，功能正如我所述：
-main.scss
+ main.scss 
 按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
 如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为str的类，我们的CSS文件中存在两种定义：
 /* line 11 */ .str { color: #efefef; } ... /* line 20 */ .str { color: #ffdab9; } 那么，位于20行的定义会覆盖位于11行的定义，使得具有str类的标签内容呈现#ffdab9这种颜色。
 这种覆盖原则就是我们自定义hugo样式的基础。
  3. 精确定义样式  基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
 在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -81,176 +96,32 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#1-css和scss">1. CSS和SCSS</a></li>
-    <li><a href="#2-hugo和scss">2. hugo和SCSS</a></li>
-    <li><a href="#3-精确定义样式">3. 精确定义样式</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -269,8 +140,28 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
         <a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/">博客搭建指南——3</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 19, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -278,8 +169,14 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 
 
 
-        <time class="article-time--published">Jan 19, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -291,7 +188,7 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。</p>
 <p>Sass（Syntatically Awesome Style Sheets）是一种CSS预处理器，它可以用来定义一套新的语法规则和函数，以加强和提升CSS。</p>
 <p>举例来说，一个页面中可能需要用到许多次颜色<code>#000</code>，即白色；在原始的CSS代码中这个<code>#000</code>需要不断地出现在各个位置，如<code>color: #000</code>、<code>background: #000</code>等，这就为样式的改变带来了麻烦，假如我们需要整体性地改变页面颜色主题，就只能找到所有的<code>#000</code>并将其修改，实在不够方便。而Sass引入了变量，其概念和C/C++等语言中的变量并无二致，极大地简化了数值的维护。现在可以使用如下的写法来设置页面颜色：</p>
-<div class="highlight"><pre class="chroma"><code class="language-CSS" data-lang="CSS"><span class="o">$</span><span class="nt">WHITE</span><span class="o">:</span> <span class="p">#</span><span class="nn">000</span><span class="o">;</span>  <span class="c">/* 设置变量 */</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-CSS" data-lang="CSS"><span class="o">$</span><span class="nt">WHITE</span><span class="o">:</span> <span class="p">#</span><span class="nn">000</span><span class="o">;</span>  <span class="c">/* 设置变量 */</span>
 <span class="p">.</span><span class="nc">code</span> <span class="p">{</span>
 	<span class="k">background</span><span class="p">:</span> <span class="err">$</span><span class="n">WHITE</span><span class="p">;</span>
 <span class="p">}</span>
@@ -305,21 +202,28 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <p>hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。</p>
 <p>你的网站样式存放在根目录下<code>asset/css</code>文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块<code>include/import</code>进来，实现完整的页面样式。</p>
 <p>我的KeepIt主题有一个内容如下的主文件，功能正如我所述：</p>
-<p><figure style="flex-grow: 106; flex-basis: 256px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1.png" data-size="873x816"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_1024x0_resize_box_2.png 1024w"
-				width="873"
-				height="816"
-				loading="lazy"
-				alt="main.scss">
-		</a>
-		
-		<figcaption>main.scss</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 106; 
+			flex-basis: 256px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1.png" data-size="873x816">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1.png"
+			width="873"
+			height="816"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="main.scss">
+	</a>
+	
+	<figcaption>main.scss</figcaption>
+	
+</figure></p>
 <p>按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。</p>
 <p>如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为<code>str</code>的类，我们的CSS文件中存在两种定义：</p>
-<div class="highlight"><pre class="chroma"><code class="language-CSS" data-lang="CSS"><span class="c">/* line 11 */</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-CSS" data-lang="CSS"><span class="c">/* line 11 */</span>
 <span class="p">.</span><span class="nc">str</span> <span class="p">{</span>
     <span class="k">color</span><span class="p">:</span> <span class="mh">#efefef</span><span class="p">;</span>
 <span class="p">}</span>
@@ -337,112 +241,165 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 <hr>
 <p>基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。</p>
 <p>在我所知道的hugo主题中，<code>asset/css</code>目录中都有<code>_custom.scss</code>文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看<code>main.scss</code>的最后几行：</p>
-<p><figure style="flex-grow: 266; flex-basis: 639px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2.png" data-size="815x306"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_1024x0_resize_box_2.png 1024w"
-				width="815"
-				height="306"
-				loading="lazy"
-				alt="main.scss的最后几行">
-		</a>
-		
-		<figcaption>main.scss的最后几行</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 266; 
+			flex-basis: 639px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2.png" data-size="815x306">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2.png"
+			width="815"
+			height="306"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="main.scss的最后几行">
+	</a>
+	
+	<figcaption>main.scss的最后几行</figcaption>
+	
+</figure></p>
 <p>可以看到，最后一行引入了<code>_custom.scss</code>文件，这使得定义在其中的样式位于最终CSS文件的末尾，其中重复定义的样式会被作为页面的最终效果。</p>
 <p>于是我们的问题就变得很简单了：找到你希望修改的元素和它对应的选择器，重新定义这个选择器即可。</p>
 <p>所幸，现代浏览器为我们提供的开发者工具使得这一切都变得无比简单。以Edge Beta为例，按下<code>F12</code>弹出开发者工具，使用左上角的小箭头使你的鼠标变成一个查看器，现在你点击页面上的任何元素，立即可以在右边的窗口看到这个元素对应的源码。</p>
 <p>例如，在我的博客中有这样的元素已经让我不爽很久了：</p>
-<p><figure style="flex-grow: 194; flex-basis: 467px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3.png" data-size="1921x987"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_1024x0_resize_box_2.png 1024w"
-				width="1921"
-				height="987"
-				loading="lazy"
-				alt="精确选取元素">
-		</a>
-		
-		<figcaption>精确选取元素</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 194; 
+			flex-basis: 467px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3.png" data-size="1921x987">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3.png"
+			width="1921"
+			height="987"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="精确选取元素">
+	</a>
+	
+	<figcaption>精确选取元素</figcaption>
+	
+</figure></p>
 <p>可以看到跟这个<code>project</code>相同的<code>aboutme.md</code>这个单词被拆成了两半，真是岂有此理。</p>
 <p><strong>现在我们希望这样的元素以后都单独位居一行</strong>。可以在右边开发者工具的下半部分看到这个元素对应的CSS，试着改改它的样式，结果真是令人高兴！</p>
-<p><figure style="flex-grow: 224; flex-basis: 538px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1.png" data-size="687x306"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_1024x0_resize_box_2.png 1024w"
-				width="687"
-				height="306"
-				loading="lazy"
-				alt="在开发者工具中修改样式">
-		</a>
-		
-		<figcaption>在开发者工具中修改样式</figcaption>
-		
-	</figure></p>
-<p><figure style="flex-grow: 267; flex-basis: 641px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1.png" data-size="1117x418"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_1024x0_resize_box_2.png 1024w"
-				width="1117"
-				height="418"
-				loading="lazy"
-				alt="效果">
-		</a>
-		
-		<figcaption>效果</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 224; 
+			flex-basis: 538px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1.png" data-size="687x306">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1.png"
+			width="687"
+			height="306"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="在开发者工具中修改样式">
+	</a>
+	
+	<figcaption>在开发者工具中修改样式</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 267; 
+			flex-basis: 641px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1.png" data-size="1117x418">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1.png"
+			width="1117"
+			height="418"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="效果">
+	</a>
+	
+	<figcaption>效果</figcaption>
+	
+</figure></p>
 <p>在这里，我将此类元素的background变深了一些；直接用鼠标在最后一行的位置单击，就可以新加入一个<code>white-space: nowrap;</code>的样式，这使得此类元素被强制不换行，看着真是舒服多了！</p>
 <p>效果已经这么好了，我们不妨就将这部分代码（选择器+样式）直接放入<code>_custom.scss</code>，那么理论上来说，这部分样式将覆盖主题原有的效果：</p>
-<p><figure style="flex-grow: 213; flex-basis: 512px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2.png" data-size="1170x548"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_1024x0_resize_box_2.png 1024w"
-				width="1170"
-				height="548"
-				loading="lazy"
-				alt="在SCSS文件中修改样式，包括暗黑模式的样式">
-		</a>
-		
-		<figcaption>在SCSS文件中修改样式，包括暗黑模式的样式</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 213; 
+			flex-basis: 512px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2.png" data-size="1170x548">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2.png"
+			width="1170"
+			height="548"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="在SCSS文件中修改样式，包括暗黑模式的样式">
+	</a>
+	
+	<figcaption>在SCSS文件中修改样式，包括暗黑模式的样式</figcaption>
+	
+</figure></p>
 <p>使用<code>hugo server</code>在本地试试，<em>Hmm&hellip;Not bad！</em></p>
-<p><figure style="flex-grow: 360; flex-basis: 865px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2.png" data-size="1922x533"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_1024x0_resize_box_2.png 1024w"
-				width="1922"
-				height="533"
-				loading="lazy"
-				alt="本地效果">
-		</a>
-		
-		<figcaption>本地效果</figcaption>
-		
-	</figure></p>
-<p><figure style="flex-grow: 241; flex-basis: 578px">
-		<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3.png" data-size="1030x427"><img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3.png"
-				srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_480x0_resize_box_2.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_1024x0_resize_box_2.png 1024w"
-				width="1030"
-				height="427"
-				loading="lazy"
-				alt="本地效果（黑）">
-		</a>
-		
-		<figcaption>本地效果（黑）</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 360; 
+			flex-basis: 865px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2.png" data-size="1922x533">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2.png"
+			width="1922"
+			height="533"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="本地效果">
+	</a>
+	
+	<figcaption>本地效果</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 241; 
+			flex-basis: 578px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3.png" data-size="1030x427">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3.png"
+			width="1030"
+			height="427"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="本地效果（黑）">
+	</a>
+	
+	<figcaption>本地效果（黑）</figcaption>
+	
+</figure></p>
 <p>以上就是本篇的全部内容。</p>
 <hr>
 <p><strong>参考文献</strong></p>
 <p>[1] 新西兰程序员.CSS,Sass,SCSS关系[EB/OL].2018-10-10</p>
-<p><em><a href="https://www.cnblogs.com/wphl-27/p/9765647.html">https://www.cnblogs.com/wphl-27/p/9765647.html</a></em></p>
+<p><em><a class="link" href="https://www.cnblogs.com/wphl-27/p/9765647.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/wphl-27/p/9765647.html</a></em></p>
 <p>[2] 选择远方.css强制不换行[EB/OL].2019-03-11</p>
-<p><em><a href="https://blog.csdn.net/qq_40713392/article/details/88411432">https://blog.csdn.net/qq_40713392/article/details/88411432</a></em></p>
+<p><em><a class="link" href="https://blog.csdn.net/qq_40713392/article/details/88411432"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/qq_40713392/article/details/88411432</a></em></p>
 <p>[3] 百度百科.CSS（层叠样式表）[EB/OL]</p>
-<p><em><a href="https://baike.baidu.com/item/CSS/5457?fr=aladdin">https://baike.baidu.com/item/CSS/5457?fr=aladdin</a></em></p>
+<p><em><a class="link" href="https://baike.baidu.com/item/CSS/5457?fr=aladdin"  target="_blank" rel="noopener"
+    >https://baike.baidu.com/item/CSS/5457?fr=aladdin</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -454,8 +411,12 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -463,6 +424,18 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
         <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Hugo Stack主题更新小记</h2>
+        </div>
+    </a>
+</article>
                 
                     
 <article class="">
@@ -512,43 +485,44 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
     </a>
 </article>
                 
-                    
-<article class="">
-    <a href="/p/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">桌面美化方案-Rainmeter</h2>
-        </div>
-    </a>
-</article>
-                
             </div>
         </div>
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-01-19 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -558,16 +532,19 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -644,7 +621,44 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-css和scss">1. CSS和SCSS</a></li>
+    <li><a href="#2-hugo和scss">2. hugo和SCSS</a></li>
+    <li><a href="#3-精确定义样式">3. 精确定义样式</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

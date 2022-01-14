@@ -27,15 +27,26 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
 #include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.'><title>难题本 | LeetCode778. 水位上升的泳池中游泳</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode778. 水位上升的泳池中游泳'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='难题本 | LeetCode778. 水位上升的泳池中游泳'>
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/swim-in-rising-water/
 又是一道不错的复习题，借此回顾回顾BFS和SPFA。
 BFS Breadth First Search，宽度优先搜素。
@@ -90,8 +101,12 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
  这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&#39;#&#39;）且该点未被访问，则记录它到源点的距离。
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
 #include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -108,174 +123,32 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -294,8 +167,28 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
         <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/">难题本 | LeetCode778. 水位上升的泳池中游泳</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 30, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -303,12 +196,19 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 
 
 
-        <time class="article-time--published">Jan 30, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/swim-in-rising-water/">https://leetcode-cn.com/problems/swim-in-rising-water/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/swim-in-rising-water/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/swim-in-rising-water/</a></em></p>
 <p>又是一道不错的复习题，借此回顾回顾BFS和SPFA。</p>
 <h2 id="bfs">BFS</h2>
 <p>Breadth First Search，宽度优先搜素。</p>
@@ -336,7 +236,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 </blockquote>
 <p>这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（'#'）且该点未被访问，则记录它到源点的距离。</p>
 <p>我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
@@ -417,18 +317,25 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 <p>SPFA是求单源最短路径的一种算法，其思想与宽搜十分相近。实际上，我当年在完全没有接触此算法的情况下独立地将宽搜改写为了一个粗糙的SPFA，用它通过了一些求最短路的题目。由此可见，在理解宽搜的前提下理解SPFA是比较简单的。</p>
 <p>大概还是需要讨论讨论BFS的正确性：我们将当前节点的邻接节点加入队列，由于当前节点到源节点最短，则其邻接节点到源节点也最短。</p>
 <p>但是，BFS的“距离”实际上是指源节点到当前节点的“跳数”，也就是从源节点出发需要经过几个节点才能到达当前节点。这在一个<strong>带权</strong>图中是不适用的。考虑以下情况：</p>
-<p><figure style="flex-grow: 145; flex-basis: 349px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1.png" data-size="562x386"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_1024x0_resize_box_2.png 1024w"
-				width="562"
-				height="386"
-				loading="lazy"
-				alt="BFS在带权图中不适用">
-		</a>
-		
-		<figcaption>BFS在带权图中不适用</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 145; 
+			flex-basis: 349px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1.png" data-size="562x386">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1.png"
+			width="562"
+			height="386"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="BFS在带权图中不适用">
+	</a>
+	
+	<figcaption>BFS在带权图中不适用</figcaption>
+	
+</figure></p>
 <p>我们从源点A出发，到达点E，使用BFS时，情况如下：</p>
 <blockquote>
 <ul>
@@ -445,18 +352,25 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 <p>在上面的分析中，由visited带来的影响能否消除呢？答案是肯定的。既然可能出现跳数更多但权和更短的路径，那么我们在访问点E的时候考虑其<code>dist[E]</code>和<code>dist[C] + edge[C][E]</code>的大小，令其等于更小的那一个不就可以了吗？</p>
 <p>在本例中，这样做确实可以。当点C出队时考虑其邻接点E，由于<code>dist[E] &gt; dist[C] + edge[C][E]</code>，我们将<code>dist[E]</code>的值更新为后者，即A到E的最短距离为7。</p>
 <p>但是，在一个更加复杂的图中，这样做就不完全正确了。考虑这个有向图：</p>
-<p><figure style="flex-grow: 119; flex-basis: 286px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2.png" data-size="671x562"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_1024x0_resize_box_2.png 1024w"
-				width="671"
-				height="562"
-				loading="lazy"
-				alt="有向图">
-		</a>
-		
-		<figcaption>有向图</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 119; 
+			flex-basis: 286px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2.png" data-size="671x562">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2.png"
+			width="671"
+			height="562"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="有向图">
+	</a>
+	
+	<figcaption>有向图</figcaption>
+	
+</figure></p>
 <p>当我们经过了很多跳之后终于找到了一个到达点C的更短路径（A-&gt;B-&gt;D-&gt;F-&gt;G-&gt;C)，发现它的邻接点E早在不知道什么时候就已经用路径<code>A-&gt;C-&gt;E</code>来计算距离了。</p>
 <p>兵来将挡，水来土掩。既然我使用更小的距离来更新某个点时，它的邻接点可能无法得到更新，那么我们干脆让它再次进入队列中，这样之后它从队列中被取出时将会重新更新所有邻接点；同理，被更新的邻接点再次进入队列中，去更新邻接点的邻接点&hellip;&hellip;</p>
 <p>没错，SPFA就是如此，且只有如此。</p>
@@ -489,7 +403,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 </blockquote>
 <p>这道题可以使用变相的SPFA来解决。我们的<code>dist</code>不再是源点到任一点的距离，而是<strong>源点到达任一点所需要的时间</strong>。对于一个点的邻接点，如果自己的高度比它高，则说明我们到达当前这个点的时候，水面已经没过了这个邻接点；如果自己的高度比它低，说明我们到达当前这个点的时候还没办法到达邻接点，因为至少需要等待水面没过它；所以采用当前这条路径，要到达这个邻接点的时间就是<code>max(grid[tmp.x][tmp.y], distance[head.x][head.y])</code>。</p>
 <p>那么根据SPFA的逻辑，就能得到如下的代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
         <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
@@ -551,30 +465,41 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
     <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div><p>表现一般，主要是由于SPFA算法在<strong>稀疏图</strong>的情况下表现更好，在这种稠密图中时间复杂度退化了。</p>
-<p><figure style="flex-grow: 458; flex-basis: 1100px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3.png" data-size="587x128"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_1024x0_resize_box_2.png 1024w"
-				width="587"
-				height="128"
-				loading="lazy"
-				alt="Performance">
-		</a>
-		
-		<figcaption>Performance</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 458; 
+			flex-basis: 1100px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3.png" data-size="587x128">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3.png"
+			width="587"
+			height="128"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Performance">
+	</a>
+	
+	<figcaption>Performance</figcaption>
+	
+</figure></p>
 <p>这题实际上还是使用Dijkstra算法会好一些，官方还提供了二分答案（思路简单！）、并查集等骚操作，不在本文的讨论范围内。</p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 力扣官方题解.水位上升的泳池中游泳[EB/OL].2021-01-30</p>
-<p><em><a href="https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/">https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/swim-in-rising-water/solution/shui-wei-shang-sheng-de-yong-chi-zhong-y-xm9i/</a></em></p>
 <p>[2] SHHHS.SPFA算法[EB/OL].2016-09-14</p>
-<p><em><a href="https://www.cnblogs.com/shadowland/p/5870640.html">https://www.cnblogs.com/shadowland/p/5870640.html</a></em></p>
+<p><em><a class="link" href="https://www.cnblogs.com/shadowland/p/5870640.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/shadowland/p/5870640.html</a></em></p>
 <p>[3] 360百科.宽度优先搜索[EB/OL]</p>
-<p><em><a href="https://baike.so.com/doc/7806949-8081044.html">https://baike.so.com/doc/7806949-8081044.html</a></em></p>
+<p><em><a class="link" href="https://baike.so.com/doc/7806949-8081044.html"  target="_blank" rel="noopener"
+    >https://baike.so.com/doc/7806949-8081044.html</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -588,8 +513,12 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -663,26 +592,39 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-01-30 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -692,16 +634,19 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -778,7 +723,42 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

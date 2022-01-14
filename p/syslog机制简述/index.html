@@ -8,26 +8,37 @@ syslog工作流程简述 不管是什么应用，日志机制永是最重要的�
 大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
 syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
 流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
-syslog处理分类分级处理信息
+ syslog处理分类分级处理信息 
 当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
 过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
 authpriv.* /var/log/secure
 这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
-规则的组成
+ 规则的组成 
 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
 #### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages!'><title>syslog机制简述</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='syslog机制简述'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='syslog机制简述'>
 <meta property='og:description' content='断更了将近两个月？
 五月下旬开始参加实习，工作颇为忙碌，单程一小时的通勤也磨灭了我回到宿舍之后继续学习和输出的热情；然而实习已近两月，所幸稍有所得，不做记录则恐愧对时光矣。
 syslog工作流程简述 不管是什么应用，日志机制永是最重要的机制之一，从日志中，维护人员可以排查错误、发现攻击，从而有效地提高应用的可用性。
@@ -35,12 +46,12 @@ syslog工作流程简述 不管是什么应用，日志机制永是最重要的�
 大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
 syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
 流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
-syslog处理分类分级处理信息
+ syslog处理分类分级处理信息 
 当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
 过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
 authpriv.* /var/log/secure
 这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
-规则的组成
+ 规则的组成 
 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
@@ -56,18 +67,22 @@ syslog工作流程简述 不管是什么应用，日志机制永是最重要的�
 大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
 syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
 流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
-syslog处理分类分级处理信息
+ syslog处理分类分级处理信息 
 当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
 过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
 authpriv.* /var/log/secure
 这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
-规则的组成
+ 规则的组成 
 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
 #### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages!">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -84,178 +99,32 @@ authpriv.* /var/log/secure
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#syslog工作流程简述">syslog工作流程简述</a></li>
-    <li><a href="#过滤规则">过滤规则</a></li>
-    <li><a href="#模板template">模板Template</a></li>
-    <li><a href="#小结">小结</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -274,8 +143,28 @@ authpriv.* /var/log/secure
         <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">syslog机制简述</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jul 03, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -283,8 +172,14 @@ authpriv.* /var/log/secure
 
 
 
-        <time class="article-time--published">Jul 03, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -296,39 +191,53 @@ authpriv.* /var/log/secure
 <p>大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 <code>/etc/syslog</code> 或 <code>/etc/syslogd</code> 或 <code>/etc/rsyslog.d</code> ，默认配置文件为 <code>/etc/syslog.conf</code> 或 <code>rsyslog.conf</code> ，任何希望生成日志的程序都可以向syslog发送信息。</p>
 <p>syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。</p>
 <p>流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：</p>
-<p><figure style="flex-grow: 202; flex-basis: 486px">
-		<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1.png" data-size="1335x658"><img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1.png"
-				srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu2a132ba86368ae48d7ca4b3177802c28_63856_480x0_resize_box_2.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu2a132ba86368ae48d7ca4b3177802c28_63856_1024x0_resize_box_2.png 1024w"
-				width="1335"
-				height="658"
-				loading="lazy"
-				alt="syslog处理分类分级处理信息">
-		</a>
-		
-		<figcaption>syslog处理分类分级处理信息</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 202; 
+			flex-basis: 486px"
+	>
+	<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1.png" data-size="1335x658">
+		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1.png"
+			width="1335"
+			height="658"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu2a132ba86368ae48d7ca4b3177802c28_63856_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu2a132ba86368ae48d7ca4b3177802c28_63856_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="syslog处理分类分级处理信息">
+	</a>
+	
+	<figcaption>syslog处理分类分级处理信息</figcaption>
+	
+</figure></p>
 <p>当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。</p>
 <h3 id="过滤规则">过滤规则</h3>
 <p>如果你的系统是CentOS，可以打开 <code>/etc/rsyslog.conf</code> ，这是syslog的配置文件，Ubuntu下的配置文件位于 <code>/etc/rsyslog.d/50-default.conf</code> ；在这里，你可以看到不少类似下方的语句：</p>
 <p><code>authpriv.* /var/log/secure</code></p>
 <p>这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：</p>
-<p><figure style="flex-grow: 584; flex-basis: 1401px">
-		<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2.png" data-size="730x125"><img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2.png"
-				srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hua64d7bced7b5541c9155f4c6c1515890_127055_480x0_resize_box_2.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hua64d7bced7b5541c9155f4c6c1515890_127055_1024x0_resize_box_2.png 1024w"
-				width="730"
-				height="125"
-				loading="lazy"
-				alt="规则的组成">
-		</a>
-		
-		<figcaption>规则的组成</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 584; 
+			flex-basis: 1401px"
+	>
+	<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2.png" data-size="730x125">
+		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2.png"
+			width="730"
+			height="125"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hua64d7bced7b5541c9155f4c6c1515890_127055_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hua64d7bced7b5541c9155f4c6c1515890_127055_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="规则的组成">
+	</a>
+	
+	<figcaption>规则的组成</figcaption>
+	
+</figure></p>
 <p>第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。</p>
 <p>你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！</p>
 <p>仔细看看配置文件吧，每一条规则都是如此的简单而实用：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1">#### RULES ####</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1">#### RULES ####</span>
 
 <span class="c1"># Log all kernel messages to the console.</span>
 <span class="c1"># Logging much else clutters up the screen.</span>
@@ -352,32 +261,46 @@ cron.*                                                  /var/log/cron
 *.emerg                                                 :omusrmsg:*
 </code></pre></div><h4 id="facility">facility</h4>
 <p>规则的第一部分facility指的是消息源设备的类型。syslog体系中已经将Linux中的大部分进程进行了合理的分类，例如与内核消息相关的 <code>kern</code> 类型、与授权信息相关的 <code>auth/authpriv</code> 类型等等，官方为我们总结出了如下的表格：</p>
-<p><figure style="flex-grow: 71; flex-basis: 170px">
-		<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3.png" data-size="649x911"><img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3.png"
-				srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hudf588dce9af02c203636c1dbc4296b2c_146200_480x0_resize_box_2.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hudf588dce9af02c203636c1dbc4296b2c_146200_1024x0_resize_box_2.png 1024w"
-				width="649"
-				height="911"
-				loading="lazy"
-				alt="facilities">
-		</a>
-		
-		<figcaption>facilities</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 71; 
+			flex-basis: 170px"
+	>
+	<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3.png" data-size="649x911">
+		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3.png"
+			width="649"
+			height="911"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hudf588dce9af02c203636c1dbc4296b2c_146200_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hudf588dce9af02c203636c1dbc4296b2c_146200_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="facilities">
+	</a>
+	
+	<figcaption>facilities</figcaption>
+	
+</figure></p>
 <h4 id="priority和selector">priority和selector</h4>
 <p>将消息源设备进行分类之后，就需要看看这条消息对应的是什么级别，priority（或者叫severity）就用来表示消息的严重性。</p>
-<p><figure style="flex-grow: 177; flex-basis: 425px">
-		<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4.png" data-size="657x371"><img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4.png"
-				srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu7b6910958e27d1c2c0ef4e6ffcbc3a51_86172_480x0_resize_box_2.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu7b6910958e27d1c2c0ef4e6ffcbc3a51_86172_1024x0_resize_box_2.png 1024w"
-				width="657"
-				height="371"
-				loading="lazy"
-				alt="Severities">
-		</a>
-		
-		<figcaption>Severities</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 177; 
+			flex-basis: 425px"
+	>
+	<a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4.png" data-size="657x371">
+		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4.png"
+			width="657"
+			height="371"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu7b6910958e27d1c2c0ef4e6ffcbc3a51_86172_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu7b6910958e27d1c2c0ef4e6ffcbc3a51_86172_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Severities">
+	</a>
+	
+	<figcaption>Severities</figcaption>
+	
+</figure></p>
 <p>facility + priority的形式能够唯一确定一条消息的种类，因此被称为 <em>选择器（selector）</em> 。正如我们所看到的规则那样，使用 <code>facility.priority</code> 的形式来指定一个选择器。其中，在不特别指定的情况下，选中的是 <code>facility</code> 设备类型所产生的 <code>priority</code> 级别<strong>及以上</strong>的消息，也就是说，一个 <code>kern.info</code> 选择器不仅能选中 <code>kern</code> 类型的 <code>info</code> 级别消息，还能选中 <code>info</code> 以上的所有级别。</p>
 <p>例如 <code>kernel</code> 进程产生了一条严重性为 <code>warning</code> 的信息，那么这条信息就将被 <code>kern.info</code> 或 <code>kern.notice</code> 等规则选中。</p>
 <p>除了基本的选择器用法，rsyslog在syslog的基础上扩展了一些选择器的语法。例如使用符号 <code>=</code> 可以 <strong>严格选中</strong> 某一优先级的消息，使用符号 <code>!</code> 可以选中 <strong>除了</strong> 某一优先级的所有消息，最常用的 <code>*</code> 号表示这一字段的 <strong>所有取值</strong> ，字段 <code>none</code> 常常配合 <code>*</code> 号使用，表示不记录某些facility的消息。还有一些使用表达式构造的选择器，在此不加叙述（因为在Linux默认配置中本身就用得不多），读者可以阅读文末给出的参考资料[1]来进行扩展学习。</p>
@@ -388,7 +311,7 @@ cron.*                                                  /var/log/cron
 <li>action字段形如 <code>@&lt;IP&gt;:&lt;端口&gt;</code> ，这表示将选择器选中的消息 <strong>转发</strong> 到目标服务器的目标端口上。一个 <code>@</code> 号表示使用UDP协议发送（默认），两个 <code>@</code> 号表示使用TCP协议发送。例如我们配置一条规则 <code>*.* @@192.168.0.1:514</code> 表示将所有类型的、所有级别的消息都转发到服务器 <code>192.168.0.1</code> 的 <code>514</code> 端口。</li>
 </ul>
 <p>至此，我们就了解了规则的含义，顺带地，你可以初步读懂Linux日志配置文件里的部分内容了。从这些规则出发，你能够对Linux系统下的一些日志文件有更深入的了解。我们再来看一下这些规则：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages
 <span class="c1"># 这条规则表示将除了 mail、authpriv、cron 的类型之外的所有设备类型的消息记录到 /var/log/messages 文件中</span>
 <span class="c1"># 因此，你可以在 /var/log/message 文件中找到大部分日志消息</span>
 
@@ -402,23 +325,23 @@ cron.*                                                  /var/log/cron
 <h3 id="模板template">模板Template</h3>
 <p>阅读至此，我们能够把任何需要的消息用我们希望的办法进行记录或转发，但仅仅采用默认的格式可能还远远不够。</p>
 <p>正常情况下，一条Linux日志长成这样：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">Jul  <span class="m">2</span> 23:30:03 localhost su: pam_unix<span class="o">(</span>su:session<span class="o">)</span>: session opened <span class="k">for</span> user root by xr_g<span class="o">(</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">Jul  <span class="m">2</span> 23:30:03 localhost su: pam_unix<span class="o">(</span>su:session<span class="o">)</span>: session opened <span class="k">for</span> user root by xr_g<span class="o">(</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">)</span>
 </code></pre></div><p>这一条日志分为几个部分： <code>[时间戳] [主机名] [进程名和进程ID] [消息体]</code> 。</p>
 <p>这可不是我瞎说的，因为rsyslog在记录日志的时候使用了默认的 <em>模板</em> 。</p>
 <p>如果你使用过Django或者什么其他的后端编程框架，很可能已经了解了模板的概念；如果你没接触过模板，不妨简单地将其看作一种 <em>格式</em> ，就像你写论文时候的格式要求那样，所有的消息都要按照这种格式进行记录。而与你写论文时相同，论文模板里总是会指定一些较为宽泛的 <em>属性</em> ，比如开头要写上摘要和关键字，所有人的论文都是相同的结构，但摘要和关键字的具体内容就因人而异了。</p>
 <p>日志的模板也正是如此，一条模板指定了日志的大致结构，就像上面提到的那样；而这一结构由一个一个的属性组成，日志守护进程需要根据这些属性往模板里填充数据，从而产生一条具体的日志。</p>
 <h4 id="模板的定义">模板的定义</h4>
 <p>模板的定义办法有新旧两种，我个人比较习惯旧式的模板定义办法：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># $template [模板名] [模板格式]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># $template [模板名] [模板格式]</span>
 <span class="nv">$template</span> MyTmp,<span class="s2">&#34;%timestamp% %hostname% %syslogfacility-text% %syslogseverity-text% %msg%\n&#34;</span>
 </code></pre></div><p>而新版的模板定义办法有若干个，例如：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;tpl3&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;tpl3&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
          <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n&#34;</span>
         <span class="o">)</span>
 </code></pre></div><h4 id="模板的使用">模板的使用</h4>
 <p>定义好了自己的模板之后，可以直接将模板应用在action字段上，具体办法就是在action原本的内容后加一个分号 <code>;</code> ，然后写上自己的模板名。</p>
 <p>例如修改 <code>/var/log/message</code> 内容为我们自定义的格式：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Step1 设置模板，使用模板</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Step1 设置模板，使用模板</span>
 <span class="o">[</span>root@localhost log<span class="o">]</span><span class="c1"># cat /etc/rsyslog.conf </span>
 ···
 <span class="nv">$template</span> MyTmp,<span class="s2">&#34;%timestamp% %hostname% %syslogfacility-text% %syslogseverity-text% %msg%\n&#34;</span>
@@ -474,7 +397,7 @@ Jul  <span class="m">2</span> 23:57:55 localhost daemon info Starting System Log
 </tbody>
 </table>
 <p>我们需要为自定义的模板命名，当然，不能与系统默认保留的一些模板重名，比如下面几个系统自带的模板：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_TraditionalForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_TraditionalForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
      <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;&lt;%PRI%&gt;%TIMESTAMP% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%&#34;</span><span class="o">)</span>
      
 template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_ForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
@@ -494,7 +417,8 @@ template<span class="o">(</span><span class="nv">name</span><span class="o">=</s
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -506,8 +430,12 @@ template<span class="o">(</span><span class="nv">name</span><span class="o">=</s
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -581,26 +509,39 @@ template<span class="o">(</span><span class="nv">name</span><span class="o">=</s
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-07-03 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -610,16 +551,19 @@ template<span class="o">(</span><span class="nv">name</span><span class="o">=</s
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -696,7 +640,57 @@ template<span class="o">(</span><span class="nv">name</span><span class="o">=</s
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#syslog工作流程简述">syslog工作流程简述</a></li>
+    <li><a href="#过滤规则">过滤规则</a>
+      <ul>
+        <li><a href="#facility">facility</a></li>
+        <li><a href="#priority和selector">priority和selector</a></li>
+        <li><a href="#action">action</a></li>
+      </ul>
+    </li>
+    <li><a href="#模板template">模板Template</a>
+      <ul>
+        <li><a href="#模板的定义">模板的定义</a></li>
+        <li><a href="#模板的使用">模板的使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#小结">小结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

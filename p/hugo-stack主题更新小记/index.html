@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='近期某友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
+今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
+动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
+ 旧主页   新Stack主页（未修改) 
+ 旧文章页面   新Stack文章页面（未修改) 
+Part 1 左边栏 图标 图标显示 修改配置文件和 page
+首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
+ 左边栏 
+发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
+以 config.yaml 中的内容为例，以前的 menu 是这样的：
+menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：'><title>Hugo Stack主题更新小记</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='Hugo Stack主题更新小记'>
+<meta property='og:description' content='近期某友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
+今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
+动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
+ 旧主页   新Stack主页（未修改) 
+ 旧文章页面   新Stack文章页面（未修改) 
+Part 1 左边栏 图标 图标显示 修改配置文件和 page
+首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
+ 左边栏 
+发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
+以 config.yaml 中的内容为例，以前的 menu 是这样的：
+menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：'>
+<meta property='og:url' content='https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2022-01-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-01-12T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Hugo Stack主题更新小记">
+<meta name="twitter:description" content="近期某友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
+今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
+动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
+ 旧主页   新Stack主页（未修改) 
+ 旧文章页面   新Stack文章页面（未修改) 
+Part 1 左边栏 图标 图标显示 修改配置文件和 page
+首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
+ 左边栏 
+发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
+以 config.yaml 中的内容为例，以前的 menu 是这样的：
+menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/">Hugo Stack主题更新小记</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 12, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>近期某友搭建博客，使用了跟我一样的 <a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack"  target="_blank" rel="noopener"
+    >Hugo Stack主题</a> ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。</p>
+<p>今天下载了 <code>3.6.0</code> 版本的 <a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack/releases"  target="_blank" rel="noopener"
+    >Release</a> ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。</p>
+<h3 id="动工前纪念">动工前纪念</h3>
+<p>动工之前，把旧有的博客样式和 <strong>未作修改之前的</strong> 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1_hu1a673ea9d1a7bdc434fe9a368b6804b7_308762_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1_hu1a673ea9d1a7bdc434fe9a368b6804b7_308762_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧主页">
+	</a>
+	
+	<figcaption>旧主页</figcaption>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2_hu72e49de9833b7775f0d62d03cda8045f_326370_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2_hu72e49de9833b7775f0d62d03cda8045f_326370_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新Stack主页（未修改)">
+	</a>
+	
+	<figcaption>新Stack主页（未修改)</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/3.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/3.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/3_hu43f79852a2c6db00beb32097812fb498_556596_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/3_hu43f79852a2c6db00beb32097812fb498_556596_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧文章页面">
+	</a>
+	
+	<figcaption>旧文章页面</figcaption>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/4.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/4.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/4_hu1578330d649dfb85d462696fb2764b9d_463876_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/4_hu1578330d649dfb85d462696fb2764b9d_463876_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新Stack文章页面（未修改)">
+	</a>
+	
+	<figcaption>新Stack文章页面（未修改)</figcaption>
+	
+</figure></p>
+<h3 id="part-1-左边栏">Part 1 左边栏</h3>
+<h4 id="图标">图标</h4>
+<h5 id="图标显示">图标显示</h5>
+<p>修改配置文件和 page</p>
+<p>首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 <code>menu</code> 来指代这几个东西）是没有图标的，光秃秃的很不好看。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 49; 
+			flex-basis: 118px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/7.png" data-size="403x815">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/7.png"
+			width="403"
+			height="815"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/7_hufed611c083602f72eff8761fefb599fa_114490_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/7_hufed611c083602f72eff8761fefb599fa_114490_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="左边栏">
+	</a>
+	
+	<figcaption>左边栏</figcaption>
+	
+</figure></p>
+<p>发生这种情况的原因是新版的 <code>menu</code> 图标与旧版的图标不同。在旧版主题中， <code>menu</code> 图标由 <code>menu.main.pre</code> 来指定，而新版的图标由 <code>menu.main.params.icon</code> 来指定，参数都不一样了，图标丢失是当然的了！</p>
+<p>根据作者的 <a class="link" href="https://docs.stack.jimmycai.com/configuration/custom-menu.html"  target="_blank" rel="noopener"
+    >文档</a> ，添加页面有两种方式，一种是在 <code>content/page</code> 页面的 <code>Front Matter</code> 中加上 <code>menu.main</code> 参数，另一种是在 <code>config.yaml</code> 文件中添加 <code>menu.main</code> 参数。旧有的主题也是这么工作的， <strong>我们只需要把跟图标相关的参数修改一下就行了</strong> 。</p>
+<p>以 <code>config.yaml</code> 中的内容为例，以前的 <code>menu</code> 是这样的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">menu</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">博文</span><span class="w">
+</span><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
+</span><span class="w">          </span><span class="nt">pre</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></code></pre></div><p>修改过后，要变成这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">menu</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">主页</span><span class="w">
+</span><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
+</span><span class="w">          </span><span class="nt">params</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></code></pre></div><p>在 <code>page</code> 当中的那些页面也要如此修改。</p>
+<p>于是我们的图标就回来了！</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 52; 
+			flex-basis: 124px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8.png" data-size="498x957">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8.png"
+			width="498"
+			height="957"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8_hu6a697caf88efe191886c8c8b17d6fd02_107219_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8_hu6a697caf88efe191886c8c8b17d6fd02_107219_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="调出图标">
+	</a>
+	
+	<figcaption>调出图标</figcaption>
+	
+</figure></p>
+<h5 id="图标高亮">图标高亮</h5>
+<p>如果当前页面对应左边栏的某个入口，那么左边栏的图标应该高亮显示。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 56; 
+			flex-basis: 134px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/9.png" data-size="488x869">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/9.png"
+			width="488"
+			height="869"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/9_hud93a63710b5ed8bb95fcc0a42e42daa0_107614_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/9_hud93a63710b5ed8bb95fcc0a42e42daa0_107614_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="主页图标高亮">
+	</a>
+	
+	<figcaption>主页图标高亮</figcaption>
+	
+</figure><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 52; 
+			flex-basis: 124px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8.png" data-size="498x957">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8.png"
+			width="498"
+			height="957"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8_hu6a697caf88efe191886c8c8b17d6fd02_107219_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/8_hu6a697caf88efe191886c8c8b17d6fd02_107219_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="主页图标不高亮（新版)">
+	</a>
+	
+	<figcaption>主页图标不高亮（新版)</figcaption>
+	
+</figure></p>
+<p>新版的主题只有一点小问题，那就是主页的图标没办法高亮。</p>
+<p>在 <code>layouts/partials/sidebar/left.html</code> 中找到了图标高亮的相关代码，从第 <code>56</code> 行开始：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">ol</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;menu&#34;</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;main-menu&#34;</span><span class="p">&gt;</span>
+        {{ $currentPage := . }}
+        {{ range .Site.Menus.main }}
+        {{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent &#34;main&#34; .) ($currentPage.IsMenuCurrent &#34;main&#34; .)) }}
+
+        <span class="p">&lt;</span><span class="nt">li</span> <span class="err">{{</span> <span class="na">if</span> <span class="err">$</span><span class="na">active</span> <span class="err">}}</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;current&#39;</span> <span class="err">{{</span> <span class="na">end</span> <span class="err">}}</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;{{ .URL | relLangURL }}&#39;</span> <span class="err">{{</span> <span class="na">if</span> <span class="na">eq</span> <span class="err">.</span><span class="na">Params</span><span class="err">.</span><span class="na">newTab</span> <span class="na">true</span> <span class="err">}}</span><span class="na">target</span><span class="o">=</span><span class="s">&#34;_blank&#34;</span><span class="err">{{</span> <span class="na">end</span> <span class="err">}}</span><span class="p">&gt;</span>
+                {{ $icon := default .Pre .Params.Icon }}
+                {{ if .Pre }}
+                    {{ warnf &#34;Menu item [%s] is using [pre] field to set icon, please use [params.icon] instead.\nMore information: https://docs.stack.jimmycai.com/configuration/custom-menu.html&#34; .URL }}
+                {{ end }}
+                {{ with $icon }}
+                    {{ partial &#34;helper/icon&#34; . }}
+                {{ end }}
+                <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>{{- .Name -}}<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</code></pre></div><p>注意代码片段中的第四行，即控制 <code>active</code> 这个属性的部分，当 <code>active</code> 为 <code>true</code> 时，左边栏的对应图标就高亮了。</p>
+<p>什么情况下 <code>active</code> 会是 <code>true</code> 呢？作者在这边写的语句比较复杂，其实只有两种情况：</p>
+<ul>
+<li>当前页面的 <strong>标题</strong> 和某个 <code>menu.name</code> 相同；</li>
+<li>当前页面可以在 <code>Menus</code> 菜单中找到，即当前页面属于从 <code>menu</code> 菜单可以访问的页面。</li>
+</ul>
+<p>在本地测试中，无论从 <code>config</code> 文件添加主页入口，还是从 <code>page</code> 目录下添加主页入口，主页都是 <strong>不高亮</strong> 的。看来在Hugo中主页不属于 <code>menu</code> 菜单的一部分。</p>
+<p><code>active</code> 的原理基本上弄清，理论上可以将主页入口也设置成高亮；但是时间有限且难以找到一个合适的逻辑，因此暂时不考虑这个细节。</p>
+<h4 id="主页布局">主页布局</h4>
+<p>主页的布局可以说是整个新主题当中最令人不满意的地方。</p>
+<p>我没有美学基础，只从最基本的个人的视觉喜好出发，首先对比一下新旧两个主题主页布局的差异。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1_hu1a673ea9d1a7bdc434fe9a368b6804b7_308762_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1_hu1a673ea9d1a7bdc434fe9a368b6804b7_308762_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧主题">
+	</a>
+	
+	<figcaption>旧主题</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2_hu72e49de9833b7775f0d62d03cda8045f_326370_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/2_hu72e49de9833b7775f0d62d03cda8045f_326370_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新主题">
+	</a>
+	
+	<figcaption>新主题</figcaption>
+	
+</figure></p>
+<p>我的感受是：旧主题的页面左右端有一定的留白，显得比较和谐；新主题的页面左右端距离浏览器边框非常近，过于拥挤了。</p>
+<p>决定将旧主题的主页布局迁移到新主题上，同时进行一些微调。</p>
+<h5 id="修改自适应布局">修改自适应布局</h5>
+<p>要修改主页的布局，首先应该找到控制主页样式的那个文件。它的路径是在 <code>[themePath]/assets/scss/grid.scss</code> ，不过我希望读者能明白我是怎么找到它的。</p>
+<p>正如我在 <a class="link" href="https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/"  target="_blank" rel="noopener"
+    >这篇记录</a> 当中所说，精确调整样式，你应该使用开发者工具选中你的目标，然后看到它的 <code>class</code> ，之后在项目的所有CSS文件中找到这个 <code>class</code> 对应的选择器，就能看到作者为它赋予了哪些样式。</p>
+<p>例如我们要修改主页的布局，那就要用开发者工具选中主页，可以根据直觉来判断你选的对不对，一般来说一个页面会分成好几个模块，就像我们的主页那样：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/10.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/10.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/10_hu1584222d53416f9ebc76f6cf3499d84d_583370_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/10_hu1584222d53416f9ebc76f6cf3499d84d_583370_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="选中主页">
+	</a>
+	
+	<figcaption>选中主页</figcaption>
+	
+</figure></p>
+<p>我们知道这三个模块构成了主页，它的 <code>class</code> 是 <code>container</code> ；直接到CSS文件目录中查找，发现 <code>container</code> 这个类的样式是在 <code>grid.scss</code> 这个文件中定义。</p>
+<p>开始阅读这个文件，在很靠前的地方就发现了它的重要内容哈！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.container</span> <span class="p">{</span>
+    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+
+    <span class="nc">.left-sidebar</span> <span class="p">{</span>
+        <span class="na">max-width</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="ni">left</span><span class="o">-</span><span class="n">sidebar-max-width</span><span class="p">);</span>
+        <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nc">.right-sidebar</span> <span class="p">{</span>
+        <span class="na">max-width</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="ni">right</span><span class="o">-</span><span class="n">sidebar-max-width</span><span class="p">);</span>
+
+        <span class="c1">/// Display right sidebar when min-width: lg
+</span><span class="c1"></span>        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">display</span><span class="o">:</span> <span class="ni">block</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1536</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">15</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="o">===</span> <span class="nt">snip</span> <span class="o">===</span>
+<span class="p">}</span>
+</code></pre></div><p>我们看到，作者在这个文件中限制了 <code>container</code> 的子元素 <code>left-sidebar</code> 和 <code>right-sidebar</code> 的最大宽度，分别用 <code>--left-sidebar-max-width</code> 和 <code>--right-sidebar-max-width</code> 来表示最大宽度的限制，然后动态调整这两个变量的值，来实现对不同设备屏幕的适应。</p>
+<p>在Stack新主题的各个CSS文件中，经常要看到 <code>@include respond()</code> 这种写法，它是什么东西呢？</p>
+<p>我们找到了 <code>asset/scss/breakpoints.scss</code> 这个文件，它的内容是这样的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nv">$breakpoints</span><span class="o">:</span> <span class="p">(</span>
+    <span class="na">sm</span><span class="o">:</span> <span class="mi">640</span><span class="kt">px</span><span class="o">,</span>
+    <span class="na">md</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="o">,</span>
+    <span class="na">lg</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="o">,</span>
+    <span class="na">xl</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="o">,</span>
+    <span class="na">2xl</span><span class="o">:</span> <span class="mi">1536</span><span class="kt">px</span><span class="o">,</span>
+<span class="p">);</span>
+
+<span class="k">@mixin</span><span class="nf"> respond</span><span class="p">(</span><span class="nv">$breakpoint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">@if</span> <span class="ow">not</span> <span class="nf">map-has-key</span><span class="p">(</span><span class="nv">$breakpoints</span><span class="o">,</span> <span class="nv">$breakpoint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">@warn</span> <span class="s2">&#34;&#39;</span><span class="si">#{</span><span class="nv">$breakpoint</span><span class="si">}</span><span class="s2">&#39; is not a valid breakpoint&#34;</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">@else</span> <span class="p">{</span>
+        <span class="k">@media</span> <span class="p">(</span><span class="na">min-width</span><span class="o">:</span> <span class="nf">map-get</span><span class="p">(</span><span class="nv">$breakpoints</span><span class="o">,</span> <span class="nv">$breakpoint</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">@content</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>啊哈，原来 <code>respond</code> 函数就是个CSS中的 <code>@media</code> 关键字的封装嘛。</p>
+<p>例如在上面的样式中，我们看到 <code>@include respond(md)</code> 这样的用法，翻译翻译就是 <code>@media(min-width: 768px)</code> 而已！表示这个样式要在屏幕宽度 <code>768px</code> 以上才能生效！</p>
+<p>看到这里，这些自适应的布局就没那么吓人了，就是 <strong>在不同的设备上指定不同的左右侧边栏宽度</strong> 而已。</p>
+<p>我使用的笔记本电脑屏幕宽度是在 <code>1024px</code> 以上的，也就是说我只要修改 <code>@include respond(lg)</code> 底下的样式就行了。</p>
+<p>在 <code>asset/scss/custom.scss</code> 文件中添加如下的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.container</span> <span class="p">{</span>
+    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+
+    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
+        <span class="cm">/* range: 768-1024 */</span>
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="cm">/* range: 1024-1280 */</span>
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">22</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">&amp;</span><span class="nc">.compact</span> <span class="p">{</span>
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>其中在我的电脑上真正起到作用的只有 <code>@include respond(lg)</code> 部分而已！我把左侧边栏的宽度放宽到 <code>25%</code> ，右侧边栏宽度放到 <code>22%</code> ，是我个人比较舒服的数字。</p>
+<h5 id="修改非自适应布局">修改非自适应布局</h5>
+<p>经过上面的修改，现在的主页应该是这样的：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/11.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/11.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/11_hu1c8521127bac6e03961d17c6e2b828d0_356006_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/11_hu1c8521127bac6e03961d17c6e2b828d0_356006_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="主页（未完成）">
+	</a>
+	
+	<figcaption>主页（未完成）</figcaption>
+	
+</figure></p>
+<p>主要有几个问题：</p>
+<ul>
+<li>
+<p>中间栏显得过于宽；</p>
+</li>
+<li>
+<p>左边栏头像太抢戏。</p>
+</li>
+</ul>
+<p>我们针对 <code>left-sidebar</code> 和 <code>right-sidebar</code> 再进行一下微调，在 <code>custom.scss</code> 中继续追加：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.left-sidebar</span> <span class="p">{</span>
+    <span class="na">--sidebar-avatar-size</span><span class="o">:</span> <span class="mi">120</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">--sidebar-element-separation</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
+    <span class="na">padding</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">main-top-padding</span><span class="p">)</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">max-height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+    <span class="na">padding-right</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.right-sidebar</span> <span class="p">{</span>
+    <span class="na">padding-left</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>这部分内容是经过旧参数的试验，发现的视觉上比较舒服的参数，而这些东西不用随着屏幕变化而变化，因此不写在刚才的自适应布局中，直接放在最外层。</p>
+<p>至此，我的主页就调整完毕了。 <code>custom.scss</code> 文件全部内容如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.container</span> <span class="p">{</span>
+    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+
+    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
+        <span class="cm">/* min-width: 812 
+</span><span class="cm">        @media (min-width: $on-phone) {
+</span><span class="cm">            max-width: 800px;
+</span><span class="cm">
+</span><span class="cm">            --left-sidebar-max-width: 25%;
+</span><span class="cm">        }
+</span><span class="cm">        */</span>
+        <span class="cm">/* range: 768-1024 */</span>
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="cm">/* range: 1024-1280 */</span>
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">22</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">&amp;</span><span class="nc">.compact</span> <span class="p">{</span>
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
+            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* 
+</span><span class="cm">跟上面 container 中的 left-sidebar 没有区别
+</span><span class="cm">但是这部分内容不需要使用 respond 函数，因此直接放在最外层固定下来即可
+</span><span class="cm">*/</span>
+<span class="nc">.left-sidebar</span> <span class="p">{</span>
+    <span class="na">--sidebar-avatar-size</span><span class="o">:</span> <span class="mi">120</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">--sidebar-element-separation</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
+    <span class="na">padding</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">main-top-padding</span><span class="p">)</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">max-height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+    <span class="na">padding-right</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.right-sidebar</span> <span class="p">{</span>
+    <span class="na">margin-left</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>在修改中，我没有完全复刻旧主题，因为我在修改过程中发现了现有布局的一些优点，放到下一小节分析。</p>
+<h5 id="主页视觉分析">主页视觉分析</h5>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1_hu1a673ea9d1a7bdc434fe9a368b6804b7_308762_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/1_hu1a673ea9d1a7bdc434fe9a368b6804b7_308762_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧主页">
+	</a>
+	
+	<figcaption>旧主页</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/12.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/12.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/12_hub3e2d530b5970e0e7da19046d7f9d33d_311075_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/12_hub3e2d530b5970e0e7da19046d7f9d33d_311075_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新主页">
+	</a>
+	
+	<figcaption>新主页</figcaption>
+	
+</figure></p>
+<p>我想指出旧主页的一个问题，这些问题在现在这个主页中是不存在了。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/13.png" data-size="2560x1518">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/13.png"
+			width="2560"
+			height="1518"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/13_hu4e3ca530f5051eaf0343ca1364d300c7_323194_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/13_hu4e3ca530f5051eaf0343ca1364d300c7_323194_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧主页">
+	</a>
+	
+	<figcaption>旧主页</figcaption>
+	
+</figure></p>
+<p>可以看到，旧主页中左边栏和文章列表的间距是比较大的，而文章列表和右边栏则贴得很紧，三个模块产生了一点割裂的感觉。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/14.png" data-size="2560x1518">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/14.png"
+			width="2560"
+			height="1518"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/14_hu1717d1eff7d4ab5f40d92f332c1e68fe_321906_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/14_hu1717d1eff7d4ab5f40d92f332c1e68fe_321906_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新主页">
+	</a>
+	
+	<figcaption>新主页</figcaption>
+	
+</figure></p>
+<p>而在新主页中，四块留白区域宽度基本相同，左侧边栏占用的空间出让给了文章列表，突出了重点，整体上给我的感觉是比较和谐的。</p>
+<h3 id="part-2-文章页面">Part 2 文章页面</h3>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15_hu26b451df9219cca2963db45d83cf8cfe_451858_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15_hu26b451df9219cca2963db45d83cf8cfe_451858_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新主题文章页面">
+	</a>
+	
+	<figcaption>新主题文章页面</figcaption>
+	
+</figure></p>
+<p>这个文章页面是我决定更新新主题的一个重要原因。旧主题是没有右边的 <em>目录</em> 一栏的，我曾经仿照新主题的样式自行实现了一下，但是效果并不是特别理想：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/16.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/16.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/16_hu18a204278361088805b1b2ce8efeb5a4_461885_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/16_hu18a204278361088805b1b2ce8efeb5a4_461885_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧主题文章页面">
+	</a>
+	
+	<figcaption>旧主题文章页面</figcaption>
+	
+</figure></p>
+<p>直接更新主题之后，解决了文章样式的痛点，还是比较舒服的。考虑到这是一次大升级，我想顺便把之前的一些不足的细节补充上。</p>
+<h4 id="返回顶部按钮">返回顶部按钮</h4>
+<h5 id="添加函数">添加函数</h5>
+<p>在阅读比较长的文章时，有一个东西是我认为非常必要的，那就是返回顶部按钮。</p>
+<p>在新主题中，作者已经写好了Table Of Conents（即文章目录），且它的位置就在页面右侧。我希望直接在该组件的下方添加一个返回顶部的按钮，当页面不处于顶部时，该按钮出现，点击之后返回页面的顶部。</p>
+<p>按钮的核心函数直接参考了 <a class="link" href="https://github.com/zhe/hugo-theme-slim"  target="_blank" rel="noopener"
+    >Slim主题</a> ，具体做法是在 <code>layouts/partials/head/script.html</code> 中添加如下的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&#34;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&#34;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+    <span class="c1">// Check to see if the window is top if not then display button
+</span><span class="c1"></span>    <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">scroll</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">scrollTop</span><span class="p">())</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">fadeIn</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="c1">// Click event to scroll to top
+</span><span class="c1"></span>    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html, body&#39;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span><span class="nx">scrollTop</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div><p>函数使用了 <code>jQuery</code> 监听窗口的滚动，并控制按钮的出现与消失，其核心是一个具备 <code>back-to-top</code> ID的HTML元素，在原本的主题（Slim主题）中，这个元素就是一个简单的 <code>&lt;a&gt;</code> 标签。</p>
+<p>我希望自定义返回顶部按钮的外观，并决定使用一张图片来代替Slim主题中朴素的 <code>^</code> 号。</p>
+<h5 id="添加组件">添加组件</h5>
+<p>此前已经提过，我希望这个按钮就放置在文章目录下方，那么我们就要找到文章目录的HTML代码，然后在它下方插入这个按钮的代码。</p>
+<p>找到 <code>layouts/_default/single.html</code> ，在它的第 <code>47</code> 行找到了TOC的代码，在 <code>aside</code> 内部、TOC底部插入下面的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-HTML" data-lang="HTML">{{ $topImg := resources.Get (&#34;img/top.png&#34;) }}
+{{ $topImg := $topImg.Resize &#34;40x&#34; }}
+<span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;back-to-top&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;#&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $topImg.RelPermalink }}&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</code></pre></div><p>这段代码是我仿照 <code>Avatar</code> 部分的代码写出来的，作者用类似的代码实现了主页左边栏的头像。需要把代码的图片跟头像的图片放在一起，也就是放在 <code>asset/img</code> 文件中。</p>
+<p>那么，TOC部分的代码就变成了这样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-HTML" data-lang="HTML">{{ define &#34;right-sidebar&#34; }}
+    {{ if (.Scratch.Get &#34;hasTOC&#34;) }}
+        <span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;sidebar right-sidebar sticky&#34;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">section</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget archives&#34;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget-icon&#34;</span><span class="p">&gt;</span>
+                    {{ partial &#34;helper/icon&#34; &#34;hash&#34; }}
+                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget-title section-title&#34;</span><span class="p">&gt;</span>{{ T &#34;article.tableOfContents&#34; }}<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+                
+                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget--toc&#34;</span><span class="p">&gt;</span>
+                    {{ .TableOfContents }}
+                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
+
+            {{ $topImg := resources.Get (&#34;img/top.png&#34;) }}
+            {{ $topImg := $topImg.Resize &#34;40x&#34; }}
+            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;back-to-top&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;#&#34;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $topImg.RelPermalink }}&#34;</span> <span class="p">/&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">aside</span><span class="p">&gt;</span>
+    {{ end }}
+{{ end }}
+</code></pre></div><h5 id="添加样式">添加样式</h5>
+<p>最后一步是很简单的，我们还是需要为这个组件添加CSS样式。</p>
+<p>找到熟悉的 <code>custom.scss</code> 文件，追加下面的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nv">$hover</span><span class="o">:</span> <span class="mi">0</span><span class="mf">.2</span><span class="kt">s</span> <span class="ni">ease-in-out</span><span class="p">;</span>
+<span class="nn">#back-to-top</span> <span class="p">{</span>
+    <span class="na">bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">30</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">right</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">display</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>  
+    <span class="na">border</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="na">transition</span><span class="o">:</span> <span class="ni">transform</span> <span class="nv">$hover</span><span class="p">;</span>
+    <span class="k">&amp;</span><span class="nd">:hover</span> <span class="p">{</span>
+      <span class="na">transform</span><span class="o">:</span> <span class="nf">translateY</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="kt">px</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>这里只需要注意两个重点（也就是我在添加这个组件过程中踩坑的点）：</p>
+<ul>
+<li><code>position: absolute</code> ，能够将按钮固定，且它的父元素是我们上面看到的 <code>&lt;aside&gt;</code> 标签，就能将按钮跟TOC的相对位置固定起来（因为他们同属于一个父元素）；如果使用 <code>position: fixed</code> 就不能起到这个效果，因为 <code>fixed</code> 属性会直接将它的父元素设置为浏览器窗口。</li>
+<li><code>bottom: -30px</code> ，使得这个按钮不会被TOC的边界包住，而且在屏幕缩放时不会超出屏幕底端（其实就是个试验值）。</li>
+</ul>
+<p>至此就得到了一个很漂亮的返回顶部按钮了！</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/17.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/17.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/17_hu8fe50cc9db1bbfb0f8bb7cac47481c8f_290931_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/17_hu8fe50cc9db1bbfb0f8bb7cac47481c8f_290931_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="效果">
+	</a>
+	
+	<figcaption>效果</figcaption>
+	
+</figure></p>
+<h3 id="to-be-continued">To Be Continued&hellip;</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 文章页面微调</li>
+<li><input disabled="" type="checkbox"> 主页侧边栏不亮</li>
+<li><input checked="" disabled="" type="checkbox"> 文章添加返回最上层</li>
+<li><input disabled="" type="checkbox"> 研究在线字体</li>
+<li><input disabled="" type="checkbox"> 修改文章页面的 <em>返回</em> 按钮的跳转逻辑（不要直接回到主页，最好回到上一级）</li>
+</ul>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">博客搭建指南——3</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%972/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">博客搭建指南——2</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">博客搭建指南——1</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">TCP加速之环境搭建（WANem）</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">尝尝鲜——为自己装一台Mac OS虚拟机</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#动工前纪念">动工前纪念</a></li>
+    <li><a href="#part-1-左边栏">Part 1 左边栏</a>
+      <ul>
+        <li><a href="#图标">图标</a></li>
+        <li><a href="#主页布局">主页布局</a></li>
+      </ul>
+    </li>
+    <li><a href="#part-2-文章页面">Part 2 文章页面</a>
+      <ul>
+        <li><a href="#返回顶部按钮">返回顶部按钮</a></li>
+      </ul>
+    </li>
+    <li><a href="#to-be-continued">To Be Continued&hellip;</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

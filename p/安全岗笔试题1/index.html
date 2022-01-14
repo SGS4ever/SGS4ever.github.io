@@ -20,15 +20,26 @@ D、 squid
  答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
 A、 hackbar'><title>安全岗笔试题——1</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='安全岗笔试题——1'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='安全岗笔试题——1'>
 <meta property='og:description' content='&amp;quot;安全岗笔试题——1&amp;quot;  近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
 以下哪些说法是正确的？（）
 A、 iOS系统从iOS6开始引入kernel ASLR安全措施
@@ -69,8 +80,12 @@ C、 nginx
 D、 squid
  答案  ABC  A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php  B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。  C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。  squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。   以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
 A、 hackbar">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page 
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -87,13 +102,19 @@ A、 hackbar">
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
+</script>
+<div class="container main-container flex 
+    
+        on-phone--column extended
+    
+">
+    
+        <aside class="sidebar left-sidebar sticky">
     <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
@@ -102,31 +123,35 @@ A、 hackbar">
 
     <header class="site-info">
         
+            
             <figure class="site-avatar">
                 
                     
                     
                     
                         
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
+                        <img src="/img/avatar_hu53eb95313f34f2c4eaf7d87a8aa930a8_16189_300x0_resize_q75_box.jpg" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
 
                 
             </figure>
+            
         
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
+        
+        <h1 class="site-name"><a href="/">XR_G&#39;s Blog</a></h1>
+        <h2 class="site-description">杏花疏影里，吹笛到天明</h2></header>
 
     <ol class="menu" id="main-menu">
         
         
         
-
+        
         <li >
-            <a href='/'>
+            <a href='/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -138,14 +163,16 @@ A、 hackbar">
 
 
                 
-                <span>博文</span>
+                <span>主页</span>
             </a>
         </li>
         
         
-
+        
         <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
+            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -161,9 +188,11 @@ A、 hackbar">
         </li>
         
         
-
+        
         <li >
-            <a href='/categories/'>
+            <a href='/categories/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -180,9 +209,11 @@ A、 hackbar">
         </li>
         
         
-
+        
         <li >
-            <a href='/search/'>
+            <a href='/search/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -222,35 +253,8 @@ A、 hackbar">
     </ol>
 </aside>
 
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="15 6 9 12 15 18" />
-</svg>
-
-
-
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -269,8 +273,28 @@ A、 hackbar">
         <a href="/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/">安全岗笔试题——1</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 29, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -278,8 +302,14 @@ A、 hackbar">
 
 
 
-        <time class="article-time--published">Jan 29, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -467,7 +497,8 @@ A、 hackbar">
 </html>
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -479,8 +510,12 @@ A、 hackbar">
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -542,26 +577,39 @@ A、 hackbar">
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-01-29 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -571,16 +619,19 @@ A、 hackbar">
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -657,7 +708,10 @@ A、 hackbar">
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

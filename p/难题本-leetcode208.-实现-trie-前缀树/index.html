@@ -15,15 +15,26 @@
 [[], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;]]
   输出：'><title>难题本 | LeetCode208. 实现 Trie (前缀树)</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode208. 实现 Trie (前缀树)'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='难题本 | LeetCode208. 实现 Trie (前缀树)'>
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/
 定场句：人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。
 题目  Trie（发音类似 &amp;ldquo;try&amp;rdquo;）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
@@ -54,8 +65,12 @@
 [&amp;ldquo;Trie&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;search&amp;rdquo;, &amp;ldquo;startsWith&amp;rdquo;, &amp;ldquo;insert&amp;rdquo;, &amp;ldquo;search&amp;rdquo;]
 [[], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;apple&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;], [&amp;ldquo;app&amp;rdquo;]]
   输出：">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -72,179 +87,32 @@
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#原理--插入">原理 —— 插入</a></li>
-    <li><a href="#原理--查询">原理 —— 查询</a></li>
-    <li><a href="#原理--构造">原理 —— 构造</a></li>
-    <li><a href="#ac代码1">AC代码1</a></li>
-    <li><a href="#ac代码2">AC代码2</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -263,8 +131,28 @@
         <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/">难题本 | LeetCode208. 实现 Trie (前缀树)</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 14, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -272,12 +160,19 @@
 
 
 
-        <time class="article-time--published">Apr 14, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/implement-trie-prefix-tree/">https://leetcode-cn.com/problems/implement-trie-prefix-tree/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/implement-trie-prefix-tree/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/implement-trie-prefix-tree/</a></em></p>
 <p>定场句：<em>人一能之，己百之；人十能之，己千之。果能此道矣，虽愚必明，虽柔必强。</em></p>
 <h2 id="题目">题目</h2>
 <blockquote>
@@ -332,73 +227,108 @@
 <h3 id="原理--插入">原理 —— 插入</h3>
 <p>前缀树是一颗 <strong>多叉树</strong> ，它的每一个节点可以分出若干个子节点，每一条边表示一个字符。你可以发现，从根节点开始向下走去，每走过一条边我们就得到了一个字符，遍历到一个 <strong>终止节点</strong> 时，我们就得到了一个 <strong>单词（字符串）</strong> 。</p>
 <p>比如，单词 <code>dog</code> 就能组成这么一颗前缀树：</p>
-<p><figure style="flex-grow: 103; flex-basis: 249px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png" data-size="532x512"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_1024x0_resize_box_2.png 1024w"
-				width="532"
-				height="512"
-				loading="lazy"
-				alt="Trie &ldquo;dog&rdquo;">
-		</a>
-		
-		<figcaption>Trie “dog”</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 103; 
+			flex-basis: 249px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png" data-size="532x512">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2.png"
+			width="532"
+			height="512"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/2_hua70950d3438930595bfb2e57ac59d7e5_20624_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Trie &ldquo;dog&rdquo;">
+	</a>
+	
+	<figcaption>Trie “dog”</figcaption>
+	
+</figure></p>
 <p>从根节点向下遍历，到了节点 <code>3</code> ，它应该被标记为 <strong>终止节点</strong> ，我们就得到了 <code>dog</code> 。</p>
 <p>现在我们希望插入一个单词 <code>doge</code> ，要怎么做呢？</p>
 <p>我们还是进行遍历，从根节点出发，依次获取 <code>d</code> 、 <code>o</code> 、 <code>g</code> ，来到了节点 <code>3</code> ，只需要再插入一条边表示 <code>e</code> 就可以了！</p>
-<p><figure style="flex-grow: 90; flex-basis: 217px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png" data-size="568x628"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_1024x0_resize_box_2.png 1024w"
-				width="568"
-				height="628"
-				loading="lazy"
-				alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo;">
-		</a>
-		
-		<figcaption>Trie “dog” &amp; “doge”</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 90; 
+			flex-basis: 217px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png" data-size="568x628">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3.png"
+			width="568"
+			height="628"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/3_hu1fefd7f5a5f5586e5c065ce206babc7e_24814_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo;">
+	</a>
+	
+	<figcaption>Trie “dog” &amp; “doge”</figcaption>
+	
+</figure></p>
 <p>在上面的图中，我标出了 <strong>终止节点</strong> ，当我们遍历到 <code>3</code> 或 <code>4</code> 时，我们知道它们表示的是一个切实存在的字符串；而当我们遍历到 <code>2</code> 或 <code>1</code> 时，我们知道 <code>do</code> 或者 <code>d</code> 不是一个切实存在的字符串，它们只是某个单词的前缀而已。</p>
 <p>从这个模拟中可以看到， <code>doge</code> 和 <code>dog</code> 使用的是同一些字母前缀，这就是 <em>前缀树</em> 的意思。</p>
 <p>我们再插入一个单词 <code>do</code> ，这时根据我们遍历的结果发现，到达节点 <code>2</code> 的路径就能表示这个单词！那么我们不用再申请一个新的节点，直接将 <code>2</code> 标记为 <strong>终止节点</strong> 即可。</p>
-<p><figure style="flex-grow: 94; flex-basis: 226px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png" data-size="593x627"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_1024x0_resize_box_2.png 1024w"
-				width="593"
-				height="627"
-				loading="lazy"
-				alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo; & &ldquo;do&rdquo;">
-		</a>
-		
-		<figcaption>Trie “dog” &amp; “doge” &amp; “do”</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 94; 
+			flex-basis: 226px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png" data-size="593x627">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4.png"
+			width="593"
+			height="627"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/4_hu4a668a964db75e6a7117e3db6c7a492e_24622_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo; & &ldquo;do&rdquo;">
+	</a>
+	
+	<figcaption>Trie “dog” &amp; “doge” &amp; “do”</figcaption>
+	
+</figure></p>
 <p>最后，插入一个 <code>bye</code> 吧，相信读者已经能够模拟出这个过程了！（也可以点开下面的动图看看答案）</p>
-<p><figure style="flex-grow: 170; flex-basis: 409px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5.gif" data-size="1124x659"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5.gif"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_480x0_resize_box.gif 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_1024x0_resize_box.gif 1024w"
-				width="1124"
-				height="659"
-				loading="lazy"
-				alt="Trie.insert(&ldquo;bye&rdquo;)">
-		</a>
-		
-		<figcaption>Trie.insert(“bye”)</figcaption>
-		
-	</figure></p>
-<p><figure style="flex-grow: 163; flex-basis: 393px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png" data-size="1017x621"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_1024x0_resize_box_2.png 1024w"
-				width="1017"
-				height="621"
-				loading="lazy"
-				alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo; & &ldquo;do&rdquo; & &ldquo;bye&rdquo;">
-		</a>
-		
-		<figcaption>Trie “dog” &amp; “doge” &amp; “do” &amp; “bye”</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 170; 
+			flex-basis: 409px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5.gif" data-size="1124x659">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5.gif"
+			width="1124"
+			height="659"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_480x0_resize_box.gif 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_1024x0_resize_box.gif 1024w"
+			loading="lazy"
+			alt="Trie.insert(&ldquo;bye&rdquo;)">
+	</a>
+	
+	<figcaption>Trie.insert(“bye”)</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 163; 
+			flex-basis: 393px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png" data-size="1017x621">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6.png"
+			width="1017"
+			height="621"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/6_hu98ca918bcbfb8d4202833c00b3152e69_39311_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Trie &ldquo;dog&rdquo; & &ldquo;doge&rdquo; & &ldquo;do&rdquo; & &ldquo;bye&rdquo;">
+	</a>
+	
+	<figcaption>Trie “dog” &amp; “doge” &amp; “do” &amp; “bye”</figcaption>
+	
+</figure></p>
 <h3 id="原理--查询">原理 —— 查询</h3>
 <p>我们能够插入一个单词（字符串），当然也就需要能够查询某个单词。对于一个给出的字符串 <code>s</code> ，我们从 <code>Trie</code> 的根节点出发，沿着它的每一个字符向下遍历，如果能够到达一个 <strong>终止节点</strong> ，那么这个字符串 <code>s</code> 就存在于我们的集合中，否则它就是不存在的。</p>
 <p>例如我们要查询单词 <code>bye</code> ，从根节点出发，沿着每个字符对应的路径依次来到了 <code>5</code> 、 <code>6</code> 、 <code>7</code> ，最后我们发现节点 <code>7</code> 是个终止节点，太好了，这个单词就是存在的。</p>
@@ -421,7 +351,7 @@
 <p>如果我们用链表的思想 + 动态申请内存的办法，效果则大不相同。使用一个数据结构来表示节点，它含有一个长度为 <code>26</code> 的 <strong>指针数组</strong> ，每一个单元表示对应的边，指向下一个节点。同时，这个结构顺便定义了一个成员变量来表示该节点是否为终止节点，这种办法就简洁多了。</p>
 <h3 id="ac代码1">AC代码1</h3>
 <p>此代码对应构造方法1</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">int</span> <span class="n">tire</span><span class="p">[</span><span class="mi">100000</span><span class="p">][</span><span class="mi">26</span><span class="p">];</span>
     <span class="kt">int</span> <span class="n">mark</span><span class="p">[</span><span class="mi">100000</span><span class="p">];</span>
@@ -505,7 +435,7 @@
 </span><span class="cm"> */</span>
 </code></pre></div><h3 id="ac代码2">AC代码2</h3>
 <p>此代码对应构造方法2</p>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Trie</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="k">typedef</span> <span class="k">struct</span> <span class="nc">n</span> <span class="p">{</span>
         <span class="k">struct</span> <span class="nc">n</span><span class="o">*</span> <span class="n">childen</span><span class="p">[</span><span class="mi">26</span><span class="p">];</span>
@@ -595,39 +525,56 @@
 </span><span class="cm"> * bool param_2 = obj-&gt;search(word);
 </span><span class="cm"> * bool param_3 = obj-&gt;startsWith(prefix);
 </span><span class="cm"> */</span>
-</code></pre></div><p><figure style="flex-grow: 382; flex-basis: 917px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png" data-size="791x207"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_1024x0_resize_box_2.png 1024w"
-				width="791"
-				height="207"
-				loading="lazy"
-				alt="Performance——方法2">
-		</a>
-		
-		<figcaption>Performance——方法2</figcaption>
-		
-	</figure></p>
-<p><figure style="flex-grow: 423; flex-basis: 1016px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png" data-size="868x205"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_1024x0_resize_box_2.png 1024w"
-				width="868"
-				height="205"
-				loading="lazy"
-				alt="Performance Compare">
-		</a>
-		
-		<figcaption>Performance Compare</figcaption>
-		
-	</figure></p>
+</code></pre></div><p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 382; 
+			flex-basis: 917px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png" data-size="791x207">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1.png"
+			width="791"
+			height="207"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/1_huf1e1c37996250242b60781334e8aa16a_19658_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Performance——方法2">
+	</a>
+	
+	<figcaption>Performance——方法2</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 423; 
+			flex-basis: 1016px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png" data-size="868x205">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7.png"
+			width="868"
+			height="205"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/7_hud310b8495d3318b19bc379b1b3bcd378_21975_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Performance Compare">
+	</a>
+	
+	<figcaption>Performance Compare</figcaption>
+	
+</figure></p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 向前走别回头.字典树（前缀树）[EB/OL].2018-08-24</p>
-<p><em><a href="https://blog.csdn.net/weixin_39778570/article/details/81990417">https://blog.csdn.net/weixin_39778570/article/details/81990417</a></em></p>
+<p><em><a class="link" href="https://blog.csdn.net/weixin_39778570/article/details/81990417"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/weixin_39778570/article/details/81990417</a></em></p>
 <p>[2] GeeksforGeeks.Trie | (Insert and Search)[EB/OL].2019-09-04</p>
-<p><em><a href="https://www.geeksforgeeks.org/trie-insert-and-search/">https://www.geeksforgeeks.org/trie-insert-and-search/</a></em></p>
+<p><em><a class="link" href="https://www.geeksforgeeks.org/trie-insert-and-search/"  target="_blank" rel="noopener"
+    >https://www.geeksforgeeks.org/trie-insert-and-search/</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -641,8 +588,12 @@
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -716,26 +667,39 @@
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-04-14 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -745,16 +709,19 @@
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -831,7 +798,52 @@
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#原理--插入">原理 —— 插入</a></li>
+    <li><a href="#原理--查询">原理 —— 查询</a></li>
+    <li><a href="#原理--构造">原理 —— 构造</a>
+      <ul>
+        <li><a href="#方法一">方法一</a></li>
+        <li><a href="#方法二">方法二</a></li>
+      </ul>
+    </li>
+    <li><a href="#ac代码1">AC代码1</a></li>
+    <li><a href="#ac代码2">AC代码2</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

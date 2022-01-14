@@ -14,22 +14,33 @@
 考虑对于最大的32位二进制，将前16位与后16位对换。
 考虑高低的16位，将每一部分中的高8位与低8位对换。
 如此进行······
-分治
+ 分治 
 那么，我们如何做到这种形式的对换呢？
 不妨以8位二进制为例，对于一个八位二进制数 1011 0011 ，我们首先需要将其高低四位进行对换。示意如下：
-Step 1
+ Step 1 
 对于一个二进制数，我们可以很简单地使用如下办法取得它的高低四位：
 highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0'><title>难题本 | LeetCode190. 颠倒二进制位</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='难题本 | LeetCode190. 颠倒二进制位'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='难题本 | LeetCode190. 颠倒二进制位'>
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/reverse-bits/
 一道简单题，却能引出一个无比骚包的操作。此法前所未见，独自亦难想出，因此大抵也算是难的。
 题目  颠倒给定的 32 位无符号整数的二进制位。
@@ -43,10 +54,10 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0'><title>�
 考虑对于最大的32位二进制，将前16位与后16位对换。
 考虑高低的16位，将每一部分中的高8位与低8位对换。
 如此进行······
-分治
+ 分治 
 那么，我们如何做到这种形式的对换呢？
 不妨以8位二进制为例，对于一个八位二进制数 1011 0011 ，我们首先需要将其高低四位进行对换。示意如下：
-Step 1
+ Step 1 
 对于一个二进制数，我们可以很简单地使用如下办法取得它的高低四位：
 highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/'>
@@ -66,14 +77,18 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0'>
 考虑对于最大的32位二进制，将前16位与后16位对换。
 考虑高低的16位，将每一部分中的高8位与低8位对换。
 如此进行······
-分治
+ 分治 
 那么，我们如何做到这种形式的对换呢？
 不妨以8位二进制为例，对于一个八位二进制数 1011 0011 ，我们首先需要将其高低四位进行对换。示意如下：
-Step 1
+ Step 1 
 对于一个二进制数，我们可以很简单地使用如下办法取得它的高低四位：
 highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -90,176 +105,32 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#ac代码1">AC代码1</a></li>
-    <li><a href="#ac代码2">AC代码2</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -278,8 +149,28 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
         <a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/">难题本 | LeetCode190. 颠倒二进制位</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 29, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -287,12 +178,19 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 
 
 
-        <time class="article-time--published">Mar 29, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
-    <p>题目链接：<em><a href="https://leetcode-cn.com/problems/reverse-bits/">https://leetcode-cn.com/problems/reverse-bits/</a></em></p>
+    <p>题目链接：<em><a class="link" href="https://leetcode-cn.com/problems/reverse-bits/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/reverse-bits/</a></em></p>
 <p>一道简单题，却能引出一个无比骚包的操作。此法前所未见，独自亦难想出，因此大抵也算是难的。</p>
 <h2 id="题目">题目</h2>
 <blockquote>
@@ -324,32 +222,46 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 <p>考虑对于最大的32位二进制，将前16位与后16位对换。</p>
 <p>考虑高低的16位，将每一部分中的高8位与低8位对换。</p>
 <p>如此进行······</p>
-<p><figure style="flex-grow: 213; flex-basis: 511px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1.png" data-size="1102x517"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_1024x0_resize_box_2.png 1024w"
-				width="1102"
-				height="517"
-				loading="lazy"
-				alt="分治">
-		</a>
-		
-		<figcaption>分治</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 213; 
+			flex-basis: 511px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1.png" data-size="1102x517">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1.png"
+			width="1102"
+			height="517"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/1_hu2913eb5f0b4f41e5c127e9561a8ff64a_23941_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="分治">
+	</a>
+	
+	<figcaption>分治</figcaption>
+	
+</figure></p>
 <p>那么，我们如何做到这种形式的对换呢？</p>
 <p>不妨以8位二进制为例，对于一个八位二进制数 <code>1011 0011</code> ，我们首先需要将其高低四位进行对换。示意如下：</p>
-<p><figure style="flex-grow: 205; flex-basis: 493px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2.png" data-size="1287x626"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_1024x0_resize_box_2.png 1024w"
-				width="1287"
-				height="626"
-				loading="lazy"
-				alt="Step 1">
-		</a>
-		
-		<figcaption>Step 1</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 205; 
+			flex-basis: 493px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2.png" data-size="1287x626">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2.png"
+			width="1287"
+			height="626"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/2_hu94e2baebe1a3578d852073a88398b857_17962_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Step 1">
+	</a>
+	
+	<figcaption>Step 1</figcaption>
+	
+</figure></p>
 <p>对于一个二进制数，我们可以很简单地使用如下办法取得它的高低四位：</p>
 <p><code>highBits = 0x10110011 &amp; 0x11110000 = 0x10110011 &amp; 0xf0</code></p>
 <p><code>lowBits = 0x10110011 &amp; 0x00001111 = 0x10110011 &amp; 0x0f</code></p>
@@ -360,25 +272,32 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 <p><code>final = lowerPart | upperPart</code></p>
 <p>如此一来，我们实现了高低四位的对换。</p>
 <p>紧接着，对于两部分4位来说，每4位中需要进行高低二位的对换。示意如下：</p>
-<p><figure style="flex-grow: 193; flex-basis: 465px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3.png" data-size="1290x665"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_1024x0_resize_box_2.png 1024w"
-				width="1290"
-				height="665"
-				loading="lazy"
-				alt="Step 2">
-		</a>
-		
-		<figcaption>Step 2</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 193; 
+			flex-basis: 465px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3.png" data-size="1290x665">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3.png"
+			width="1290"
+			height="665"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/3_hu01a9cd44fd78e7b4682b956b90e47fde_22138_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Step 2">
+	</a>
+	
+	<figcaption>Step 2</figcaption>
+	
+</figure></p>
 <p>在这里，我们的两部分分别可以表示如下：</p>
 <p><code>final = higherPart | lowerPart = (origin &amp; 0x33 &lt;&lt; 2) | (origin &amp; 0xcc &gt;&gt; 2)</code></p>
 <p>最后，在每一个二位中进行高低一位的对换，示意图略。</p>
 <p>8位如此解决，16位当然也可，32位亦然。</p>
 </blockquote>
 <h3 id="ac代码1">AC代码1</h3>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">uint32_t</span> <span class="n">reverseBits</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">uint32_t</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -395,7 +314,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
     <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div><h3 id="ac代码2">AC代码2</h3>
-<div class="highlight"><pre class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
     <span class="kt">uint32_t</span> <span class="n">reverseBits</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// 注意！由于移位操作的优先级高于按位与，需要在与操作部分添加括号
@@ -408,25 +327,34 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
         <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div><p><figure style="flex-grow: 129; flex-basis: 310px">
-		<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4.png" data-size="552x427"><img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4.png"
-				srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_480x0_resize_box_2.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_1024x0_resize_box_2.png 1024w"
-				width="552"
-				height="427"
-				loading="lazy"
-				alt="Performance">
-		</a>
-		
-		<figcaption>Performance</figcaption>
-		
-	</figure></p>
+</code></pre></div><p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 129; 
+			flex-basis: 310px"
+	>
+	<a href="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4.png" data-size="552x427">
+		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4.png"
+			width="552"
+			height="427"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode190.-%E9%A2%A0%E5%80%92%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D/4_hu6636285d82c8327d94e829f5a8d56a54_25848_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Performance">
+	</a>
+	
+	<figcaption>Performance</figcaption>
+	
+</figure></p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 负雪明烛.「循环」与「分治」解法[EB/OL].2021-03-29</p>
-<p><em><a href="https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/">https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/</a></em></p>
+<p><em><a class="link" href="https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/"  target="_blank" rel="noopener"
+    >https://leetcode-cn.com/problems/reverse-bits/solution/fu-xue-ming-zhu-xun-huan-yu-fen-zhi-jie-hoakf/</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -440,8 +368,12 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -515,26 +447,39 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-03-29 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -544,16 +489,19 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -630,7 +578,44 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0">
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#ac代码1">AC代码1</a></li>
+    <li><a href="#ac代码2">AC代码2</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

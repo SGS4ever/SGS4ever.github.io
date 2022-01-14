@@ -16,13 +16,13 @@ TCP的主要特点如下：
  面向连接。 每条连接只能有两个端点，即一对一的。 可靠的交付服务，保证数据无差错、不丢失、不重复且有序。 全双工通信，即任何时刻双方都能进行数据的发送。为此，双方都应该设置发送缓存和接收缓存，用来临时存放双向通信的数据。 面向字节流。计算机网络中常见的一个问题是：面向字节和面向报文有什么区别？ 面向字节流是指TCP将应用程序交付下来的数据仅视为一连串的无结构的字节流，发送的时候按照TCP的规则进行发送，不会考虑保留原始数据的边界；而面向报文是指每次发送的数据作为一个报文，一个报文是一块有结构的数据。   TCP报文段
  想要理解TCP的连接建立等等细节，认识其报头是必要的。TCP有固定的20B报头，变长字段配合填充字段使TCP报头长度始终是4B的整数倍。由于首部长度字段只有4位，故报头最长为15 * 4 = 60B
 TCP报头格式如下：
-TCP Header
+ TCP Header 
 每个字段的含义可以参见这篇文章。
  TCP连接管理
  TCP是面向连接的协议，每个TCP连接都有三个阶段：连接建立、数据传输和连接释放。TCP的连接管理就是使运输连接的建立和释放都能正常进行。
 TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式，主动发起连接的进程称为客户机（Client），被动等待连接的进程称为服务器（Server）。
 连接的建立分为3个步骤，即三次握手：
-TCP three-way-handshake
+ TCP three-way-handshake 
  第一步：客户机向服务器发送一个报文段，该报文段不含应用层数据，首部中的SYN标志被置为1，且该报文段占用了一个随机序号seq=x。 第二步：服务器收到连接请求，如同意连接，就向客户机发回确认，并为该连接分配TCP缓存和变量。确认报文中SYN和ACK都置为1，seq是服务器选用的初始随机序号，ack表示期望收到的下一个客户机报文序号。 第三步：客户机接收到确认报文，也要为该连接分配缓存和变量，并回复确认。  完成三次握手之后，双方的应用进程在任何时刻都可以发送数据（全双工）。
 注意这里的第二步握手，服务器在此步分配资源，那么如果客户端不回应第三步的确认报文，则服务器在原地忙等，过一段时间后才删除这些资源；如果快速发送大量的SYN包给特定服务器，将耗尽它的资源，使得正常的连接无法被建立，这就是典型的SYN Flood攻击。
  三次握手的必要性：
@@ -30,15 +30,26 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 从直觉进行理解：第一步握手是客户端向服务器发送数据，此时双方对信道的性质还不了解；第二步握手成功之后，客户端知道了服务器能够收到自己的数据，但服务器还不知道客户端能不能收到自己的数据；第三步握手成功之后，服务器知道客户端能收到自己的数据，可以开始通信。
 进一步地，考虑以下这种两次握手的情况：'><title>传输层协议——TCP</title>
 
-<link rel="canonical" href="https://xrg.fj.cn/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/" />
-<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel='canonical' href='https://xrg.fj.cn/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='传输层协议——TCP'>
+<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script><meta property='og:title' content='传输层协议——TCP'>
 <meta property='og:description' content='传输层 传输层的功能
 从通信和信息处理的角度看，传输层向它上面的应用层提供通信服务，它属于面向通信部分的最高层，同时也是用户功能中的最低层。
 实际上，传输层起到一个承上启下的作用。它之下的网络层、数据链路层、物理层被称为通信子网，其实现细节对用户是不可见的。
@@ -54,13 +65,13 @@ TCP的主要特点如下：
  面向连接。 每条连接只能有两个端点，即一对一的。 可靠的交付服务，保证数据无差错、不丢失、不重复且有序。 全双工通信，即任何时刻双方都能进行数据的发送。为此，双方都应该设置发送缓存和接收缓存，用来临时存放双向通信的数据。 面向字节流。计算机网络中常见的一个问题是：面向字节和面向报文有什么区别？ 面向字节流是指TCP将应用程序交付下来的数据仅视为一连串的无结构的字节流，发送的时候按照TCP的规则进行发送，不会考虑保留原始数据的边界；而面向报文是指每次发送的数据作为一个报文，一个报文是一块有结构的数据。   TCP报文段
  想要理解TCP的连接建立等等细节，认识其报头是必要的。TCP有固定的20B报头，变长字段配合填充字段使TCP报头长度始终是4B的整数倍。由于首部长度字段只有4位，故报头最长为15 * 4 = 60B
 TCP报头格式如下：
-TCP Header
+ TCP Header 
 每个字段的含义可以参见这篇文章。
  TCP连接管理
  TCP是面向连接的协议，每个TCP连接都有三个阶段：连接建立、数据传输和连接释放。TCP的连接管理就是使运输连接的建立和释放都能正常进行。
 TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式，主动发起连接的进程称为客户机（Client），被动等待连接的进程称为服务器（Server）。
 连接的建立分为3个步骤，即三次握手：
-TCP three-way-handshake
+ TCP three-way-handshake 
  第一步：客户机向服务器发送一个报文段，该报文段不含应用层数据，首部中的SYN标志被置为1，且该报文段占用了一个随机序号seq=x。 第二步：服务器收到连接请求，如同意连接，就向客户机发回确认，并为该连接分配TCP缓存和变量。确认报文中SYN和ACK都置为1，seq是服务器选用的初始随机序号，ack表示期望收到的下一个客户机报文序号。 第三步：客户机接收到确认报文，也要为该连接分配缓存和变量，并回复确认。  完成三次握手之后，双方的应用进程在任何时刻都可以发送数据（全双工）。
 注意这里的第二步握手，服务器在此步分配资源，那么如果客户端不回应第三步的确认报文，则服务器在原地忙等，过一段时间后才删除这些资源；如果快速发送大量的SYN包给特定服务器，将耗尽它的资源，使得正常的连接无法被建立，这就是典型的SYN Flood攻击。
  三次握手的必要性：
@@ -86,21 +97,25 @@ TCP的主要特点如下：
  面向连接。 每条连接只能有两个端点，即一对一的。 可靠的交付服务，保证数据无差错、不丢失、不重复且有序。 全双工通信，即任何时刻双方都能进行数据的发送。为此，双方都应该设置发送缓存和接收缓存，用来临时存放双向通信的数据。 面向字节流。计算机网络中常见的一个问题是：面向字节和面向报文有什么区别？ 面向字节流是指TCP将应用程序交付下来的数据仅视为一连串的无结构的字节流，发送的时候按照TCP的规则进行发送，不会考虑保留原始数据的边界；而面向报文是指每次发送的数据作为一个报文，一个报文是一块有结构的数据。   TCP报文段
  想要理解TCP的连接建立等等细节，认识其报头是必要的。TCP有固定的20B报头，变长字段配合填充字段使TCP报头长度始终是4B的整数倍。由于首部长度字段只有4位，故报头最长为15 * 4 = 60B
 TCP报头格式如下：
-TCP Header
+ TCP Header 
 每个字段的含义可以参见这篇文章。
  TCP连接管理
  TCP是面向连接的协议，每个TCP连接都有三个阶段：连接建立、数据传输和连接释放。TCP的连接管理就是使运输连接的建立和释放都能正常进行。
 TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式，主动发起连接的进程称为客户机（Client），被动等待连接的进程称为服务器（Server）。
 连接的建立分为3个步骤，即三次握手：
-TCP three-way-handshake
+ TCP three-way-handshake 
  第一步：客户机向服务器发送一个报文段，该报文段不含应用层数据，首部中的SYN标志被置为1，且该报文段占用了一个随机序号seq=x。 第二步：服务器收到连接请求，如同意连接，就向客户机发回确认，并为该连接分配TCP缓存和变量。确认报文中SYN和ACK都置为1，seq是服务器选用的初始随机序号，ack表示期望收到的下一个客户机报文序号。 第三步：客户机接收到确认报文，也要为该连接分配缓存和变量，并回复确认。  完成三次握手之后，双方的应用进程在任何时刻都可以发送数据（全双工）。
 注意这里的第二步握手，服务器在此步分配资源，那么如果客户端不回应第三步的确认报文，则服务器在原地忙等，过一段时间后才删除这些资源；如果快速发送大量的SYN包给特定服务器，将耗尽它的资源，使得正常的连接无法被建立，这就是典型的SYN Flood攻击。
  三次握手的必要性：
 进行三次握手是必要的。
 从直觉进行理解：第一步握手是客户端向服务器发送数据，此时双方对信道的性质还不了解；第二步握手成功之后，客户端知道了服务器能够收到自己的数据，但服务器还不知道客户端能不能收到自己的数据；第三步握手成功之后，服务器知道客户端能收到自己的数据，可以开始通信。
 进一步地，考虑以下这种两次握手的情况：">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -117,177 +132,32 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hub48dd7e92e6801eecec2b2d3d92faed3_364393_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://xrg.fj.cn">XR_G&#39;s Blog</a></h1>
-        <h2 class="site-description">杏花疏影里，吹笛到天明</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-
-
-
-                
-                <span>博文</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/%E5%85%B3%E4%BA%8E%E6%88%91/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-                
-                <span>关于我</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/categories/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>归档</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-
-
-
-                
-                <span>搜索</span>
-            </a>
-        </li>
-        
-
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
-</svg>
-
-
-
-                <span>暗色模式</span>
-            </li>
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a onclick="javascript: history.back(-1);" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
-    <script>
-        
-        document.getElementsByTagName("aside")[0].style.display='none'
-    </script>
-
-    <aside class="my-toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#传输层">传输层</a></li>
-    <li><a href="#tcp">TCP</a></li>
-    <li><a href="#小结">小结</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ul>
-</nav>
-    </aside>
-
-    <script>
-        document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        window.onresize = function() {
-            document.getElementsByClassName("my-toc")[0].style.marginLeft=document.getElementsByClassName("main")[0].offsetWidth*0.8+'px';
-        }
-    </script>
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -306,8 +176,28 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
         <a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/">传输层协议——TCP</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 27, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -315,8 +205,14 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 
 
 
-        <time class="article-time--published">Jan 27, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -354,18 +250,25 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 <hr>
 <p>想要理解TCP的连接建立等等细节，认识其报头是必要的。TCP有固定的20B报头，变长字段配合填充字段使TCP报头长度始终是4B的整数倍。由于首部长度字段只有4位，故报头最长为<code>15 * 4 = 60B</code></p>
 <p>TCP报头格式如下：</p>
-<p><figure style="flex-grow: 207; flex-basis: 498px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1.png" data-size="1042x502"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1_hu15a27add226755c37ed86293ad2beaa4_32486_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1_hu15a27add226755c37ed86293ad2beaa4_32486_1024x0_resize_box_2.png 1024w"
-				width="1042"
-				height="502"
-				loading="lazy"
-				alt="TCP Header">
-		</a>
-		
-		<figcaption>TCP Header</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 207; 
+			flex-basis: 498px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1.png" data-size="1042x502">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1.png"
+			width="1042"
+			height="502"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1_hu15a27add226755c37ed86293ad2beaa4_32486_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/1_hu15a27add226755c37ed86293ad2beaa4_32486_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="TCP Header">
+	</a>
+	
+	<figcaption>TCP Header</figcaption>
+	
+</figure></p>
 <p>每个字段的含义可以参见<a class="link" href="https://blog.csdn.net/a19881029/article/details/29557837"  target="_blank" rel="noopener"
     >这篇文章</a>。</p>
 <hr>
@@ -374,18 +277,25 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 <p>TCP是面向连接的协议，每个TCP连接都有三个阶段：连接建立、数据传输和连接释放。TCP的连接管理就是使运输连接的建立和释放都能正常进行。</p>
 <p>TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式，主动发起连接的进程称为客户机（Client），被动等待连接的进程称为服务器（Server）。</p>
 <p>连接的建立分为3个步骤，即三次握手：</p>
-<p><figure style="flex-grow: 97; flex-basis: 232px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2.png" data-size="656x676"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2_huf107514ad86e2db03f0e790ef9212bd6_22896_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2_huf107514ad86e2db03f0e790ef9212bd6_22896_1024x0_resize_box_2.png 1024w"
-				width="656"
-				height="676"
-				loading="lazy"
-				alt="TCP three-way-handshake">
-		</a>
-		
-		<figcaption>TCP three-way-handshake</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 97; 
+			flex-basis: 232px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2.png" data-size="656x676">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2.png"
+			width="656"
+			height="676"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2_huf107514ad86e2db03f0e790ef9212bd6_22896_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/2_huf107514ad86e2db03f0e790ef9212bd6_22896_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="TCP three-way-handshake">
+	</a>
+	
+	<figcaption>TCP three-way-handshake</figcaption>
+	
+</figure></p>
 <ul>
 <li>第一步：客户机向服务器发送一个报文段，该报文段不含应用层数据，首部中的SYN标志被置为1，且该报文段占用了一个随机序号<code>seq=x</code>。</li>
 <li>第二步：服务器收到连接请求，如同意连接，就向客户机发回确认，<strong>并为该连接分配TCP缓存和变量</strong>。确认报文中SYN和ACK都置为1，seq是服务器选用的初始随机序号，ack表示期望收到的下一个客户机报文序号。</li>
@@ -398,51 +308,72 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 <p>进行三次握手是必要的。</p>
 <p>从直觉进行理解：第一步握手是客户端向服务器发送数据，此时双方对信道的性质还不了解；第二步握手成功之后，客户端知道了服务器能够收到自己的数据，但服务器还不知道客户端能不能收到自己的数据；第三步握手成功之后，服务器知道客户端能收到自己的数据，可以开始通信。</p>
 <p>进一步地，考虑以下这种两次握手的情况：</p>
-<p><figure style="flex-grow: 150; flex-basis: 360px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3.png" data-size="1066x710"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3_huadeb4850e0a5e583f9932cb905f25b1a_61281_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3_huadeb4850e0a5e583f9932cb905f25b1a_61281_1024x0_resize_box_2.png 1024w"
-				width="1066"
-				height="710"
-				loading="lazy"
-				alt="TCP 2-way-handshake-bug1">
-		</a>
-		
-		<figcaption>TCP 2-way-handshake-bug1</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 150; 
+			flex-basis: 360px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3.png" data-size="1066x710">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3.png"
+			width="1066"
+			height="710"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3_huadeb4850e0a5e583f9932cb905f25b1a_61281_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/3_huadeb4850e0a5e583f9932cb905f25b1a_61281_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="TCP 2-way-handshake-bug1">
+	</a>
+	
+	<figcaption>TCP 2-way-handshake-bug1</figcaption>
+	
+</figure></p>
 <p>在第二步握手时，服务器回应的报文段没有被客户机收到，而此时服务器认为连接已经建立（因为对服务器来说第二步握手已经完成了），开始发送数据；服务器发送的数据到达客户机，但客户机并不知道自己的连接已经建立，这里的<code>seq</code>字段是违法的，丢弃这些包；服务器超时重传，客户端继续丢弃。</p>
 <p>当然，对于客户机来说，连接迟迟无法建立，应当重新发送SYN包，而对于服务器来说，与这个客户端的连接已经存在了，故对后来的连接请求不予响应。</p>
 <hr>
 <p>不妨再考虑下面这种情况：</p>
-<p><figure style="flex-grow: 182; flex-basis: 437px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4.png" data-size="1308x718"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4_hu06e4d1a2062a188f8b33fe4b6766cdee_84886_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4_hu06e4d1a2062a188f8b33fe4b6766cdee_84886_1024x0_resize_box_2.png 1024w"
-				width="1308"
-				height="718"
-				loading="lazy"
-				alt="TCP 2-way-handshake-bug2">
-		</a>
-		
-		<figcaption>TCP 2-way-handshake-bug2</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 182; 
+			flex-basis: 437px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4.png" data-size="1308x718">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4.png"
+			width="1308"
+			height="718"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4_hu06e4d1a2062a188f8b33fe4b6766cdee_84886_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/4_hu06e4d1a2062a188f8b33fe4b6766cdee_84886_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="TCP 2-way-handshake-bug2">
+	</a>
+	
+	<figcaption>TCP 2-way-handshake-bug2</figcaption>
+	
+</figure></p>
 <p>当客户机发送一个SYN包，该请求在网络中某个节点长时间滞留，客户机超时之后认为报文丢失，重传一次请求，服务器收到之后建立连接，开始传输数据。</p>
 <p>数据传输完毕之后双方断开连接，而此时，前一个滞留在网络中的连接请求到达服务器，服务器认为客户机又请求建立连接。此时，如果使用两次握手，服务器认为连接建立，而客户机实际上并没有发起连接请求，因此不予理睬，造成了服务器资源的浪费。</p>
 </blockquote>
 <p>数据传输完成之后，需要断开连接。如果你有注意到上图中的<code>FIN</code>报文段，需要留心，那只是个断开连接的示意，其中并没有展现“四次挥手”的过程。</p>
 <p>而真正的“四次挥手”过程如下图：</p>
-<p><figure style="flex-grow: 94; flex-basis: 226px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5.png" data-size="690x732"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5_hu986193792853f4bc148a1760f6ab665c_34165_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5_hu986193792853f4bc148a1760f6ab665c_34165_1024x0_resize_box_2.png 1024w"
-				width="690"
-				height="732"
-				loading="lazy"
-				alt="TCP 四次挥手">
-		</a>
-		
-		<figcaption>TCP 四次挥手</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 94; 
+			flex-basis: 226px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5.png" data-size="690x732">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5.png"
+			width="690"
+			height="732"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5_hu986193792853f4bc148a1760f6ab665c_34165_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/5_hu986193792853f4bc148a1760f6ab665c_34165_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="TCP 四次挥手">
+	</a>
+	
+	<figcaption>TCP 四次挥手</figcaption>
+	
+</figure></p>
 <ul>
 <li>第一步：客户机打算关闭连接时，向服务器发送一个连接释放报文段，其中FIN标志位设置为1,同样占用一个序号即<code>seq=x</code>（这里的x与之前三次握手的x无关，只是一种表示）。此时发送FIN的一端不能再发送数据，但可以发送控制信息，可以接收数据。</li>
 <li>第二步：服务器收到连接释放报文段之后发出确认。此时客户机到服务器方向的连接就释放了，但服务器还能发送数据，客户机仍要接收。</li>
@@ -471,18 +402,25 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 <li>
 <p>校验</p>
 <p>TCP的校验机制和UDP是一样的。计算校验和时要在TCP/UDP数据报<strong>之前</strong>增加<em>12B</em>的伪首部，伪首部并不是真正的数据报首部，不实际发送，只是参与校验和的计算而已。添加了伪首部之后的数据报如下：</p>
-<p><figure style="flex-grow: 356; flex-basis: 854px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6.png" data-size="1122x315"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6_huefb40be230a147d466a7e146d39e099f_17341_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6_huefb40be230a147d466a7e146d39e099f_17341_1024x0_resize_box_2.png 1024w"
-				width="1122"
-				height="315"
-				loading="lazy"
-				alt="添加伪首部的临时数据报">
-		</a>
-		
-		<figcaption>添加伪首部的临时数据报</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 356; 
+			flex-basis: 854px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6.png" data-size="1122x315">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6.png"
+			width="1122"
+			height="315"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6_huefb40be230a147d466a7e146d39e099f_17341_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/6_huefb40be230a147d466a7e146d39e099f_17341_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="添加伪首部的临时数据报">
+	</a>
+	
+	<figcaption>添加伪首部的临时数据报</figcaption>
+	
+</figure></p>
 <p>校验和的计算方法是：将临时数据报视为许多16位的字链接起来，末尾不足则用0填充。使用二进制反码计算出这些16位字的和，并将此和的二进制反码写入真正数据报头部的校验位字段。</p>
 </li>
 <li>
@@ -541,18 +479,25 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 <li>每当出现一次超时，令慢开始门限（阈值）等于<strong>当前</strong><code>cwnd</code>的一半（乘法减小），然后将<code>cwnd</code>设置为1，重新慢启动。</li>
 </ul>
 <p>慢启动和拥塞避免的实现过程如下：</p>
-<p><figure style="flex-grow: 210; flex-basis: 506px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7.png" data-size="1175x557"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7_hu3d3aded04d15f7dd464a986a49f0d7f6_610036_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7_hu3d3aded04d15f7dd464a986a49f0d7f6_610036_1024x0_resize_box_2.png 1024w"
-				width="1175"
-				height="557"
-				loading="lazy"
-				alt="慢启动和拥塞避免">
-		</a>
-		
-		<figcaption>慢启动和拥塞避免</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 210; 
+			flex-basis: 506px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7.png" data-size="1175x557">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7.png"
+			width="1175"
+			height="557"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7_hu3d3aded04d15f7dd464a986a49f0d7f6_610036_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/7_hu3d3aded04d15f7dd464a986a49f0d7f6_610036_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="慢启动和拥塞避免">
+	</a>
+	
+	<figcaption>慢启动和拥塞避免</figcaption>
+	
+</figure></p>
 <blockquote>
 <p>注意在慢开始（指数增长）阶段，若<code>2 * cwnd &gt; ssthresh</code>，则下一个RTT的<code>cwnd </code>等于<code>ssthresh</code>；即<code>cwnd</code><strong>不能跃过</strong><code>ssthresh</code>值。</p>
 </blockquote>
@@ -566,18 +511,25 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 <p>快恢复是为了配合快重传而定义的算法。它规定：发送端收到连续三个冗余ACK时执行“乘法减小”算法，即将慢开始门限设置为此时<code>cwnd</code>的一半，然后把<code>cwnd</code>的值设置为改变后的阈值，直接进行加法增长。</p>
 <p>显然，快恢复不需要<code>cwnd</code>从1开始时的慢启动过程，所以它比较“快”。</p>
 <p>两种算法实现的比较如下：</p>
-<p><figure style="flex-grow: 217; flex-basis: 520px">
-		<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8.png" data-size="1378x635"><img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8.png"
-				srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8_hu51756ee002ccf038c432e9dff036ae52_669728_480x0_resize_box_2.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8_hu51756ee002ccf038c432e9dff036ae52_669728_1024x0_resize_box_2.png 1024w"
-				width="1378"
-				height="635"
-				loading="lazy"
-				alt="快恢复算法的实现过程">
-		</a>
-		
-		<figcaption>快恢复算法的实现过程</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 217; 
+			flex-basis: 520px"
+	>
+	<a href="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8.png" data-size="1378x635">
+		<img src="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8.png"
+			width="1378"
+			height="635"
+			srcset="/p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8_hu51756ee002ccf038c432e9dff036ae52_669728_480x0_resize_box_3.png 480w, /p/%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AEtcp/8_hu51756ee002ccf038c432e9dff036ae52_669728_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="快恢复算法的实现过程">
+	</a>
+	
+	<figcaption>快恢复算法的实现过程</figcaption>
+	
+</figure></p>
 <blockquote>
 <p>为什么快重传要搭配快恢复？</p>
 <p>在拥塞避免算法中，重传的情况是<strong>计时器超时</strong>，说明此时不管是自己的数据报还是对方的ACK都已经无法送达，网络的负载已经很大，直接将自己的拥塞窗口减成1，是一种比较高效的限流措施；</p>
@@ -590,18 +542,23 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 <p>本文<strong>多数</strong>内容来自参考资料[2]，少数内容来自网络，对部分知识点进行了补充。参考资料难免不够全面，对本文中的内容有任何疑问处请在评论区留言。</p>
 <h3 id="参考资料">参考资料</h3>
 <p>[1] 车小胖.为什么TCP4次挥手时等待为2MSL？[EB/OL].2017-10-23</p>
-<p><em><a href="https://www.zhihu.com/question/67013338">https://www.zhihu.com/question/67013338</a></em></p>
+<p><em><a class="link" href="https://www.zhihu.com/question/67013338"  target="_blank" rel="noopener"
+    >https://www.zhihu.com/question/67013338</a></em></p>
 <p>[2] 王道论坛.2021年计算机网络考研复习指导[M].北京:电子工业出版社,2020:209-246</p>
 <p>[3] 李卓航.TCP的三次握手与四次挥手理解及面试题（很全面）[EB/OL].2019-06-29</p>
-<p><em><a href="https://www.cnblogs.com/bj-mr-li/p/11106390.html">https://www.cnblogs.com/bj-mr-li/p/11106390.html</a></em></p>
+<p><em><a class="link" href="https://www.cnblogs.com/bj-mr-li/p/11106390.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/bj-mr-li/p/11106390.html</a></em></p>
 <p>[4] 小狼的世界.Wireshark使用入门[EB/OL].2019-06-23</p>
-<p><em><a href="https://www.cnblogs.com/cocowool/p/wireshark_tcp_http.html">https://www.cnblogs.com/cocowool/p/wireshark_tcp_http.html</a></em></p>
+<p><em><a class="link" href="https://www.cnblogs.com/cocowool/p/wireshark_tcp_http.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/cocowool/p/wireshark_tcp_http.html</a></em></p>
 <p>[5] sean-zou.TCP报文格式[EB/OL].2014-06-10</p>
-<p><em><a href="https://blog.csdn.net/a19881029/article/details/29557837">https://blog.csdn.net/a19881029/article/details/29557837</a></em></p>
+<p><em><a class="link" href="https://blog.csdn.net/a19881029/article/details/29557837"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/a19881029/article/details/29557837</a></em></p>
 
 </section>
 
-    
+
+
     <footer class="article-footer">
     
     <section class="article-tags">
@@ -613,8 +570,12 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
 
     </footer>
 
+
+
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -688,26 +649,39 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
     
 </aside>
 
-
+     
     
         
-    <link rel="stylesheet" href="/resources/gitalk.css">
-<script src="/resources/gitalk.min.js"></script> 
-
-
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-        var gitalk  = new Gitalk({
-                id: '2021-01-27 00:00:00 \u002b0000 UTC',
-                clientID: '60cf432a89bc92763c12',
-                clientSecret: '6725615388bdb06c4050a0f6f3fa47d017fcc8d9',
-                repo: 'BlogComments',      
-                owner: 'SGS4ever',
-                admin: ['SGS4ever']
-        });
-        gitalk.render('gitalk-container');
+    <div id="gitalk-container"></div>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["[SGS4ever]"],
+        distractionFreeMode: false, 
+        id: md5(location.pathname), 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
 </script>
-<noscript>启用JavaScript来获取 <a href="https://github.com/gitalk/gitalk">gittalk</a> 提供的内容</noscript>
+
+
 
     
 
@@ -717,16 +691,19 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
         
             2020 - 
         
-        2021 XR_G&#39;s Blog
+        2022 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.3.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -803,7 +780,45 @@ TCP连接的端口称为套接字（socket）或插口。连接采用C/S方式�
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#传输层">传输层</a></li>
+    <li><a href="#tcp">TCP</a></li>
+    <li><a href="#小结">小结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
