@@ -16,7 +16,7 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 
 <link rel='canonical' href='https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/'>
 
-<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" href="/scss/style.min.afc3b8892e0432ad4f482f0aabb27425bf5983ce85e34a113145a2b2bb514b79.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <script>
     
@@ -33,7 +33,9 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
     $('html, body').animate({scrollTop: 0}, 1000);
     return false;
     });
-</script><meta property='og:title' content='Hugo Stack主题更新小记'>
+</script>
+
+<meta property='og:title' content='Hugo Stack主题更新小记'>
 <meta property='og:description' content='近期一好友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
 今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
 动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
@@ -158,7 +160,7 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 
 
                 <time class="article-time--reading">
-                    阅读时长: 5 分钟
+                    阅读时长: 8 分钟
                 </time>
             </div>
         
@@ -907,12 +909,561 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 	<figcaption>效果</figcaption>
 	
 </figure></p>
+<h4 id="字体样式修改">字体样式修改</h4>
+<p>把这一项归在文章页面似乎不太合适，因为主页的字体样式也被我更改了；但其实字体样式主要地还是与文章有关，好的字体让人看起文章来心情愉悦。</p>
+<p>作者在 <code>layouts/partials/footer/components/custom-font.html</code> 中进行了字体的自定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">customFont</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;link&#39;</span><span class="p">);</span>
+        <span class="nx">customFont</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">&#34;https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&amp;display=swap&#34;</span><span class="p">;</span>
+
+        <span class="nx">customFont</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&#34;text/css&#34;</span><span class="p">;</span>
+        <span class="nx">customFont</span><span class="p">.</span><span class="nx">rel</span> <span class="o">=</span> <span class="s2">&#34;stylesheet&#34;</span><span class="p">;</span>
+
+        <span class="nb">document</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">customFont</span><span class="p">);</span>
+    <span class="p">}());</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div><p>他使用的字体是 <code>Lato</code> ，这个字体不支持中文，因此最终呈现出来的字体是平平无奇的微软雅黑（其实是作者放置的默认选项）。</p>
+<p>更改字体的方式有几种：</p>
+<ul>
+<li>使用在线字体；</li>
+<li>下载字体CSS并引入；</li>
+<li>使用正常PC都会有的字体（如微软雅黑、仿宋、楷体等）。</li>
+</ul>
+<p>我决定使用在线字体，首先是因为在线字体的样式比较丰富，其次是字体CSS并没有那么好找……</p>
+<p><strong>科学上网</strong> 去到 <a class="link" href="https://fonts.google.com/"  target="_blank" rel="noopener"
+    >Google fonts</a> ，找到满意的中文字体，把 <code>custom-font.html</code> 中的原有代码注释掉，使用网站给出的代码。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/18.png" data-size="1920x1030">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/18.png"
+			width="1920"
+			height="1030"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/18_hu81f6d1df315425379c34494f56e1d3ff_298381_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/18_hu81f6d1df315425379c34494f56e1d3ff_298381_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="示例">
+	</a>
+	
+	<figcaption>示例</figcaption>
+	
+</figure></p>
+<p>我现在的 <code>custom-font.html</code> 内容如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="c">&lt;!-- &lt;script&gt;
+</span><span class="c">    (function () {
+</span><span class="c">        const customFont = document.createElement(&#39;link&#39;);
+</span><span class="c">        customFont.href = &#34;https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&amp;display=swap&#34;;
+</span><span class="c">
+</span><span class="c">        customFont.type = &#34;text/css&#34;;
+</span><span class="c">        customFont.rel = &#34;stylesheet&#34;;
+</span><span class="c">
+</span><span class="c">        document.head.appendChild(customFont);
+</span><span class="c">    }());
+</span><span class="c">&lt;/script&gt; --&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com&#34;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.gstatic.com&#34;</span> <span class="na">crossorigin</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;family=Ma+Shan+Zheng&amp;family=Noto+Sans+SC:wght@300&amp;family=Noto+Serif+SC:wght@300&amp;family=Zhi+Mang+Xing&amp;display=swap&#34;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span><span class="p">&gt;</span>
+</code></pre></div><p>一次性引入了几款我认为还不错的字体，以便自由选择。</p>
+<p>引入字体之后，来到我们的老朋友 <code>custom.scss</code> 文件中，把 <code>body</code> 和 <code>.article-content</code> 的字体改为我们引入的字体的名字即可。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nt">body</span><span class="o">,</span> <span class="nc">.article-content</span> <span class="p">{</span>
+    <span class="c1">// font-family: &#39;Long Cang&#39;, cursive;
+</span><span class="c1"></span>    <span class="c1">// font-family: &#39;Ma Shan Zheng&#39;, cursive;
+</span><span class="c1"></span>    <span class="c1">// font-family: &#39;Noto Sans SC&#39;, sans-serif;
+</span><span class="c1"></span>    <span class="na">font-family</span><span class="o">:</span> <span class="s1">&#39;Noto Serif SC&#39;</span><span class="o">,</span> <span class="ni">serif</span><span class="p">;</span>
+    <span class="c1">// font-family: &#39;Zhi Mang Xing&#39;, cursive;
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><h4 id="目录项紧凑">目录项紧凑</h4>
+<p>作者默认的文章页面是这样的：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 168; 
+			flex-basis: 404px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15.png" data-size="2558x1517">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15.png"
+			width="2558"
+			height="1517"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15_hu26b451df9219cca2963db45d83cf8cfe_451858_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/15_hu26b451df9219cca2963db45d83cf8cfe_451858_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="文章页面">
+	</a>
+	
+	<figcaption>文章页面</figcaption>
+	
+</figure></p>
+<p>虽然我很喜欢这个Table Of Content的位置，但我认为每一个目录之间的距离有点太开了。对于目录短一点的文章来说还好，对于目录很长的文章来说，这么大的间距显得不够精致。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19.png" data-size="1920x1030">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19.png"
+			width="1920"
+			height="1030"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19_hu330e7700461d11dadfda3efbdbb8ffe2_218749_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19_hu330e7700461d11dadfda3efbdbb8ffe2_218749_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="目录较长情况下的效果">
+	</a>
+	
+	<figcaption>目录较长情况下的效果</figcaption>
+	
+</figure></p>
+<p>老规矩，开发者工具选中、找class、搜索一条龙，在 <code>assets/scss/partials/layout/article.scss</code> 中找到了控制TOC格式的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.widget--toc</span> <span class="p">{</span>
+    <span class="na">background-color</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-background</span><span class="p">);</span>
+    <span class="na">border-radius</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-border-radius</span><span class="p">);</span>
+    <span class="na">box-shadow</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">shadow-l1</span><span class="p">);</span>
+    <span class="na">display</span><span class="o">:</span> <span class="ni">flex</span><span class="p">;</span>
+    <span class="na">flex-direction</span><span class="o">:</span> <span class="ni">column</span><span class="p">;</span>
+    <span class="na">color</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-text-color-main</span><span class="p">);</span>
+    <span class="na">overflow</span><span class="o">:</span> <span class="ni">hidden</span><span class="p">;</span>
+
+    <span class="nn">#TableOfContents</span> <span class="p">{</span>
+        <span class="na">overflow-x</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+        <span class="na">max-height</span><span class="o">:</span> <span class="mi">75</span><span class="kt">vh</span><span class="p">;</span>
+
+        <span class="nt">ol</span><span class="o">,</span>
+        <span class="nt">ul</span> <span class="p">{</span>
+            <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nt">ol</span> <span class="p">{</span>
+            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+            <span class="na">counter-reset</span><span class="o">:</span> <span class="n">item</span><span class="p">;</span>
+
+            <span class="nt">li</span><span class="nd">:before</span> <span class="p">{</span>
+                <span class="na">counter-increment</span><span class="o">:</span> <span class="n">item</span><span class="p">;</span>
+                <span class="na">content</span><span class="o">:</span> <span class="nf">counters</span><span class="p">(</span><span class="n">item</span><span class="o">,</span> <span class="s2">&#34;.&#34;</span><span class="p">)</span> <span class="s2">&#34;. &#34;</span><span class="p">;</span>
+                <span class="na">font-weight</span><span class="o">:</span> <span class="ni">bold</span><span class="p">;</span>
+                <span class="na">margin-right</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+            <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nt">li</span> <span class="p">{</span>
+            <span class="na">margin</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+            <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+
+            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+
+                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>只需要把重点放在诸如 <code>padding</code> 、 <code>margin</code> 一类的字眼上即可。</p>
+<p>审视 <code>#TableOfContents</code> 选择器底下的几个属性（已经删去较不重要的样式）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nn">#TableOfContents</span> <span class="p">{</span>
+    <span class="na">max-height</span><span class="o">:</span> <span class="mi">75</span><span class="kt">vh</span><span class="p">;</span>  <span class="c1">// 控制目录的最大高度
+</span><span class="c1"></span>
+    <span class="nt">li</span> <span class="p">{</span>
+        <span class="na">margin</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 控制列表项之间的距离（重要！）
+</span><span class="c1"></span>        <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+
+        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+            <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 控制子列表和父列表项之间的距离（当TOC不只有一层目录的时候有用）
+</span><span class="c1"></span>            <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 子列表项的向右缩进距离（当TOC不只有一层目录的时候有用）
+</span><span class="c1"></span>            <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+
+            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+                <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>经过一番修改，我在 <code>custom.scss</code> 中添加了如下的样式：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.widget--toc</span> <span class="p">{</span>
+    <span class="nn">#TableOfContents</span> <span class="p">{</span>
+        <span class="na">max-height</span><span class="o">:</span> <span class="mi">65</span><span class="kt">vh</span><span class="p">;</span>
+
+        <span class="nt">ol</span><span class="o">,</span>
+        <span class="nt">ul</span> <span class="p">{</span>
+            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nt">li</span> <span class="p">{</span>
+            <span class="na">margin</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+
+            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+
+                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>主要解决了几个问题：</p>
+<ul>
+<li>目录太高了，使得之前添加的返回顶部按钮可能会被顶出屏幕；</li>
+<li>目录项前面的小黑点不太好看，隐去；</li>
+<li>目录项之间的距离不够紧凑。</li>
+</ul>
+<p>进行一下对比，个人是满意这个效果的：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19.png" data-size="1920x1030">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19.png"
+			width="1920"
+			height="1030"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19_hu330e7700461d11dadfda3efbdbb8ffe2_218749_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/19_hu330e7700461d11dadfda3efbdbb8ffe2_218749_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧目录效果">
+	</a>
+	
+	<figcaption>旧目录效果</figcaption>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20.png" data-size="1920x1030">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20.png"
+			width="1920"
+			height="1030"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20_huf09a0d97507b7570236ed80485f28190_216236_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20_huf09a0d97507b7570236ed80485f28190_216236_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新目录效果">
+	</a>
+	
+	<figcaption>新目录效果</figcaption>
+	
+</figure></p>
+<h4 id="滚动条美化">滚动条美化</h4>
+<p>尽管经过了紧凑，目录还是可能出现过长的情况，而原本的样式中目录的滚动条毫无疑问是粗糙的，甚至令人很难接受。</p>
+<p>网络上有非常多自定义滚动条的教程，但是我懒得自行调试，直接使用Cabriel大佬在 <a class="link" href="https://dev.to/xtrp/how-to-create-a-beautiful-custom-scrollbar-for-your-site-in-plain-css-1mjg"  target="_blank" rel="noopener"
+    >这篇文章</a> 中给出的 <a class="link" href="https://codepen.io/xtrp/pen/QWjREeo"  target="_blank" rel="noopener"
+    >代码</a> ，将代码中自定义滚动条的部分加到上一小节中TOC的样式里，使得上一小节里修改过的TOC样式变成下面的样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.widget--toc</span> <span class="p">{</span>
+    <span class="nn">#TableOfContents</span> <span class="p">{</span>
+        <span class="na">max-height</span><span class="o">:</span> <span class="mi">65</span><span class="kt">vh</span><span class="p">;</span>
+
+        <span class="nt">ol</span><span class="o">,</span>
+        <span class="nt">ul</span> <span class="p">{</span>
+            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nt">li</span> <span class="p">{</span>
+            <span class="na">margin</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+
+            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+
+                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">::-webkit-scrollbar</span> <span class="p">{</span>
+        <span class="na">width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+      <span class="nd">::-webkit-scrollbar-track</span> <span class="p">{</span>
+        <span class="na">background-color</span><span class="o">:</span> <span class="ni">transparent</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+      <span class="nd">::-webkit-scrollbar-thumb</span> <span class="p">{</span>
+        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
+        <span class="na">border-radius</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+        <span class="na">border</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="ni">solid</span> <span class="ni">transparent</span><span class="p">;</span>
+        <span class="na">background-clip</span><span class="o">:</span> <span class="ni">content-box</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+      <span class="nd">::-webkit-scrollbar-thumb:hover</span> <span class="p">{</span>
+        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
+      <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20.png" data-size="1920x1030">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20.png"
+			width="1920"
+			height="1030"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20_huf09a0d97507b7570236ed80485f28190_216236_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/20_huf09a0d97507b7570236ed80485f28190_216236_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧目录滚动条效果">
+	</a>
+	
+	<figcaption>旧目录滚动条效果</figcaption>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/21.png" data-size="1920x1030">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/21.png"
+			width="1920"
+			height="1030"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/21_huff7389a141c31aa72c3f61903362a535_149152_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/21_huff7389a141c31aa72c3f61903362a535_149152_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新目录滚动条效果">
+	</a>
+	
+	<figcaption>新目录滚动条效果</figcaption>
+	
+</figure></p>
+<p>属实是提升幸福感的一个细节啊！</p>
+<hr>
+<p>我实在太喜欢这个滚动条了，以至于我不希望它仅仅作用在目录上。</p>
+<p>在我的博客中还有若干出现滚动条的地方，都是及其粗糙的浏览器原始样式：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 150; 
+			flex-basis: 360px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/22.png" data-size="1062x708">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/22.png"
+			width="1062"
+			height="708"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/22_hu36d9c2ae8bf5b4cdd50e73f6bafcb888_53667_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/22_hu36d9c2ae8bf5b4cdd50e73f6bafcb888_53667_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="代码块的滚动条">
+	</a>
+	
+	<figcaption>代码块的滚动条</figcaption>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 374; 
+			flex-basis: 898px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/23.png" data-size="1097x293">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/23.png"
+			width="1097"
+			height="293"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/23_hu61fd57010dd3e0d5d92bfc528d8e9049_33410_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/23_hu61fd57010dd3e0d5d92bfc528d8e9049_33410_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="相关文章的滚动条">
+	</a>
+	
+	<figcaption>相关文章的滚动条</figcaption>
+	
+</figure></p>
+<p>无法忍受！</p>
+<p>因此我决定直接将滚动条优化的代码拿出来，作用到 <strong>整个网站</strong> 上！没错，我希望使得访客在我的博客的任意一个角落都不会见到原始的、丑陋的滚动条！</p>
+<p>简单粗暴地在 <code>custom.scss</code> 追加：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nt">html</span><span class="p">{</span>
+    <span class="nd">::-webkit-scrollbar</span> <span class="p">{</span>
+        <span class="na">width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+      <span class="nd">::-webkit-scrollbar-track</span> <span class="p">{</span>
+        <span class="na">background-color</span><span class="o">:</span> <span class="ni">transparent</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+      <span class="nd">::-webkit-scrollbar-thumb</span> <span class="p">{</span>
+        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
+        <span class="na">border-radius</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+        <span class="na">border</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="ni">solid</span> <span class="ni">transparent</span><span class="p">;</span>
+        <span class="na">background-clip</span><span class="o">:</span> <span class="ni">content-box</span><span class="p">;</span>
+      <span class="p">}</span>
+      
+      <span class="nd">::-webkit-scrollbar-thumb:hover</span> <span class="p">{</span>
+        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
+      <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>注意，为了使得代码简洁，我们把滚动条美化的部分拿出来之后，要回到TOC样式那边把相同的这些代码删掉。</p>
+<p>现在，在我网站的所有地方，乃至于最外层的窗口右侧的滚动条都已经变成了优雅的样子 😏 。</p>
+<p><em>注：希望读者使用的 <strong>不是</strong> FireFox浏览器</em> 。</p>
+<h4 id="相关文章组件美化">相关文章组件美化</h4>
+<p>旧有的 <em>相关文章</em> 其实一直令我比较难受。JimmyCai大佬在设计文章列表的时候是考虑了每个文章配一个封面图的，因此在 <em>相关文章</em> 一栏也考虑了图片的存在，使得单个元素显得比较高大：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 376; 
+			flex-basis: 902px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24.png" data-size="1072x285">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24.png"
+			width="1072"
+			height="285"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24_hu1928c360a7d7d139ce4a80bf664a7067_23673_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24_hu1928c360a7d7d139ce4a80bf664a7067_23673_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="旧主题相关文章">
+	</a>
+	
+	<figcaption>旧主题相关文章</figcaption>
+	
+</figure></p>
+<p>假如这些标题能够在垂直上居中，我倒也无所谓了，问题在于这些标题它居中不了……</p>
+<p>因此我决定从几个方面来稍微改善一下视觉效果：</p>
+<ul>
+<li>在相关文章推荐的时候，多显示一些元素（不要只显示一个标题）；</li>
+<li>不使用文章封面（本来也不打算每个文章都配封面）而是展示我们自行选定的图片。</li>
+</ul>
+<p>依然是熟悉的开发者工具选中操作，在 <code>layouts/partials/article/components/related-contents.html</code> 找到 <em>相关文章</em> 组件的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;related-contents--wrapper&#34;</span><span class="p">&gt;</span>
+    {{ $related := (where (.Site.RegularPages.Related .) &#34;Params.hidden&#34; &#34;!=&#34; true) | first 5 }}
+    {{ with $related }}
+        <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;section-title&#34;</span><span class="p">&gt;</span>{{ T &#34;article.relatedContents&#34; }}<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;related-contents&#34;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;flex article-list--tile&#34;</span><span class="p">&gt;</span>
+                {{ range . }}
+                    {{ partial &#34;article-list/tile&#34; (dict &#34;context&#34; . &#34;size&#34; &#34;250x150&#34; &#34;Type&#34; &#34;articleList&#34;) }}
+                {{ end }}
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    {{ end }}
+<span class="p">&lt;/</span><span class="nt">aside</span><span class="p">&gt;</span>
+
+</code></pre></div><p>从代码中可以看到，它使用的是 <code>layouts/partials/article-list/tile.html</code> 这个页面提供的文章列表，其代码为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{ $image := partialCached &#34;helper/image&#34; (dict &#34;Context&#34; .context &#34;Type&#34; .Type) .context.RelPermalink .Type }}
+<span class="p">&lt;</span><span class="nt">article</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ if $image.exists }}has-image{{ end }}&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;{{ .context.RelPermalink }}&#34;</span><span class="p">&gt;</span>
+        {{ if $image.exists }}  <span class="c">&lt;!-- 必然为 false，因为我们的文章没配封面 --&gt;</span>
+        	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
+			<span class="c">&lt;!-- ==== 因此这部分代码不重要，略 ===== --&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        {{ end }}
+
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-details&#34;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-title&#34;</span><span class="p">&gt;</span>
+                {{- .context.Title -}}
+            <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">article</span><span class="p">&gt;</span>
+</code></pre></div><p>根据我们的两点目标，我们应该：</p>
+<ul>
+<li>在下面一个 <code>div</code> 中添加 <code>title</code> 之外的元素，在这里我希望把文章的发表日期也呈现出来；</li>
+<li>绕过 <code>image.exists</code> 的逻辑，直接用作者的 <code>div</code> 包住自己选用的图片。</li>
+</ul>
+<p>第一点非常简单，仿照 <code>layouts/partials/article-list/compact.html</code> 代码，在 <code>h2</code> 标签下添加一个 <code>footer</code> 即可；</p>
+<p>第二点同样简单，此前已经仿照Avatar的代码写过返回顶部按钮，则在这里使用相同的办法添加一张图片即可。</p>
+<p>修改过后的 <code>tile.html</code> 代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{ $image := partialCached &#34;helper/image&#34; (dict &#34;Context&#34; .context &#34;Type&#34; .Type) .context.RelPermalink .Type }}
+<span class="p">&lt;</span><span class="nt">article</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ if $image.exists }}has-image{{ end }}&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;{{ .context.RelPermalink }}&#34;</span><span class="p">&gt;</span>
+        {{ if $image.exists }}  <span class="c">&lt;!-- 必然为 false，因为我们的文章没配封面 --&gt;</span>
+        	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
+			<span class="c">&lt;!-- ==== 因此这部分代码不重要，略 ===== --&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        {{ end }}
+	
+        <span class="c">&lt;!-- 自行增加的图片 --&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
+            {{ $relatedImage := resources.Get (&#34;img/related-content.png&#34;) }}
+            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $relatedImage.RelPermalink }}&#34;</span> <span class="na">loading</span><span class="o">=</span><span class="s">&#34;lazy&#34;</span> 
+            <span class="na">data-key</span><span class="o">=</span><span class="s">&#34;{{ .context.Slug }}&#34;</span> <span class="na">data-hash</span><span class="o">=</span><span class="s">&#34;{{ $image.permalink }}&#34;</span> 
+            <span class="na">style</span><span class="o">=</span><span class="s">&#34;opacity: 0.3;&#34;</span><span class="p">/&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-details&#34;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-title&#34;</span><span class="p">&gt;</span>
+                {{- .context.Title -}}
+            <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+            <span class="c">&lt;!-- 自行增加的文章发布日期 --&gt;</span>
+            <span class="p">&lt;</span><span class="nt">footer</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-time&#34;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">time</span> <span class="na">datetime</span><span class="o">=</span><span class="s">&#39;{{ .Date.Format &#34;2006-01-02T15:04:05Z07:00&#34; }}&#39;</span><span class="p">&gt;</span>
+                    {{- .context.Date.Format (or .Site.Params.dateFormat.published &#34;Jan 02, 2006&#34;) -}}
+                <span class="p">&lt;/</span><span class="nt">time</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">footer</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">article</span><span class="p">&gt;</span>
+</code></pre></div><p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 376; 
+			flex-basis: 902px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24.png" data-size="1072x285">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24.png"
+			width="1072"
+			height="285"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24_hu1928c360a7d7d139ce4a80bf664a7067_23673_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/24_hu1928c360a7d7d139ce4a80bf664a7067_23673_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="修改前">
+	</a>
+	
+	<figcaption>修改前</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 348; 
+			flex-basis: 836px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/25.png" data-size="1052x302">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/25.png"
+			width="1052"
+			height="302"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/25_hu4abaf97b589443b5f7ca4069b28cb7bc_50018_480x0_resize_box_3.png 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/25_hu4abaf97b589443b5f7ca4069b28cb7bc_50018_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="修改后">
+	</a>
+	
+	<figcaption>修改后</figcaption>
+	
+</figure></p>
+<h4 id="选中样式美化">选中样式美化</h4>
+<p>直接使用 <a class="link" href="https://munlelee.github.io/post/hugo%E5%8D%9A%E5%AE%A2-stack%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9%E7%AC%AC%E4%B8%80%E7%AB%99/#%E4%BF%AE%E6%94%B9%E9%80%89%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F"  target="_blank" rel="noopener"
+    >好友的样式</a> ，在 <code>custom.scss</code> 中添加：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nd">::selection</span> <span class="p">{</span>
+    <span class="na">color</span><span class="o">:</span> <span class="mh">#fff</span><span class="p">;</span>
+    <span class="na">background</span><span class="o">:</span> <span class="mh">#557697</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>必须夸一句，颜色选得不错 😆 。</p>
 <h3 id="to-be-continued">To Be Continued&hellip;</h3>
 <ul>
-<li><input disabled="" type="checkbox"> 文章页面微调（white-space: nowrap；目录项紧凑；……）</li>
+<li><input checked="" disabled="" type="checkbox"> 文章页面微调（white-space: nowrap；目录项紧凑；……）</li>
 <li><input checked="" disabled="" type="checkbox"> 主页侧边栏不亮</li>
 <li><input checked="" disabled="" type="checkbox"> 文章添加返回最上层</li>
-<li><input disabled="" type="checkbox"> 研究在线字体</li>
+<li><input checked="" disabled="" type="checkbox"> 研究在线字体</li>
 <li><input disabled="" type="checkbox"> 修改文章页面的 <em>返回</em> 按钮的跳转逻辑（不要直接回到主页，最好回到上一级）</li>
 </ul>
 
@@ -951,8 +1502,17 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">博客搭建指南——3</h2>
+            <footer class="article-time">
+                <time datetime=''>Jan 19, 2021</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -963,8 +1523,17 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">博客搭建指南——2</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 19, 2020</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -975,8 +1544,17 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">博客搭建指南——1</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2020</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -987,8 +1565,17 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">TCP加速之环境搭建（WANem）</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 23, 2021</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -999,8 +1586,17 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">尝尝鲜——为自己装一台Mac OS虚拟机</h2>
+            <footer class="article-time">
+                <time datetime=''>Apr 30, 2021</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -1171,6 +1767,11 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
     <li><a href="#part-2-文章页面">Part 2 文章页面</a>
       <ul>
         <li><a href="#返回顶部按钮">返回顶部按钮</a></li>
+        <li><a href="#字体样式修改">字体样式修改</a></li>
+        <li><a href="#目录项紧凑">目录项紧凑</a></li>
+        <li><a href="#滚动条美化">滚动条美化</a></li>
+        <li><a href="#相关文章组件美化">相关文章组件美化</a></li>
+        <li><a href="#选中样式美化">选中样式美化</a></li>
       </ul>
     </li>
     <li><a href="#to-be-continued">To Be Continued&hellip;</a></li>
@@ -1193,17 +1794,11 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
                 defer="false"
                 >
             </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
 
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
 
-        document.head.appendChild(customFont);
-    }());
-</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
 
     </body>
 </html>

@@ -27,7 +27,7 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 
 <link rel='canonical' href='https://xrg.fj.cn/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/'>
 
-<link rel="stylesheet" href="/scss/style.min.390d02970c63536a181758a5d60f23939ab1dbaa7f9aca0fa8e0e189ff32194a.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" href="/scss/style.min.afc3b8892e0432ad4f482f0aabb27425bf5983ce85e34a113145a2b2bb514b79.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <script>
     
@@ -44,7 +44,9 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
     $('html, body').animate({scrollTop: 0}, 1000);
     return false;
     });
-</script><meta property='og:title' content='DoS——拒绝服务攻击'>
+</script>
+
+<meta property='og:title' content='DoS——拒绝服务攻击'>
 <meta property='og:description' content='网络安全理论复习开始了！
 今天从最简单的开始，目标是在寒假期间整理完成《网络安全》这门课所涉及的知识。希望本系列文章能以清晰的思路将安全理论表述出来。
 DoS Denial of Service，拒绝服务，是现代网络安全领域很常见的一种攻击。所谓拒绝服务，就是通过一系列手段使得原本正常运行的服务器无法再为用户的请求提供服务与应答，从而使目标业务停滞。
@@ -293,7 +295,7 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
 <blockquote>
 <p>就我个人来说，其实还没有想清楚为什么要使用<code>end2 - end1</code>的办法来计算<code>len2</code>，明明长度字段就写在报头&hellip;</p>
 <p>不过如果报头的长度字段也被伪造了，怎么办呢？Teardrop的防御办法是将接受到的数据报先缓存起来，然后先根据标识分组来进行检查，对于分片信息有错误的报文就直接丢弃。</p>
-<p>不过，还是简单一点，没有什么是一个补丁无法解决的，如果有，那就两个。:triumph:</p>
+<p>不过，还是简单一点，没有什么是一个补丁无法解决的，如果有，那就两个。😤</p>
 </blockquote>
 <h3 id="land攻击">LAND攻击</h3>
 <p>在TCP连接管理中，源地址、目的地址、源端口、目的端口是最为重要的几个参数。如果交由你来实现TCP连接监听，是否会向一个SYN包中的源IP直接发起ACK应答呢？</p>
@@ -443,8 +445,17 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">OWASP Top10（2021）</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 29, 2021</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -455,8 +466,17 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">audit 简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 25, 2021</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -467,8 +487,17 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">安全岗笔试题——1</h2>
+            <footer class="article-time">
+                <time datetime=''>Jan 29, 2021</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -479,8 +508,17 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
         
         
 
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
         <div class="article-details">
             <h2 class="article-title">提权技术--绕过UAC</h2>
+            <footer class="article-time">
+                <time datetime=''>Dec 28, 2020</time>
+            </footer>
         </div>
     </a>
 </article>
@@ -683,17 +721,11 @@ IP协议使用首部的标识、标志和片偏移字段来完成对片的重组
                 defer="false"
                 >
             </script><script type="text/javascript" src="/ts/main.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
 
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
 
-        document.head.appendChild(customFont);
-    }());
-</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
 
     </body>
 </html>

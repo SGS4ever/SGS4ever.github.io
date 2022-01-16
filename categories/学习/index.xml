@@ -235,7 +235,7 @@ houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色
   示例2
   输入： nums = [0]
   输出： [[],[0]]
-  分析  三个月之前WA过的题，在每日一题里碰见了，而我还是思考了很久 :cry:
+  分析  三个月之前WA过的题，在每日一题里碰见了，而我还是思考了很久 😢
  原始数组中可能包含重复元素，则对于重复元素的考虑就尤为重要，一般来说，重复元素对于子集的贡献也有重复。
 我们不妨考虑进行以下的模拟，对于一个 不包含重复元素 的集合 [1, 2, 3] ，如何求得它的所有子集呢？
 首先，答案中包含一个空集。
@@ -372,7 +372,7 @@ highBits = 0x10110011 &amp;amp; 0x11110000 = 0x10110011 &amp;amp; 0xf0</descript
       <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/</guid>
-      <description>不是吧啊Sir，这种题也错？:cry:
+      <description>不是吧啊Sir，这种题也错？😢
 题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
 题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
 请实现 KthLargest 类：

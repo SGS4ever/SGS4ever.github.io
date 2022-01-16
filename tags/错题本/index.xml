@@ -69,7 +69,7 @@
       <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/</guid>
-      <description>不是吧啊Sir，这种题也错？:cry:
+      <description>不是吧啊Sir，这种题也错？😢
 题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
 题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
 请实现 KthLargest 类：
