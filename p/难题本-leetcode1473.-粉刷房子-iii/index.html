@@ -211,7 +211,7 @@ houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色
 <li>房子原本有颜色，如果此颜色与 <code>color</code> 不同，那么这种上色方案无论如何是不可行的；如果此颜色与 <code>color</code> 相同，那么 <code>dp</code> 值就是我们上面分析的情况。</li>
 </ul>
 <p>把这些分析加以实现，我们应该：</p>
-<pre tabindex="0"><code class="language-伪代码" data-lang="伪代码">- 枚举房子下标 --&gt; idx: 0 ~ m - 1
+<pre><code class="language-伪代码" data-lang="伪代码">- 枚举房子下标 --&gt; idx: 0 ~ m - 1
 	- 枚举上色方案 --&gt; color: 0 ~ n - 1
 		- 如果房子有颜色且不同于 color，继续枚举颜色
 		- 运行至此有两种情况：房子没有颜色，或房子有颜色且颜色就是 color

