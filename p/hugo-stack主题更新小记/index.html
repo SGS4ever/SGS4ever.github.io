@@ -16,7 +16,7 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 
 <link rel='canonical' href='https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/'>
 
-<link rel="stylesheet" href="/scss/style.min.afc3b8892e0432ad4f482f0aabb27425bf5983ce85e34a113145a2b2bb514b79.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <script>
     
@@ -70,6 +70,29 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
     <body class="
     article-page has-toc
 ">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -160,7 +183,7 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 
 
                 <time class="article-time--reading">
-                    阅读时长: 8 分钟
+                    阅读时长: 10 分钟
                 </time>
             </div>
         
@@ -1458,13 +1481,205 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
     <span class="na">background</span><span class="o">:</span> <span class="mh">#557697</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div><p>必须夸一句，颜色选得不错 😆 。</p>
+<h3 id="part-3-页面载入动画">Part 3 页面载入动画</h3>
+<p>这部分一定要单独拎出来！它实在是 <strong>SO COOL！</strong></p>
+<p>事情的由来是这样的：虽然我在几个月之前就给我的博客（在GitPage上）布置了 <a class="link" href="https://www.netlify.com/"  target="_blank" rel="noopener"
+    >Netlify</a> 的CDN，但考虑到大墙的影响，偶尔加载起来还是慢得吐血。</p>
+<p>慢倒是无所谓，关键是点击完一个链接之后要加载老半天，页面也没什么反应，就跟宕机了一样，很尴尬的！</p>
+<p>为此呢，我参考 <a class="link" href="https://dreamruins.gitee.io/"  target="_blank" rel="noopener"
+    >望间</a> 大佬的 <a class="link" href="https://dreamruins.gitee.io/tutorials/1793947201.html#!"  target="_blank" rel="noopener"
+    >这篇文章</a> ，为我的博客也搞了个页面载入动画。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 428px"
+	>
+	<a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading.gif" data-size="1436x805">
+		<img src="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading.gif"
+			width="1436"
+			height="805"
+			srcset="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading_hu86d2a74fb92551c2b6b068bb08714db9_235832_480x0_resize_box.gif 480w, /p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading_hu86d2a74fb92551c2b6b068bb08714db9_235832_1024x0_resize_box.gif 1024w"
+			loading="lazy"
+			alt="动画效果展示">
+	</a>
+	
+	<figcaption>动画效果展示</figcaption>
+	
+</figure></p>
+<h4 id="step-1-新增组件">Step 1 新增组件</h4>
+<p>这个加载动画的大致原理呢，就是在原本的比较大的页面加载完成之前，先加载出一些比较简单的元素，为这些元素制作一些简单的动效，这样访客就不会等得太无聊了！等原本的页面加载完成之后，再把这个组件隐匿掉即可！</p>
+<p>因此，需要在原本的主题结构里面新增跟加载动画相关的组件。</p>
+<p>我把这个小组件放在 <code>layouts/partials/widget/preload.html</code>  文件里，注意，这个文件是自己创建的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{ if .Site.Params.enablePreloadingAnim }}
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;loading-box&#34;</span><span class="p">&gt;</span>
+                <span class="c">&lt;!-- 页面加载完成之后帷幕拉开的效果 --&gt;</span>
+                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-left-bg&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-right-bg&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                <span class="c">&lt;!-- 旋转盒子动效 --&gt;</span>
+                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;spinner-box&#34;</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-border-1&#34;</span><span class="p">&gt;</span>
+                                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-core&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-border-2&#34;</span><span class="p">&gt;</span>
+                                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-core&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-word&#34;</span><span class="p">&gt;</span>加载中...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="c">&lt;!-- 页面加载动画 --&gt;</span>
+      <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;loading-box&#39;</span><span class="p">).</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&#34;loaded&#34;</span><span class="p">)</span>
+        <span class="p">})</span>
+      <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+{{ end }}
+</code></pre></div><p>可以看到，这个文件里面有几个组成部分，非常简单：</p>
+<ul>
+<li>Hugo的 <code>if</code> 判断句，便于我们在配置文件里控制这个组件要不要启用；</li>
+<li>用于呈现动效的几个简单的HTML元素；</li>
+<li>jQuery的函数，直接使用 <code>ready</code> 函数，当页面载入完成之后把动效组件隐匿掉！</li>
+</ul>
+<p>万事俱备，把这个组件直接加到网站模板里面就行了！Stack主题的网页模板在 <code>layouts/_default/baseof.html</code> ，我们找到 <code>body</code> 标签，在它底下加上这么一句：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ block `body-class` . }}{{ end }}&#34;</span><span class="p">&gt;</span>
+    <span class="c">&lt;!-- 下面这个是新加的 --&gt;</span>
+    {{- partial &#34;widget/preload&#34; . -}}
+    <span class="c">&lt;!-- 下面就是Stack作者原本的代码了 --&gt;</span>
+    {{- partial &#34;head/colorScheme&#34; . -}}
+   	<span class="c">&lt;!-- 省略省略省略 --&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></div><p>一切就OK了！</p>
+<h4 id="step-2-组件样式">Step 2 组件样式</h4>
+<p>我们刚才看到的jQuery函数非常简单，是因为这个动效最灵魂的地方是在组件的CSS啊！</p>
+<p>找到老朋友 <code>assets/scss/custom.scss</code> ，在文件里面 <strong>追加</strong> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nn">#loading-box</span> <span class="nc">.loading-left-bg</span><span class="o">,</span>
+<span class="nn">#loading-box</span> <span class="nc">.loading-right-bg</span> <span class="p">{</span>
+    <span class="na">position</span><span class="o">:</span> <span class="ni">fixed</span><span class="p">;</span>
+    <span class="na">z-index</span><span class="o">:</span> <span class="mi">1000</span><span class="p">;</span>
+    <span class="na">width</span><span class="o">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="c1">// 我在这里小改了一下颜色，
+</span><span class="c1"></span>    <span class="na">background-color</span><span class="o">:</span> <span class="mh">#b1c0c7</span><span class="p">;</span>
+    <span class="na">transition</span><span class="o">:</span> <span class="ni">all</span> <span class="mi">0</span><span class="mf">.5</span><span class="kt">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nn">#loading-box</span> <span class="nc">.loading-right-bg</span> <span class="p">{</span>
+    <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nn">#loading-box</span><span class="o">&gt;</span><span class="nc">.spinner-box</span> <span class="p">{</span>
+    <span class="na">position</span><span class="o">:</span> <span class="ni">fixed</span><span class="p">;</span>
+    <span class="na">z-index</span><span class="o">:</span> <span class="mi">1001</span><span class="p">;</span>
+    <span class="na">display</span><span class="o">:</span> <span class="ni">flex</span><span class="p">;</span>
+    <span class="na">justify-content</span><span class="o">:</span> <span class="ni">center</span><span class="p">;</span>
+    <span class="na">align-items</span><span class="o">:</span> <span class="ni">center</span><span class="p">;</span>
+    <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-border-1</span> <span class="p">{</span>
+    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>
+    <span class="na">padding</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">width</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">height</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">background</span><span class="o">:</span> <span class="mh">#ffab91</span><span class="p">;</span>
+    <span class="na">animation</span><span class="o">:</span> <span class="n">configure-clockwise</span> <span class="mi">3</span><span class="kt">s</span> <span class="ni">ease-in-out</span> <span class="mi">0</span><span class="kt">s</span> <span class="ni">infinite</span> <span class="ni">alternate</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-border-2</span> <span class="p">{</span>
+    <span class="na">left</span><span class="o">:</span> <span class="o">-</span><span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">padding</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">width</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">height</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+    <span class="na">background</span><span class="o">:</span> <span class="nf">rgb</span><span class="p">(</span><span class="mi">63</span><span class="o">,</span> <span class="mi">249</span><span class="o">,</span> <span class="mi">220</span><span class="p">);</span>
+    <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="na">animation</span><span class="o">:</span> <span class="n">configure-xclockwise</span> <span class="mi">3</span><span class="kt">s</span> <span class="ni">ease-in-out</span> <span class="mi">0</span><span class="kt">s</span> <span class="ni">infinite</span> <span class="ni">alternate</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.loading-word</span> <span class="p">{</span>
+    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>
+    <span class="na">color</span><span class="o">:</span> <span class="mh">#ffffff</span><span class="p">;</span>
+    <span class="c1">// 我在这里小改了一下文字大小和字体，注意！
+</span><span class="c1"></span>    <span class="na">font-size</span><span class="o">:</span> <span class="mi">1</span><span class="mf">.8</span><span class="kt">rem</span><span class="p">;</span>
+    <span class="na">font-family</span><span class="o">:</span> <span class="s1">&#39;Zhi Mang Xing&#39;</span><span class="o">,</span> <span class="ni">cursive</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-core</span> <span class="p">{</span>
+    <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="na">background-color</span><span class="o">:</span> <span class="mh">#37474f</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.loading-left-bg</span> <span class="p">{</span>
+    <span class="na">transform</span><span class="o">:</span> <span class="nf">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.loading-right-bg</span> <span class="p">{</span>
+    <span class="na">transform</span><span class="o">:</span> <span class="nf">translate</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.spinner-box</span> <span class="p">{</span>
+    <span class="c1">// 你可以把这个注释掉，这样就能一直看那个动画的效果了！
+</span><span class="c1"></span>    <span class="na">display</span><span class="o">:</span> <span class="ni">none</span> <span class="k">!important</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="nt">configure-clockwise</span> <span class="p">{</span>
+    <span class="nt">0</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">25</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">90</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">50</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">180</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">75</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">270</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">100</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">360</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="nt">configure-xclockwise</span> <span class="p">{</span>
+    <span class="nt">0</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">25</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">50</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">135</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">75</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">225</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nt">100</span><span class="err">%</span> <span class="p">{</span>
+        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">315</span><span class="kt">deg</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>OK，搞定！</p>
+<p>在这里，我们没必要搞清楚动画原理，因为我感觉这个动画自定义的空间不大了。读者可以在网络上查找一下 <em>CSS页面载入动画</em> 这种相关内容，会发现其实已经有超级多设计师大牛把他们的作品开源了，我们没必要自己调整，总能找到一个很满意的啦！</p>
+<h4 id="step-3-配置文件">Step 3 配置文件</h4>
+<p>完成上面两步之后，动画暂时还不能生效，因为我们新增组件的时候加了个 <code>if</code> 判断，还记得吗？</p>
+<p>在配置文件的相应位置（我这里是 <code>params</code> 栏目底下）加上 <code>enablePreloadingAnim: true</code> 这个键值对，然后就可以享受这个很棒的载入动画了！</p>
 <h3 id="to-be-continued">To Be Continued&hellip;</h3>
 <ul>
 <li><input checked="" disabled="" type="checkbox"> 文章页面微调（white-space: nowrap；目录项紧凑；……）</li>
 <li><input checked="" disabled="" type="checkbox"> 主页侧边栏不亮</li>
 <li><input checked="" disabled="" type="checkbox"> 文章添加返回最上层</li>
 <li><input checked="" disabled="" type="checkbox"> 研究在线字体</li>
-<li><input disabled="" type="checkbox"> 修改文章页面的 <em>返回</em> 按钮的跳转逻辑（不要直接回到主页，最好回到上一级）</li>
+<li><input disabled="" type="checkbox"> <del>修改文章页面的 <em>返回</em> 按钮的跳转逻辑（不要直接回到主页，最好回到上一级）</del></li>
+<li><input disabled="" type="checkbox"> 研究SVG动画，把加载动画优化成SVG绘制土楼！（福建人的执念啊）</li>
 </ul>
 
 </section>
@@ -1772,6 +1987,13 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
         <li><a href="#滚动条美化">滚动条美化</a></li>
         <li><a href="#相关文章组件美化">相关文章组件美化</a></li>
         <li><a href="#选中样式美化">选中样式美化</a></li>
+      </ul>
+    </li>
+    <li><a href="#part-3-页面载入动画">Part 3 页面载入动画</a>
+      <ul>
+        <li><a href="#step-1-新增组件">Step 1 新增组件</a></li>
+        <li><a href="#step-2-组件样式">Step 2 组件样式</a></li>
+        <li><a href="#step-3-配置文件">Step 3 配置文件</a></li>
       </ul>
     </li>
     <li><a href="#to-be-continued">To Be Continued&hellip;</a></li>
