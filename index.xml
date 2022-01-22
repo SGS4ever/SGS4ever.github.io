@@ -1392,6 +1392,11 @@
 	&lt;figcaption&gt;动画效果展示&lt;/figcaption&gt;
 	
 &lt;/figure&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;补充：&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;我把页面部署上去之后，发现最终效果比较一般 😿&lt;/p&gt;
+&lt;p&gt;因为这个动画主要应对的是 &lt;strong&gt;页面加载了、但没完全加载&lt;/strong&gt; 的场景，而我们的主要问题似乎是点击链接之后 &lt;strong&gt;连页面都加载不了&lt;/strong&gt; 😿&lt;/p&gt;
+&lt;p&gt;Whatever，聊胜于无吧，大墙带来的问题看来是没那么容易平衡掉的……&lt;/p&gt;
 &lt;h4 id=&#34;step-1-新增组件&#34;&gt;Step 1 新增组件&lt;/h4&gt;
 &lt;p&gt;这个加载动画的大致原理呢，就是在原本的比较大的页面加载完成之前，先加载出一些比较简单的元素，为这些元素制作一些简单的动效，这样访客就不会等得太无聊了！等原本的页面加载完成之后，再把这个组件隐匿掉即可！&lt;/p&gt;
 &lt;p&gt;因此，需要在原本的主题结构里面新增跟加载动画相关的组件。&lt;/p&gt;
