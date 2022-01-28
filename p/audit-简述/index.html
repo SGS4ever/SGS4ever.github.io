@@ -14,7 +14,8 @@ audit内核审计的消息可以由应用或系统活动来触发，而 audit da
  auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
-对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：'><title>audit 简述</title>
+对文件和目录访问的审计
+监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：'><title>audit 简述</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/'>
 
@@ -51,7 +52,8 @@ audit内核审计的消息可以由应用或系统活动来触发，而 audit da
  auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
-对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：'>
+对文件和目录访问的审计
+监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：'>
 <meta property='og:url' content='https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2021-08-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-08-25T00:00:00&#43;00:00'/>
@@ -69,7 +71,8 @@ audit内核审计的消息可以由应用或系统活动来触发，而 audit da
  auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
-对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：">
+对文件和目录访问的审计
+监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -199,7 +202,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 </header>
 
     <section class="article-content">
-    <h2 id="什么是audit">什么是audit</h2>
+    <h3 id="什么是audit">什么是audit</h3>
 <p>Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。</p>
 <p>简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。</p>
 <p>而较为系统地说，audit框架的组件结构如图所示：</p>
@@ -222,7 +225,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 	<figcaption>img</figcaption>
 	
 </figure></p>
-<h2 id="安装">安装</h2>
+<h3 id="安装">安装</h3>
 <p>内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 <code>CONFIG_AUDIT</code> 。</p>
 <p>我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：</p>
 <p><figure 
@@ -256,12 +259,12 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <li><em>autrace</em> ：用于追踪某一进程的命令，类似 <code>strace</code> ；</li>
 <li><code>etc/audit/auditd.conf</code> ：关于日志记录的配置文件。</li>
 </ul>
-<h2 id="添加规则">添加规则</h2>
-<h3 id="基础">基础</h3>
+<h3 id="添加规则">添加规则</h3>
+<h4 id="基础">基础</h4>
 <p><em>注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。</em></p>
 <p>audit规则的加载可以通过命令行工具 <code>auditctl</code> 或使用命令 <code>auditctl -R /etc/audit/audit.rules</code> 从规则文件中批量读取。</p>
 <p>通过 <code>auditctl</code> 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 <code>/etc/audit/audit.rules</code> 文件中，通过命令 <code>rcauditd resatrt</code> 重启audit服务使规则文件生效。</p>
-<h3 id="对文件和目录访问的审计">对文件和目录访问的审计</h3>
+<p>对文件和目录访问的审计</p>
 <p>监控某一特定文件的访问行为属于audit框架的基础用法。使用 <code>-w</code> 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 <code>passwd</code> 文件的访问：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa</span>
 </code></pre></div><p>也可以监控对某一路径的访问：</p>
@@ -275,7 +278,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 </code></pre></div><p>当确认规则无误之后，可以将它们添加到 <code>/etc/audit/audit.rules</code> 文件末尾：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">-w /etc/passwd -p rwxa
 -w /etc/security/
-</code></pre></div><h3 id="对系统调用的审计">对系统调用的审计</h3>
+</code></pre></div><h4 id="对系统调用的审计">对系统调用的审计</h4>
 <p>通过 <code>-a</code> 选项可以对系统调用进行审计。</p>
 <p>例如，对 <code>chmod</code> 调用进行审计，以检测文件属主的变更：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -a entry,always -S chmod</span>
@@ -289,7 +292,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 </code></pre></div><p>下面这条规则也使用了 <code>-F</code> 选项，但是它的审计内容较为特殊：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">-a task,always -F <span class="nv">auid</span><span class="o">=</span><span class="m">0</span>
 </code></pre></div><p>当一个进程被创建或克隆时， <em>task</em> 规则就起作用了。在上面这条示例中，我们将选中所有具备 <code>auid=0</code> 的任务，并在它们发生时进行记录。每个进程都会在用户登录时被赋予一个 <em>audit ID</em> ，这一ID不随着用户身份的改变而改变，且子进程会继承父进程的 <code>auid</code> ，通过这个ID我们可以唯一确定原始用户。</p>
-<h3 id="对无用消息的过滤">对无用消息的过滤</h3>
+<h4 id="对无用消息的过滤">对无用消息的过滤</h4>
 <p>在日志记录过程中，有必要避免对不重要的消息进行记录，从而既方便我们对日志进行分析，也减小日志文件的体积。</p>
 <p>可以添加如下形式的规则来对部分消息进行过滤：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 以下规则添加在 /etc/audit/rules.d/quiet.rules 文件中</span>
@@ -297,8 +300,8 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 -A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>SERVICE_START
 -A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>SERVICE_STOP
 -A exclude,always -F <span class="nv">msgtype</span><span class="o">=</span>BPF
-</code></pre></div><h2 id="audit-日志">audit 日志</h2>
-<h3 id="日志的基本格式">日志的基本格式</h3>
+</code></pre></div><h3 id="audit-日志">audit 日志</h3>
+<h4 id="日志的基本格式">日志的基本格式</h4>
 <p>默认情况下，audit日志存放在 <code>/var/log/audit</code> 目录下。下面先看一条典型的audit日志示例：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 命令执行审计</span>
 <span class="nv">type</span><span class="o">=</span>SYSCALL <span class="nv">msg</span><span class="o">=</span>audit<span class="o">(</span>1234874638.599:5207<span class="o">)</span>: <span class="nv">arch</span><span class="o">=</span>c000003e <span class="nv">syscall</span><span class="o">=</span><span class="m">2</span> <span class="nv">success</span><span class="o">=</span>yes <span class="nv">exit</span><span class="o">=</span><span class="m">4</span> <span class="nv">a0</span><span class="o">=</span>62fb60 <span class="nv">a1</span><span class="o">=</span><span class="m">0</span> <span class="nv">a2</span><span class="o">=</span><span class="m">31</span> <span class="nv">a3</span><span class="o">=</span><span class="m">0</span> <span class="nv">items</span><span class="o">=</span><span class="m">1</span> <span class="nv">ppid</span><span class="o">=</span><span class="m">25400</span> <span class="nv">pid</span>
@@ -384,32 +387,32 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <li><em>ouid、ogid</em> ：指向相关 <em>inode</em> 的UID和GID。</li>
 <li><em>rdev</em> ：本例中没有意义。该字段仅适用于块设备或字符设备，与文件无关。</li>
 </ul>
-<h3 id="日志的搜索与分析">日志的搜索与分析</h3>
+<h4 id="日志的搜索与分析">日志的搜索与分析</h4>
 <p>audit框架提供了一些日志查找工具，以便查看系统上发生的一系列事件。</p>
-<h4 id="通过pid">通过pid</h4>
+<h5 id="通过pid">通过pid</h5>
 <p>通过进程id来查看特定事件：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -p 1</span>
 </code></pre></div><p>该命令将呈现所有与ID为1的进程相关的事件。</p>
-<h4 id="通过key">通过key</h4>
+<h5 id="通过key">通过key</h5>
 <p>通过 <code>key</code> 来管理事件是audit框架中一个很棒的特性，推荐日常使用。</p>
 <p>可以在规则中使用 <code>-k</code> 选项来为相关事件打上标签，方便后续查找：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># auditctl -w /etc/passwd -p rwxa -k KEY_pwd</span>
 </code></pre></div><p>紧接着，查找所有带有键值 <code>KEY_pwd</code> 的事件，ausearch将呈现所有与文件 <code>/etc/passwd</code> 相关的事件：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ausearch -k KEY_pwd</span>
-</code></pre></div><h4 id="查看异常事件">查看异常事件</h4>
+</code></pre></div><h5 id="查看异常事件">查看异常事件</h5>
 <p>方才介绍了 <em>ausearch</em> 的基本用法，而此前提及的 <em>aureport</em> 工具更擅长快速地报告系统上的异常事件，例如，网卡工作在混杂模式、进程或线程由于ENOMEM等错误崩溃推出等等。</p>
 <p>最简单的查看异常的命令是：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># aureport -n</span>
 </code></pre></div><p>也可以使用此工具生成自定义报告，详见 <a class="link" href="https://man.archlinux.org/man/aureport.8"  target="_blank" rel="noopener"
     >aureport 文档</a> 。</p>
-<h3 id="值得记录的文件或系统调用">值得记录的文件或系统调用</h3>
+<h4 id="值得记录的文件或系统调用">值得记录的文件或系统调用</h4>
 <p>始终注意，所有列入审计的文件和系统调用都将产生日志，因此要对日志的数量保持谨慎。一般来说，与安全相关的事件和文件都需要被记录，如IDS、IPS、anti-rootkits等等；与此相对地，对于 <code>write</code> 类型的系统调用就没必要进行记录，否则即便是最微不足道的写入操作都会被记录到日志中。</p>
 <p>人们可以设置一系列复杂的规则来实现对审计事件的精细管控，详见 <a class="link" href="https://man.archlinux.org/man/auditctl.8"  target="_blank" rel="noopener"
     >auditctl文档</a> 。</p>
 <p>本文中给出两份可用度较高的规则文件 [附件1](#附件1 推荐规则（1）) 和 [附件2](#附件2 推荐规则（2）) ，可以直接将它们复制到 <code>/etc/audit/audit.rules</code> 中。</p>
-<h2 id="远程日志传输">远程日志传输</h2>
+<h3 id="远程日志传输">远程日志传输</h3>
 <p>audit框架提供了用于实现日志转发的插件，可以将本地日志转发到远程auditd主机上。</p>
-<h3 id="发送日志">发送日志</h3>
+<h4 id="发送日志">发送日志</h4>
 <p>实现日志的发送，需要具备 <code>audisp-remote</code> 插件，该插件由audit安装包默认自带。通过修改如下文件来激活插件：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audisp/plugins.d/au-remote.conf</span>
 ---
@@ -425,7 +428,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <span class="nv">port</span> <span class="o">=</span> <span class="m">60</span>
 <span class="c1">## localport = optional</span>
 <span class="nv">transport</span> <span class="o">=</span> tcp
-</code></pre></div><h3 id="接收日志">接收日志</h3>
+</code></pre></div><h4 id="接收日志">接收日志</h4>
 <p>接受日志的配置较为简单：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 文件 /etc/audit/auditd.conf</span>
 ---
@@ -434,12 +437,12 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 <span class="nv">tcp_max_per_addr</span> <span class="o">=</span> <span class="m">1</span>
 <span class="c1">## tcp_client_ports = 1024-65535  #optional</span>
 <span class="nv">tcp_client_max_idle</span> <span class="o">=</span> <span class="m">0</span>
-</code></pre></div><h2 id="参考资料">参考资料</h2>
+</code></pre></div><h3 id="参考资料">参考资料</h3>
 <p>[1] <a class="link" href="https://wiki.archlinux.org/title/Audit_framework"  target="_blank" rel="noopener"
     >Audit framework - ArchWiki (archlinux.org)</a></p>
 <p>[2] <a class="link" href="https://documentation.suse.com/sles/11-SP4/html/SLES-all/cha-audit-comp.html"  target="_blank" rel="noopener"
     >Understanding Linux Audit | Security Guide | SUSE Linux Enterprise Server 11 SP4</a></p>
-<h2 id="附件1-推荐规则1">附件1 推荐规则（1）</h2>
+<h3 id="附件1-推荐规则1">附件1 推荐规则（1）</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># This file contains the auditctl rules that are loaded</span>
 <span class="c1"># whenever the audit daemon is started via the initscripts.</span>
 <span class="c1"># The rules are simply the parameters that would be passed</span>
@@ -497,7 +500,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 -w /etc/resolv.conf -p wa -k resolv_conf_changes
 -a always,exit -S execve -k execve_event
 -a exit,always -S all -F <span class="nv">euid</span><span class="o">=</span><span class="m">0</span> -F <span class="nv">perm</span><span class="o">=</span>awx -k root-commands
-</code></pre></div><h2 id="附件2-推荐规则2">附件2 推荐规则（2）</h2>
+</code></pre></div><h3 id="附件2-推荐规则2">附件2 推荐规则（2）</h3>
 <p><a class="link" href="https://github.com/Neo23x0/auditd/blob/master/audit.rules"  target="_blank" rel="noopener"
     >auditd/audit.rules at master · Neo23x0/auditd · GitHub</a></p>
 
@@ -793,27 +796,31 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
                 <div class="widget--toc">
                     <nav id="TableOfContents">
   <ul>
-    <li><a href="#基础">基础</a></li>
-    <li><a href="#对文件和目录访问的审计">对文件和目录访问的审计</a></li>
-    <li><a href="#对系统调用的审计">对系统调用的审计</a></li>
-    <li><a href="#对无用消息的过滤">对无用消息的过滤</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#日志的基本格式">日志的基本格式</a></li>
-    <li><a href="#日志的搜索与分析">日志的搜索与分析</a>
+    <li><a href="#什么是audit">什么是audit</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#添加规则">添加规则</a>
       <ul>
-        <li><a href="#通过pid">通过pid</a></li>
-        <li><a href="#通过key">通过key</a></li>
-        <li><a href="#查看异常事件">查看异常事件</a></li>
+        <li><a href="#基础">基础</a></li>
+        <li><a href="#对系统调用的审计">对系统调用的审计</a></li>
+        <li><a href="#对无用消息的过滤">对无用消息的过滤</a></li>
       </ul>
     </li>
-    <li><a href="#值得记录的文件或系统调用">值得记录的文件或系统调用</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#发送日志">发送日志</a></li>
-    <li><a href="#接收日志">接收日志</a></li>
+    <li><a href="#audit-日志">audit 日志</a>
+      <ul>
+        <li><a href="#日志的基本格式">日志的基本格式</a></li>
+        <li><a href="#日志的搜索与分析">日志的搜索与分析</a></li>
+        <li><a href="#值得记录的文件或系统调用">值得记录的文件或系统调用</a></li>
+      </ul>
+    </li>
+    <li><a href="#远程日志传输">远程日志传输</a>
+      <ul>
+        <li><a href="#发送日志">发送日志</a></li>
+        <li><a href="#接收日志">接收日志</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+    <li><a href="#附件1-推荐规则1">附件1 推荐规则（1）</a></li>
+    <li><a href="#附件2-推荐规则2">附件2 推荐规则（2）</a></li>
   </ul>
 </nav>
                 </div>

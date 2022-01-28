@@ -50,7 +50,7 @@ Part 1 左边栏 图标 图标显示 修改配置文件和 page
 menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：'>
 <meta property='og:url' content='https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2022-01-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-01-12T00:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2022-01-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-01-22T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Hugo Stack主题更新小记">
 <meta name="twitter:description" content="近期一好友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
 今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
@@ -1685,6 +1685,7 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <li><input checked="" disabled="" type="checkbox"> 研究在线字体</li>
 <li><input disabled="" type="checkbox"> <del>修改文章页面的 <em>返回</em> 按钮的跳转逻辑（不要直接回到主页，最好回到上一级）</del></li>
 <li><input disabled="" type="checkbox"> 研究SVG动画，把加载动画优化成SVG绘制土楼！（福建人的执念啊）</li>
+<li><input disabled="" type="checkbox"> 修复 <code>archieves</code> 页面顶部，categories用的 <code>article-tile</code> 的问题（之前改相关文章组件，把这个东西影响到了 😝 ）</li>
 </ul>
 
 </section>
@@ -1700,7 +1701,19 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
     </section>
 
 
-    </footer>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 Jan 22, 2022 00:00 UTC
+        </span>
+    </section></footer>
 
 
 

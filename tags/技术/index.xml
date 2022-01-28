@@ -104,7 +104,8 @@ audit内核审计的消息可以由应用或系统活动来触发，而 audit da
  auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
-对文件和目录访问的审计 监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：</description>
+对文件和目录访问的审计
+监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：</description>
     </item>
     
     <item>

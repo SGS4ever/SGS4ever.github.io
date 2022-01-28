@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='谁能想到我一个安全专业的人会被后端开发岗捞起来呢 -_-||
+按照火星公司的性格，上岸概率不大。这篇先作为draft，暂时不在博客上发表出来。
+1 HTTPS的流程？  比较easy的问题，算是看在我的安全经验上来送分的？
+此前整理过这个问题 ☞ 秋招 | 一些知识点 (xr_g的博客) ，但是面试的时候稍微有点紧张，忘了一些细节。回答的是基于公钥密码的密钥交换（这个流程比较好记）；但实际上HTTPS还有基于ECDHE的密钥交换，当时记得不够清楚，也就没跟面试官讲了。
+ 1.1 为什么HTTPS不用公钥加密通信？  肯定是效率啊！
+非对称加密的算法能够得到严谨的安全性证明，但是它的加解密效率比较低；对称加密算法在设计时就充分考虑了计算机硬件的运算优势，所以效率很高。因此，我们一般用非对称加密算法来进行密钥交换，使用交换后的密钥进行对称加密的通信。
+ 2 听过加盐吗？  在存储用户口令的时候，在口令后面附上一些与用户身份相关的值，然后再进行哈希。
+这样做的好处是对于不同用户的相同口令，不会得到相同的哈希值，避免了撞库和暴力破解。
+  当时可没答出撞库和爆破，冷静下来才发现答得有多烂（悲）。
+ 2.1 那一般取什么值来作为盐呢？  呃，嗯，这个……
+一般取跟用户身份相关的值？比如用户ID？
+  事后发现当时少说了一个随机值。
+ 3 听过彩虹表？  大概是预先计算一些明文的哈希值，然后对着得到的哈希值进行比较破解？
+巴拉了半天，发现我说的其实就是哈希字典。
+然而彩虹表不是这样的！详见 密码破解的利器——彩虹表（rainbow table） - 简书 (jianshu.com) 。
+郁闷，又挂一题。
+ 4 听过SYN攻击吗？  SYN Flood？好亲切！
+TCP三次握手时，当服务端收到一个SYN，返回ACK&#43;SYN的时候，就为本次连接分配了资源，即所谓的 半开连接 。
+而客户端需要完成第三次握手之后，才分配连接资源。
+假如有很多客户端，同时向服务端发送SYN，但不完成第三次握手，就会以自身很少的资源消耗、来占用服务端大量的连接资源，使得服务端无法接受其他正常客户端的连接。
+ 4.1 如何防御呢？  一般的WAF都能识别此类攻击。
+此外，可以在服务端适当地缩减半开连接的超时时间，即更快地清除没用的半开连接（我在说什么艹）。
+还有就是可以用代理服务器先接受连接，这类服务器一般可以针对SYN进行硬件上的优化，也可以通过一定的算法来识别SYN Flood（实在想不出识别的算法，含糊其辞了）。'><title>字节后端面经</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='字节后端面经'>
+<meta property='og:description' content='谁能想到我一个安全专业的人会被后端开发岗捞起来呢 -_-||
+按照火星公司的性格，上岸概率不大。这篇先作为draft，暂时不在博客上发表出来。
+1 HTTPS的流程？  比较easy的问题，算是看在我的安全经验上来送分的？
+此前整理过这个问题 ☞ 秋招 | 一些知识点 (xr_g的博客) ，但是面试的时候稍微有点紧张，忘了一些细节。回答的是基于公钥密码的密钥交换（这个流程比较好记）；但实际上HTTPS还有基于ECDHE的密钥交换，当时记得不够清楚，也就没跟面试官讲了。
+ 1.1 为什么HTTPS不用公钥加密通信？  肯定是效率啊！
+非对称加密的算法能够得到严谨的安全性证明，但是它的加解密效率比较低；对称加密算法在设计时就充分考虑了计算机硬件的运算优势，所以效率很高。因此，我们一般用非对称加密算法来进行密钥交换，使用交换后的密钥进行对称加密的通信。
+ 2 听过加盐吗？  在存储用户口令的时候，在口令后面附上一些与用户身份相关的值，然后再进行哈希。
+这样做的好处是对于不同用户的相同口令，不会得到相同的哈希值，避免了撞库和暴力破解。
+  当时可没答出撞库和爆破，冷静下来才发现答得有多烂（悲）。
+ 2.1 那一般取什么值来作为盐呢？  呃，嗯，这个……
+一般取跟用户身份相关的值？比如用户ID？
+  事后发现当时少说了一个随机值。
+ 3 听过彩虹表？  大概是预先计算一些明文的哈希值，然后对着得到的哈希值进行比较破解？
+巴拉了半天，发现我说的其实就是哈希字典。
+然而彩虹表不是这样的！详见 密码破解的利器——彩虹表（rainbow table） - 简书 (jianshu.com) 。
+郁闷，又挂一题。
+ 4 听过SYN攻击吗？  SYN Flood？好亲切！
+TCP三次握手时，当服务端收到一个SYN，返回ACK&#43;SYN的时候，就为本次连接分配了资源，即所谓的 半开连接 。
+而客户端需要完成第三次握手之后，才分配连接资源。
+假如有很多客户端，同时向服务端发送SYN，但不完成第三次握手，就会以自身很少的资源消耗、来占用服务端大量的连接资源，使得服务端无法接受其他正常客户端的连接。
+ 4.1 如何防御呢？  一般的WAF都能识别此类攻击。
+此外，可以在服务端适当地缩减半开连接的超时时间，即更快地清除没用的半开连接（我在说什么艹）。
+还有就是可以用代理服务器先接受连接，这类服务器一般可以针对SYN进行硬件上的优化，也可以通过一定的算法来识别SYN Flood（实在想不出识别的算法，含糊其辞了）。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='学习' /><meta property='article:published_time' content='2021-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-08-28T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="字节后端面经">
+<meta name="twitter:description" content="谁能想到我一个安全专业的人会被后端开发岗捞起来呢 -_-||
+按照火星公司的性格，上岸概率不大。这篇先作为draft，暂时不在博客上发表出来。
+1 HTTPS的流程？  比较easy的问题，算是看在我的安全经验上来送分的？
+此前整理过这个问题 ☞ 秋招 | 一些知识点 (xr_g的博客) ，但是面试的时候稍微有点紧张，忘了一些细节。回答的是基于公钥密码的密钥交换（这个流程比较好记）；但实际上HTTPS还有基于ECDHE的密钥交换，当时记得不够清楚，也就没跟面试官讲了。
+ 1.1 为什么HTTPS不用公钥加密通信？  肯定是效率啊！
+非对称加密的算法能够得到严谨的安全性证明，但是它的加解密效率比较低；对称加密算法在设计时就充分考虑了计算机硬件的运算优势，所以效率很高。因此，我们一般用非对称加密算法来进行密钥交换，使用交换后的密钥进行对称加密的通信。
+ 2 听过加盐吗？  在存储用户口令的时候，在口令后面附上一些与用户身份相关的值，然后再进行哈希。
+这样做的好处是对于不同用户的相同口令，不会得到相同的哈希值，避免了撞库和暴力破解。
+  当时可没答出撞库和爆破，冷静下来才发现答得有多烂（悲）。
+ 2.1 那一般取什么值来作为盐呢？  呃，嗯，这个……
+一般取跟用户身份相关的值？比如用户ID？
+  事后发现当时少说了一个随机值。
+ 3 听过彩虹表？  大概是预先计算一些明文的哈希值，然后对着得到的哈希值进行比较破解？
+巴拉了半天，发现我说的其实就是哈希字典。
+然而彩虹表不是这样的！详见 密码破解的利器——彩虹表（rainbow table） - 简书 (jianshu.com) 。
+郁闷，又挂一题。
+ 4 听过SYN攻击吗？  SYN Flood？好亲切！
+TCP三次握手时，当服务端收到一个SYN，返回ACK&#43;SYN的时候，就为本次连接分配了资源，即所谓的 半开连接 。
+而客户端需要完成第三次握手之后，才分配连接资源。
+假如有很多客户端，同时向服务端发送SYN，但不完成第三次握手，就会以自身很少的资源消耗、来占用服务端大量的连接资源，使得服务端无法接受其他正常客户端的连接。
+ 4.1 如何防御呢？  一般的WAF都能识别此类攻击。
+此外，可以在服务端适当地缩减半开连接的超时时间，即更快地清除没用的半开连接（我在说什么艹）。
+还有就是可以用代理服务器先接受连接，这类服务器一般可以针对SYN进行硬件上的优化，也可以通过一定的算法来识别SYN Flood（实在想不出识别的算法，含糊其辞了）。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/">字节后端面经</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 28, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>谁能想到我一个安全专业的人会被后端开发岗捞起来呢 -_-||</p>
+<p>按照火星公司的性格，上岸概率不大。这篇先作为draft，暂时不在博客上发表出来。</p>
+<h3 id="1-https的流程">1 HTTPS的流程？</h3>
+<blockquote>
+<p>比较easy的问题，算是看在我的安全经验上来送分的？</p>
+<p>此前整理过这个问题 ☞ <a class="link" href="https://xr_g.gitee.io/blog/p/%e7%a7%8b%e6%8b%9b-%e4%b8%80%e4%ba%9b%e7%9f%a5%e8%af%86%e7%82%b9/#2-https%e6%b5%81%e7%a8%8b"  target="_blank" rel="noopener"
+    >秋招 | 一些知识点 (xr_g的博客)</a> ，但是面试的时候稍微有点紧张，忘了一些细节。回答的是基于公钥密码的密钥交换（这个流程比较好记）；但实际上HTTPS还有基于ECDHE的密钥交换，当时记得不够清楚，也就没跟面试官讲了。</p>
+</blockquote>
+<h4 id="11-为什么https不用公钥加密通信">1.1 为什么HTTPS不用公钥加密通信？</h4>
+<blockquote>
+<p>肯定是效率啊！</p>
+<p>非对称加密的算法能够得到严谨的安全性证明，但是它的加解密效率比较低；对称加密算法在设计时就充分考虑了计算机硬件的运算优势，所以效率很高。因此，我们一般用非对称加密算法来进行密钥交换，使用交换后的密钥进行对称加密的通信。</p>
+</blockquote>
+<h3 id="2-听过加盐吗">2 听过加盐吗？</h3>
+<blockquote>
+<p>在存储用户口令的时候，在口令后面附上一些与用户身份相关的值，然后再进行哈希。</p>
+<p>这样做的好处是对于不同用户的相同口令，不会得到相同的哈希值，避免了撞库和暴力破解。</p>
+</blockquote>
+<blockquote>
+<p>当时可没答出撞库和爆破，冷静下来才发现答得有多烂（悲）。</p>
+</blockquote>
+<h4 id="21-那一般取什么值来作为盐呢">2.1 那一般取什么值来作为盐呢？</h4>
+<blockquote>
+<p>呃，嗯，这个……</p>
+<p>一般取跟用户身份相关的值？比如用户ID？</p>
+</blockquote>
+<blockquote>
+<p>事后发现当时少说了一个随机值。</p>
+</blockquote>
+<h3 id="3-听过彩虹表">3 听过彩虹表？</h3>
+<blockquote>
+<p>大概是预先计算一些明文的哈希值，然后对着得到的哈希值进行比较破解？</p>
+<p>巴拉了半天，发现我说的其实就是哈希字典。</p>
+<p>然而彩虹表不是这样的！详见 <a class="link" href="https://www.jianshu.com/p/732d9d960411"  target="_blank" rel="noopener"
+    >密码破解的利器——彩虹表（rainbow table） - 简书 (jianshu.com)</a> 。</p>
+<p>郁闷，又挂一题。</p>
+</blockquote>
+<h3 id="4-听过syn攻击吗">4 听过SYN攻击吗？</h3>
+<blockquote>
+<p>SYN Flood？好亲切！</p>
+<p>TCP三次握手时，当服务端收到一个SYN，返回ACK+SYN的时候，就为本次连接分配了资源，即所谓的 <em>半开连接</em> 。</p>
+<p>而客户端需要完成第三次握手之后，才分配连接资源。</p>
+<p>假如有很多客户端，同时向服务端发送SYN，但不完成第三次握手，就会以自身很少的资源消耗、来占用服务端大量的连接资源，使得服务端无法接受其他正常客户端的连接。</p>
+</blockquote>
+<h4 id="41-如何防御呢">4.1 如何防御呢？</h4>
+<blockquote>
+<p>一般的WAF都能识别此类攻击。</p>
+<p>此外，可以在服务端适当地缩减半开连接的超时时间，即更快地清除没用的半开连接（我在说什么艹）。</p>
+<p>还有就是可以用代理服务器先接受连接，这类服务器一般可以针对SYN进行硬件上的优化，也可以通过一定的算法来识别SYN Flood（实在想不出识别的算法，含糊其辞了）。</p>
+</blockquote>
+<blockquote>
+<p>正解：代理服务器没毛病，可以使用cookie源认证等办法来识别恶意客户端；还有主机上可以设置SYN Cache，先不为半开连接分配资源，等建立连接之后再从cache中取出半开连接的信息，分配资源。</p>
+<p>亏我以前还整理过，真正要用的时候想不起来了 -_-||</p>
+<p><a class="link" href="https://xr_g.gitee.io/blog/p/dos%e6%8b%92%e7%bb%9d%e6%9c%8d%e5%8a%a1%e6%94%bb%e5%87%bb/"  target="_blank" rel="noopener"
+    >DoS——拒绝服务攻击 (gitee.io)</a></p>
+</blockquote>
+<h3 id="5-tcp和udp的区别">5 TCP和UDP的区别？</h3>
+<blockquote>
+<p>可以再八股一点？</p>
+<p>TCP是面向连接的，字节流；UDP是无连接的，报文流。</p>
+<p>编程实现上也有一些区别，但是我没用过UDP编程（我又在说什么）。</p>
+<p>还有就是TCP的连接是可靠的，有一些办法来保证。</p>
+</blockquote>
+<h4 id="51-怎么保证tcp连接可靠">5.1 怎么保证TCP连接可靠？</h4>
+<blockquote>
+<p>挖坑埋自己……</p>
+<p>想不起来了。</p>
+</blockquote>
+<blockquote>
+<p>正解：校验、序号、确认、重传。</p>
+<p>不说了，有空一定看计网 o(╥﹏╥)o</p>
+<p><a class="link" href="https://xr_g.gitee.io/blog/p/%e4%bc%a0%e8%be%93%e5%b1%82%e5%8d%8f%e8%ae%aetcp/"  target="_blank" rel="noopener"
+    >传输层协议——TCP (gitee.io)</a></p>
+</blockquote>
+<h4 id="52-假如服务端要接收12345号包如何确保有序">5.2 假如服务端要接收1、2、3、4、5号包，如何确保有序？</h4>
+<blockquote>
+<p>发送窗口和接收窗口吧？</p>
+<p>例如服务端收到了2~5号包，而没有收到1号包，此时就发送 <code>ACK=1</code> ，告知客户端重传1号包。由于客户端也维持相同的发送窗口，可以只重传1号包而不重传其他。</p>
+<p>还有冗余ACK，脑子里想到了，当时聊着聊着就忘记说出来了。</p>
+</blockquote>
+<h4 id="53-tcp粘包听过吗">5.3 TCP粘包听过吗？</h4>
+<blockquote>
+<p>听过，大概就是由于网络原因，把两个包视作了一个包进行处理？</p>
+</blockquote>
+<p>具体是什么情况会出现粘包？</p>
+<blockquote>
+<p>emmm，可能是协议栈实现的时候出了点问题？也可能是网络原因……</p>
+</blockquote>
+<blockquote>
+<p>正解：其实是因为TCP是字节流的传输，发送端发多少数据和接收端一次收多少数据，没有必然的联系。这就可能出现发送端一次发送 <code>n</code> 字节，而接收端一次接收 <code>2n</code> 字节，两个包就粘到一起了。此外，可能在发送端要等到缓冲区满了才发，那么就有好几个包粘到一起发送的情况。</p>
+<p>内心OS：其实好像还真是协议栈的实现问题？</p>
+<p>详见 <a class="link" href="https://www.cnblogs.com/zhouxuchong/p/11576275.html"  target="_blank" rel="noopener"
+    >粘包问题及解决 - xuchong - 博客园 (cnblogs.com)</a> ，写得真不错！</p>
+</blockquote>
+<h3 id="6-你知道哪些http头">6 你知道哪些HTTP头？</h3>
+<blockquote>
+<p>User-Agent</p>
+<p>Referer</p>
+<p>XFF</p>
+<p>Encode？？（记忆模糊了，其实想说Accept-Encoding）</p>
+<p>Content-Length</p>
+<p>……（被打断）</p>
+</blockquote>
+<blockquote>
+<p>XFF当时没说上含义，其实是告诉服务端这个请求者的最初始IP。</p>
+<p>感谢当年做过的一个简单Web题……</p>
+<p><a class="link" href="https://blog.csdn.net/slj1552560/article/details/113825428"  target="_blank" rel="noopener"
+    >XFF与Referer（含实操）_slj1552560的博客-CSDN博客_xff</a></p>
+</blockquote>
+<h3 id="7-io-多路复用">7 I/O 多路复用？</h3>
+<blockquote>
+<p>听过，但完全没印象，pass。</p>
+</blockquote>
+<h3 id="8-数据库">8 数据库</h3>
+<h4 id="81-left-joininner-joinright-join">8.1 left-join、inner-join、right-join？</h4>
+<blockquote>
+<p>完全没答上来……</p>
+<p>left-join就是在两个表进行筛选时，完全保留左表的内容；</p>
+<p>right-join同理；</p>
+<p>inner-join则只保留两个表中都匹配的内容。</p>
+<p><a class="link" href="https://www.cnblogs.com/lijingran/p/9001302.html"  target="_blank" rel="noopener"
+    >left join,right join,inner join,full join之间的区别 - lijingran - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<h4 id="82-隔离级别">8.2 隔离级别？</h4>
+<blockquote>
+<p>可算是被我蹲到一个会的。</p>
+<p>读未提交：读到其他事务还没提交的数据；</p>
+<p>读已提交：顾名思义；</p>
+<p>可重复读</p>
+<p>串行化。</p>
+</blockquote>
+<h4 id="83-隔离级别的区别">8.3 隔离级别的区别？</h4>
+<blockquote>
+<p>其实隔离级别来源于数据库并行处理事务时会发生的问题。</p>
+<p>如脏写、脏读、不可重复读、幻读。</p>
+</blockquote>
+<p>幻读和不可重复读的区别？</p>
+<blockquote>
+<p>不可重复读是针对某个确定数据，而幻读可能是针对不确定的多行数据。</p>
+<p>例如，额，额，……（忘了）</p>
+</blockquote>
+<blockquote>
+<p>正解：<a class="link" href="https://www.cnblogs.com/takumicx/p/9998844.html#21-%e5%b8%b8%e8%a7%81%e7%9a%84%e5%b9%b6%e5%8f%91%e5%bc%82%e5%b8%b8"  target="_blank" rel="noopener"
+    >数据库事务的概念及其实现原理 - takumiCX - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<h3 id="9-说一下-fdfopen-这个指令在系统中的具体流程">9 说一下 fd=fopen() 这个指令在系统中的具体流程？</h3>
+<blockquote>
+<p>开始了操作系统部分。</p>
+<p>文件的读操作，就是向目标文件的真实设备上发送一个IO请求，这个IO请求经过绑定在这个设备上的多个设备（设备栈）之后，到达文件驱动，然后把文件读取出来，返回。</p>
+</blockquote>
+<p>还有吗？</p>
+<blockquote>
+<p>没了……</p>
+</blockquote>
+<blockquote>
+<p>后来发现他想问的可能不是驱动，而是API调用的整个过程（中断，保存现场，系统调用，返回文件指针等）。</p>
+</blockquote>
+<h3 id="10-孤儿进程和僵尸进程">10 孤儿进程和僵尸进程？</h3>
+<blockquote>
+<p>孤儿进程就是指父进程创建子进程后，父进程先死亡，然后子进程就变成了孤儿进程。孤儿进程一般由 <code>init</code> 进程接管，会去调用 <code>wait</code> 方法来回收这些进程。</p>
+<p>僵尸进程是指父进程创建子进程后，不去管这些子进程了。当子进程结束之后，本来应该由父进程进行回收，但父进程不管它们了，就使得这些子进程的资源停留在系统中。</p>
+<p><a class="link" href="https://www.cnblogs.com/Anker/p/3271773.html"  target="_blank" rel="noopener"
+    >孤儿进程与僵尸进程[总结] - Rabbit_Dale - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+<h3 id="11-进程切换上下文">11 进程切换上下文？</h3>
+<blockquote>
+<p>保存一些寄存器的值（ESP、EIP、EBP等）。</p>
+<p>产生系统栈、CPU等的开销。</p>
+</blockquote>
+<h3 id="12-冒泡快排归并的最好最坏时间复杂度">12 冒泡、快排、归并的最好最坏时间复杂度？</h3>
+<blockquote>
+<p>冒泡应该都是 <em>O(n^2)</em> ？因为都要进行冒泡。</p>
+<p>归并应该都是 <em>O(nlogn)</em> ？因为只需要进行归并。</p>
+<p>快排记不清了，最坏是 <em>O(n^2)</em> ，具体场景忘记。</p>
+</blockquote>
+<blockquote>
+<p>正解：</p>
+<p>冒泡最优 <em><strong>O(n)</strong></em> ！沃日。</p>
+<p>归并都是 <em>O(nlogn)</em> 没毛病。</p>
+<p>快排最优 <em><strong>O(nlogn)</strong></em> ，最坏 <em><strong>O(n^2)</strong></em> 。</p>
+<p>冒泡最优的情况需要对代码进行优化，如果某次冒泡的时候没有进行交换，说明已经有序，直接返回 （<a class="link" href="https://blog.csdn.net/qq_41891257/article/details/85245127?utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.essearch_pc_relevant&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.essearch_pc_relevant"  target="_blank" rel="noopener"
+    >冒泡排序的最优时间复杂度_小君子的博客-CSDN博客_冒泡排序最优时间复杂度</a>）。</p>
+<p>快排最优最坏的分析见 （<a class="link" href="https://blog.csdn.net/weshjiness/article/details/8660583"  target="_blank" rel="noopener"
+    >快速排序最好，最坏，平均复杂度分析_weshjiness的专栏-CSDN博客_快排复杂度</a>）。</p>
+<p>还有，这个表不错： <a class="link" href="https://blog.csdn.net/JohinieLi/article/details/80959584"  target="_blank" rel="noopener"
+    >常见排序的最好，平均以及最坏时间复杂度_JohnieLi的博客-CSDN博客_排序最好最坏时间复杂度</a></p>
+</blockquote>
+<h3 id="13-代码题之字形打印n叉树">13 代码题：之字形打印N叉树</h3>
+<p>如图所示，之字形打印N叉树。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 217; 
+			flex-basis: 523px"
+	>
+	<a href="/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1.png" data-size="1358x623">
+		<img src="/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1.png"
+			width="1358"
+			height="623"
+			srcset="/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1_hu30ed6267f213794df72f73076e689ffa_46682_480x0_resize_box_3.png 480w, /p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1_hu30ed6267f213794df72f73076e689ffa_46682_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="题目">
+	</a>
+	
+	<figcaption>题目</figcaption>
+	
+</figure></p>
+<blockquote>
+<p>我使用了两个栈来层序遍历。从左到右将子节点入栈，下一层就从右到左输出；反之亦然。</p>
+<p>问题在于：如何将子节点 <strong>从右到左</strong> 入栈呢？</p>
+<p>跟面试官聊了聊，他说可以先考虑实现上的方便，那我就用一个 <code>vector</code> 来保存子节点，从左到右遍历或从右到左遍历都行。</p>
+<p>实际上如果使用指针来保存子节点，估计还得开一个临时 <code>vector</code> 来存所有子节点，然后再从右到左入栈。</p>
+</blockquote>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">秋招 | 一些知识点</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 29, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E6%B7%B1%E4%BF%A1%E6%9C%8D%E9%9D%A2%E7%BB%8F-%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%B7%A5%E7%A8%8B%E5%B8%88/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">深信服面经-安全攻防工程师</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 21, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">进程间文件同步写</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 27, 2020</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1610.-%E5%8F%AF%E8%A7%81%E7%82%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode1610. 可见点的最大数目</h2>
+            <footer class="article-time">
+                <time datetime=''>Dec 16, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">TCP加速技术简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 25, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-https的流程">1 HTTPS的流程？</a>
+      <ul>
+        <li><a href="#11-为什么https不用公钥加密通信">1.1 为什么HTTPS不用公钥加密通信？</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-听过加盐吗">2 听过加盐吗？</a>
+      <ul>
+        <li><a href="#21-那一般取什么值来作为盐呢">2.1 那一般取什么值来作为盐呢？</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-听过彩虹表">3 听过彩虹表？</a></li>
+    <li><a href="#4-听过syn攻击吗">4 听过SYN攻击吗？</a>
+      <ul>
+        <li><a href="#41-如何防御呢">4.1 如何防御呢？</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-tcp和udp的区别">5 TCP和UDP的区别？</a>
+      <ul>
+        <li><a href="#51-怎么保证tcp连接可靠">5.1 怎么保证TCP连接可靠？</a></li>
+        <li><a href="#52-假如服务端要接收12345号包如何确保有序">5.2 假如服务端要接收1、2、3、4、5号包，如何确保有序？</a></li>
+        <li><a href="#53-tcp粘包听过吗">5.3 TCP粘包听过吗？</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-你知道哪些http头">6 你知道哪些HTTP头？</a></li>
+    <li><a href="#7-io-多路复用">7 I/O 多路复用？</a></li>
+    <li><a href="#8-数据库">8 数据库</a>
+      <ul>
+        <li><a href="#81-left-joininner-joinright-join">8.1 left-join、inner-join、right-join？</a></li>
+        <li><a href="#82-隔离级别">8.2 隔离级别？</a></li>
+        <li><a href="#83-隔离级别的区别">8.3 隔离级别的区别？</a></li>
+      </ul>
+    </li>
+    <li><a href="#9-说一下-fdfopen-这个指令在系统中的具体流程">9 说一下 fd=fopen() 这个指令在系统中的具体流程？</a></li>
+    <li><a href="#10-孤儿进程和僵尸进程">10 孤儿进程和僵尸进程？</a></li>
+    <li><a href="#11-进程切换上下文">11 进程切换上下文？</a></li>
+    <li><a href="#12-冒泡快排归并的最好最坏时间复杂度">12 冒泡、快排、归并的最好最坏时间复杂度？</a></li>
+    <li><a href="#13-代码题之字形打印n叉树">13 代码题：之字形打印N叉树</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

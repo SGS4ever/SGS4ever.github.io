@@ -1569,6 +1569,7 @@
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 研究在线字体&lt;/li&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;del&gt;修改文章页面的 &lt;em&gt;返回&lt;/em&gt; 按钮的跳转逻辑（不要直接回到主页，最好回到上一级）&lt;/del&gt;&lt;/li&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 研究SVG动画，把加载动画优化成SVG绘制土楼！（福建人的执念啊）&lt;/li&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 修复 &lt;code&gt;archieves&lt;/code&gt; 页面顶部，categories用的 &lt;code&gt;article-tile&lt;/code&gt; 的问题（之前改相关文章组件，把这个东西影响到了 😝 ）&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>
@@ -3426,12 +3427,234 @@
 </description>
         </item>
         <item>
+        <title>字节后端面经</title>
+        <link>https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/</link>
+        <pubDate>Sat, 28 Aug 2021 00:00:00 +0000</pubDate>
+        
+        <guid>https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/</guid>
+        <description>&lt;p&gt;谁能想到我一个安全专业的人会被后端开发岗捞起来呢 -_-||&lt;/p&gt;
+&lt;p&gt;按照火星公司的性格，上岸概率不大。这篇先作为draft，暂时不在博客上发表出来。&lt;/p&gt;
+&lt;h3 id=&#34;1-https的流程&#34;&gt;1 HTTPS的流程？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;比较easy的问题，算是看在我的安全经验上来送分的？&lt;/p&gt;
+&lt;p&gt;此前整理过这个问题 ☞ &lt;a class=&#34;link&#34; href=&#34;https://xr_g.gitee.io/blog/p/%e7%a7%8b%e6%8b%9b-%e4%b8%80%e4%ba%9b%e7%9f%a5%e8%af%86%e7%82%b9/#2-https%e6%b5%81%e7%a8%8b&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;秋招 | 一些知识点 (xr_g的博客)&lt;/a&gt; ，但是面试的时候稍微有点紧张，忘了一些细节。回答的是基于公钥密码的密钥交换（这个流程比较好记）；但实际上HTTPS还有基于ECDHE的密钥交换，当时记得不够清楚，也就没跟面试官讲了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;11-为什么https不用公钥加密通信&#34;&gt;1.1 为什么HTTPS不用公钥加密通信？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;肯定是效率啊！&lt;/p&gt;
+&lt;p&gt;非对称加密的算法能够得到严谨的安全性证明，但是它的加解密效率比较低；对称加密算法在设计时就充分考虑了计算机硬件的运算优势，所以效率很高。因此，我们一般用非对称加密算法来进行密钥交换，使用交换后的密钥进行对称加密的通信。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;2-听过加盐吗&#34;&gt;2 听过加盐吗？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在存储用户口令的时候，在口令后面附上一些与用户身份相关的值，然后再进行哈希。&lt;/p&gt;
+&lt;p&gt;这样做的好处是对于不同用户的相同口令，不会得到相同的哈希值，避免了撞库和暴力破解。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;当时可没答出撞库和爆破，冷静下来才发现答得有多烂（悲）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;21-那一般取什么值来作为盐呢&#34;&gt;2.1 那一般取什么值来作为盐呢？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;呃，嗯，这个……&lt;/p&gt;
+&lt;p&gt;一般取跟用户身份相关的值？比如用户ID？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;事后发现当时少说了一个随机值。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;3-听过彩虹表&#34;&gt;3 听过彩虹表？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;大概是预先计算一些明文的哈希值，然后对着得到的哈希值进行比较破解？&lt;/p&gt;
+&lt;p&gt;巴拉了半天，发现我说的其实就是哈希字典。&lt;/p&gt;
+&lt;p&gt;然而彩虹表不是这样的！详见 &lt;a class=&#34;link&#34; href=&#34;https://www.jianshu.com/p/732d9d960411&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;密码破解的利器——彩虹表（rainbow table） - 简书 (jianshu.com)&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;郁闷，又挂一题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;4-听过syn攻击吗&#34;&gt;4 听过SYN攻击吗？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;SYN Flood？好亲切！&lt;/p&gt;
+&lt;p&gt;TCP三次握手时，当服务端收到一个SYN，返回ACK+SYN的时候，就为本次连接分配了资源，即所谓的 &lt;em&gt;半开连接&lt;/em&gt; 。&lt;/p&gt;
+&lt;p&gt;而客户端需要完成第三次握手之后，才分配连接资源。&lt;/p&gt;
+&lt;p&gt;假如有很多客户端，同时向服务端发送SYN，但不完成第三次握手，就会以自身很少的资源消耗、来占用服务端大量的连接资源，使得服务端无法接受其他正常客户端的连接。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;41-如何防御呢&#34;&gt;4.1 如何防御呢？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一般的WAF都能识别此类攻击。&lt;/p&gt;
+&lt;p&gt;此外，可以在服务端适当地缩减半开连接的超时时间，即更快地清除没用的半开连接（我在说什么艹）。&lt;/p&gt;
+&lt;p&gt;还有就是可以用代理服务器先接受连接，这类服务器一般可以针对SYN进行硬件上的优化，也可以通过一定的算法来识别SYN Flood（实在想不出识别的算法，含糊其辞了）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;正解：代理服务器没毛病，可以使用cookie源认证等办法来识别恶意客户端；还有主机上可以设置SYN Cache，先不为半开连接分配资源，等建立连接之后再从cache中取出半开连接的信息，分配资源。&lt;/p&gt;
+&lt;p&gt;亏我以前还整理过，真正要用的时候想不起来了 -_-||&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://xr_g.gitee.io/blog/p/dos%e6%8b%92%e7%bb%9d%e6%9c%8d%e5%8a%a1%e6%94%bb%e5%87%bb/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;DoS——拒绝服务攻击 (gitee.io)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;5-tcp和udp的区别&#34;&gt;5 TCP和UDP的区别？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可以再八股一点？&lt;/p&gt;
+&lt;p&gt;TCP是面向连接的，字节流；UDP是无连接的，报文流。&lt;/p&gt;
+&lt;p&gt;编程实现上也有一些区别，但是我没用过UDP编程（我又在说什么）。&lt;/p&gt;
+&lt;p&gt;还有就是TCP的连接是可靠的，有一些办法来保证。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;51-怎么保证tcp连接可靠&#34;&gt;5.1 怎么保证TCP连接可靠？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;挖坑埋自己……&lt;/p&gt;
+&lt;p&gt;想不起来了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;正解：校验、序号、确认、重传。&lt;/p&gt;
+&lt;p&gt;不说了，有空一定看计网 o(╥﹏╥)o&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://xr_g.gitee.io/blog/p/%e4%bc%a0%e8%be%93%e5%b1%82%e5%8d%8f%e8%ae%aetcp/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;传输层协议——TCP (gitee.io)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;52-假如服务端要接收12345号包如何确保有序&#34;&gt;5.2 假如服务端要接收1、2、3、4、5号包，如何确保有序？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;发送窗口和接收窗口吧？&lt;/p&gt;
+&lt;p&gt;例如服务端收到了2~5号包，而没有收到1号包，此时就发送 &lt;code&gt;ACK=1&lt;/code&gt; ，告知客户端重传1号包。由于客户端也维持相同的发送窗口，可以只重传1号包而不重传其他。&lt;/p&gt;
+&lt;p&gt;还有冗余ACK，脑子里想到了，当时聊着聊着就忘记说出来了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;53-tcp粘包听过吗&#34;&gt;5.3 TCP粘包听过吗？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;听过，大概就是由于网络原因，把两个包视作了一个包进行处理？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;具体是什么情况会出现粘包？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;emmm，可能是协议栈实现的时候出了点问题？也可能是网络原因……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;正解：其实是因为TCP是字节流的传输，发送端发多少数据和接收端一次收多少数据，没有必然的联系。这就可能出现发送端一次发送 &lt;code&gt;n&lt;/code&gt; 字节，而接收端一次接收 &lt;code&gt;2n&lt;/code&gt; 字节，两个包就粘到一起了。此外，可能在发送端要等到缓冲区满了才发，那么就有好几个包粘到一起发送的情况。&lt;/p&gt;
+&lt;p&gt;内心OS：其实好像还真是协议栈的实现问题？&lt;/p&gt;
+&lt;p&gt;详见 &lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/zhouxuchong/p/11576275.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;粘包问题及解决 - xuchong - 博客园 (cnblogs.com)&lt;/a&gt; ，写得真不错！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;6-你知道哪些http头&#34;&gt;6 你知道哪些HTTP头？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;User-Agent&lt;/p&gt;
+&lt;p&gt;Referer&lt;/p&gt;
+&lt;p&gt;XFF&lt;/p&gt;
+&lt;p&gt;Encode？？（记忆模糊了，其实想说Accept-Encoding）&lt;/p&gt;
+&lt;p&gt;Content-Length&lt;/p&gt;
+&lt;p&gt;……（被打断）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;XFF当时没说上含义，其实是告诉服务端这个请求者的最初始IP。&lt;/p&gt;
+&lt;p&gt;感谢当年做过的一个简单Web题……&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/slj1552560/article/details/113825428&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;XFF与Referer（含实操）_slj1552560的博客-CSDN博客_xff&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;7-io-多路复用&#34;&gt;7 I/O 多路复用？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;听过，但完全没印象，pass。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;8-数据库&#34;&gt;8 数据库&lt;/h3&gt;
+&lt;h4 id=&#34;81-left-joininner-joinright-join&#34;&gt;8.1 left-join、inner-join、right-join？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;完全没答上来……&lt;/p&gt;
+&lt;p&gt;left-join就是在两个表进行筛选时，完全保留左表的内容；&lt;/p&gt;
+&lt;p&gt;right-join同理；&lt;/p&gt;
+&lt;p&gt;inner-join则只保留两个表中都匹配的内容。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/lijingran/p/9001302.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;left join,right join,inner join,full join之间的区别 - lijingran - 博客园 (cnblogs.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;82-隔离级别&#34;&gt;8.2 隔离级别？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可算是被我蹲到一个会的。&lt;/p&gt;
+&lt;p&gt;读未提交：读到其他事务还没提交的数据；&lt;/p&gt;
+&lt;p&gt;读已提交：顾名思义；&lt;/p&gt;
+&lt;p&gt;可重复读&lt;/p&gt;
+&lt;p&gt;串行化。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;83-隔离级别的区别&#34;&gt;8.3 隔离级别的区别？&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;其实隔离级别来源于数据库并行处理事务时会发生的问题。&lt;/p&gt;
+&lt;p&gt;如脏写、脏读、不可重复读、幻读。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;幻读和不可重复读的区别？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;不可重复读是针对某个确定数据，而幻读可能是针对不确定的多行数据。&lt;/p&gt;
+&lt;p&gt;例如，额，额，……（忘了）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;正解：&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/takumicx/p/9998844.html#21-%e5%b8%b8%e8%a7%81%e7%9a%84%e5%b9%b6%e5%8f%91%e5%bc%82%e5%b8%b8&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数据库事务的概念及其实现原理 - takumiCX - 博客园 (cnblogs.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;9-说一下-fdfopen-这个指令在系统中的具体流程&#34;&gt;9 说一下 fd=fopen() 这个指令在系统中的具体流程？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;开始了操作系统部分。&lt;/p&gt;
+&lt;p&gt;文件的读操作，就是向目标文件的真实设备上发送一个IO请求，这个IO请求经过绑定在这个设备上的多个设备（设备栈）之后，到达文件驱动，然后把文件读取出来，返回。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;还有吗？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;没了……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;后来发现他想问的可能不是驱动，而是API调用的整个过程（中断，保存现场，系统调用，返回文件指针等）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;10-孤儿进程和僵尸进程&#34;&gt;10 孤儿进程和僵尸进程？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;孤儿进程就是指父进程创建子进程后，父进程先死亡，然后子进程就变成了孤儿进程。孤儿进程一般由 &lt;code&gt;init&lt;/code&gt; 进程接管，会去调用 &lt;code&gt;wait&lt;/code&gt; 方法来回收这些进程。&lt;/p&gt;
+&lt;p&gt;僵尸进程是指父进程创建子进程后，不去管这些子进程了。当子进程结束之后，本来应该由父进程进行回收，但父进程不管它们了，就使得这些子进程的资源停留在系统中。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/Anker/p/3271773.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;孤儿进程与僵尸进程[总结] - Rabbit_Dale - 博客园 (cnblogs.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;11-进程切换上下文&#34;&gt;11 进程切换上下文？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;保存一些寄存器的值（ESP、EIP、EBP等）。&lt;/p&gt;
+&lt;p&gt;产生系统栈、CPU等的开销。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;12-冒泡快排归并的最好最坏时间复杂度&#34;&gt;12 冒泡、快排、归并的最好最坏时间复杂度？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;冒泡应该都是 &lt;em&gt;O(n^2)&lt;/em&gt; ？因为都要进行冒泡。&lt;/p&gt;
+&lt;p&gt;归并应该都是 &lt;em&gt;O(nlogn)&lt;/em&gt; ？因为只需要进行归并。&lt;/p&gt;
+&lt;p&gt;快排记不清了，最坏是 &lt;em&gt;O(n^2)&lt;/em&gt; ，具体场景忘记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;正解：&lt;/p&gt;
+&lt;p&gt;冒泡最优 &lt;em&gt;&lt;strong&gt;O(n)&lt;/strong&gt;&lt;/em&gt; ！沃日。&lt;/p&gt;
+&lt;p&gt;归并都是 &lt;em&gt;O(nlogn)&lt;/em&gt; 没毛病。&lt;/p&gt;
+&lt;p&gt;快排最优 &lt;em&gt;&lt;strong&gt;O(nlogn)&lt;/strong&gt;&lt;/em&gt; ，最坏 &lt;em&gt;&lt;strong&gt;O(n^2)&lt;/strong&gt;&lt;/em&gt; 。&lt;/p&gt;
+&lt;p&gt;冒泡最优的情况需要对代码进行优化，如果某次冒泡的时候没有进行交换，说明已经有序，直接返回 （&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_41891257/article/details/85245127?utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.essearch_pc_relevant&amp;amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.essearch_pc_relevant&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;冒泡排序的最优时间复杂度_小君子的博客-CSDN博客_冒泡排序最优时间复杂度&lt;/a&gt;）。&lt;/p&gt;
+&lt;p&gt;快排最优最坏的分析见 （&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/weshjiness/article/details/8660583&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;快速排序最好，最坏，平均复杂度分析_weshjiness的专栏-CSDN博客_快排复杂度&lt;/a&gt;）。&lt;/p&gt;
+&lt;p&gt;还有，这个表不错： &lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/JohinieLi/article/details/80959584&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;常见排序的最好，平均以及最坏时间复杂度_JohnieLi的博客-CSDN博客_排序最好最坏时间复杂度&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;13-代码题之字形打印n叉树&#34;&gt;13 代码题：之字形打印N叉树&lt;/h3&gt;
+&lt;p&gt;如图所示，之字形打印N叉树。&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 217; 
+			flex-basis: 523px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1.png&#34; data-size=&#34;1358x623&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1.png&#34;
+			width=&#34;1358&#34;
+			height=&#34;623&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1_hu30ed6267f213794df72f73076e689ffa_46682_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E5%AD%97%E8%8A%82%E5%90%8E%E7%AB%AF%E9%9D%A2%E7%BB%8F/1_hu30ed6267f213794df72f73076e689ffa_46682_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;题目&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;题目&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我使用了两个栈来层序遍历。从左到右将子节点入栈，下一层就从右到左输出；反之亦然。&lt;/p&gt;
+&lt;p&gt;问题在于：如何将子节点 &lt;strong&gt;从右到左&lt;/strong&gt; 入栈呢？&lt;/p&gt;
+&lt;p&gt;跟面试官聊了聊，他说可以先考虑实现上的方便，那我就用一个 &lt;code&gt;vector&lt;/code&gt; 来保存子节点，从左到右遍历或从右到左遍历都行。&lt;/p&gt;
+&lt;p&gt;实际上如果使用指针来保存子节点，估计还得开一个临时 &lt;code&gt;vector&lt;/code&gt; 来存所有子节点，然后再从右到左入栈。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>audit 简述</title>
         <link>https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/</link>
         <pubDate>Wed, 25 Aug 2021 00:00:00 +0000</pubDate>
         
         <guid>https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/</guid>
-        <description>&lt;h2 id=&#34;什么是audit&#34;&gt;什么是audit&lt;/h2&gt;
+        <description>&lt;h3 id=&#34;什么是audit&#34;&gt;什么是audit&lt;/h3&gt;
 &lt;p&gt;Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。&lt;/p&gt;
 &lt;p&gt;简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。&lt;/p&gt;
 &lt;p&gt;而较为系统地说，audit框架的组件结构如图所示：&lt;/p&gt;
@@ -3454,7 +3677,7 @@
 	&lt;figcaption&gt;img&lt;/figcaption&gt;
 	
 &lt;/figure&gt;&lt;/p&gt;
-&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
+&lt;h3 id=&#34;安装&#34;&gt;安装&lt;/h3&gt;
 &lt;p&gt;内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 &lt;code&gt;CONFIG_AUDIT&lt;/code&gt; 。&lt;/p&gt;
 &lt;p&gt;我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：&lt;/p&gt;
 &lt;p&gt;&lt;figure 
@@ -3488,12 +3711,12 @@
 &lt;li&gt;&lt;em&gt;autrace&lt;/em&gt; ：用于追踪某一进程的命令，类似 &lt;code&gt;strace&lt;/code&gt; ；&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;etc/audit/auditd.conf&lt;/code&gt; ：关于日志记录的配置文件。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;添加规则&#34;&gt;添加规则&lt;/h2&gt;
-&lt;h3 id=&#34;基础&#34;&gt;基础&lt;/h3&gt;
+&lt;h3 id=&#34;添加规则&#34;&gt;添加规则&lt;/h3&gt;
+&lt;h4 id=&#34;基础&#34;&gt;基础&lt;/h4&gt;
 &lt;p&gt;&lt;em&gt;注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;audit规则的加载可以通过命令行工具 &lt;code&gt;auditctl&lt;/code&gt; 或使用命令 &lt;code&gt;auditctl -R /etc/audit/audit.rules&lt;/code&gt; 从规则文件中批量读取。&lt;/p&gt;
 &lt;p&gt;通过 &lt;code&gt;auditctl&lt;/code&gt; 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 &lt;code&gt;/etc/audit/audit.rules&lt;/code&gt; 文件中，通过命令 &lt;code&gt;rcauditd resatrt&lt;/code&gt; 重启audit服务使规则文件生效。&lt;/p&gt;
-&lt;h3 id=&#34;对文件和目录访问的审计&#34;&gt;对文件和目录访问的审计&lt;/h3&gt;
+&lt;p&gt;对文件和目录访问的审计&lt;/p&gt;
 &lt;p&gt;监控某一特定文件的访问行为属于audit框架的基础用法。使用 &lt;code&gt;-w&lt;/code&gt; 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 &lt;code&gt;passwd&lt;/code&gt; 文件的访问：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# auditctl -w /etc/passwd -p rwxa&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;也可以监控对某一路径的访问：&lt;/p&gt;
@@ -3507,7 +3730,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当确认规则无误之后，可以将它们添加到 &lt;code&gt;/etc/audit/audit.rules&lt;/code&gt; 文件末尾：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;-w /etc/passwd -p rwxa
 -w /etc/security/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;对系统调用的审计&#34;&gt;对系统调用的审计&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;对系统调用的审计&#34;&gt;对系统调用的审计&lt;/h4&gt;
 &lt;p&gt;通过 &lt;code&gt;-a&lt;/code&gt; 选项可以对系统调用进行审计。&lt;/p&gt;
 &lt;p&gt;例如，对 &lt;code&gt;chmod&lt;/code&gt; 调用进行审计，以检测文件属主的变更：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# auditctl -a entry,always -S chmod&lt;/span&gt;
@@ -3521,7 +3744,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下面这条规则也使用了 &lt;code&gt;-F&lt;/code&gt; 选项，但是它的审计内容较为特殊：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;-a task,always -F &lt;span class=&#34;nv&#34;&gt;auid&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当一个进程被创建或克隆时， &lt;em&gt;task&lt;/em&gt; 规则就起作用了。在上面这条示例中，我们将选中所有具备 &lt;code&gt;auid=0&lt;/code&gt; 的任务，并在它们发生时进行记录。每个进程都会在用户登录时被赋予一个 &lt;em&gt;audit ID&lt;/em&gt; ，这一ID不随着用户身份的改变而改变，且子进程会继承父进程的 &lt;code&gt;auid&lt;/code&gt; ，通过这个ID我们可以唯一确定原始用户。&lt;/p&gt;
-&lt;h3 id=&#34;对无用消息的过滤&#34;&gt;对无用消息的过滤&lt;/h3&gt;
+&lt;h4 id=&#34;对无用消息的过滤&#34;&gt;对无用消息的过滤&lt;/h4&gt;
 &lt;p&gt;在日志记录过程中，有必要避免对不重要的消息进行记录，从而既方便我们对日志进行分析，也减小日志文件的体积。&lt;/p&gt;
 &lt;p&gt;可以添加如下形式的规则来对部分消息进行过滤：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 以下规则添加在 /etc/audit/rules.d/quiet.rules 文件中&lt;/span&gt;
@@ -3529,8 +3752,8 @@
 -A exclude,always -F &lt;span class=&#34;nv&#34;&gt;msgtype&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;SERVICE_START
 -A exclude,always -F &lt;span class=&#34;nv&#34;&gt;msgtype&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;SERVICE_STOP
 -A exclude,always -F &lt;span class=&#34;nv&#34;&gt;msgtype&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;BPF
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;audit-日志&#34;&gt;audit 日志&lt;/h2&gt;
-&lt;h3 id=&#34;日志的基本格式&#34;&gt;日志的基本格式&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;audit-日志&#34;&gt;audit 日志&lt;/h3&gt;
+&lt;h4 id=&#34;日志的基本格式&#34;&gt;日志的基本格式&lt;/h4&gt;
 &lt;p&gt;默认情况下，audit日志存放在 &lt;code&gt;/var/log/audit&lt;/code&gt; 目录下。下面先看一条典型的audit日志示例：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 命令执行审计&lt;/span&gt;
 &lt;span class=&#34;nv&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;SYSCALL &lt;span class=&#34;nv&#34;&gt;msg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;audit&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;1234874638.599:5207&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;: &lt;span class=&#34;nv&#34;&gt;arch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;c000003e &lt;span class=&#34;nv&#34;&gt;syscall&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;success&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;yes &lt;span class=&#34;nv&#34;&gt;exit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;4&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;a0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;62fb60 &lt;span class=&#34;nv&#34;&gt;a1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;a2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;31&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;a3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;items&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ppid&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;25400&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;pid&lt;/span&gt;
@@ -3616,32 +3839,32 @@
 &lt;li&gt;&lt;em&gt;ouid、ogid&lt;/em&gt; ：指向相关 &lt;em&gt;inode&lt;/em&gt; 的UID和GID。&lt;/li&gt;
 &lt;li&gt;&lt;em&gt;rdev&lt;/em&gt; ：本例中没有意义。该字段仅适用于块设备或字符设备，与文件无关。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;日志的搜索与分析&#34;&gt;日志的搜索与分析&lt;/h3&gt;
+&lt;h4 id=&#34;日志的搜索与分析&#34;&gt;日志的搜索与分析&lt;/h4&gt;
 &lt;p&gt;audit框架提供了一些日志查找工具，以便查看系统上发生的一系列事件。&lt;/p&gt;
-&lt;h4 id=&#34;通过pid&#34;&gt;通过pid&lt;/h4&gt;
+&lt;h5 id=&#34;通过pid&#34;&gt;通过pid&lt;/h5&gt;
 &lt;p&gt;通过进程id来查看特定事件：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# ausearch -p 1&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;该命令将呈现所有与ID为1的进程相关的事件。&lt;/p&gt;
-&lt;h4 id=&#34;通过key&#34;&gt;通过key&lt;/h4&gt;
+&lt;h5 id=&#34;通过key&#34;&gt;通过key&lt;/h5&gt;
 &lt;p&gt;通过 &lt;code&gt;key&lt;/code&gt; 来管理事件是audit框架中一个很棒的特性，推荐日常使用。&lt;/p&gt;
 &lt;p&gt;可以在规则中使用 &lt;code&gt;-k&lt;/code&gt; 选项来为相关事件打上标签，方便后续查找：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# auditctl -w /etc/passwd -p rwxa -k KEY_pwd&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;紧接着，查找所有带有键值 &lt;code&gt;KEY_pwd&lt;/code&gt; 的事件，ausearch将呈现所有与文件 &lt;code&gt;/etc/passwd&lt;/code&gt; 相关的事件：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# ausearch -k KEY_pwd&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;查看异常事件&#34;&gt;查看异常事件&lt;/h4&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;查看异常事件&#34;&gt;查看异常事件&lt;/h5&gt;
 &lt;p&gt;方才介绍了 &lt;em&gt;ausearch&lt;/em&gt; 的基本用法，而此前提及的 &lt;em&gt;aureport&lt;/em&gt; 工具更擅长快速地报告系统上的异常事件，例如，网卡工作在混杂模式、进程或线程由于ENOMEM等错误崩溃推出等等。&lt;/p&gt;
 &lt;p&gt;最简单的查看异常的命令是：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# aureport -n&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;也可以使用此工具生成自定义报告，详见 &lt;a class=&#34;link&#34; href=&#34;https://man.archlinux.org/man/aureport.8&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;aureport 文档&lt;/a&gt; 。&lt;/p&gt;
-&lt;h3 id=&#34;值得记录的文件或系统调用&#34;&gt;值得记录的文件或系统调用&lt;/h3&gt;
+&lt;h4 id=&#34;值得记录的文件或系统调用&#34;&gt;值得记录的文件或系统调用&lt;/h4&gt;
 &lt;p&gt;始终注意，所有列入审计的文件和系统调用都将产生日志，因此要对日志的数量保持谨慎。一般来说，与安全相关的事件和文件都需要被记录，如IDS、IPS、anti-rootkits等等；与此相对地，对于 &lt;code&gt;write&lt;/code&gt; 类型的系统调用就没必要进行记录，否则即便是最微不足道的写入操作都会被记录到日志中。&lt;/p&gt;
 &lt;p&gt;人们可以设置一系列复杂的规则来实现对审计事件的精细管控，详见 &lt;a class=&#34;link&#34; href=&#34;https://man.archlinux.org/man/auditctl.8&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;auditctl文档&lt;/a&gt; 。&lt;/p&gt;
 &lt;p&gt;本文中给出两份可用度较高的规则文件 [附件1](#附件1 推荐规则（1）) 和 [附件2](#附件2 推荐规则（2）) ，可以直接将它们复制到 &lt;code&gt;/etc/audit/audit.rules&lt;/code&gt; 中。&lt;/p&gt;
-&lt;h2 id=&#34;远程日志传输&#34;&gt;远程日志传输&lt;/h2&gt;
+&lt;h3 id=&#34;远程日志传输&#34;&gt;远程日志传输&lt;/h3&gt;
 &lt;p&gt;audit框架提供了用于实现日志转发的插件，可以将本地日志转发到远程auditd主机上。&lt;/p&gt;
-&lt;h3 id=&#34;发送日志&#34;&gt;发送日志&lt;/h3&gt;
+&lt;h4 id=&#34;发送日志&#34;&gt;发送日志&lt;/h4&gt;
 &lt;p&gt;实现日志的发送，需要具备 &lt;code&gt;audisp-remote&lt;/code&gt; 插件，该插件由audit安装包默认自带。通过修改如下文件来激活插件：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 文件 /etc/audisp/plugins.d/au-remote.conf&lt;/span&gt;
 ---
@@ -3657,7 +3880,7 @@
 &lt;span class=&#34;nv&#34;&gt;port&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;60&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;## localport = optional&lt;/span&gt;
 &lt;span class=&#34;nv&#34;&gt;transport&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; tcp
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;接收日志&#34;&gt;接收日志&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;接收日志&#34;&gt;接收日志&lt;/h4&gt;
 &lt;p&gt;接受日志的配置较为简单：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 文件 /etc/audit/auditd.conf&lt;/span&gt;
 ---
@@ -3666,12 +3889,12 @@
 &lt;span class=&#34;nv&#34;&gt;tcp_max_per_addr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;## tcp_client_ports = 1024-65535  #optional&lt;/span&gt;
 &lt;span class=&#34;nv&#34;&gt;tcp_client_max_idle&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;参考资料&#34;&gt;参考资料&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;参考资料&#34;&gt;参考资料&lt;/h3&gt;
 &lt;p&gt;[1] &lt;a class=&#34;link&#34; href=&#34;https://wiki.archlinux.org/title/Audit_framework&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Audit framework - ArchWiki (archlinux.org)&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;[2] &lt;a class=&#34;link&#34; href=&#34;https://documentation.suse.com/sles/11-SP4/html/SLES-all/cha-audit-comp.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Understanding Linux Audit | Security Guide | SUSE Linux Enterprise Server 11 SP4&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;附件1-推荐规则1&#34;&gt;附件1 推荐规则（1）&lt;/h2&gt;
+&lt;h3 id=&#34;附件1-推荐规则1&#34;&gt;附件1 推荐规则（1）&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# This file contains the auditctl rules that are loaded&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;# whenever the audit daemon is started via the initscripts.&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;# The rules are simply the parameters that would be passed&lt;/span&gt;
@@ -3729,9 +3952,82 @@
 -w /etc/resolv.conf -p wa -k resolv_conf_changes
 -a always,exit -S execve -k execve_event
 -a exit,always -S all -F &lt;span class=&#34;nv&#34;&gt;euid&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; -F &lt;span class=&#34;nv&#34;&gt;perm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;awx -k root-commands
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;附件2-推荐规则2&#34;&gt;附件2 推荐规则（2）&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;附件2-推荐规则2&#34;&gt;附件2 推荐规则（2）&lt;/h3&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/Neo23x0/auditd/blob/master/audit.rules&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;auditd/audit.rules at master · Neo23x0/auditd · GitHub&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>深信服面经-安全攻防工程师</title>
+        <link>https://xrg.fj.cn/p/%E6%B7%B1%E4%BF%A1%E6%9C%8D%E9%9D%A2%E7%BB%8F-%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%B7%A5%E7%A8%8B%E5%B8%88/</link>
+        <pubDate>Sat, 21 Aug 2021 00:00:00 +0000</pubDate>
+        
+        <guid>https://xrg.fj.cn/p/%E6%B7%B1%E4%BF%A1%E6%9C%8D%E9%9D%A2%E7%BB%8F-%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%B7%A5%E7%A8%8B%E5%B8%88/</guid>
+        <description>&lt;p&gt;安全攻防工程师一面，大概率是寄了，此前也没有遇到过这种难度的面试，稍作记录吧。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;恶意样本的静态分析？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;大致答了一些常见的，PE文件头的分析、文件哈希、符号表、反编译之后的控制流和数据流等。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;如果针对内存驻留的恶意程序呢？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;显然就是上一个问题的Plus版本。没有思路。面试官提醒我可以考虑内存的R/W/X属性。我就说可以检测可执行的内存段，然后根据这些内存段的内容去生成可执行代码的特征，送入机器学习模型进行检测。扯就完事了……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;一个进程中如果有多个线程（比如100个），CPU只有4个核，怎么分配？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;属于是多线程的一个小盲区，我知道Python由于GIL全局锁，多线程是假的多线程，不知道其他语言的情况。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;git熟悉吗？分支是干啥的？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;只在日常博客中用git，分支知道一点点，就是从主线上分出若干个分支，团队成员在上面开发，不影响主线版本，最后再合并起来。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;多线程扫描的时候，流量可能很大，怎么进行控制，怎么能不把目标扫崩（扫描不能产生DoS的效果）？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我把这个问题提炼成并发流量的控制，进一步就是并发线程的控制。只要控制活跃的线程数量，就能达到控制流量的作用。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;5.1. &lt;strong&gt;那怎么控制线程的数量？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可能可以先起一个线程，以这个线程的流量为标准，根据我们设定的阈值来得出线程的最大活跃数量。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;5.2. &lt;strong&gt;但是在实际的环境中，你到达目标的流量可能跟你出口的流量相差很多，因为你的流量要到达目标，还要过公网环境？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;但是我们只能控制和计算出口流量，所以只能以出口流量为标准啊。考虑公网环境的损失的话，可能可以按照出口流量的计算值，再稍微上调一些，作为阈值。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;内心OS：瞎扯就完了。后来面试官建议可以去看看nmap的流量控制，这一点打算以后有空写个博客。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;多个模块之间的解耦。举例如下：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;有四个模块分别是：【端口发现】、【服务识别】、【Web模糊测试】、【POC测试】，模块之间相互作用，主程序如何将他们联系起来？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这题给我问懵了，开始瞎扯。&lt;/p&gt;
+&lt;p&gt;首先分析，这四个模块应该是串联的关系，即服务识别模块依赖端口发现的输出，这样就可以用生产者消费者的模型来把他们组织起来。由于我们并不需要前一个模块的完整输出，只需要前一个模块产生部分输出，后一个模块就可以开始工作了，所以可以用流水线的思路来组织。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;进一步开始扯IOC，逆转控制，就是原本是一个模块来实例化另一个模块，但是这样他们就耦合在一起了，IOC就是引入一个第三方控制程序，由它来讲另一个模块的对象在合适的时机注入到模块中，各个模块就不需要在自己的代码中引用其他模块了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;然后扯到消息队列，可能上一个模块产生输出之后，就可以挂到下一个模块的消息队列上，唤醒下一个模块来开始工作。&lt;/p&gt;
+&lt;p&gt;然而消息队列的具体实现并不了解，就没有多讲。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;聊了聊其他项目，还有啥问题没，over。&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;总体来说，整个面试的技术内容还是比较硬核，确实能够起到筛选人的作用。很多问题不一定要你会细节，脑洞够大就行；同时，你在安全领域的见识够不够丰富，也是能问出来的。&lt;/p&gt;
+&lt;p&gt;我个人的能力确实没有非常精的领域（毕竟本科是通识教育啊操），大概率是凉了。&lt;/p&gt;
+&lt;p&gt;但是相比之下，此前字节一面二面的问题全是八股，万年不变的那种，完事之后撕代码，筛人全靠算法，简直无语。被这种面试挂了，总比被算法挂了来得服气，整场体验能给个3.5分吧。&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -4628,7 +4924,7 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 &lt;li&gt;房子原本有颜色，如果此颜色与 &lt;code&gt;color&lt;/code&gt; 不同，那么这种上色方案无论如何是不可行的；如果此颜色与 &lt;code&gt;color&lt;/code&gt; 相同，那么 &lt;code&gt;dp&lt;/code&gt; 值就是我们上面分析的情况。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;把这些分析加以实现，我们应该：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-伪代码&#34; data-lang=&#34;伪代码&#34;&gt;- 枚举房子下标 --&amp;gt; idx: 0 ~ m - 1
+&lt;pre&gt;&lt;code class=&#34;language-伪代码&#34; data-lang=&#34;伪代码&#34;&gt;- 枚举房子下标 --&amp;gt; idx: 0 ~ m - 1
 	- 枚举上色方案 --&amp;gt; color: 0 ~ n - 1
 		- 如果房子有颜色且不同于 color，继续枚举颜色
 		- 运行至此有两种情况：房子没有颜色，或房子有颜色且颜色就是 color
