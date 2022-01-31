@@ -6,7 +6,27 @@
     <description>Recent content in 实践 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 12 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 31 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>王者荣耀虎年充值——简单DP问题</title>
+      <link>https://xrg.fj.cn/p/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E8%99%8E%E5%B9%B4%E5%85%85%E5%80%BC%E7%AE%80%E5%8D%95dp%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 31 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E8%99%8E%E5%B9%B4%E5%85%85%E5%80%BC%E7%AE%80%E5%8D%95dp%E9%97%AE%E9%A2%98/</guid>
+      <description>整活简介 今天是农历除夕，王者荣耀一年一度的 割韭菜 年限皮肤又上场了。
+打开游戏，进入充值页面，开冲！
+嗯？等等，好像要破费？！
+虽然APP Store有充值赠送机制，但当我需要的目标数额多起来时，怎么获取最优化的充值方案呢？似乎是个有趣的问题 😼
+所谓 最优化的充值方案 ，即是指两种情况：
+ 花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。  这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
+ APP Store充值方案 
+场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
+既然文章标题都已经点明了我的用意，那就直接从DP的角度开始思考了 😏
+令 dp[i] 表示 购买 i 点券的最少花销 ，那么对于目标点券 i ，它可以由上图中所有可能的方案组成。例如我们需要购买 1430 点券，那么我们可以花费若干个 1￥ 购买若干份 10点券 ，也可以花费两个 68￥ 购买两份 715(680+35)点券 。唯一的限制是，不能使用比 i 更大的购买方案，例如我们需要 1430 点券，那就不能花费 648￥ 去买到六千多点券，不然就很浪费！
+既然要使用DP，那么我们得到的状态转移方程应该是什么呢？
+这是个很简单的问题！假如我们使用的购买方案是 m ， cost[m] 表示使用 m 号购买方案 花费的RMB ，gain[m] 表示使用 m 号购买方案 获得的点券 ，而 dp[i] 仍然是 购买 i 点券的最少花销 ，那么： $$ dp[i] = min(dp[i], dp[i - gain[m]] + cost[m]) $$ 其实就是：假如我们选择了方案 m ，获得了gain[m] 的点券，花掉了 cost[m] 的钱，还要继续获得 i - gain[m] 的点券，这个 i - gain[m] 点券的最少花销应该是此前已经计算过的了！那么总的花销就是 dp[i - gain[m]] + cost[m] 啦！</description>
+    </item>
+    
     <item>
       <title>Hugo Stack主题更新小记</title>
       <link>https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/</link>
