@@ -6,7 +6,25 @@
     <description>Recent content in 计算机网络 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 05 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</title>
+      <link>https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Sat, 05 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</guid>
+      <description>简介 由于项目的需要，近期产生了一个需求：将一个 pacp 文件解析出来，然后尝试提取每个连接的各种统计数据，例如提取一个完整的TCP会话中的源IP、目的IP、源端口、目的端口、会话开始时间、会话结束时间、发送的数据包数量、发送的数据包总大小等等。
+能够实现这一需求的库有很多，如python中的 scapy 、 dpkt ，C++中的 PcapPlusPlus 等，考虑到将来可能需要处理较大的 pcap 文件，以及C++相比于python在执行速度上的优势，我决定使用C++作为流量处理的语言；简单翻阅了一下 PcapPlusPlus的文档 ，我认为这个库的易用性能够满足我较低的水平，因此决定先实践一下再说。
+预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
+本文使用的环境是：Win10 + VisualStudio2019 。
+要使用这个库，我们需要先安装一些依赖。
+ 个人建议将这些依赖下载到同一个地方，方便管理！
+  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C++ Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
+ 现有的文件 
+All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：</description>
+    </item>
+    
     <item>
       <title>TCP加速技术简述</title>
       <link>https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/</link>
