@@ -6,7 +6,23 @@
     <description>Recent content in Posts on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 07 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</title>
+      <link>https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/</link>
+      <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/</guid>
+      <description>前情提要 在 上一篇PCPP使用记录 中，我记录了PcapPlusPlus这个库的环境安装和简单使用，紧接着，就准备基于这个库来实现一些具体的、有用的功能了。
+数据包解析 PCPP这个库将一个原始数据包解析为若干层，每一层的协议信息由一个变量来保存，我们可以自由读写这些解析后的数据。
+一个 RawPacket 表示原始的字节流，也就是我们最开始从 pcap 文件中读进来的一个数据包，经过解析，可以将这个数据包拆分成我们熟悉的若干层数据！PCPP的一个特性是它不保存多个副本，而只是在同一个数据包上标记各层协议的起点，这些起点可以由上一层解析结果访问到。
+ 示例 
+例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
+PCPP提供的数据包解析方法有两种，我们分别来看。
+首先还是需要先创建一个 reader ，如果你还记得第一章的内容，那就很简单了：
+#include &amp;lt;iostream&amp;gt;#include &amp;lt;IPv4Layer.h&amp;gt;#include &amp;lt;Packet.h&amp;gt;#include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 	// open a pcap file for reading 	pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!</description>
+    </item>
+    
     <item>
       <title>PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</title>
       <link>https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</link>
