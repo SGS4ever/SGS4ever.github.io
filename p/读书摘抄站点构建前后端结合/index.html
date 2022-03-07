@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='自后端篇之后，各方面进度逐渐加快，以至于基本没有时间慢慢跟进记录了。
+目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
+本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
+0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows&#43;VisualStudio 改换到 CentOS 7&#43;VSCode远程开发 ，引发这个决定的因素主要有几点：
+  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得服气。
+在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
+0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
+前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
+VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
+现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
+前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
+const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .'><title>读书摘抄站点构建（前后端结合）</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='读书摘抄站点构建（前后端结合）'>
+<meta property='og:description' content='自后端篇之后，各方面进度逐渐加快，以至于基本没有时间慢慢跟进记录了。
+目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
+本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
+0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows&#43;VisualStudio 改换到 CentOS 7&#43;VSCode远程开发 ，引发这个决定的因素主要有几点：
+  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得服气。
+在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
+0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
+前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
+VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
+现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
+前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
+const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-07T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="读书摘抄站点构建（前后端结合）">
+<meta name="twitter:description" content="自后端篇之后，各方面进度逐渐加快，以至于基本没有时间慢慢跟进记录了。
+目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
+本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
+0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows&#43;VisualStudio 改换到 CentOS 7&#43;VSCode远程开发 ，引发这个决定的因素主要有几点：
+  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得服气。
+在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
+0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
+前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
+VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
+现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
+前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
+const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/">读书摘抄站点构建（前后端结合）</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 07, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>自后端篇之后，各方面进度逐渐加快，以至于基本没有时间慢慢跟进记录了。</p>
+<p>目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～</p>
+<p>本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！</p>
+<h3 id="0x00-后端开发环境转移">0x00 后端开发环境转移</h3>
+<p>后端开发环境已由上一篇所述的 Windows+VisualStudio 改换到 CentOS 7+VSCode远程开发 ，引发这个决定的因素主要有几点：</p>
+<ul>
+<li>
+<p>VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；</p>
+</li>
+<li>
+<p>VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；</p>
+</li>
+<li>
+<p>导火索：根页面的控制器 <code>IndexCtrl</code> 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。</p>
+</li>
+</ul>
+<p>还是依照 <a class="link" href="https://github.com/drogonframework/drogon/wiki/CHN-02-%E5%AE%89%E8%A3%85"  target="_blank" rel="noopener"
+    >Drogon WiKi</a> 在 CentOS 7 上配好了环境，没出现任何问题，不得服气。</p>
+<p>在 Windows/MacOS 上都可以安装VSCode，下载 <code>RemoteDevelopment</code> 插件即可配置远程开发，网上教程很多，此处不表。</p>
+<h3 id="0x01-前端引入vue">0x01 前端引入VUE</h3>
+<p>在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 <del>我不想承认我的问题</del> 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。</p>
+<p>前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。</p>
+<p><a class="link" href="https://v3.cn.vuejs.org/guide/introduction.html"  target="_blank" rel="noopener"
+    >VUE</a> 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。</p>
+<p>现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。</p>
+<p>前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 <code>fetchData()</code> 的方法，其中使用 <code>axios</code> 从后端请求数据，然后更新到实例的 <code>data</code> 上；这个方法在 <code>mounted()</code> 的时候被调用。需要注意，在 <code>fetchData()</code> 里面使用的 <code>this</code> 指向的不是组件实例，要从外部传入实例才行。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">Vue</span><span class="p">.</span><span class="nx">createApp</span><span class="p">({</span>
+	<span class="c1">// ==== 略 ====
+</span><span class="c1"></span>	<span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
+		<span class="c1">// ==== 略 ====
+</span><span class="c1"></span>		<span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">axios</span>
+				<span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/index&#39;</span><span class="p">)</span>
+				<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+					<span class="kd">var</span> <span class="nx">respJSON</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
+					<span class="nx">vueThis</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;login&#34;</span><span class="p">];</span>
+					<span class="nx">vueThis</span><span class="p">.</span><span class="nx">cards</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;cards&#34;</span><span class="p">];</span>
+					<span class="nx">vueThis</span><span class="p">.</span><span class="nx">totalBooks</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;totalBooks&#34;</span><span class="p">];</span>
+				<span class="p">})</span>
+				<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+					<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+				<span class="p">});</span>
+		<span class="p">}</span>
+	<span class="p">},</span>
+	<span class="nx">mounted</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">let</span> <span class="nx">vueThis</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}).</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
+</code></pre></div><h3 id="0x02-交互逻辑设计">0x02 交互逻辑设计</h3>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 52; 
+			flex-basis: 125px"
+	>
+	<a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1.png" data-size="353x675">
+		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1.png"
+			width="353"
+			height="675"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1_huf80c7fbaae80b4fefe1919dc680145b4_40009_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1_huf80c7fbaae80b4fefe1919dc680145b4_40009_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="总体交互逻辑">
+	</a>
+	
+	<figcaption>总体交互逻辑</figcaption>
+	
+</figure></p>
+<p>整个站点的交互逻辑比较简单，无论是否登录都能查看我的摘抄内容。登录的作用目前仅限于发布摘抄（将来有多人使用该站点的时候可以正式加入用户功能）。</p>
+<p>个人认为登录认证的模块做得还不错，实际上也是本站工作量的集中体现，后续详谈。</p>
+<h3 id="0x03-登录认证">0x03 登录认证</h3>
+<p>本站登录认证机制是 <strong>公私钥认证</strong> ，实现思路如下：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 408; 
+			flex-basis: 980px"
+	>
+	<a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2.png" data-size="1066x261">
+		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2.png"
+			width="1066"
+			height="261"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2_huf83a29e63f5cbd5fc444fce2edb7f7ab_48118_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2_huf83a29e63f5cbd5fc444fce2edb7f7ab_48118_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="登录认证机制">
+	</a>
+	
+	<figcaption>登录认证机制</figcaption>
+	
+</figure></p>
+<ul>
+<li>
+<p>用户向服务器发起登录请求，携带参数 <code>user=xxx</code> ；</p>
+</li>
+<li>
+<p>服务器根据用户名找到该用户的公钥（已经预先保存好），生成随机字符串 <code>s</code> ，保存 <code>user-s</code> 这一映射关系；用公钥加密 <code>s</code> 得到加密后的字符串 <code>question</code> ，该加密串还需要使用Base64编码，然后传输到前端；</p>
+</li>
+<li>
+<p>前端脚本得到 <code>question</code> ，使用用户输入到文本框的私钥对其进行解密，得到解密后的字符串 <code>answer</code> ，返回给服务器，参数为 <code>user=xxx;answer=xxxxx</code> ；</p>
+</li>
+<li>
+<p>服务端收到 <code>answer</code> ，将其与 <code>s</code> 进行对比；</p>
+<ul>
+<li>
+<p>登录成功：服务端生成JWT（Json Web Token），返回前端告知登录成功；</p>
+</li>
+<li>
+<p>登录失败：返回前端告知登录失败。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>登录成功之后前端会获取一个JWT，将其保存到cookie；</p>
+</li>
+<li>
+<p>此后所有请求都会带上JWT，后端获取JWT进行验证即可判断用户的登录状态。</p>
+</li>
+</ul>
+<p>这个登录机制的安全分析如下：</p>
+<ul>
+<li>
+<p>每个用户对应的公私钥都是唯一的，使用用户公钥加密的随机串，只有拥有私钥的用户才能解密，因此，用户的身份可以得到确认；</p>
+</li>
+<li>
+<p>用户私钥只用于浏览器端解密，不传输到网络上，因此私钥私密性可以保证；</p>
+</li>
+<li>
+<p>登录成功之后获取的JWT，标准的实现办法应该是将其存放到 <em>local storage</em> ，但这里直接存到cookie，主要是基于实现难度进行的选择；</p>
+</li>
+<li>
+<p>cookie需要针对CSRF攻击进行一系列加固（HTTP only等）；</p>
+</li>
+</ul>
+<p>简单记录一下这个登录机制的实现方案：</p>
+<ul>
+<li>
+<p>后台C++使用openssl实现的RSA公钥加密，支持的公钥格式应以 <code>BEGIN PUBLIC KEY</code> 开头；</p>
+</li>
+<li>
+<p><code>#include &lt;drogon/utils/Utilities.h&gt;</code> 并使用 <code>utils::base64Encode</code> 这个Drogon API来进行Base64编码；</p>
+</li>
+<li>
+<p>引入 <a class="link" href="https://github.com/arun11299/cpp-jwt"  target="_blank" rel="noopener"
+    >CPP-JWT</a> 这个第三方库来实现JWT的生成和解析；</p>
+</li>
+<li>
+<p>前端使用 <a class="link" href="https://github.com/travist/jsencrypt"  target="_blank" rel="noopener"
+    >JSEncrypt</a> 来实现RSA私钥解密；</p>
+</li>
+<li>
+<p>JWT和cookie都设置过期时间（暂定1天）。</p>
+</li>
+</ul>
+<p>这个方案其实进行了一些取舍：</p>
+<ul>
+<li>
+<p>JWT存到cookie，是一种妥协。标准的做法是实现 <em>本地存储</em> ，然后每次进行请求时都从本地获取JWT并放入请求头（如axios设置拦截器）。但是，我的页面中并不是所有的请求都是由我控制的，即并不是所有请求都是由Ajax代码发起的：当直接使用浏览器访问某个页面时发起的GET请求就可能不带JWT，就失去了一致性；将JWT放到cookie中可以解决这一问题，带来的CSRF等安全性问题则需要其他办法进行加固。</p>
+</li>
+<li>
+<p>急于上线使用，没有手撸加密算法，因此学到的东西不多。 😢</p>
+</li>
+</ul>
+<h3 id="0x04-数据库">0x04 数据库</h3>
+<p>数据库也是可能出现安全问题的一个点，当初构思时考虑了 <em>加密存储</em> ，后来觉得这种私密性很弱的数据库没有什么加密的必要（本来就是希望所有人都能看到我摘抄的内容），因此放弃了加密的想法。</p>
+<p>数据库方面有几个要点：</p>
+<ul>
+<li>
+<p>使用了Drogon的 <a class="link" href="https://github.com/drogonframework/drogon/wiki/CHN-08-3-%E6%95%B0%E6%8D%AE%E5%BA%93-ORM"  target="_blank" rel="noopener"
+    >ORM模型</a> ，即，Drogon提供的将数据库操作抽象出来的一套方法；使用了ORM之后，我的操作就只有 <code>mapper.insert()</code> 和 <code>mapper.findAll()</code> 了，后续要加功能的话再研究条件查询；</p>
+</li>
+<li>
+<p>数据库里面的 <code>bookName</code> 和 <code>excerpt</code> 字段是非空的，即书籍名称和摘抄内容是非空的（不然还叫什么摘抄），因此在收到数据的时候要进行检查（前端也检查了一遍，但众所周知前端检查没啥用）；</p>
+</li>
+<li>
+<p><strong>防SQL注入！防SQL注入！防SQL注入！</strong> 这一点被ORM模型承包了，很提升幸福感；最初的方案是自己构造SQL，C++字符串转义什么的，比PHP还原始，比较痛苦。</p>
+</li>
+<li>
+<p>灾备。考虑过若干方案，比如将mysql文件同步到OneDrive啥的，最后实现的办法是每天定时做一次全量备份，用 <code>mysqldump</code> 把数据库弄出来，把数据 <strong>加密压缩</strong> 然后自动push到Gitee上。更加理想的方案是全量备份 + <code>binlog</code> 增量备份，但是考虑到实现起来多一些步骤、而且我的数据库很小、就没有使用这个方案。</p>
+</li>
+</ul>
+<h3 id="0x05-页面修修补补">0x05 页面修修补补</h3>
+<p>前端页面CSS也是出了一些问题的，我把几个比较重要（但不一定困难）的修补在这里记录一下：</p>
+<ul>
+<li>
+<p><code>.content-wrapper</code> 类要添加 <code>height: 112.5px;</code> 属性，不然在FireFox和Safari浏览器下面排版会错乱，具体表现为 <code>overflow: hidden</code> 不起作用，被子元素撑开）；</p>
+</li>
+<li>
+<p><code>.card</code> 类要添加 <code>white-space: pre-wrap;</code> 属性，不然换行会变成空格；读书摘抄没有换行简直是噩梦。这里不得不说一句Drogon的ORM做得很不错，把前端文本框传来的换行符忠实地存入数据库中了，省却一大堆事；</p>
+</li>
+</ul>
+<h3 id="0x06-to-do">0x06 To Do</h3>
+<p>本文的叙述相比之前的两篇简单很多，因为内容实在太多了，详写不来 😢</p>
+<p>整个站点初具功能，还有一些地方是可以改进的：</p>
+<ul>
+<li>
+<p><input disabled="" type="checkbox"> 分段加载！每次只加载一部分记录，滑动到最底部时再继续发起请求。这个功能需要前端发起请求时带上一些参数，后端数据库查询时也进行一些修改。</p>
+</li>
+<li>
+<p><input disabled="" type="checkbox"> 卡片出现的动画。的trans试试VUEition标签，总之就是使卡片出现的时候丝滑一点。</p>
+</li>
+<li>
+<p><input disabled="" type="checkbox"> 大起始页。访问其他大佬的博客时觉得他们的首页美图很不错，滚动滚轮能触发全屏滚动呈现真正内容，可以考虑学习实现一下。</p>
+</li>
+<li>
+<p><input disabled="" type="checkbox"> ……</p>
+</li>
+</ul>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Hackintosh小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 22, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 16, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（页面篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 12, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 07, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 05, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0x00-后端开发环境转移">0x00 后端开发环境转移</a></li>
+    <li><a href="#0x01-前端引入vue">0x01 前端引入VUE</a></li>
+    <li><a href="#0x02-交互逻辑设计">0x02 交互逻辑设计</a></li>
+    <li><a href="#0x03-登录认证">0x03 登录认证</a></li>
+    <li><a href="#0x04-数据库">0x04 数据库</a></li>
+    <li><a href="#0x05-页面修修补补">0x05 页面修修补补</a></li>
+    <li><a href="#0x06-to-do">0x06 To Do</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

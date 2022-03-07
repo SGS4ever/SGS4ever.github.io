@@ -6,7 +6,93 @@
     <description>Recent content in 实践 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>读书摘抄站点构建（前后端结合）</title>
+      <link>https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/</link>
+      <pubDate>Mon, 07 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/</guid>
+      <description>自后端篇之后，各方面进度逐渐加快，以至于基本没有时间慢慢跟进记录了。
+目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
+本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
+0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows+VisualStudio 改换到 CentOS 7+VSCode远程开发 ，引发这个决定的因素主要有几点：
+  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得服气。
+在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
+0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
+前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
+VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
+现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
+前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
+const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .</description>
+    </item>
+    
+    <item>
+      <title>Hackintosh小记</title>
+      <link>https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Tue, 22 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/</guid>
+      <description>最近太闲，时常想着把老电脑重装一下，不过Windows的C盘总是莫名其妙地渐渐跑满，非常烦人；加之一直以来对Mac OS的好奇，决定在老电脑上搞个黑苹果（Hackintosh）玩一玩。
+黑苹果指的是在 非Apple设备上运行Mac OS ，可以理解为在自己的机器上运行一个盗版系统，一般来说会导致几个问题：
+ 硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。  本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
+Step0 Video教程   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
+Step 1 EFI 教程里面有用到EFI文件。这是黑苹果启动时需要的文件，每个机型的引导文件不尽相同。如果EFI不合适的话，自然就不能启动啦！
+我的电脑是 ASUS FL8000UQ ，使用了 https://github.com/alexanderkin/ASUS-FL8000UQ-Hackintosh 开源的EFI文件。
+各机型和其对应的EFI可以从 https://gitee.com/softxing/Hackintosh 找到。
+Step 2 解锁CFG Lock CFG Lock用于保护MSR 0xE2单元，开启CFG锁之后，MSR（特定模块寄存器，用来控制CPU的工作环境和读取工作状态）的0xE2单元就不能写入了。不过苹果系统通过这个单元来管理电源！不能写入的话可就麻烦了，需要解锁！
+在我的机型中，按照EFI文件那个仓库里面的做法解锁即可。
+Step 3 修改config.plist 这一步就在 Video教程 里面而已，主要就是改一下 三码 ，照着做即可！
+Step 4 禁用各种BIOS选项 重要！我刚开始做的时候就是因为漏掉某些选项没有禁，搞得系统一直装不上！
+教程里面有清单的，或者按照下图的选项逐一禁用：
+ Img 
+Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
+Step 6 安装 直接U盘启动啊！So Easy！
+安装过程中有一些小插曲：
+ 磁盘识别不到。因为原本的Win10系统用的是MBR分区，而Mac只能识别GPT分区，搞得我特别难受。后面重新制作了个Windows的启动盘，在安装界面用了命令行操作把磁盘重新格式化了，然后才重新开始Mac的安装。详见 此篇 ，只能说CSDN偶尔还是有点好东西 😏 安装完毕之后进不了系统，重启的时候还是只能从U盘进入恢复模式。这个问题非常烦人，使我重装了N遍系统（为我的硬盘感到忧伤），一度使我想要放弃，最后按照上一步的指示把Mindate改掉即可。  Step 7 更新Wi-Fi驱动 我的网卡是原装的AR9565，按照 这篇文章 完美搞定Wi-Fi驱动。</description>
+    </item>
+    
+    <item>
+      <title>读书摘抄站点构建（后端篇|之一）</title>
+      <link>https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/</link>
+      <pubDate>Wed, 16 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/</guid>
+      <description>书接上文，前端暂告一段落之后就要准备后端了。
+我原本已经在服务器上用Docker运行过Drogon，但是服务器+vim的开发环境属实有点不太直观，还是决定在Windows上也配一个Drogon环境，结果遇到了不少坑，稍做记录，是为站点后端第一篇。
+Step0 环境配置 VCPKG安装+集成 第一步是安装VCPKG，这是微软开发的一款C++软件包管理工具，Drogon就通过这款工具下载。
+去到 microsoft/vcpkg: C++ Library Manager for Windows, Linux, and MacOS (github.com) 下载代码或克隆仓库，运行 bootstrap-vcpkg.bat 完成安装。会生成一个 vcpkg.exe ，可以添加环境变量以便全局使用。
+使用 vcpkg search drogon 既可以初步观察到Drogon库的情况；同时，这条命令的顺利运行也就表示我们的安装已经成功。
+ vcpkg安装成功 
+使用命令 vcpkg integrate install 可以将vcpkg进行全局集成，此后从VCPKG下载的库都能在Visual Studio里面直接使用。全局集成可以通过 vcpkg integrate remove 来移除。
+对于工程项目的集成，应该通过 vcpkg integrate project 来完成，这样在单一项目中下载的库不会影响到其他项目，较为理想。具体做法参见参考资料 [1] ，我选择直接使用全局集成。
+Drogon安装 使用命令 vcpkg install drogon 或命令 vcpkg install drogon:x64-windows 来安装Drogon，前者安装的是X86的包，后者安装的是X64的包。
+安装完成之后，应该从 [VCPKG PATH]\installed\x86-windows\tools\drogon 文件夹中找到 drogon_ctl 工具，该工具可以帮助我们生成Drogon项目及一系列组件，很有意义；我在初次安装的时候并没有找到这个工具，通过 vcpkg install drogon[ctl] 实现手动安装。
+至此，可以使用 drogon_ctl create project [ProjectName] 来创建一个Drogon项目了。</description>
+    </item>
+    
+    <item>
+      <title>读书摘抄站点构建（页面篇|之一）</title>
+      <link>https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/</link>
+      <pubDate>Sat, 12 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/</guid>
+      <description>终于下定决心构建一个属于自己的读书摘抄站点了！
+此前的读书摘抄一直都是写在一个Markdown文件里，然后通过OneDrive同步。这种原始的办法问题不大，但很低效，也谈不上视觉效果；面对偶发的要把某些极好的片段分享给好友的需求更是无能为力，只能截个图勉强作数。
+从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
+开工大吉！ ☀️
+总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
+ 前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载+加载时的页面动画  已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
+ 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。  正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
+我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
+我照着视频实现的总的代码为：
+&amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;amp;family=Ma+Shan+Zheng&amp;amp;family=Noto+Sans+SC:wght@300&amp;amp;family=Noto+Serif+SC:wght@300&amp;amp;family=Zhi+Mang+Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.</description>
+    </item>
+    
     <item>
       <title>PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</title>
       <link>https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/</link>

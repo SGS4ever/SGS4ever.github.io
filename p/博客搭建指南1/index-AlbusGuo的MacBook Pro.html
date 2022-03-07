@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。
+搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
+如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
+Then, let&amp;rsquo;s go!
+下载Hugo  Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac）。
+我们去到下面的这个网址：
+(https://github.com/gohugoio/hugo/releases)
+在里面你可以下载Windows系统下的Hugo，注意是Hugo_extend而不是hugo，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。
+将下载的压缩包解压，得到一个文件夹，里面有hugo.exe。接下来将这个文件夹的位置添加到系统环境变量中，就跟你配置java或者是python完全一样，还需要我再讲吗？
+好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
+ 右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
+ 接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
+ 新建站点  用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+hugo new site [yourSiteName]
+就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
+如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
+ 新建站点 
+ 选择主题  “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
+当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
+就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
+ 配置页面  现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+回到你的网站上吧，看看效果。
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
+打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
+现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。
+OK，一步一步来。首先，根目录底下有一个文件config.toml，打开它，以keepit主题为例，里面是一系列参数名称和数值。
+从上往下看，在第四行有个title = xxx，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。'><title>博客搭建指南——1</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='博客搭建指南——1'>
+<meta property='og:description' content='当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。
+搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
+如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
+Then, let&amp;rsquo;s go!
+下载Hugo  Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac）。
+我们去到下面的这个网址：
+(https://github.com/gohugoio/hugo/releases)
+在里面你可以下载Windows系统下的Hugo，注意是Hugo_extend而不是hugo，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。
+将下载的压缩包解压，得到一个文件夹，里面有hugo.exe。接下来将这个文件夹的位置添加到系统环境变量中，就跟你配置java或者是python完全一样，还需要我再讲吗？
+好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
+ 右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
+ 接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
+ 新建站点  用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+hugo new site [yourSiteName]
+就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
+如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
+ 新建站点 
+ 选择主题  “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
+当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
+就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
+ 配置页面  现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+回到你的网站上吧，看看效果。
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
+打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
+现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。
+OK，一步一步来。首先，根目录底下有一个文件config.toml，打开它，以keepit主题为例，里面是一系列参数名称和数值。
+从上往下看，在第四行有个title = xxx，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2020-09-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-18T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="博客搭建指南——1">
+<meta name="twitter:description" content="当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。
+搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。
+本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题https://themes.gohugo.io/keepit/。
+如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。
+Then, let&amp;rsquo;s go!
+下载Hugo  Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。
+但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（主要是我没有Mac）。
+我们去到下面的这个网址：
+(https://github.com/gohugoio/hugo/releases)
+在里面你可以下载Windows系统下的Hugo，注意是Hugo_extend而不是hugo，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。
+将下载的压缩包解压，得到一个文件夹，里面有hugo.exe。接下来将这个文件夹的位置添加到系统环境变量中，就跟你配置java或者是python完全一样，还需要我再讲吗？
+好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：
+ 右键我的电脑 &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在系统变量中找到path这一栏，把你放置Hugo.exe的文件夹路径写进去。
+ 接下来打开你的命令行窗口，试着执行hugo version，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！
+ 新建站点  用hugo新建站点实在是非常简单。在你电脑上某个位置打开你的命令行，敲上命令：
+hugo new site [yourSiteName]
+就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
+如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
+ 新建站点 
+ 选择主题  “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
+当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
+就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
+ 配置页面  现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+回到你的网站上吧，看看效果。
+什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
+打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
+现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。
+OK，一步一步来。首先，根目录底下有一个文件config.toml，打开它，以keepit主题为例，里面是一系列参数名称和数值。
+从上往下看，在第四行有个title = xxx，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/">博客搭建指南——1</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 18, 2020</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p><em>当你见到这篇文章的时候，意味着我可以用一种比价体面的方式向所有人分享我的学识和想法了。</em></p>
+<p>搭建博客，说难也难，说容易也容易。难在确定和学习一款建站工具，以及选择一款好看的主题（或者手写一款好看的主题），而容易指的是当你稍微会使用建站工具、并非常幸运地选中了一款好看且易于配置的主题之后，一切后续都变得无比丝滑。</p>
+<p>本博客，部署于GitHub，属于静态网页，使用Hugo搭建，使用现成的主题<!-- raw HTML omitted --><a class="link" href="https://themes.gohugo.io/keepit/"  target="_blank" rel="noopener"
+    >https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted -->。</p>
+<p>如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。</p>
+<p>Then, let&rsquo;s go!</p>
+<h3 id="下载hugo">下载Hugo</h3>
+<blockquote>
+<p>Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。</p>
+<p>但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（<del>主要是我没有Mac</del>）。</p>
+<p>我们去到下面的这个网址：</p>
+<p><code>(https://github.com/gohugoio/hugo/releases)</code></p>
+<p>在里面你可以下载Windows系统下的Hugo，注意是<code>Hugo_extend</code>而不是<code>hugo</code>，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。</p>
+<p>将下载的压缩包解压，得到一个文件夹，里面有<code>hugo.exe</code>。接下来将这个文件夹的位置添加到<strong>系统环境变量</strong>中，就跟你配置<em>java</em>或者是<em>python</em>完全一样，还需要我再讲吗？</p>
+<p>好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：</p>
+<blockquote>
+<p>右键<code>我的电脑</code> &ndash;&gt; 属性 &ndash;&gt; 高级系统设置（在左边栏里） &ndash;&gt; 环境变量（在弹出的窗口的右下角） &ndash;&gt; 在<code>系统变量</code>中找到<code>path</code>这一栏，把你放置Hugo.exe的文件夹路径写进去。</p>
+</blockquote>
+<p>接下来打开你的命令行窗口，试着执行<code>hugo version</code>，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！</p>
+</blockquote>
+<h3 id="新建站点">新建站点</h3>
+<blockquote>
+<p>用hugo新建站点实在是<strong>非常简单</strong>。在你电脑上某个位置打开你的命令行，敲上命令：</p>
+<p><code>hugo new site [yourSiteName]</code></p>
+<p>就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！</p>
+<p>如果顺利的话，你将会得到一个名字为<em>yourSiteName</em>的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用<code>ls</code>查看它们。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 138; 
+			flex-basis: 331px"
+	>
+	<a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1.png" data-size="1092x791">
+		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1.png"
+			width="1092"
+			height="791"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1_hu4d1a923f200524e5bef1801853ce0452_80119_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%971/1-1_hu4d1a923f200524e5bef1801853ce0452_80119_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="新建站点">
+	</a>
+	
+	<figcaption>新建站点</figcaption>
+	
+</figure></p>
+</blockquote>
+<h3 id="选择主题">选择主题</h3>
+<blockquote>
+<p>“一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德</p>
+<p>你现在浏览的——也就是我的博客——主题是：<!-- raw HTML omitted --><a class="link" href="https://themes.gohugo.io/keepit/"  target="_blank" rel="noopener"
+    >https://themes.gohugo.io/keepit/</a><!-- raw HTML omitted --></p>
+<p>实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ</p>
+<p>当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是<strong>安装</strong>指南o(╥﹏╥)o）。</p>
+<p>就以这款<em>KeepIt</em>主题为例，我们的网站根目录下有一个<code>themes</code>文件夹，你只需要进入这个文件夹，使用命令<code>git clone https://github.com/Fastbyte01/KeepIt.git</code>，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。</p>
+</blockquote>
+<h3 id="配置页面">配置页面</h3>
+<blockquote>
+<p>现在让你的命令行回到网站的根目录下，写下命令<code>hugo server --theme=keepit -D</code>，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将<code>--theme</code>这个参数指定为你想用的主题的名字，就问你简单不？</p>
+<p>回到你的网站上吧，看看效果。</p>
+<p>什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。</p>
+<p>打开你刚才下载的主题文件夹，一般来讲，里面都有一个<code>exampleSite</code>文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。</p>
+<p>现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。</p>
+<p>OK，一步一步来。首先，根目录底下有一个文件<code>config.toml</code>，打开它，以keepit主题为例，里面是一系列参数名称和数值。</p>
+<p>从上往下看，在第四行有个<code>title = xxx</code>，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。</p>
+<p>继续往下看，你可以找到一个用中括号括起来的<code>[menu]</code>字段，在底下你看到了什么？yes，你现在可以配置顶栏了！比如，我将底下第一个<code>[[menu.main]]</code>的<code>name</code>字段由<code>post</code>改为<code>博文</code>，在网页对应的位置，<code>post</code>也变成了<code>博文</code>！</p>
+<p>继续往下看，你可以看到一个<code>[params]</code>字段，这是适用于整个站点的一些参数。里面有个<code>avatar</code>参数，它用于配置你的主页面上的那个头像，你可以把它注释掉，然后启用下方几行的<code>[params.gravatar]</code>字段，它会将你的主页图片替换为你独有的gravatar，当然，如果你不知道什么是gravatar，百度之。</p>
+<p>主页的底下有四个链接按钮，你在<code>[params.social]</code>字段下可以找到对应的配置。比如我，就把里面的<code>Instagram</code>、<code>Linkedin</code>都注释掉了，只保留了<code>Twitter</code>和<code>Github</code>，所以你在我的主页上只能找到这两个链接。</p>
+<p>继续往下，就是一些无关紧要的参数了，你可以暂且忽略它们。当你走到这里，你的网站已经初步具有你的个人特色了，但我还要带你继续配置你的网站。</p>
+</blockquote>
+<h3 id="进一步配置页面">进一步配置页面</h3>
+<blockquote>
+<p>从你的主页上点击头像或者右上角进入<code>post</code>，你会发现里面的文章都是一些别人已经写好的东西，你一定会希望把它们换掉，但是它们在哪里？</p>
+<p>打开网站的根目录，进入<code>content</code>，你会看到一个<code>posts</code>文件夹和一个<code>projects</code>文件夹，还有一个<code>aboutme.md</code>文件，它们是什么？</p>
+<p>进入<code>posts</code>文件夹，所有的博文都存在这里。你可以把里面的文件删掉，换成你自己的Markdown文件，但是不要急，先打开别人的文件，看看hugo解析文件时需要的特定的格式：</p>
+<p>比如我打开了<code>hugoisforlovers.md</code>，在里面，头几行的位置我们能看到这些东西：</p>
+<hr>
+<p>title = &ldquo;Getting Started with Hugo&rdquo;
+description = &quot;&quot;
+type = [&ldquo;posts&rdquo;,&ldquo;post&rdquo;]
+tags = [
+&ldquo;go&rdquo;,
+&ldquo;golang&rdquo;,
+&ldquo;hugo&rdquo;,
+&ldquo;development&rdquo;,
+]
+date = &ldquo;2014-04-02&rdquo;
+categories = [
+&ldquo;Development&rdquo;,
+&ldquo;golang&rdquo;,
+]
+series = [&ldquo;Hugo 101&rdquo;]
+[ author ]
+name = &ldquo;Hugo Authors&rdquo;</p>
+<hr>
+<p>它们是一个文件被解析时需要的一些参数。比如文件标题<code>title</code>，比如文件类型<code>tags</code>和<code>caterogies</code>，你自己写Markdown文件时也需要在头部附上这些东西，否则它在你的网站上就无法体现出相关的信息。具体的做法是使用两行<code>---</code>把你的这些信息夹起来，然后hugo就能进行识别了。如果是智能一点的Markdown编辑器，可能直接弹出一个非常明显的提示，告知你这里是输入头部信息的地方。在此强烈推荐Typora！！</p>
+<p>会修改你的博文之后，你可以顺便改一改<code>about.md</code>，它是这个主题里面自我介绍的那一页。</p>
+<p>一切都完事之后，你的网站已经是一个承载着你个人信息、存放着你个人博文的站点了。你可以直接进入发布环节，也可以再进行更精细的配置——修改网页源码。</p>
+<p>我们的网站页面都在你的主题文件夹里面。进入你的主题文件夹，能看到一个<code>layouts</code>的文件夹，点进去，里面是一些模板HTML。有些主题里，你可以从<code>index.html</code>文件修改一些信息，但是在我们的keepit主题，这个文件并没有什么价值，你需要再进入<code>partials</code>文件内，这里的文件们才是你需要阅读与修改的。</p>
+<p>你可以看到一个<code>home_profile.html</code>文件，这是默认情况下你的主页。仔细阅读，你应该可以悟到这里使用了很多配置文件中的参数，比如<code>{{ .Site.Params.avatar}}</code>，就是你在配置文件中定义的图像！</p>
+<p>换一个文件，比如<code>footer.html</code>，你应该可以悟到这一页掌管着主页下方的版权说明！如果你不满意主页底下的copyright，不妨对其进行修改。</p>
+<p>这里的文件不可能逐一讲解，自己去阅读它们，时刻牢记你配置文件里的东西，你完全可以配置一个很漂亮的页面。</p>
+</blockquote>
+<h3 id="将页面部署到github上">将页面部署到GitHub上</h3>
+<blockquote>
+<p>对于页面的配置，我目前讲的完全是够用了（主要是其他的操作我也不会 x）。如果之后有更多的需求，完全可以新开一篇博文，在此就不多赘述了。</p>
+<p>我们现在需要将页面部署到GitHub上，为什么不用Gitee？因为Gitee会出现<strong>一大堆路径问题</strong>。你不要觉得我在造谣，也不要觉得网上一堆博客可供参考，事实就是我尝试了几天，看了一大堆文章，但是我的Gitee上的博客完全无法加载样式。</p>
+<p>在这里不禁想讲道理，国家战略支持的平台就这么个鸟样子，想做到跟GitHub分庭抗礼真的是任重道远。</p>
+<p>如果你成功在Gitee上部署了自己的博客，欢迎联系我，我非常乐意学习，并将自己的博客迁移到Gitee上。</p>
+<p>回到主题，首先要在GitHub上建立一个仓库，这个仓库的名字非常特殊，它必须是<code>username.github.io</code>，其中的<code>username</code>就是你的GitHub用户名。比如我的用户名是<code>SGS4ever</code>，那么我的仓库就是<code>SGS4ever.github.io</code>。</p>
+<p>建立完成后，在站点根目录下使用命令<code>hugo --theme=keepit --baseUrl=&quot;https://SGS4ever.github.io -D&quot;</code>你就会得到一个文件夹<code>public</code>，进入它，在里面打开GitBash，进行一系列操作：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">git</span> <span class="n">init</span>
+<span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&#34;Your comment&#34;</span>
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">origin</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">xxxxxxxxxxx</span>
+<span class="c1"># 注意，这里的https://xxxxxx 是你刚创建的仓库的地址，也就是当你进入仓库页面，你的浏览器上方地址栏里面的东西。</span>
+<span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">master</span>
+</code></pre></div><p>这些操作之后，你的GitHub仓库里就多了很多东西了，完全不需要任何操作，直接打开浏览器访问<code>https://username.github.io</code>吧！</p>
+</blockquote>
+<h3 id="写在最后">写在最后</h3>
+<blockquote>
+<p>搭建博客真的是费了很大的功夫，但我万万没想到这些无用功实际上是Gitee的问题，实在是愤意难平。</p>
+<p>国产的很多东西——并不止Gitee——希望与国外的东西竞争，还需要非常努力。有些情况下并不是你实现了同样的功能，你就具备了同样的竞争力，还需要考虑到这些功能的易用性、稳定性。当你的东西用起来比别人更繁琐，以至于这种繁琐给用户带来的负面感受压过了爱国情怀的正面加持，你的竞争就注定失败了。</p>
+</blockquote>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Hugo Stack主题更新小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Jan 12, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">博客搭建指南——3</h2>
+            <footer class="article-time">
+                <time datetime=''>Jan 19, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%972/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">博客搭建指南——2</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 19, 2020</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Hackintosh小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 22, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 16, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#下载hugo">下载Hugo</a></li>
+    <li><a href="#新建站点">新建站点</a></li>
+    <li><a href="#选择主题">选择主题</a></li>
+    <li><a href="#配置页面">配置页面</a></li>
+    <li><a href="#进一步配置页面">进一步配置页面</a></li>
+    <li><a href="#将页面部署到github上">将页面部署到GitHub上</a></li>
+    <li><a href="#写在最后">写在最后</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

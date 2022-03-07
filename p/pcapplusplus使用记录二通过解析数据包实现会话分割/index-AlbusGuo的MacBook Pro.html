@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='前情提要 在 上一篇PCPP使用记录 中，我记录了PcapPlusPlus这个库的环境安装和简单使用，紧接着，就准备基于这个库来实现一些具体的、有用的功能了。
+数据包解析 PCPP这个库将一个原始数据包解析为若干层，每一层的协议信息由一个变量来保存，我们可以自由读写这些解析后的数据。
+一个 RawPacket 表示原始的字节流，也就是我们最开始从 pcap 文件中读进来的一个数据包，经过解析，可以将这个数据包拆分成我们熟悉的若干层数据！PCPP的一个特性是它不保存多个副本，而只是在同一个数据包上标记各层协议的起点，这些起点可以由上一层解析结果访问到。
+ 示例 
+例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
+PCPP提供的数据包解析方法有两种，我们分别来看。
+首先还是需要先创建一个 reader ，如果你还记得第一章的内容，那就很简单了：
+#include &amp;lt;iostream&amp;gt;#include &amp;lt;IPv4Layer.h&amp;gt;#include &amp;lt;Packet.h&amp;gt;#include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 	// open a pcap file for reading 	pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!'><title>PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）'>
+<meta property='og:description' content='前情提要 在 上一篇PCPP使用记录 中，我记录了PcapPlusPlus这个库的环境安装和简单使用，紧接着，就准备基于这个库来实现一些具体的、有用的功能了。
+数据包解析 PCPP这个库将一个原始数据包解析为若干层，每一层的协议信息由一个变量来保存，我们可以自由读写这些解析后的数据。
+一个 RawPacket 表示原始的字节流，也就是我们最开始从 pcap 文件中读进来的一个数据包，经过解析，可以将这个数据包拆分成我们熟悉的若干层数据！PCPP的一个特性是它不保存多个副本，而只是在同一个数据包上标记各层协议的起点，这些起点可以由上一层解析结果访问到。
+ 示例 
+例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
+PCPP提供的数据包解析方法有两种，我们分别来看。
+首先还是需要先创建一个 reader ，如果你还记得第一章的内容，那就很简单了：
+#include &amp;lt;iostream&amp;gt;#include &amp;lt;IPv4Layer.h&amp;gt;#include &amp;lt;Packet.h&amp;gt;#include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 	// open a pcap file for reading 	pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!'>
+<meta property='og:url' content='https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2022-02-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-02-07T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）">
+<meta name="twitter:description" content="前情提要 在 上一篇PCPP使用记录 中，我记录了PcapPlusPlus这个库的环境安装和简单使用，紧接着，就准备基于这个库来实现一些具体的、有用的功能了。
+数据包解析 PCPP这个库将一个原始数据包解析为若干层，每一层的协议信息由一个变量来保存，我们可以自由读写这些解析后的数据。
+一个 RawPacket 表示原始的字节流，也就是我们最开始从 pcap 文件中读进来的一个数据包，经过解析，可以将这个数据包拆分成我们熟悉的若干层数据！PCPP的一个特性是它不保存多个副本，而只是在同一个数据包上标记各层协议的起点，这些起点可以由上一层解析结果访问到。
+ 示例 
+例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
+PCPP提供的数据包解析方法有两种，我们分别来看。
+首先还是需要先创建一个 reader ，如果你还记得第一章的内容，那就很简单了：
+#include &amp;lt;iostream&amp;gt;#include &amp;lt;IPv4Layer.h&amp;gt;#include &amp;lt;Packet.h&amp;gt;#include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 	// open a pcap file for reading 	pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/">PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 07, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 6 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h3 id="前情提要">前情提要</h3>
+<p>在 <a class="link" href="https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/"  target="_blank" rel="noopener"
+    >上一篇PCPP使用记录</a> 中，我记录了PcapPlusPlus这个库的环境安装和简单使用，紧接着，就准备基于这个库来实现一些具体的、有用的功能了。</p>
+<h3 id="数据包解析">数据包解析</h3>
+<p>PCPP这个库将一个原始数据包解析为若干层，每一层的协议信息由一个变量来保存，我们可以自由读写这些解析后的数据。</p>
+<p>一个 <code>RawPacket</code> 表示原始的字节流，也就是我们最开始从 <code>pcap</code> 文件中读进来的一个数据包，经过解析，可以将这个数据包拆分成我们熟悉的若干层数据！PCPP的一个特性是它不保存多个副本，而只是在同一个数据包上标记各层协议的起点，这些起点可以由上一层解析结果访问到。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 189; 
+			flex-basis: 455px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/1.png" data-size="1008x531">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/1.png"
+			width="1008"
+			height="531"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/1_hu720000cbcbecc6dad6210d36934be121_67454_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/1_hu720000cbcbecc6dad6210d36934be121_67454_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="示例">
+	</a>
+	
+	<figcaption>示例</figcaption>
+	
+</figure></p>
+<p>例如这个图中的解析结果，首先是数据链路层的 <code>Ethernet Layer</code> ，它可以看到所有原始数据；由 <code>Ethernet Layer</code> 层扣除它的头部数据，就是整个 <code>IPv4</code> 层的数据；而由 <code>IPv4</code> 层再继续解析，就是 <code>UDP</code> 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。</p>
+<p>PCPP提供的数据包解析方法有两种，我们分别来看。</p>
+<p>首先还是需要先创建一个 <code>reader</code> ，如果你还记得第一章的内容，那就很简单了：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;IPv4Layer.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;Packet.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;PcapFileDevice.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="c1">// Part 1
+</span><span class="c1"></span>	<span class="c1">// open a pcap file for reading
+</span><span class="c1"></span>	<span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">::</span><span class="n">getReader</span><span class="p">(</span><span class="s">&#34;test_file_1.pcap&#34;</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot determine reader for file type&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">open</span><span class="p">())</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot open input.pcap for reading&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+    
+    <span class="c1">// read the first packet from the file
+</span><span class="c1"></span>    <span class="n">pcpp</span><span class="o">::</span><span class="n">RawPacket</span> <span class="n">rawPacket</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">getNextPacket</span><span class="p">(</span><span class="n">rawPacket</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Couldn&#39;t read the first packet in the file&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// ===== Code to write =====
+</span><span class="c1"></span>
+	<span class="n">reader</span><span class="o">-&gt;</span><span class="n">close</span><span class="p">();</span>
+	<span class="k">delete</span> <span class="n">reader</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>上面是程序的基本框架，已经写好了创建Reader、读取第一个数据包 <code>rawPacket</code> 的部分。接下来的所有代码都追加在 <em>Code to write</em> 那块地方~</p>
+<p>首先需要创建一个解析后的数据包：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// parse the raw packet into a parsed packet
+</span><span class="c1"></span><span class="n">pcpp</span><span class="o">::</span><span class="n">Packet</span> <span class="n">parsedPacket</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rawPacket</span><span class="p">);</span>
+</code></pre></div><p>在上面的介绍中，我们知道这个解析后的数据包是一层一层的结构，每一层都有一个指向下一层的指针，于是我们可以使用一个循环来遍历这些层：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// first let&#39;s go over the layers one by one and find out its type, its total length, its header length and its payload length
+</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="n">pcpp</span><span class="o">::</span><span class="n">Layer</span><span class="o">*</span> <span class="n">curLayer</span> <span class="o">=</span> <span class="n">parsedPacket</span><span class="p">.</span><span class="n">getFirstLayer</span><span class="p">();</span> <span class="n">curLayer</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="n">curLayer</span> <span class="o">=</span> <span class="n">curLayer</span><span class="o">-&gt;</span><span class="n">getNextLayer</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="c1">// Code to write
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>在这个循环中呢， <code>curLayer</code> 就是当前获取到的层了！假如说我们需要使用到TCP层的信息，那就需要用API获取一下当前层的协议，然后判断 <code>curLayer-&gt;getProtocol() == pcpp::TCP</code> ，真是有点麻烦！</p>
+<p>好在PCPP为我们提供了第二种获取协议层的方法：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Layer</span><span class="o">*</span> <span class="n">ipLayer</span> <span class="o">=</span> <span class="n">parsedPakcet</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">IPv4Layer</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div><p>直接使用 <code>getLayerOfType</code> 这个接口来获取我们想要的层，很酷！</p>
+<p>在我接下来的场景中，使用到的是网络层的IP地址和传输层的端口，那么就只需要：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">pcpp</span><span class="o">::</span><span class="n">TcpLayer</span><span class="o">*</span> <span class="n">tcpLayer</span> <span class="o">=</span> <span class="n">parsedPakcet</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">TcpLayer</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Layer</span><span class="o">*</span> <span class="n">ipLayer</span> <span class="o">=</span> <span class="n">parsedPakcet</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">IPv4Layer</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div><p>方便得很！</p>
+<p>当我们获取到某个特定的层之后，就可以来使用这一层的信息了。在VS环境中有自动补全，使用 <code>tcpLayer-&gt;getxxxxxx()</code> 这样的格式，一般就能看到这一层包含的信息。例如本次使用较多的有：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">IPv4Address</span>		<span class="n">ipLayer</span><span class="o">-&gt;</span><span class="n">getSrcIPv4Address</span><span class="p">();</span>
+<span class="kt">uint16_t</span> 		<span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getSrcPort</span><span class="p">();</span>
+<span class="n">tcphdr</span><span class="o">*</span>			<span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getTcpHeader</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">synFlag</span>
+</code></pre></div><p>这几个API从名字上就很容易看出它们是什么作用！如果想进行更多的解析，可以看参考资料 <a class="link" href="https://pcapplusplus.github.io/docs/tutorials/packet-parsing"  target="_blank" rel="noopener"
+    >[1]</a> 和参考资料 <a class="link" href="https://pcapplusplus.github.io/api-docs/"  target="_blank" rel="noopener"
+    >[3]</a> 😁 ​</p>
+<h3 id="并不成功的会话切分">并不成功的会话切分</h3>
+<p>所谓 <em>会话分割</em> ，就是说给出一个很大的 <code>pcap</code> 文件，里面有超级多的数据包，我们要把它按照一个个的TCP会话（或者叫TCP连接，whatever）整理好！</p>
+<p>这一工作很有意义！TCP会话一般是数据传输的一个基本单元，它以三次握手开始、以四次挥手结束。譬如以前的HTTP协议，传输一个文件就使用一个TCP会话，即使引入了长连接，也是在一个相对完整的语境中（如一个网页的加载）使用一次TCP会话，所以一个TCP会话的背后可能就是用户的一次网络行为！很多基于网络流量的行为分析技术都是基于TCP会话的，学者们提取TCP会话的各种特征信息，然后使用各种模型，希望把网络流量跟它背后的用户行为对应起来 😹 我们今天还做不到这么多啦，但是从 <code>pcap</code> 文件中整理出一个个TCP会话来，还是可以试试的~</p>
+<p><strong>实验目标：整理出会话的开始时间和结束时间，可以顺便计算一下时长</strong> 。</p>
+<p>All right？先讲思路，再说不足，最后慢慢改进。</p>
+<p>我基本的思路是使用一个 <em>四元组</em> 来保存连接信息。熟悉TCP的朋友应该知道，一个TCP连接可以由 <code>(SrcIP, DstIP, SrcPort, DstPort)</code> 这个元组唯一确定，其实就是两端的 <em>Socket</em> 啊！</p>
+<p>这么一个元组怎么储存呢？我的做法是进行一个简单的字符串拼接：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">string</span> <span class="n">keyTuple</span> <span class="o">=</span>
+        <span class="n">ipLayer</span><span class="o">-&gt;</span><span class="n">getSrcIPv4Address</span><span class="p">().</span><span class="n">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span>
+        <span class="n">ipLayer</span><span class="o">-&gt;</span><span class="n">getDstIPv4Address</span><span class="p">().</span><span class="n">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span>
+        <span class="n">to_string</span><span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getSrcPort</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span>
+        <span class="n">to_string</span><span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getDstPort</span><span class="p">());</span>
+</code></pre></div><p>我们要做的是 <strong>整理出会话的开始时间和结束时间</strong> ，还记得吗？</p>
+<p>我最初的想法是：对每个数据包进行分析，如果数据包中包含 <code>SYN</code> ，说明它是会话的开始，放入一个 <code>map</code> 中；如果数据包中包含 <code>FIN</code> ，说明它是会话的结束，依据这个数据包的四元组从 <code>map</code> 中获取开始时间，然后使用当前数据包的时间作为结束时间，打印！</p>
+<p>总的代码为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;IPv4Layer.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;TcpLayer.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;Packet.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;PcapFileDevice.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;ctime&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;cstdlib&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">pcpp</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cp">#define MY_FORMAT setw(18) &lt;&lt; setiosflags(ios::left)
+</span><span class="cp"></span><span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="nf">openFileReader</span><span class="p">(</span><span class="n">string</span> <span class="n">fileName</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">openedReader</span> <span class="o">=</span> <span class="n">IFileReaderDevice</span><span class="o">::</span><span class="n">getReader</span><span class="p">(</span><span class="n">fileName</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">openedReader</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot determine reader for file type&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">openedReader</span><span class="o">-&gt;</span><span class="n">open</span><span class="p">())</span>
+	<span class="p">{</span>
+		<span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot open input.pcap for reading&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">openedReader</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">printSplitedTuple</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">prevFind</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">nowFind</span><span class="p">;</span>
+	<span class="k">while</span> <span class="p">((</span><span class="n">nowFind</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">,</span> <span class="n">prevFind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">prevFind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nowFind</span> <span class="o">-</span> <span class="n">prevFind</span><span class="p">);</span>
+		<span class="n">prevFind</span> <span class="o">=</span> <span class="n">nowFind</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">prevFind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+	<span class="c1">// open a pcap file for reading
+</span><span class="c1"></span>	<span class="n">string</span> <span class="n">pcapFile</span> <span class="o">=</span> <span class="s">&#34;test_file_1.pcap&#34;</span><span class="p">;</span>
+	<span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">openFileReader</span><span class="p">(</span><span class="n">pcapFile</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">setFilter</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot set filter for file reader&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="n">RawPacket</span> <span class="n">rawPacket</span><span class="p">;</span>
+	<span class="n">multimap</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">timespec</span><span class="o">&gt;</span> <span class="n">sessionMap</span><span class="p">;</span>
+	<span class="k">auto</span> <span class="n">BEGIN</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+	<span class="k">while</span> <span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">getNextPacket</span><span class="p">(</span><span class="n">rawPacket</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">Packet</span> <span class="n">parsedPakcet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rawPacket</span><span class="p">);</span>
+		<span class="n">TcpLayer</span><span class="o">*</span> <span class="n">tcpLayer</span> <span class="o">=</span> <span class="n">parsedPakcet</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">TcpLayer</span><span class="o">&gt;</span><span class="p">();</span>
+		<span class="n">IPv4Layer</span><span class="o">*</span> <span class="n">ipLayer</span> <span class="o">=</span> <span class="n">parsedPakcet</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">IPv4Layer</span><span class="o">&gt;</span><span class="p">();</span>
+		<span class="n">string</span> <span class="n">keyTuple</span> <span class="o">=</span>
+			<span class="n">ipLayer</span><span class="o">-&gt;</span><span class="n">getSrcIPv4Address</span><span class="p">().</span><span class="n">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span>
+			<span class="n">ipLayer</span><span class="o">-&gt;</span><span class="n">getDstIPv4Address</span><span class="p">().</span><span class="n">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span>
+			<span class="n">to_string</span><span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getSrcPort</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span>
+			<span class="n">to_string</span><span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getDstPort</span><span class="p">());</span>
+		
+		<span class="k">if</span> <span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getTcpHeader</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">synFlag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">sessionMap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">timespec</span><span class="o">&gt;</span><span class="p">(</span><span class="n">keyTuple</span><span class="p">,</span> <span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">()));</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getTcpHeader</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">finFlag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">auto</span> <span class="n">sessionStart</span> <span class="o">=</span> <span class="n">sessionMap</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">keyTuple</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">sessionStart</span> <span class="o">!=</span> <span class="n">sessionMap</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Src&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Dst&#34;</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;SrcPort&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;DstPort&#34;</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Start&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;End&#34;</span><span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Duration&#34;</span>
+					<span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+				<span class="n">printSplitedTuple</span><span class="p">(</span><span class="n">keyTuple</span><span class="p">);</span>
+
+				<span class="kt">double</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">sessionStart</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">+</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">sessionStart</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">;</span>
+				<span class="kt">double</span> <span class="n">endTime</span> <span class="o">=</span> <span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">().</span><span class="n">tv_sec</span> <span class="o">+</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">().</span><span class="n">tv_nsec</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">;</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">sessionStart</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">tv_sec</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">().</span><span class="n">tv_sec</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+					<span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+				<span class="n">sessionMap</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">sessionStart</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">auto</span> <span class="n">END</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Total time: &#34;</span> <span class="o">&lt;&lt;</span> <span class="kt">double</span><span class="p">(</span><span class="n">END</span> <span class="o">-</span> <span class="n">BEGIN</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLK_TCK</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;ms.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">reader</span><span class="o">-&gt;</span><span class="n">close</span><span class="p">();</span>
+	<span class="k">delete</span> <span class="n">reader</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>上面的代码使用了 <code>rawPacket.getPacketTimestamp()</code> 来获取数据包的时间戳，返回结果是一个 <a class="link" href="https://www.gnu.org/software/libc/manual/html_node/Time-Types.html"  target="_blank" rel="noopener"
+    >timespec</a> 类型！这个类型表示从日历起点到现在所经过的秒数，它的第一部分是 <em>秒</em> ，第二部分是 <em>纳秒</em> ，我使用了 <em>秒</em> 来打印会话开始时间和结束时间，使用了 <em>纳秒</em> 来计算会话持续时间。</p>
+<p>此外，为了输出结果的美观，我定义了一个 <code>MY_FORMAT</code> 宏，将输出的字符串指定为 <code>18</code> 个宽度，方便对齐。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 200; 
+			flex-basis: 481px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/2.png" data-size="1462x728">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/2.png"
+			width="1462"
+			height="728"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/2_hucefc57169c0ae326befb1eb4d9ef79c8_65449_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/2_hucefc57169c0ae326befb1eb4d9ef79c8_65449_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="输出结果">
+	</a>
+	
+	<figcaption>输出结果</figcaption>
+	
+</figure></p>
+<p>这次的运行花了5秒多！结果看着蛮厉害，其实问题有很多 😢 这些问题是在我基本上完成了这个程序之后，逐渐意识到的。</p>
+<h4 id="元组的表示问题">元组的表示问题</h4>
+<p>首先是那个四元组的问题。我们说一个TCP会话是由一个元组确定的，这自然是没有错，但是在编程实现中，我把这四个元素简单地做了字符串拼接，这就带来问题了！本来 <code>(SrcIP, DstIP, SrcPort, DstPort)</code> 这四个元素的顺序是可以倒换的，也就是它跟 <code>(DstIP, SrcIP, DstPort, SrcPort)</code> 是同一个东西啊！更加具体地说，本来由 <code>192.168.0.102</code> 发往 <code>1.1.1.1</code> 的会话是双向的，也就是说 <code>(192.168.0.102, 1.1.1.1, 4321, 443)</code> 这么一个元组表示主机发往服务器的数据，而 <code>(1.1.1.1, 192.168.0.102, 443, 4321)</code> 表示的是服务器发往主机的数据，这两个元组表示的是同一个会话！而我 <strong>愚蠢地</strong> 做了字符串拼接，而且用这个拼接后的字符串来作为 <code>map</code> 的 <code>key</code> 。这种 <code>key</code> 表示出来的东西根本就不全啊？！会使得我们在取得一个 <code>FIN</code> 包时，只能找到 <strong>同向的</strong> <code>SYN</code> 包，也就是说，我们整理出来的会话，只能是 <strong>由主机发起、由主机断开</strong> 或者是 <strong>由服务器发起、由服务器断开</strong> 的会话，至于 <strong>由主机发起、由服务器断开</strong> 的会话，或者 <strong>由服务器发起、由主机断开</strong> 的会话，就整理不到了。</p>
+<h4 id="会话起止的问题">会话起止的问题</h4>
+<p>即便解决了元组的表示问题，还有会话起止的问题没有考虑到。</p>
+<p>TCP的三次握手和四次挥手中，会产生 <strong>两个SYN包、两个FIN包</strong> ！这是我在编程过程中遗漏的知识点，反应过来之后，头痛不已……</p>
+<p>会话的起止，应该表示为第一个 <code>SYN</code> 和最后一个 <code>FIN</code> ，第一个 <code>SYN</code> 是不含 <code>ack</code> 的，而最后一个 <code>FIN</code> 是在同一个元组下出现的第二个 <code>FIN</code> 。</p>
+<p>这样的算法 <strong>不考虑超时重传的情况、不考虑最后一个 <code>ack</code> 的传输、不考虑连接断开之前的 <code>2MSL</code> 等待</strong> 。</p>
+<p>感觉误差挺大的样子，不过这样的误差会作用到每一个会话上，相对来说是可以接受的。</p>
+<h3 id="比较成功的会话切分">比较成功的会话切分</h3>
+<p>在上面部分的代码宣告失败后，我翻看PCPP的 <a class="link" href="https://pcapplusplus.github.io/docs/examples"  target="_blank" rel="noopener"
+    >示例应用</a> ，意外地发现了 <a class="link" href="https://github.com/seladb/PcapPlusPlus/tree/master/Examples/PcapSplitter"  target="_blank" rel="noopener"
+    >PcapSplitter</a> 这个好东西，作者已经初步实现了按照会话切分 <code>pcap</code> 文件的功能。</p>
+<p>不过，作者的代码只能作为参考，因为他是将一个大的 <code>pcap</code> 文件按照一定规则切分为若干小的 <code>pcap</code> 文件，跟我的主要需求不太一致。</p>
+<p>当我阅读 <a class="link" href="https://github.com/seladb/PcapPlusPlus/blob/master/Examples/PcapSplitter/ConnectionSplitters.h"  target="_blank" rel="noopener"
+    >ConnectionSplitter.h</a> 这个文件时，发现了一个重要的函数： <code>hash5Tuple()</code> 。</p>
+<p>有没有搞错？！搞了大半天的用四元组来表示一个会话，结果这个库自己就能够处理元组哈希？而且参数简单得要死，传入一个 <code>parsedPacket</code> 即可。</p>
+<p>行叭，就用这个函数来替代之前的愚蠢的元组表示方式，同时完善一下会话起止的判定方法，改写一下会话切分代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;IPv4Layer.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;TcpLayer.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;Packet.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;PcapFileDevice.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;PacketUtils.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;ctime&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;cstdlib&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">pcpp</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="cp">#define MY_FORMAT setw(18) &lt;&lt; setiosflags(ios::left)
+</span><span class="cp"></span><span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="nf">openFileReader</span><span class="p">(</span><span class="n">string</span> <span class="n">fileName</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">openedReader</span> <span class="o">=</span> <span class="n">IFileReaderDevice</span><span class="o">::</span><span class="n">getReader</span><span class="p">(</span><span class="n">fileName</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">openedReader</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot determine reader for file type&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">openedReader</span><span class="o">-&gt;</span><span class="n">open</span><span class="p">())</span>
+	<span class="p">{</span>
+		<span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot open input.pcap for reading&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">openedReader</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+	<span class="c1">// open a pcap file for reading
+</span><span class="c1"></span>	<span class="n">string</span> <span class="n">pcapFile</span> <span class="o">=</span> <span class="s">&#34;test_file_1.pcap&#34;</span><span class="p">;</span>
+	<span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">openFileReader</span><span class="p">(</span><span class="n">pcapFile</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">setFilter</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot set filter for file reader&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+		<span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="n">RawPacket</span> <span class="n">rawPacket</span><span class="p">;</span>
+	<span class="n">map</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="p">,</span> <span class="n">timespec</span><span class="o">&gt;</span> <span class="n">sessionMap</span><span class="p">;</span>
+	<span class="n">map</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">finCount</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">outputCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">auto</span> <span class="n">BEGIN</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+	<span class="k">while</span> <span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">getNextPacket</span><span class="p">(</span><span class="n">rawPacket</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">Packet</span> <span class="n">parsedPakcet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rawPacket</span><span class="p">);</span>
+		<span class="n">TcpLayer</span><span class="o">*</span> <span class="n">tcpLayer</span> <span class="o">=</span> <span class="n">parsedPakcet</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">TcpLayer</span><span class="o">&gt;</span><span class="p">();</span>
+		<span class="n">IPv4Layer</span><span class="o">*</span> <span class="n">ipLayer</span> <span class="o">=</span> <span class="n">parsedPakcet</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">IPv4Layer</span><span class="o">&gt;</span><span class="p">();</span>
+		<span class="kt">uint32_t</span> <span class="n">keyTuple</span> <span class="o">=</span> <span class="n">hash5Tuple</span><span class="p">(</span><span class="o">&amp;</span><span class="n">parsedPakcet</span><span class="p">);</span>
+		
+		<span class="k">if</span> <span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getTcpHeader</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">synFlag</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getTcpHeader</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ackFlag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">sessionMap</span><span class="p">[</span><span class="n">keyTuple</span><span class="p">]</span> <span class="o">=</span> <span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">();</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getTcpHeader</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">finFlag</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getTcpHeader</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">rstFlag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">finCount</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">keyTuple</span><span class="p">)</span> <span class="o">!=</span> <span class="n">finCount</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="n">finCount</span><span class="p">[</span><span class="n">keyTuple</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="k">else</span>
+			<span class="p">{</span>
+				<span class="n">finCount</span><span class="p">[</span><span class="n">keyTuple</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+			<span class="p">}</span>
+			
+			<span class="k">auto</span> <span class="n">sessionStart</span> <span class="o">=</span> <span class="n">sessionMap</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">keyTuple</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">finCount</span><span class="p">[</span><span class="n">keyTuple</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">sessionStart</span> <span class="o">!=</span> <span class="n">sessionMap</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Src&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Dst&#34;</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;SrcPort&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;DstPort&#34;</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Start&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;End&#34;</span><span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Duration&#34;</span>
+					<span class="o">&lt;&lt;</span> <span class="n">endl</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">ipLayer</span><span class="o">-&gt;</span><span class="n">getSrcIPv4Address</span><span class="p">().</span><span class="n">toString</span><span class="p">()</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">ipLayer</span><span class="o">-&gt;</span><span class="n">getDstIPv4Address</span><span class="p">().</span><span class="n">toString</span><span class="p">()</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getSrcPort</span><span class="p">()</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">tcpLayer</span><span class="o">-&gt;</span><span class="n">getDstPort</span><span class="p">();</span>
+
+				<span class="kt">double</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">sessionStart</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">+</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">sessionStart</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">;</span>
+				<span class="kt">double</span> <span class="n">endTime</span> <span class="o">=</span> <span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">().</span><span class="n">tv_sec</span> <span class="o">+</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">().</span><span class="n">tv_nsec</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">;</span>
+				<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">sessionStart</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">tv_sec</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">rawPacket</span><span class="p">.</span><span class="n">getPacketTimeStamp</span><span class="p">().</span><span class="n">tv_sec</span>
+					<span class="o">&lt;&lt;</span> <span class="n">MY_FORMAT</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+					<span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+				<span class="n">sessionMap</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">sessionStart</span><span class="p">);</span>
+				<span class="n">outputCount</span><span class="o">++</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">auto</span> <span class="n">END</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Total time: &#34;</span> <span class="o">&lt;&lt;</span> <span class="kt">double</span><span class="p">(</span><span class="n">END</span> <span class="o">-</span> <span class="n">BEGIN</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLK_TCK</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;ms.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Total sessions: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">outputCount</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">reader</span><span class="o">-&gt;</span><span class="n">close</span><span class="p">();</span>
+	<span class="k">delete</span> <span class="n">reader</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>这次代码作出的改变主要有：</p>
+<ul>
+<li>使用 <code>uint32_t keyTuple = hash5Tuple(&amp;parsedPakcet);</code> 来表示会话元组，既节省空间（原先的 <code>String</code> 超级大）又节省时间（把 <code>String</code> 当做键值，比较起来很慢）；</li>
+<li>重新考虑会话起止的算法。会话起点为带有 <code>SYN</code> 但不带 <code>ack</code> 的包，会话终点为第二个 <code>FIN</code> 包；在后期观察时，发现 <strong>会话终点还可以是 <code>RST</code> 包</strong> 。</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 200; 
+			flex-basis: 482px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/3.png" data-size="1463x728">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/3.png"
+			width="1463"
+			height="728"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/3_hud7a026e0473108f62fcb1c2c5db263e0_58974_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/3_hud7a026e0473108f62fcb1c2c5db263e0_58974_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="运行结果">
+	</a>
+	
+	<figcaption>运行结果</figcaption>
+	
+</figure></p>
+<p>结果不坏。从时间上看，基本上比之前的切分方式快了一倍。</p>
+<h3 id="与wireshark统计结果的对比">与WireShark统计结果的对比</h3>
+<p>程序计算出来的结果是 <code>163</code> 个完整会话，而WireShark的统计结果是 <code>221</code> 个会话：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 243; 
+			flex-basis: 584px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/4.png" data-size="1920x788">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/4.png"
+			width="1920"
+			height="788"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/4_hud39d4457329b17c4b6b9ba7992dd34d2_92776_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/4_hud39d4457329b17c4b6b9ba7992dd34d2_92776_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="WireShark&ndash;Statistics&ndash;Conversations">
+	</a>
+	
+	<figcaption>WireShark–Statistics–Conversations</figcaption>
+	
+</figure></p>
+<p>但是将这些会话按照字节大小排序，跟踪前面的比较小的会话，发现这些会话并不完整：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 371; 
+			flex-basis: 891px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/5.png" data-size="1920x517">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/5.png"
+			width="1920"
+			height="517"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/5_hud5891e870777b61271b58214ff08f2a3_64406_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/5_hud5891e870777b61271b58214ff08f2a3_64406_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="不完整的会话">
+	</a>
+	
+	<figcaption>不完整的会话</figcaption>
+	
+</figure></p>
+<p>我推测WireShark仅仅是根据五元组来进行统计，根本没有去考虑会话的完整性。如果我们使用 <code>hash5Tuple()</code> ，计算出来的每一个 <code>uint_32</code> 值都表示一个会话，那么结果跟WireShark的统计应该是一样的。</p>
+<p>简单在代码中添加一个记录这些五元组的集合 <code>set&lt;uint32_t&gt; tupleSet;</code> ，然后每计算一个哈希值就往里放，最后打印一下：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 200; 
+			flex-basis: 482px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/6.png" data-size="1463x728">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/6.png"
+			width="1463"
+			height="728"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/6_huac633089ac09dc129da65ccce34f353b_61922_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/6_huac633089ac09dc129da65ccce34f353b_61922_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="tupleSet.size()">
+	</a>
+	
+	<figcaption>tupleSet.size()</figcaption>
+	
+</figure></p>
+<p>果不其然！</p>
+<p>WireShark这种统计方式没什么用啦！一个没头没尾的数据段能代表什么呢？还是按照之前提到的方法来表示一个会话，这样精确一点！</p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] <a class="link" href="https://pcapplusplus.github.io/docs/tutorials/packet-parsing"  target="_blank" rel="noopener"
+    >4. Packet Parsing - PcapPlusPlus</a></p>
+<p>[2] <a class="link" href="https://pcapplusplus.github.io/docs/tutorials/intro"  target="_blank" rel="noopener"
+    >1. Introduction - PcapPlusPlus</a></p>
+<p>[3] <a class="link" href="https://pcapplusplus.github.io/api-docs/"  target="_blank" rel="noopener"
+    >PcapPlusPlus: API Documentation</a></p>
+<p>[4] <a class="link" href="https://www.cnblogs.com/zhuimengle/p/5787345.html"  target="_blank" rel="noopener"
+    >一站式学习Wireshark（七）：Statistics统计工具功能详解与应用 - zhuimeng~ - 博客园 (cnblogs.com)</a></p>
+<p>[5] <a class="link" href="https://github.com/seladb/PcapPlusPlus/tree/master/Examples/PcapSplitter"  target="_blank" rel="noopener"
+    >PcapPlusPlus/Examples/PcapSplitter at master · seladb/PcapPlusPlus (github.com)</a></p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 05, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">TCP加速之环境搭建（WANem）</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 23, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Hackintosh小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 22, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 16, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（页面篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 12, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前情提要">前情提要</a></li>
+    <li><a href="#数据包解析">数据包解析</a></li>
+    <li><a href="#并不成功的会话切分">并不成功的会话切分</a>
+      <ul>
+        <li><a href="#元组的表示问题">元组的表示问题</a></li>
+        <li><a href="#会话起止的问题">会话起止的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#比较成功的会话切分">比较成功的会话切分</a></li>
+    <li><a href="#与wireshark统计结果的对比">与WireShark统计结果的对比</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

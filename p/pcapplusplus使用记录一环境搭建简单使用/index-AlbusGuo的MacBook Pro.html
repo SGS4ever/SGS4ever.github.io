@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='简介 由于项目的需要，近期产生了一个需求：将一个 pacp 文件解析出来，然后尝试提取每个连接的各种统计数据，例如提取一个完整的TCP会话中的源IP、目的IP、源端口、目的端口、会话开始时间、会话结束时间、发送的数据包数量、发送的数据包总大小等等。
+能够实现这一需求的库有很多，如python中的 scapy 、 dpkt ，C&#43;&#43;中的 PcapPlusPlus 等，考虑到将来可能需要处理较大的 pcap 文件，以及C&#43;&#43;相比于python在执行速度上的优势，我决定使用C&#43;&#43;作为流量处理的语言；简单翻阅了一下 PcapPlusPlus的文档 ，我认为这个库的易用性能够满足我较低的水平，因此决定先实践一下再说。
+预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
+本文使用的环境是：Win10 &#43; VisualStudio2019 。
+要使用这个库，我们需要先安装一些依赖。
+ 个人建议将这些依赖下载到同一个地方，方便管理！
+  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
+ 现有的文件 
+All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：'><title>PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）'>
+<meta property='og:description' content='简介 由于项目的需要，近期产生了一个需求：将一个 pacp 文件解析出来，然后尝试提取每个连接的各种统计数据，例如提取一个完整的TCP会话中的源IP、目的IP、源端口、目的端口、会话开始时间、会话结束时间、发送的数据包数量、发送的数据包总大小等等。
+能够实现这一需求的库有很多，如python中的 scapy 、 dpkt ，C&#43;&#43;中的 PcapPlusPlus 等，考虑到将来可能需要处理较大的 pcap 文件，以及C&#43;&#43;相比于python在执行速度上的优势，我决定使用C&#43;&#43;作为流量处理的语言；简单翻阅了一下 PcapPlusPlus的文档 ，我认为这个库的易用性能够满足我较低的水平，因此决定先实践一下再说。
+预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
+本文使用的环境是：Win10 &#43; VisualStudio2019 。
+要使用这个库，我们需要先安装一些依赖。
+ 个人建议将这些依赖下载到同一个地方，方便管理！
+  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
+ 现有的文件 
+All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：'>
+<meta property='og:url' content='https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2022-02-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-02-05T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）">
+<meta name="twitter:description" content="简介 由于项目的需要，近期产生了一个需求：将一个 pacp 文件解析出来，然后尝试提取每个连接的各种统计数据，例如提取一个完整的TCP会话中的源IP、目的IP、源端口、目的端口、会话开始时间、会话结束时间、发送的数据包数量、发送的数据包总大小等等。
+能够实现这一需求的库有很多，如python中的 scapy 、 dpkt ，C&#43;&#43;中的 PcapPlusPlus 等，考虑到将来可能需要处理较大的 pcap 文件，以及C&#43;&#43;相比于python在执行速度上的优势，我决定使用C&#43;&#43;作为流量处理的语言；简单翻阅了一下 PcapPlusPlus的文档 ，我认为这个库的易用性能够满足我较低的水平，因此决定先实践一下再说。
+预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
+本文使用的环境是：Win10 &#43; VisualStudio2019 。
+要使用这个库，我们需要先安装一些依赖。
+ 个人建议将这些依赖下载到同一个地方，方便管理！
+  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
+ 现有的文件 
+All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 05, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h3 id="简介">简介</h3>
+<p>由于项目的需要，近期产生了一个需求：将一个 <code>pacp</code> 文件解析出来，然后尝试提取每个连接的各种统计数据，例如提取一个完整的TCP会话中的源IP、目的IP、源端口、目的端口、会话开始时间、会话结束时间、发送的数据包数量、发送的数据包总大小等等。</p>
+<p>能够实现这一需求的库有很多，如python中的 <code>scapy</code> 、 <code>dpkt</code> ，C++中的 <code>PcapPlusPlus</code> 等，考虑到将来可能需要处理较大的 <code>pcap</code> 文件，以及C++相比于python在执行速度上的优势，我决定使用C++作为流量处理的语言；简单翻阅了一下 <a class="link" href="https://pcapplusplus.github.io/docs/"  target="_blank" rel="noopener"
+    >PcapPlusPlus的文档</a> ，我认为这个库的易用性能够满足我较低的水平，因此决定先实践一下再说。</p>
+<h3 id="预装依赖">预装依赖</h3>
+<p><strong>从这里开始，我想将 <em>PcapPlusPlus</em> 简称为 <em>PCPP</em> ，方便文章的撰写之用</strong> 。</p>
+<p><strong>本文使用的环境是：Win10 + VisualStudio2019</strong> 。</p>
+<p>要使用这个库，我们需要先安装一些依赖。</p>
+<blockquote>
+<p>个人建议将这些依赖下载到同一个地方，方便管理！</p>
+</blockquote>
+<ul>
+<li>安装 <a class="link" href="https://www.winpcap.org/devel.htm"  target="_blank" rel="noopener"
+    >WinPcap开发者工具</a> 或 <a class="link" href="https://nmap.org/npcap/#download"  target="_blank" rel="noopener"
+    >Npcap SDK</a> 。下载解压而已，很简单！我这边使用的是WinPcap 。</li>
+<li>安装 <a class="link" href="https://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip"  target="_blank" rel="noopener"
+    >pthread-win32工具</a> ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 <code>ftp</code> ，我下载的时候好像打不开的样子，就改为使用 <code>https</code> 了！</li>
+<li>可能还需要一个 <a class="link" href="https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads"  target="_blank" rel="noopener"
+    >Microsoft Visual C++ Redistributable</a> 工具，从这里下下来的是个 <code>exe</code> 文件，我在后面的过程中 <strong>暂时没有用到</strong> ！也就是说我还没运行过这个EXE，先下载下来而已！</li>
+</ul>
+<h3 id="下载pcapplusplus">下载PcapPlusPlus</h3>
+<p>直接从 <a class="link" href="https://github.com/seladb/PcapPlusPlus/releases/tag/v21.11"  target="_blank" rel="noopener"
+    >PcapPlusPlus v21.11</a> 页面上把示例代码下载下来！我这边选用的是 <code>windows-vs2019</code> 这个压缩包！</p>
+<p>到这一步，算上我们之前下载 <strong>并解压</strong> 的依赖，文件夹里面应该有这么多东西：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 396; 
+			flex-basis: 950px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/1.png" data-size="1097x277">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/1.png"
+			width="1097"
+			height="277"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/1_hu42640c4596336638fc914d1946556867_36996_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/1_hu42640c4596336638fc914d1946556867_36996_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="现有的文件">
+	</a>
+	
+	<figcaption>现有的文件</figcaption>
+	
+</figure></p>
+<p>All right？进入刚才下载的VS2019文件夹里面，有个 <code>ExampleProject</code> ，打开之：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 451; 
+			flex-basis: 1084px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/2.png" data-size="1062x235">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/2.png"
+			width="1062"
+			height="235"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/2_hu28d29a4135024b65ca49327d89521d8e_31401_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/2_hu28d29a4135024b65ca49327d89521d8e_31401_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="ExampleProject文件结构">
+	</a>
+	
+	<figcaption>ExampleProject文件结构</figcaption>
+	
+</figure></p>
+<p>没问题的话，就准备运行示例程序了！</p>
+<h3 id="运行示例程序">运行示例程序</h3>
+<p>熟悉VS的朋友可能要迫不及待地把那个 <code>.sln</code> 文件给打开了~不要心急！</p>
+<p>首先我们应该修改 <code>.props</code> 文件，这个文件是用来指定项目里面的一些属性的；具体地说，其实就是指定刚才下载的几个依赖的路径而已！如果不修改这个文件，贸然打开 <code>.sln</code> ，那必然是要报错的！</p>
+<p>最原始的 <code>.props</code> 文件内容如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span> 
+<span class="nt">&lt;Project</span> <span class="na">ToolsVersion=</span><span class="s">&#34;4.0&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/developer/msbuild/2003&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;ImportGroup</span> <span class="na">Label=</span><span class="s">&#34;PropertySheets&#34;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;PropertyGroup</span> <span class="na">Label=</span><span class="s">&#34;UserMacros&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;PcapPlusPlusHome&gt;</span>Drive:\your\PcapPlusPlus\folder<span class="nt">&lt;/PcapPlusPlusHome&gt;</span>
+    <span class="nt">&lt;PcapSdkHome&gt;</span>Drive:\WpdPack\folder<span class="nt">&lt;/PcapSdkHome&gt;</span>
+    <span class="nt">&lt;PThreadWin32Home&gt;</span>Drive:\pthread-win32\folder<span class="nt">&lt;/PThreadWin32Home&gt;</span>
+  <span class="nt">&lt;/PropertyGroup&gt;</span>
+  <span class="nt">&lt;PropertyGroup</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;ItemDefinitionGroup</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;ItemGroup</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+</code></pre></div><p>看到吗？这个文件指定三个关键路径：</p>
+<ul>
+<li><em>PcapPlusPlusHome</em> ：就是刚才解压出来的PCPP目录，也就是现在这个 <code>ExampleProject</code> 的上级目录！</li>
+<li><em>PcapSdkHome</em> ：用于处理 <code>pcap</code> 文件的SDK工具的目录，在 <a class="link" href="#%e9%a2%84%e8%a3%85%e4%be%9d%e8%b5%96" >预装依赖</a> 小节里面我们下载了WinPcap，还记得吗？把它的路径写在这里即可！如果你选用的是Npcap，道理也一样~</li>
+<li><em>PThreadWin32Home</em> ：多线程库！把pthread路径填进去吧 😀</li>
+</ul>
+<p>在我的PC上，修改完成之后这个文件差不多是这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span> 
+<span class="nt">&lt;Project</span> <span class="na">ToolsVersion=</span><span class="s">&#34;4.0&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/developer/msbuild/2003&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;ImportGroup</span> <span class="na">Label=</span><span class="s">&#34;PropertySheets&#34;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;PropertyGroup</span> <span class="na">Label=</span><span class="s">&#34;UserMacros&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;PcapPlusPlusHome&gt;</span>E:\PcapPlusPlus\pcapplusplus-21.11-windows-vs2019<span class="nt">&lt;/PcapPlusPlusHome&gt;</span>
+    <span class="nt">&lt;PcapSdkHome&gt;</span>E:\PcapPlusPlus\WpdPack<span class="nt">&lt;/PcapSdkHome&gt;</span>
+    <span class="nt">&lt;PThreadWin32Home&gt;</span>E:\PcapPlusPlus\pthreads-w32-2-9-1-release<span class="nt">&lt;/PThreadWin32Home&gt;</span>
+  <span class="nt">&lt;/PropertyGroup&gt;</span>
+  <span class="nt">&lt;PropertyGroup</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;ItemDefinitionGroup</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;ItemGroup</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+
+</code></pre></div><p>之后，就可以打开 <code>.sln</code> 文件了！示例项目即刻出现！</p>
+<p><code>main.cpp</code> 简单使用PcapPlusPlus解析了一下示例项目里面的 <code>1_packet.pcap</code> 文件，这个文件只有一个数据包，程序把源IP和目的IP输出了一下而已！</p>
+<p>直接编译运行即可：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 200; 
+			flex-basis: 482px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/4.png" data-size="1463x728">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/4.png"
+			width="1463"
+			height="728"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/4_hub29bd059b9b8685660770c73744c3559_32559_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/4_hub29bd059b9b8685660770c73744c3559_32559_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="运行结果">
+	</a>
+	
+	<figcaption>运行结果</figcaption>
+	
+</figure></p>
+<h3 id="简单使用pcpp处理pcap文件">简单使用PCPP处理pcap文件</h3>
+<p>刚才运行的示例未免太简单，很难体现出咱们这个库的潜力！</p>
+<p>在这一小节，我希望使用这个库简单处理一下我之前捕获的一个 <code>pcap</code> 文件，里面包含两万多条数据，其实也还不算很大。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/3.png" data-size="1920x1030">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/3.png"
+			width="1920"
+			height="1030"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/3_hu1b87c0465dcb70c7eeff46beed360c4c_92529_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/3_hu1b87c0465dcb70c7eeff46beed360c4c_92529_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="test_file_1.pcap">
+	</a>
+	
+	<figcaption>test_file_1.pcap</figcaption>
+	
+</figure></p>
+<p>先把代码贴出来，再慢慢解释吧~</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;IPv4Layer.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;Packet.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;PcapFileDevice.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;ctime&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="c1">// Part 1
+</span><span class="c1"></span>	<span class="c1">// open a pcap file for reading
+</span><span class="c1"></span>	<span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">::</span><span class="n">getReader</span><span class="p">(</span><span class="s">&#34;test_file_1.pcap&#34;</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot determine reader for file type&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">open</span><span class="p">())</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot open input.pcap for reading&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+    <span class="c1">// Part 2
+</span><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">setFilter</span><span class="p">(</span><span class="s">&#34;tcp and port 80&#34;</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot set filter for file reader&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="c1">// Part 3
+</span><span class="c1"></span>	<span class="n">pcpp</span><span class="o">::</span><span class="n">RawPacket</span> <span class="n">rawPacket</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">dstIPSet</span><span class="p">;</span>
+	<span class="n">clock_t</span> <span class="n">BEGIN</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+	<span class="k">while</span> <span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">getNextPacket</span><span class="p">(</span><span class="n">rawPacket</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">pcpp</span><span class="o">::</span><span class="n">Packet</span> <span class="n">parsedPacket</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rawPacket</span><span class="p">);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">parsedPacket</span><span class="p">.</span><span class="n">isPacketOfType</span><span class="p">(</span><span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4</span><span class="p">))</span>
+		<span class="p">{</span>
+			<span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Address</span> <span class="n">dstIP</span> <span class="o">=</span> <span class="n">parsedPacket</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Layer</span><span class="o">&gt;</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getDstIPv4Address</span><span class="p">();</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">dstIPSet</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">dstIP</span><span class="p">.</span><span class="n">toString</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+				<span class="n">dstIPSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dstIP</span><span class="p">.</span><span class="n">toString</span><span class="p">());</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">clock_t</span> <span class="n">END</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+	<span class="c1">// Part 4
+</span><span class="c1"></span>	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;There are total &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dstIPSet</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; destination IP address.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Total time: &#34;</span> <span class="o">&lt;&lt;</span> <span class="kt">double</span><span class="p">(</span><span class="n">END</span> <span class="o">-</span> <span class="n">BEGIN</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLK_TCK</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; ms.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+	<span class="c1">// Part 5
+</span><span class="c1"></span>	<span class="n">reader</span><span class="o">-&gt;</span><span class="n">close</span><span class="p">();</span>
+	<span class="k">delete</span> <span class="n">reader</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div><p>根据 <a class="link" href="https://pcapplusplus.github.io/docs/tutorials/read-write-pcap"  target="_blank" rel="noopener"
+    >参考资料[4]</a> ，我们这次使用的 <code>reader</code> 跟刚才示例代码使用的不太一样，用的是 <code>IFileReaderDevice</code> 里面的 <code>getReader()</code> API，它会根据文件名来为我们返回合适的Reader！代码里面的 <code>Part 1</code> 就是在干这个事情而已，创建一个合适的Reader，然后打开它，准备读取文件了！</p>
+<p>紧接着，我为这个Reader设置了一个过滤器。 <code>reader-&gt;setFilter(&quot;tcp and port 80&quot;)</code> 表明我只希望读取协议为TCP的、且端口为 <code>80</code> 的数据包，其它的数据包（如ICMP、UDP等等）我就不关心了。这个 <code>setFilter</code> 在将来的场景里面应该是蛮有用的，它使用的是 <a class="link" href="https://biot.com/capstats/bpf.html"  target="_blank" rel="noopener"
+    >Berkeley Packet Filter (BPF) syntax</a> 。</p>
+<p>来到 <code>Part 3</code> 之后，开始分析我们读到的数据。过滤器是TCP协议和 <code>80</code> 端口，其实我们读取的就是发往某个Web服务的请求而已！我用了一个集合 <code>dstIPSet</code> 来记录目的IP，打算待会看看总共有多少不同的目的主机 😹 使用 <code>while</code> 循环来读取数据包，使用 <code>parsedPacket</code> 来解析数据包，然后获取数据包里面的IPv4地址，把它放到集合里面！</p>
+<p><code>Part 3</code> 有个小点缀，就是在循环外面设置了两个 <code>clock_t</code> ，目的是测试一下整个循环要花多长时间！</p>
+<p><code>Part 4</code> 就是我们的输出啦：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 200; 
+			flex-basis: 481px"
+	>
+	<a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/5.png" data-size="1462x728">
+		<img src="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/5.png"
+			width="1462"
+			height="728"
+			srcset="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/5_hua32758dc0b3c7eaa68fd367adcfae164_35511_480x0_resize_box_3.png 480w, /p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/5_hua32758dc0b3c7eaa68fd367adcfae164_35511_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="output result">
+	</a>
+	
+	<figcaption>output result</figcaption>
+	
+</figure></p>
+<p><code>Part 5</code> 还是比较重要的，要把劳苦功高的Reader关掉、还要释放它的空间啊！刚开始编写这个程序的时候我给忘了，罪过罪过~由于PCPP的这个 <code>IFileReaderDevice</code> 是动态分配的，如果不把它 <code>delete</code> 掉的话会发生内存泄露呀！</p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] <a class="link" href="https://pcapplusplus.github.io/docs/quickstart/vs"  target="_blank" rel="noopener"
+    >Quick Start - Visual Studio - PcapPlusPlus</a></p>
+<p>[2] <a class="link" href="https://pcapplusplus.github.io/docs/install/build-source/vs"  target="_blank" rel="noopener"
+    >Build on Windows (VS) - PcapPlusPlus</a></p>
+<p>[3] <a class="link" href="https://zhuanlan.zhihu.com/p/38890366"  target="_blank" rel="noopener"
+    >《PCAP》第1期（1）：PcapPlusPlus示例程序VS2015配置 - 知乎 (zhihu.com)</a></p>
+<p>[4] <a class="link" href="https://pcapplusplus.github.io/docs/tutorials/read-write-pcap"  target="_blank" rel="noopener"
+    >2. Read/Write Pcap Files - PcapPlusPlus</a></p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 07, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">TCP加速之环境搭建（WANem）</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 23, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Hackintosh小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 22, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 16, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（页面篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 12, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#预装依赖">预装依赖</a></li>
+    <li><a href="#下载pcapplusplus">下载PcapPlusPlus</a></li>
+    <li><a href="#运行示例程序">运行示例程序</a></li>
+    <li><a href="#简单使用pcpp处理pcap文件">简单使用PCPP处理pcap文件</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
