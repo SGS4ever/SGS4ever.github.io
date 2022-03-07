@@ -6,6 +6,7 @@
     <description>Recent content in 实践 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+<<<<<<< HEAD
     <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>读书摘抄站点构建（前后端结合）</title>
@@ -30,6 +31,9 @@ VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的�
 const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .</description>
     </item>
     
+=======
+    <lastBuildDate>Tue, 22 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+>>>>>>> eb9295cbb05244630c2f83dcc3cd6fb19d69a92b
     <item>
       <title>Hackintosh小记</title>
       <link>https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/</link>
