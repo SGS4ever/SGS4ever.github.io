@@ -452,20 +452,20 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;把第 &lt;code&gt;230&lt;/code&gt; 行的 &lt;code&gt;simple_controllers_map&lt;/code&gt; 注释掉，因为目前还不需要进行控制器、过滤器等的添加：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//&amp;#34;simple_controllers_map&amp;#34;: [
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//  {
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;path&amp;#34;: &amp;#34;/path/name&amp;#34;,
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;controller&amp;#34;: &amp;#34;controllerClassName&amp;#34;,
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;http_methods&amp;#34;: [
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//      &amp;#34;get&amp;#34;,
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//      &amp;#34;post&amp;#34;
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    ],
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;filters&amp;#34;: [
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//      &amp;#34;FilterClassName&amp;#34;
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    ]
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//  }
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//],
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;simple_controllers_map&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;path&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;/path/name&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;controller&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;controllerClassName&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;http_methods&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;      &lt;span class=&#34;s2&#34;&gt;&amp;#34;get&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;      &lt;span class=&#34;s2&#34;&gt;&amp;#34;post&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;filters&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;      &lt;span class=&#34;s2&#34;&gt;&amp;#34;FilterClassName&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;修改 &lt;code&gt;main.cc&lt;/code&gt; 文件，把加载配置文件的那行代码取消注释：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span class=&#34;n&#34;&gt;drogon&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;loadConfigFile&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;../../../config.json&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
@@ -7235,7 +7235,7 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 &lt;li&gt;房子原本有颜色，如果此颜色与 &lt;code&gt;color&lt;/code&gt; 不同，那么这种上色方案无论如何是不可行的；如果此颜色与 &lt;code&gt;color&lt;/code&gt; 相同，那么 &lt;code&gt;dp&lt;/code&gt; 值就是我们上面分析的情况。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;把这些分析加以实现，我们应该：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-伪代码&#34; data-lang=&#34;伪代码&#34;&gt;- 枚举房子下标 --&amp;gt; idx: 0 ~ m - 1
+&lt;pre&gt;&lt;code class=&#34;language-伪代码&#34; data-lang=&#34;伪代码&#34;&gt;- 枚举房子下标 --&amp;gt; idx: 0 ~ m - 1
 	- 枚举上色方案 --&amp;gt; color: 0 ~ n - 1
 		- 如果房子有颜色且不同于 color，继续枚举颜色
 		- 运行至此有两种情况：房子没有颜色，或房子有颜色且颜色就是 color
@@ -15039,21 +15039,17 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 &lt;p&gt;如果你觉得这个主题不错，那么非常幸运地，你可以参考我将要写下的经验，否则本篇对你的意义将打个折扣了。&lt;/p&gt;
 &lt;p&gt;Then, let&amp;rsquo;s go!&lt;/p&gt;
 &lt;h3 id=&#34;下载hugo&#34;&gt;下载Hugo&lt;/h3&gt;
-&lt;blockquote&gt;
 &lt;p&gt;Hugo 是一款基于Go语言的建站工具，官网说它是“世界上最快的网站框架”，主要正是由于Go语言的高效。这款软件使用起来比较简单，虽然我在整个搭建过程中出了无数错，但是只要你跟着我接下来的介绍走，就只需要使用短短的几个命令。&lt;/p&gt;
 &lt;p&gt;但是首先，下载一个Hugo是一切步骤的开始。以下步骤全部基于Windows10系统（&lt;del&gt;主要是我没有Mac&lt;/del&gt;）。&lt;/p&gt;
 &lt;p&gt;我们去到下面的这个网址：&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;(https://github.com/gohugoio/hugo/releases)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio/hugo/releases&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/gohugoio/hugo/releases&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;在里面你可以下载Windows系统下的Hugo，注意是&lt;code&gt;Hugo_extend&lt;/code&gt;而不是&lt;code&gt;hugo&lt;/code&gt;，因为有些主题里面用到了SASS/SCSS，需要extend版本的hugo才能完成编译。&lt;/p&gt;
 &lt;p&gt;将下载的压缩包解压，得到一个文件夹，里面有&lt;code&gt;hugo.exe&lt;/code&gt;。接下来将这个文件夹的位置添加到&lt;strong&gt;系统环境变量&lt;/strong&gt;中，就跟你配置&lt;em&gt;java&lt;/em&gt;或者是&lt;em&gt;python&lt;/em&gt;完全一样，还需要我再讲吗？&lt;/p&gt;
 &lt;p&gt;好吧，念及这篇博文主要是写给像当年的我一样年轻且好奇的同学，如果有任何问题，还请照着以下步骤来：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;右键&lt;code&gt;我的电脑&lt;/code&gt; &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在&lt;code&gt;系统变量&lt;/code&gt;中找到&lt;code&gt;path&lt;/code&gt;这一栏，把你放置Hugo.exe的文件夹路径写进去。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;接下来打开你的命令行窗口，试着执行&lt;code&gt;hugo version&lt;/code&gt;，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;右键 &lt;code&gt;我的电脑&lt;/code&gt; &amp;ndash;&amp;gt; 属性 &amp;ndash;&amp;gt; 高级系统设置（在左边栏里） &amp;ndash;&amp;gt; 环境变量（在弹出的窗口的右下角） &amp;ndash;&amp;gt; 在&lt;code&gt;系统变量&lt;/code&gt;中找到 &lt;code&gt;path&lt;/code&gt; 这一栏，把你放置Hugo.exe的文件夹路径写进去。&lt;/p&gt;
+&lt;p&gt;接下来打开你的命令行窗口，试着执行 &lt;code&gt;hugo version&lt;/code&gt; ，如果你没有得到报错，而是得到了一个hugo的版本信息，那么恭喜你，你取得了一个非常不错的开端！&lt;/p&gt;
 &lt;h3 id=&#34;新建站点&#34;&gt;新建站点&lt;/h3&gt;
-&lt;blockquote&gt;
 &lt;p&gt;用hugo新建站点实在是&lt;strong&gt;非常简单&lt;/strong&gt;。在你电脑上某个位置打开你的命令行，敲上命令：&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;hugo new site [yourSiteName]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！&lt;/p&gt;
@@ -15077,22 +15073,25 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 	&lt;figcaption&gt;新建站点&lt;/figcaption&gt;
 	
 &lt;/figure&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
 &lt;h3 id=&#34;选择主题&#34;&gt;选择主题&lt;/h3&gt;
-&lt;blockquote&gt;
 &lt;p&gt;“一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德&lt;/p&gt;
 &lt;p&gt;你现在浏览的——也就是我的博客——主题是：&lt;!-- raw HTML omitted --&gt;&lt;a class=&#34;link&#34; href=&#34;https://themes.gohugo.io/keepit/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://themes.gohugo.io/keepit/&lt;/a&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
 &lt;p&gt;实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ&lt;/p&gt;
 &lt;p&gt;当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是&lt;strong&gt;安装&lt;/strong&gt;指南o(╥﹏╥)o）。&lt;/p&gt;
 &lt;p&gt;就以这款&lt;em&gt;KeepIt&lt;/em&gt;主题为例，我们的网站根目录下有一个&lt;code&gt;themes&lt;/code&gt;文件夹，你只需要进入这个文件夹，使用命令&lt;code&gt;git clone https://github.com/Fastbyte01/KeepIt.git&lt;/code&gt;，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;2022-04-05注：目前博客的主题已经不是KeepIt，而是Stack，详情参见 &lt;a class=&#34;link&#34; href=&#34;https://xrg.fj.cn/p/hugo-stack%e4%b8%bb%e9%a2%98%e6%9b%b4%e6%96%b0%e5%b0%8f%e8%ae%b0/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Hugo Stack主题更新小记 (xrg.fj.cn)&lt;/a&gt; 。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;配置页面&#34;&gt;配置页面&lt;/h3&gt;
-&lt;blockquote&gt;
 &lt;p&gt;现在让你的命令行回到网站的根目录下，写下命令&lt;code&gt;hugo server --theme=keepit -D&lt;/code&gt;，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将&lt;code&gt;--theme&lt;/code&gt;这个参数指定为你想用的主题的名字，就问你简单不？&lt;/p&gt;
 &lt;p&gt;回到你的网站上吧，看看效果。&lt;/p&gt;
 &lt;p&gt;什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。&lt;/p&gt;
 &lt;p&gt;打开你刚才下载的主题文件夹，一般来讲，里面都有一个&lt;code&gt;exampleSite&lt;/code&gt;文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;2022-04-05注：为了日后换主题的方便，已经不建议将 &lt;code&gt;exampleSite&lt;/code&gt; 全部复制到根目录中。目前来看，我们只需要复制里面的 &lt;code&gt;content&lt;/code&gt; 文件夹和 &lt;code&gt;config&lt;/code&gt; 文件即可。修改主题时直接进入 &lt;code&gt;theme&lt;/code&gt; 文件夹修改，这样一来日后可以更加方便地改变博客主题。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;现在再运行，你发现你的网站已经颇有点样子了，只不过里面的页面还有显示的内容还是别人写好的，你希望把它们换成自己的内容。&lt;/p&gt;
 &lt;p&gt;OK，一步一步来。首先，根目录底下有一个文件&lt;code&gt;config.toml&lt;/code&gt;，打开它，以keepit主题为例，里面是一系列参数名称和数值。&lt;/p&gt;
 &lt;p&gt;从上往下看，在第四行有个&lt;code&gt;title = xxx&lt;/code&gt;，这就是你的网站的标题了，你把它改掉，然后看看效果，你瞬间就明白这个配置文件的作用了，这比我在这里用文字描述要生动一万倍。&lt;/p&gt;
@@ -15100,48 +15099,45 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 &lt;p&gt;继续往下看，你可以看到一个&lt;code&gt;[params]&lt;/code&gt;字段，这是适用于整个站点的一些参数。里面有个&lt;code&gt;avatar&lt;/code&gt;参数，它用于配置你的主页面上的那个头像，你可以把它注释掉，然后启用下方几行的&lt;code&gt;[params.gravatar]&lt;/code&gt;字段，它会将你的主页图片替换为你独有的gravatar，当然，如果你不知道什么是gravatar，百度之。&lt;/p&gt;
 &lt;p&gt;主页的底下有四个链接按钮，你在&lt;code&gt;[params.social]&lt;/code&gt;字段下可以找到对应的配置。比如我，就把里面的&lt;code&gt;Instagram&lt;/code&gt;、&lt;code&gt;Linkedin&lt;/code&gt;都注释掉了，只保留了&lt;code&gt;Twitter&lt;/code&gt;和&lt;code&gt;Github&lt;/code&gt;，所以你在我的主页上只能找到这两个链接。&lt;/p&gt;
 &lt;p&gt;继续往下，就是一些无关紧要的参数了，你可以暂且忽略它们。当你走到这里，你的网站已经初步具有你的个人特色了，但我还要带你继续配置你的网站。&lt;/p&gt;
-&lt;/blockquote&gt;
 &lt;h3 id=&#34;进一步配置页面&#34;&gt;进一步配置页面&lt;/h3&gt;
-&lt;blockquote&gt;
 &lt;p&gt;从你的主页上点击头像或者右上角进入&lt;code&gt;post&lt;/code&gt;，你会发现里面的文章都是一些别人已经写好的东西，你一定会希望把它们换掉，但是它们在哪里？&lt;/p&gt;
 &lt;p&gt;打开网站的根目录，进入&lt;code&gt;content&lt;/code&gt;，你会看到一个&lt;code&gt;posts&lt;/code&gt;文件夹和一个&lt;code&gt;projects&lt;/code&gt;文件夹，还有一个&lt;code&gt;aboutme.md&lt;/code&gt;文件，它们是什么？&lt;/p&gt;
 &lt;p&gt;进入&lt;code&gt;posts&lt;/code&gt;文件夹，所有的博文都存在这里。你可以把里面的文件删掉，换成你自己的Markdown文件，但是不要急，先打开别人的文件，看看hugo解析文件时需要的特定的格式：&lt;/p&gt;
 &lt;p&gt;比如我打开了&lt;code&gt;hugoisforlovers.md&lt;/code&gt;，在里面，头几行的位置我们能看到这些东西：&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;title = &amp;ldquo;Getting Started with Hugo&amp;rdquo;
-description = &amp;quot;&amp;quot;
-type = [&amp;ldquo;posts&amp;rdquo;,&amp;ldquo;post&amp;rdquo;]
-tags = [
-&amp;ldquo;go&amp;rdquo;,
-&amp;ldquo;golang&amp;rdquo;,
-&amp;ldquo;hugo&amp;rdquo;,
-&amp;ldquo;development&amp;rdquo;,
-]
-date = &amp;ldquo;2014-04-02&amp;rdquo;
-categories = [
-&amp;ldquo;Development&amp;rdquo;,
-&amp;ldquo;golang&amp;rdquo;,
-]
-series = [&amp;ldquo;Hugo 101&amp;rdquo;]
-[ author ]
-name = &amp;ldquo;Hugo Authors&amp;rdquo;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;它们是一个文件被解析时需要的一些参数。比如文件标题&lt;code&gt;title&lt;/code&gt;，比如文件类型&lt;code&gt;tags&lt;/code&gt;和&lt;code&gt;caterogies&lt;/code&gt;，你自己写Markdown文件时也需要在头部附上这些东西，否则它在你的网站上就无法体现出相关的信息。具体的做法是使用两行&lt;code&gt;---&lt;/code&gt;把你的这些信息夹起来，然后hugo就能进行识别了。如果是智能一点的Markdown编辑器，可能直接弹出一个非常明显的提示，告知你这里是输入头部信息的地方。在此强烈推荐Typora！！&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;l&#34;&gt;title = &amp;#34;Getting Started with Hugo&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;description = &amp;#34;&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;type = [&amp;#34;posts&amp;#34;,&amp;#34;post&amp;#34;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;tags = [&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;go&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;golang&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;hugo&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;development&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;date = &amp;#34;2014-04-02&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;categories = [&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Development&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;golang&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;series = [&amp;#34;Hugo 101&amp;#34;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;author ]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;name = &amp;#34;Hugo Authors&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;它们是一个文件被解析时需要的一些参数。比如文件标题 &lt;code&gt;title&lt;/code&gt;，比如文件类型&lt;code&gt;tags&lt;/code&gt;和&lt;code&gt;caterogies&lt;/code&gt;，你自己写Markdown文件时也需要在头部附上这些东西，否则它在你的网站上就无法体现出相关的信息。具体的做法是使用两行&lt;code&gt;---&lt;/code&gt;把你的这些信息夹起来，然后hugo就能进行识别了。如果是智能一点的Markdown编辑器，可能直接弹出一个非常明显的提示，告知你这里是输入头部信息的地方。在此强烈推荐Typora！！&lt;/p&gt;
 &lt;p&gt;会修改你的博文之后，你可以顺便改一改&lt;code&gt;about.md&lt;/code&gt;，它是这个主题里面自我介绍的那一页。&lt;/p&gt;
 &lt;p&gt;一切都完事之后，你的网站已经是一个承载着你个人信息、存放着你个人博文的站点了。你可以直接进入发布环节，也可以再进行更精细的配置——修改网页源码。&lt;/p&gt;
 &lt;p&gt;我们的网站页面都在你的主题文件夹里面。进入你的主题文件夹，能看到一个&lt;code&gt;layouts&lt;/code&gt;的文件夹，点进去，里面是一些模板HTML。有些主题里，你可以从&lt;code&gt;index.html&lt;/code&gt;文件修改一些信息，但是在我们的keepit主题，这个文件并没有什么价值，你需要再进入&lt;code&gt;partials&lt;/code&gt;文件内，这里的文件们才是你需要阅读与修改的。&lt;/p&gt;
 &lt;p&gt;你可以看到一个&lt;code&gt;home_profile.html&lt;/code&gt;文件，这是默认情况下你的主页。仔细阅读，你应该可以悟到这里使用了很多配置文件中的参数，比如&lt;code&gt;{{ .Site.Params.avatar}}&lt;/code&gt;，就是你在配置文件中定义的图像！&lt;/p&gt;
 &lt;p&gt;换一个文件，比如&lt;code&gt;footer.html&lt;/code&gt;，你应该可以悟到这一页掌管着主页下方的版权说明！如果你不满意主页底下的copyright，不妨对其进行修改。&lt;/p&gt;
 &lt;p&gt;这里的文件不可能逐一讲解，自己去阅读它们，时刻牢记你配置文件里的东西，你完全可以配置一个很漂亮的页面。&lt;/p&gt;
-&lt;/blockquote&gt;
 &lt;h3 id=&#34;将页面部署到github上&#34;&gt;将页面部署到GitHub上&lt;/h3&gt;
-&lt;blockquote&gt;
 &lt;p&gt;对于页面的配置，我目前讲的完全是够用了（主要是其他的操作我也不会 x）。如果之后有更多的需求，完全可以新开一篇博文，在此就不多赘述了。&lt;/p&gt;
 &lt;p&gt;我们现在需要将页面部署到GitHub上，为什么不用Gitee？因为Gitee会出现&lt;strong&gt;一大堆路径问题&lt;/strong&gt;。你不要觉得我在造谣，也不要觉得网上一堆博客可供参考，事实就是我尝试了几天，看了一大堆文章，但是我的Gitee上的博客完全无法加载样式。&lt;/p&gt;
 &lt;p&gt;在这里不禁想讲道理，国家战略支持的平台就这么个鸟样子，想做到跟GitHub分庭抗礼真的是任重道远。&lt;/p&gt;
 &lt;p&gt;如果你成功在Gitee上部署了自己的博客，欢迎联系我，我非常乐意学习，并将自己的博客迁移到Gitee上。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;2022-04-05注：Gitee的易用性已经得到了长足的改进，我在这里保留此前的牢骚之语，以侧面映证Gitee的令人欣慰的进步。不过，Gitee上面关于言论的自动审查不够智能，我仍然使用Github作为博客部署的平台。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;回到主题，首先要在GitHub上建立一个仓库，这个仓库的名字非常特殊，它必须是&lt;code&gt;username.github.io&lt;/code&gt;，其中的&lt;code&gt;username&lt;/code&gt;就是你的GitHub用户名。比如我的用户名是&lt;code&gt;SGS4ever&lt;/code&gt;，那么我的仓库就是&lt;code&gt;SGS4ever.github.io&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;建立完成后，在站点根目录下使用命令&lt;code&gt;hugo --theme=keepit --baseUrl=&amp;quot;https://SGS4ever.github.io -D&amp;quot;&lt;/code&gt;你就会得到一个文件夹&lt;code&gt;public&lt;/code&gt;，进入它，在里面打开GitBash，进行一系列操作：&lt;/p&gt;
+&lt;p&gt;建立完成后，在站点根目录下使用命令&lt;code&gt;hugo --theme=keepit --baseUrl=&amp;quot;https://SGS4ever.github.io -D&amp;quot;&lt;/code&gt;你就会得到一文件夹&lt;code&gt;public&lt;/code&gt;，进入它，在里面打开GitBash，进行一系列操作：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;n&#34;&gt;git&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;init&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;git&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;add&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;git&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;commit&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;Your comment&amp;#34;&lt;/span&gt;
@@ -15149,11 +15145,12 @@ name = &amp;ldquo;Hugo Authors&amp;rdquo;&lt;/p&gt;
 &lt;span class=&#34;c1&#34;&gt;# 注意，这里的https://xxxxxx 是你刚创建的仓库的地址，也就是当你进入仓库页面，你的浏览器上方地址栏里面的东西。&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;git&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;push&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;u&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;origin&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;master&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这些操作之后，你的GitHub仓库里就多了很多东西了，完全不需要任何操作，直接打开浏览器访问&lt;code&gt;https://username.github.io&lt;/code&gt;吧！&lt;/p&gt;
-&lt;/blockquote&gt;
 &lt;h3 id=&#34;写在最后&#34;&gt;写在最后&lt;/h3&gt;
-&lt;blockquote&gt;
 &lt;p&gt;搭建博客真的是费了很大的功夫，但我万万没想到这些无用功实际上是Gitee的问题，实在是愤意难平。&lt;/p&gt;
 &lt;p&gt;国产的很多东西——并不止Gitee——希望与国外的东西竞争，还需要非常努力。有些情况下并不是你实现了同样的功能，你就具备了同样的竞争力，还需要考虑到这些功能的易用性、稳定性。当你的东西用起来比别人更繁琐，以至于这种繁琐给用户带来的负面感受压过了爱国情怀的正面加持，你的竞争就注定失败了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;2022-03-16注：岁月不居，时节如流，Gitee Page的易用性已经得到了很大的提升，且我的博客主题早已不是keepit了；&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
         </item>
