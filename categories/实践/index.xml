@@ -6,7 +6,37 @@
     <description>Recent content in 实践 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 10 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PyQt5初探——与scapy的美妙结合</title>
+      <link>https://xrg.fj.cn/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/</link>
+      <pubDate>Sun, 10 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/</guid>
+      <description>PyQt5初探 自读书摘抄站点构建完成以来，一直没有进行什么有趣的实践，这回由于毕设的需要，首次尝试进行GUI编程；此外同样由于毕设需要，使用了scapy进行流量嗅探，因此就有了这一篇四不像的记录性质的文章。
+Qt（音 cute ）是一套被广泛使用的GUI组件库，而 PyQt 则是这套框架与Python语言的结合，是Python中最强大的GUI库之一。
+本次选用这个框架其实经过了一定的曲折，因为Python的GUI库有太多了🤣
+  TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
+  PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
+  Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
+  PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
+  安装PyQt非常简单：
+pip install PyQt5 pip install pyqt5-tools 还有简单易用的 Qt Designer ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。
+环境安装完成之后，可以照着 教程 实现一些功能。
+经过一系列的探索，我的程序初具雏形：
+ 
+界面有如下几个组件：
+  在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
+  结束在线分析：顾名思义。
+  打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
+  大大的文本框：用于输出实时流量捕捉的内容。
+  运行起来的效果如下：
+ 在线分析（初步） 
+总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
+不过，还是需要先对本文的另一个主角 scapy 进行一些介绍。
+scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。</description>
+    </item>
+    
     <item>
       <title>读书摘抄站点构建（前后端结合）</title>
       <link>https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/</link>
