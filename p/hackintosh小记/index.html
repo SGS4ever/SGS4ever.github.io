@@ -4,7 +4,8 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='最近太闲，时常想着把老电脑重装一下，不过Windows的C盘总是莫名其妙地渐渐跑满，非常烦人；加之一直以来对Mac OS的好奇，决定在老电脑上搞个黑苹果（Hackintosh）玩一玩。
 黑苹果指的是在 非Apple设备上运行Mac OS ，可以理解为在自己的机器上运行一个盗版系统，一般来说会导致几个问题：
  硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。  本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
-Step0 Video教程   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
+Step0 Video教程  From YouTube。请科学上网 😊
+   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
 Step 1 EFI 教程里面有用到EFI文件。这是黑苹果启动时需要的文件，每个机型的引导文件不尽相同。如果EFI不合适的话，自然就不能启动啦！
 我的电脑是 ASUS FL8000UQ ，使用了 https://github.com/alexanderkin/ASUS-FL8000UQ-Hackintosh 开源的EFI文件。
 各机型和其对应的EFI可以从 https://gitee.com/softxing/Hackintosh 找到。
@@ -16,8 +17,7 @@ Step 4 禁用各种BIOS选项 重要！我刚开始做的时候就是因为漏�
  Img 
 Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
 Step 6 安装 直接U盘启动啊！So Easy！
-安装过程中有一些小插曲：
- 磁盘识别不到。因为原本的Win10系统用的是MBR分区，而Mac只能识别GPT分区，搞得我特别难受。后面重新制作了个Windows的启动盘，在安装界面用了命令行操作把磁盘重新格式化了，然后才重新开始Mac的安装。详见 此篇 ，只能说CSDN偶尔还是有点好东西 😏 安装完毕之后进不了系统，重启的时候还是只能从U盘进入恢复模式。这个问题非常烦人，使我重装了N遍系统（为我的硬盘感到忧伤），一度使我想要放弃，最后按照上一步的指示把Mindate改掉即可。  Step 7 更新Wi-Fi驱动 我的网卡是原装的AR9565，按照 这篇文章 完美搞定Wi-Fi驱动。'><title>Hackintosh小记</title>
+安装过程中有一些小插曲：'><title>Hackintosh小记</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/'>
 
@@ -44,7 +44,8 @@ Step 6 安装 直接U盘启动啊！So Easy！
 <meta property='og:description' content='最近太闲，时常想着把老电脑重装一下，不过Windows的C盘总是莫名其妙地渐渐跑满，非常烦人；加之一直以来对Mac OS的好奇，决定在老电脑上搞个黑苹果（Hackintosh）玩一玩。
 黑苹果指的是在 非Apple设备上运行Mac OS ，可以理解为在自己的机器上运行一个盗版系统，一般来说会导致几个问题：
  硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。  本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
-Step0 Video教程   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
+Step0 Video教程  From YouTube。请科学上网 😊
+   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
 Step 1 EFI 教程里面有用到EFI文件。这是黑苹果启动时需要的文件，每个机型的引导文件不尽相同。如果EFI不合适的话，自然就不能启动啦！
 我的电脑是 ASUS FL8000UQ ，使用了 https://github.com/alexanderkin/ASUS-FL8000UQ-Hackintosh 开源的EFI文件。
 各机型和其对应的EFI可以从 https://gitee.com/softxing/Hackintosh 找到。
@@ -56,16 +57,16 @@ Step 4 禁用各种BIOS选项 重要！我刚开始做的时候就是因为漏�
  Img 
 Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
 Step 6 安装 直接U盘启动啊！So Easy！
-安装过程中有一些小插曲：
- 磁盘识别不到。因为原本的Win10系统用的是MBR分区，而Mac只能识别GPT分区，搞得我特别难受。后面重新制作了个Windows的启动盘，在安装界面用了命令行操作把磁盘重新格式化了，然后才重新开始Mac的安装。详见 此篇 ，只能说CSDN偶尔还是有点好东西 😏 安装完毕之后进不了系统，重启的时候还是只能从U盘进入恢复模式。这个问题非常烦人，使我重装了N遍系统（为我的硬盘感到忧伤），一度使我想要放弃，最后按照上一步的指示把Mindate改掉即可。  Step 7 更新Wi-Fi驱动 我的网卡是原装的AR9565，按照 这篇文章 完美搞定Wi-Fi驱动。'>
+安装过程中有一些小插曲：'>
 <meta property='og:url' content='https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-02-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-02-22T00:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-02-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-05-24T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Hackintosh小记">
 <meta name="twitter:description" content="最近太闲，时常想着把老电脑重装一下，不过Windows的C盘总是莫名其妙地渐渐跑满，非常烦人；加之一直以来对Mac OS的好奇，决定在老电脑上搞个黑苹果（Hackintosh）玩一玩。
 黑苹果指的是在 非Apple设备上运行Mac OS ，可以理解为在自己的机器上运行一个盗版系统，一般来说会导致几个问题：
  硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。  本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
-Step0 Video教程   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
+Step0 Video教程  From YouTube。请科学上网 😊
+   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
 Step 1 EFI 教程里面有用到EFI文件。这是黑苹果启动时需要的文件，每个机型的引导文件不尽相同。如果EFI不合适的话，自然就不能启动啦！
 我的电脑是 ASUS FL8000UQ ，使用了 https://github.com/alexanderkin/ASUS-FL8000UQ-Hackintosh 开源的EFI文件。
 各机型和其对应的EFI可以从 https://gitee.com/softxing/Hackintosh 找到。
@@ -77,8 +78,7 @@ Step 4 禁用各种BIOS选项 重要！我刚开始做的时候就是因为漏�
  Img 
 Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
 Step 6 安装 直接U盘启动啊！So Easy！
-安装过程中有一些小插曲：
- 磁盘识别不到。因为原本的Win10系统用的是MBR分区，而Mac只能识别GPT分区，搞得我特别难受。后面重新制作了个Windows的启动盘，在安装界面用了命令行操作把磁盘重新格式化了，然后才重新开始Mac的安装。详见 此篇 ，只能说CSDN偶尔还是有点好东西 😏 安装完毕之后进不了系统，重启的时候还是只能从U盘进入恢复模式。这个问题非常烦人，使我重装了N遍系统（为我的硬盘感到忧伤），一度使我想要放弃，最后按照上一步的指示把Mindate改掉即可。  Step 7 更新Wi-Fi驱动 我的网卡是原装的AR9565，按照 这篇文章 完美搞定Wi-Fi驱动。">
+安装过程中有一些小插曲：">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -185,9 +185,12 @@ Step 6 安装 直接U盘启动啊！So Easy！
 </svg>
                 <time class="article-time--published">Feb 22, 2022</time>
             </div>
-        
-
-        
+        <div>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                <time class="article-time--published">
+                    May 24, 2022
+                </time>
+            </div>
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -216,6 +219,9 @@ Step 6 安装 直接U盘启动啊！So Easy！
 </ul>
 <p>本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。</p>
 <h3 id="step0-video教程">Step0 Video教程</h3>
+<blockquote>
+<p>From YouTube。请科学上网 😊</p>
+</blockquote>
 <div class="video-wrapper">
     <iframe loading="lazy" 
             src="https://www.youtube.com/embed/e-J3yM7tfos" 
@@ -303,6 +309,47 @@ Step 6 安装 直接U盘启动啊！So Easy！
 	<figcaption>Desktop</figcaption>
 	
 </figure></p>
+<hr>
+<p><strong>2021-05-24更新</strong></p>
+<p>Hackintosh已使用三个月有余，甚至已经习惯了这个系统奇怪的快捷键逻辑。最近父亲的老电脑坏了，我的这台ASUS FL8000U大概也将要完成它在我这的使命，而交由我的父母继续使用。</p>
+<p>伴我四年的电脑，可以说是我大学成长的见证者；Hackintosh是它绽放出的最后一抹光和热，在此把我玩过的最后一些内容记录完，便与它告别了。</p>
+<h3 id="step9-usb定制">Step9 USB定制</h3>
+<p>刚装上这个系统时存在睡眠秒醒和关机变重启的问题，这个问题要通过USB定制来解决。</p>
+<p>首先，Hackintosh上应该装上Open Core Configurator和Hackintool这两款软件，前者用于修改OC引导文件，后者用于完成USB定制步骤。</p>
+<p>直接参照 <a class="link" href="https://heipg.cn/tutorial/custom-usbports-for-hackintosh.html"  target="_blank" rel="noopener"
+    >使用 Hackintool 定制黑苹果 USB 端口，适用于 Clover &amp; OpenCore-黑苹果星球 (heipg.cn)</a> 这篇文章即可，我的老电脑全是USB 2接口，工序很简单。</p>
+<h3 id="step10-系统升级">Step10 系统升级</h3>
+<p>之前装的系统是Catalina，这个系统上现在已经装不了iWorks办公软件了；近期写论文、做PPT全都使用WPS，体验跟Office产生了比较大的割裂，痛苦。</p>
+<blockquote>
+<p>插一嘴：写论文期间，分别尝试了Office、WPS、Office365，各有各的不同，就很离谱。抛开UI逻辑不谈，连同一份Word都能给我解析出不同的排版，我是真的服气。个人感觉Office365最糟心，在网盘上做出的修改似乎莫名其妙就丢失了，要么就是文字还在，格式没了，给我看笑了；WPS次之，不知道是不是WPS for Mac比较特殊，反正就是很难受，格式也是各种跑位，操作也不丝滑；Office原生体验最佳，大抵是用得习惯了吧。</p>
+</blockquote>
+<p>Catalina会自动下载Monterey更新，不过我害怕它变砖，一直不敢安装；现在既然要退役了，决定试验最后一波。</p>
+<p>安装！</p>
+<p>成功。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 177; 
+			flex-basis: 426px"
+	>
+	<a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/3.png" data-size="1920x1080">
+		<img src="/p/hackintosh%E5%B0%8F%E8%AE%B0/3.png"
+			width="1920"
+			height="1080"
+			srcset="/p/hackintosh%E5%B0%8F%E8%AE%B0/3_hub149509c7cc56e2d060f628434e92eb2_3054190_480x0_resize_box_3.png 480w, /p/hackintosh%E5%B0%8F%E8%AE%B0/3_hub149509c7cc56e2d060f628434e92eb2_3054190_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Monterey">
+	</a>
+	
+	<figcaption>Monterey</figcaption>
+	
+</figure></p>
+<p>真的就……没得说，我没想到Hackintosh是可以直接升级的，重启了几次之后，我进入到MacOS Monterey的界面了。看来我的这次黑苹果之旅还是比较成功的。</p>
+<p>睡眠秒醒问题不存在；Wifi搜不到信号，这个问题估计换个驱动可以解决。</p>
+<h3 id="step11-告别">Step11 告别</h3>
+<p>Monterey留在我的电脑上不到一小时，已经要与它告别了。</p>
+<p>并没有很多东西想说，毕竟将来还是要继续玩的；不过还是应该跟我任劳任怨的老电脑说一句：辛苦了！</p>
 
 </section>
 
@@ -317,7 +364,12 @@ Step 6 安装 直接U盘启动啊！So Easy！
     </section>
 
 
-    </footer>
+    <section class="article-lastmod">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        <span>
+            最后更新于 May 24, 2022
+        </span>
+    </section></footer>
 
 
 
@@ -603,6 +655,9 @@ Step 6 安装 直接U盘启动啊！So Easy！
     <li><a href="#step-6-安装">Step 6 安装</a></li>
     <li><a href="#step-7-更新wi-fi驱动">Step 7 更新Wi-Fi驱动</a></li>
     <li><a href="#step-8-总结">Step 8 总结</a></li>
+    <li><a href="#step9-usb定制">Step9 USB定制</a></li>
+    <li><a href="#step10-系统升级">Step10 系统升级</a></li>
+    <li><a href="#step11-告别">Step11 告别</a></li>
   </ul>
 </nav>
                 </div>

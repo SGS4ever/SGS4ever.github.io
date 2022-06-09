@@ -168,8 +168,6 @@ Drogon安装 使用命令 vcpkg install drogon 或命令 vcpkg install drogon:x6
                 <time class="article-time--published">Feb 16, 2022</time>
             </div>
         
-
-        
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -260,20 +258,20 @@ Drogon安装 使用命令 vcpkg install drogon 或命令 vcpkg install drogon:x6
 </li>
 <li>
 <p>把第 <code>230</code> 行的 <code>simple_controllers_map</code> 注释掉，因为目前还不需要进行控制器、过滤器等的添加：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="c1">//&#34;simple_controllers_map&#34;: [
-</span><span class="c1">//  {
-</span><span class="c1">//    &#34;path&#34;: &#34;/path/name&#34;,
-</span><span class="c1">//    &#34;controller&#34;: &#34;controllerClassName&#34;,
-</span><span class="c1">//    &#34;http_methods&#34;: [
-</span><span class="c1">//      &#34;get&#34;,
-</span><span class="c1">//      &#34;post&#34;
-</span><span class="c1">//    ],
-</span><span class="c1">//    &#34;filters&#34;: [
-</span><span class="c1">//      &#34;FilterClassName&#34;
-</span><span class="c1">//    ]
-</span><span class="c1">//  }
-</span><span class="c1">//],
-</span></code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="err">//</span><span class="s2">&#34;simple_controllers_map&#34;</span><span class="err">:</span> <span class="p">[</span>
+<span class="err">//</span>  <span class="p">{</span>
+<span class="err">//</span>    <span class="nt">&#34;path&#34;</span><span class="p">:</span> <span class="s2">&#34;/path/name&#34;</span><span class="p">,</span>
+<span class="err">//</span>    <span class="nt">&#34;controller&#34;</span><span class="p">:</span> <span class="s2">&#34;controllerClassName&#34;</span><span class="p">,</span>
+<span class="err">//</span>    <span class="nt">&#34;http_methods&#34;</span><span class="p">:</span> <span class="p">[</span>
+<span class="err">//</span>      <span class="s2">&#34;get&#34;</span><span class="p">,</span>
+<span class="err">//</span>      <span class="s2">&#34;post&#34;</span>
+<span class="err">//</span>    <span class="p">],</span>
+<span class="err">//</span>    <span class="nt">&#34;filters&#34;</span><span class="p">:</span> <span class="p">[</span>
+<span class="err">//</span>      <span class="s2">&#34;FilterClassName&#34;</span>
+<span class="err">//</span>    <span class="p">]</span>
+<span class="err">//</span>  <span class="p">}</span>
+<span class="err">//</span><span class="p">]</span><span class="err">,</span>
+</code></pre></div></li>
 <li>
 <p>修改 <code>main.cc</code> 文件，把加载配置文件的那行代码取消注释：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="n">drogon</span><span class="o">::</span><span class="n">app</span><span class="p">().</span><span class="n">loadConfigFile</span><span class="p">(</span><span class="s">&#34;../../../config.json&#34;</span><span class="p">);</span>

@@ -404,27 +404,27 @@
 &lt;p&gt;现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。&lt;/p&gt;
 &lt;p&gt;前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 &lt;code&gt;fetchData()&lt;/code&gt; 的方法，其中使用 &lt;code&gt;axios&lt;/code&gt; 从后端请求数据，然后更新到实例的 &lt;code&gt;data&lt;/code&gt; 上；这个方法在 &lt;code&gt;mounted()&lt;/code&gt; 的时候被调用。需要注意，在 &lt;code&gt;fetchData()&lt;/code&gt; 里面使用的 &lt;code&gt;this&lt;/code&gt; 指向的不是组件实例，要从外部传入实例才行。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-JavaScript&#34; data-lang=&#34;JavaScript&#34;&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;app&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Vue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;createApp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt;
-	&lt;span class=&#34;c1&#34;&gt;// ==== 略 ====
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;methods&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-		&lt;span class=&#34;c1&#34;&gt;// ==== 略 ====
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-			&lt;span class=&#34;nx&#34;&gt;axios&lt;/span&gt;
-				&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;/index&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-				&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;then&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;response&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-					&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;JSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;parse&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;JSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;stringify&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;response&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
-					&lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;login&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;login&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
-					&lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;cards&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;cards&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
-					&lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;totalBooks&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;totalBooks&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
-				&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;
-				&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-					&lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-				&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
-		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-	&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
-	&lt;span class=&#34;nx&#34;&gt;mounted&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-		&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-		&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;// ==== 略 ====
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;methods&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;c1&#34;&gt;// ==== 略 ====
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;nx&#34;&gt;axios&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;/index&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;then&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;response&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+                    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;JSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;parse&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;JSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;stringify&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;response&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+                    &lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;login&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;login&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+                    &lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;cards&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;cards&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+                    &lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;totalBooks&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;respJSON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;totalBooks&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+                    &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;mounted&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;vueThis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;#app&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;0x02-交互逻辑设计&#34;&gt;0x02 交互逻辑设计&lt;/h3&gt;
 &lt;p&gt;&lt;figure 
@@ -573,7 +573,7 @@
 &lt;blockquote&gt;
 &lt;p&gt;2022-03-09加&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;原先就有的一个想法，希望在登录状态下能对浏览的卡片进行在线修改（例如心血来潮地添加一些评论或者纠正一下当初录入对错别字等等）。&lt;/p&gt;
+&lt;p&gt;原先就有的一个想法，希望在登录状态下能对浏览的卡片进行在线修改（例如心血来潮地添加一些评论或者纠正一下当初录入的错别字等等）。&lt;/p&gt;
 &lt;p&gt;这块功能在最初编写卡片代码的时候就预留出来了，按钮使用的是Bootstrap提供的三个图标，分别表示“开始编辑”、“保存编辑”、“取消编辑”。&lt;/p&gt;
 &lt;p&gt;把它们各自的功能简单叙述一下。&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;开始编辑：&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
@@ -616,7 +616,138 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;在线更新功能的实现使整个站点的成熟度得到了飞跃，至此它已经跟一个在线记事本一样了。我可以自由地添加内容、修改内容，且每天都有数据库的备份，基本上完成了最初预想的功能。&lt;/p&gt;
-&lt;h3 id=&#34;0x07-to-do&#34;&gt;0x07 To Do&lt;/h3&gt;
+&lt;h3 id=&#34;0x07-图片分享&#34;&gt;0x07 图片分享&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;写于2022-06-09&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;时隔三月，重新搞起了读书摘抄站点~ 🤔&lt;/p&gt;
+&lt;p&gt;这次添加的是最初规划时就考虑到的分享功能，之前一直没有实现主要是因为懒，且觉得这个自娱自乐的站点貌似不太需要分享功能；最近想跟朋友分享我摘抄的一些很好的片段时，总得自己手动截图，比较难受；更有甚者，一些比较长的片段没法一次性截取完全，于是萌生出把分享功能完成的想法。&lt;/p&gt;
+&lt;p&gt;一直以来比较心水一键生成图片的那种功能，这次的开发就以图片分享为目标。&lt;/p&gt;
+&lt;p&gt;图片分享的基本原理：使用HTML &lt;code&gt;canvas&lt;/code&gt; 绘制矢量图，之后可以选择使用 &lt;code&gt;canvas.toDataURL&lt;/code&gt; 生成图片URL并生成 &lt;code&gt;img&lt;/code&gt; 图片，或对 &lt;code&gt;canvas&lt;/code&gt; 进行其他操作（如复制到剪贴板）。&lt;/p&gt;
+&lt;p&gt;图片分享的关键步骤是如何将要分享的内容绘制到 &lt;code&gt;canvas&lt;/code&gt; 上，这一步有成熟的第三方工具 &lt;a class=&#34;link&#34; href=&#34;http://html2canvas.hertzen.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;html2canvas&lt;/a&gt; ，可以自动解析DOM元素并生成图片，受到网上各教程的广泛使用。不过，经过我的测试，这个工具在绘制我的摘抄时会丢失一些样式，而且还得去调试它的各种参数，属于自讨苦吃，大可不必。&lt;/p&gt;
+&lt;p&gt;重新思考之后，我认为我的需求比较简单：只是将要分享的 &lt;strong&gt;文字内容&lt;/strong&gt; 转换成图片而已，没有多少麻烦的步骤，因此决定手撸 &lt;code&gt;canvas&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;生成分享图片的整体流程非常简单：&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 99; 
+			flex-basis: 237px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3.png&#34; data-size=&#34;729x736&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3.png&#34;
+			width=&#34;729&#34;
+			height=&#34;736&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hua527065085a1154cd41fd1947186dc7b_46433_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hua527065085a1154cd41fd1947186dc7b_46433_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;流程&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;流程&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;画布长宽根据屏幕大小而改变，但始终保持一个固定的比例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.9&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;画布的内容组织结构也很简单，只有三个部分：&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 75; 
+			flex-basis: 182px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4.png&#34; data-size=&#34;752x990&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4.png&#34;
+			width=&#34;752&#34;
+			height=&#34;990&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu8712c57ee0a1f0264ffabaf334c2c4f5_22774_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu8712c57ee0a1f0264ffabaf334c2c4f5_22774_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;内容结构&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;内容结构&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;使用 &lt;code&gt;let ctx = canvas.getContext(&amp;quot;2d&amp;quot;);&lt;/code&gt; 得到画布主体，之后获取目标内容进行绘制。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;头部图片，设置好宽高，然后 &lt;code&gt;ctx.drawImage(img, 0, 0, width, imgHeight);&lt;/code&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;文字部分，要先绘制一个矩形背景，否则文字没有底色：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fillStyle&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;#ffffff&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fillRect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用jQuery提取要分享的内容（通过DOM树获取书籍名称和摘抄内容的相应节点），分别在各自的位置上绘制字符串。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 绘制文字
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fillStyle&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;#000000&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;headerHeight&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.08&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;leftPadding&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;rightPadding&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;bottomPadding&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;textHeight&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.6&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;textWidth&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;maxFontSize&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// 书籍名称
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;headerHeight&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;min&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;24&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;font&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;px &amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Long Cang&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fillText&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(),&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;leftPadding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;imgHeight&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;headerHeight&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.7&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// 摘抄内容
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;realTextWidth&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;textWidth&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;leftPadding&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;rightPadding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;realTextHeight&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;textHeight&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bottomPadding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;floor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;Math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;Math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;floor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;realTextHeight&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;realTextWidth&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))));&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;min&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;maxFontSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;font&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;px &amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Noto Serif SC&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cols&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;floor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;realTextWidth&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;rows&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ceil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cols&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;rows&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;// 注意 substring 和 substr 两个不同API的区别
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fillText&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;substr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cols&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cols&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; 
+        &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;leftPadding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; 
+        &lt;span class=&#34;nx&#34;&gt;imgHeight&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;headerHeight&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;fontSize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这里为了使得大段文字能够写入到一个固定高度的区域中，需要对 &lt;strong&gt;字体大小&lt;/strong&gt; 进行一些数学上的计算。&lt;/p&gt;
+&lt;p&gt;已知待写入的字符串为 &lt;code&gt;text&lt;/code&gt; ，画布文字部分宽度为 &lt;code&gt;realTextWidth&lt;/code&gt; ，高度为 &lt;code&gt;realTextHeight&lt;/code&gt; ，令字体大小为 &lt;code&gt;fontSize&lt;/code&gt; ，则&lt;/p&gt;
+&lt;p&gt;$$
+\text{列数 }col = \frac{realTextWidth}{fontSize}
+$$&lt;/p&gt;
+&lt;p&gt;$$
+\text{行数 }row = \frac{text.length}{col}
+$$&lt;/p&gt;
+&lt;p&gt;令行高为两倍字体大小，即&lt;/p&gt;
+&lt;p&gt;$$
+lineHeight = 2 \times fontSize
+$$&lt;/p&gt;
+&lt;p&gt;那么文字部分总共需要占据的高度就有&lt;/p&gt;
+&lt;p&gt;$$
+row \times lineHeight = \frac {text.length \times fontSize}{realTextWidth} \times fontSize \times 2
+$$&lt;/p&gt;
+&lt;p&gt;它不能超过画布提供的高度，否则会溢出，也就是需要满足&lt;/p&gt;
+&lt;p&gt;$$
+\frac {text.length \times fontSize}{realTextWidth} \times fontSize \times 2 \leq realTextHeight
+$$&lt;/p&gt;
+&lt;p&gt;$$
+\text{解得 }fontSize \leq \sqrt{\frac{realTextHeight \times readTextWidth}{2 \times text.length}}
+$$&lt;/p&gt;
+&lt;p&gt;这就是字体大小的要求。满足这一大小要求的字体才能将一个片段完整地写入画布中。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;另一个&lt;/strong&gt; 需要注意的地方是， &lt;code&gt;canvas&lt;/code&gt; 写入文字时不能自动换行，超出画布的部分即不可见。为了实现 &lt;strong&gt;文字换行&lt;/strong&gt; 的效果，需要手动对原始字符串进行切分，每一次只写入原始字符串的一部分（实际上就是写入列数 &lt;code&gt;col&lt;/code&gt; 个字符），移动至下一行，再继续写入，这就是上方代码中的最后一个 &lt;code&gt;for&lt;/code&gt; 循环所做的事情。&lt;/p&gt;
+&lt;p&gt;完成以上几点之后，能够绘制出一张很不错的分享图了：&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;最后，添加一个按钮，用于将这张图片一键保存到剪贴板。这里给出两篇重要参考， &lt;a class=&#34;link&#34; href=&#34;https://stackoverflow.com/questions/27863617/is-it-possible-to-copy-a-canvas-image-to-the-clipboard&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;第一篇&lt;/a&gt; 教会我们如何把 &lt;code&gt;canvas&lt;/code&gt; 转化为可以写入剪贴板中的数据； &lt;a class=&#34;link&#34; href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;第二篇&lt;/a&gt; 介绍了浏览器的 &lt;code&gt;navigator.clipboard.write&lt;/code&gt; 接口的用法，据此，可以实现一键复制图片的功能。&lt;/p&gt;
+&lt;h3 id=&#34;0x08-to-do&#34;&gt;0x08 To Do&lt;/h3&gt;
 &lt;p&gt;本文的叙述相比之前的两篇简单很多，因为内容实在太多了，详写不来 😢&lt;/p&gt;
 &lt;p&gt;整个站点还有一些地方是可以改进的：&lt;/p&gt;
 &lt;ul&gt;
@@ -652,6 +783,9 @@
 &lt;/ul&gt;
 &lt;p&gt;本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。&lt;/p&gt;
 &lt;h3 id=&#34;step0-video教程&#34;&gt;Step0 Video教程&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;From YouTube。请科学上网 😊&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;div class=&#34;video-wrapper&#34;&gt;
     &lt;iframe loading=&#34;lazy&#34; 
             src=&#34;https://www.youtube.com/embed/e-J3yM7tfos&#34; 
@@ -739,6 +873,47 @@
 	&lt;figcaption&gt;Desktop&lt;/figcaption&gt;
 	
 &lt;/figure&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;2021-05-24更新&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Hackintosh已使用三个月有余，甚至已经习惯了这个系统奇怪的快捷键逻辑。最近父亲的老电脑坏了，我的这台ASUS FL8000U大概也将要完成它在我这的使命，而交由我的父母继续使用。&lt;/p&gt;
+&lt;p&gt;伴我四年的电脑，可以说是我大学成长的见证者；Hackintosh是它绽放出的最后一抹光和热，在此把我玩过的最后一些内容记录完，便与它告别了。&lt;/p&gt;
+&lt;h3 id=&#34;step9-usb定制&#34;&gt;Step9 USB定制&lt;/h3&gt;
+&lt;p&gt;刚装上这个系统时存在睡眠秒醒和关机变重启的问题，这个问题要通过USB定制来解决。&lt;/p&gt;
+&lt;p&gt;首先，Hackintosh上应该装上Open Core Configurator和Hackintool这两款软件，前者用于修改OC引导文件，后者用于完成USB定制步骤。&lt;/p&gt;
+&lt;p&gt;直接参照 &lt;a class=&#34;link&#34; href=&#34;https://heipg.cn/tutorial/custom-usbports-for-hackintosh.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;使用 Hackintool 定制黑苹果 USB 端口，适用于 Clover &amp;amp; OpenCore-黑苹果星球 (heipg.cn)&lt;/a&gt; 这篇文章即可，我的老电脑全是USB 2接口，工序很简单。&lt;/p&gt;
+&lt;h3 id=&#34;step10-系统升级&#34;&gt;Step10 系统升级&lt;/h3&gt;
+&lt;p&gt;之前装的系统是Catalina，这个系统上现在已经装不了iWorks办公软件了；近期写论文、做PPT全都使用WPS，体验跟Office产生了比较大的割裂，痛苦。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;插一嘴：写论文期间，分别尝试了Office、WPS、Office365，各有各的不同，就很离谱。抛开UI逻辑不谈，连同一份Word都能给我解析出不同的排版，我是真的服气。个人感觉Office365最糟心，在网盘上做出的修改似乎莫名其妙就丢失了，要么就是文字还在，格式没了，给我看笑了；WPS次之，不知道是不是WPS for Mac比较特殊，反正就是很难受，格式也是各种跑位，操作也不丝滑；Office原生体验最佳，大抵是用得习惯了吧。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Catalina会自动下载Monterey更新，不过我害怕它变砖，一直不敢安装；现在既然要退役了，决定试验最后一波。&lt;/p&gt;
+&lt;p&gt;安装！&lt;/p&gt;
+&lt;p&gt;成功。&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 177; 
+			flex-basis: 426px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/3.png&#34; data-size=&#34;1920x1080&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/3.png&#34;
+			width=&#34;1920&#34;
+			height=&#34;1080&#34;
+			srcset=&#34;https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/3_hub149509c7cc56e2d060f628434e92eb2_3054190_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/3_hub149509c7cc56e2d060f628434e92eb2_3054190_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Monterey&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Monterey&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;真的就……没得说，我没想到Hackintosh是可以直接升级的，重启了几次之后，我进入到MacOS Monterey的界面了。看来我的这次黑苹果之旅还是比较成功的。&lt;/p&gt;
+&lt;p&gt;睡眠秒醒问题不存在；Wifi搜不到信号，这个问题估计换个驱动可以解决。&lt;/p&gt;
+&lt;h3 id=&#34;step11-告别&#34;&gt;Step11 告别&lt;/h3&gt;
+&lt;p&gt;Monterey留在我的电脑上不到一小时，已经要与它告别了。&lt;/p&gt;
+&lt;p&gt;并没有很多东西想说，毕竟将来还是要继续玩的；不过还是应该跟我任劳任怨的老电脑说一句：辛苦了！&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -817,20 +992,20 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;把第 &lt;code&gt;230&lt;/code&gt; 行的 &lt;code&gt;simple_controllers_map&lt;/code&gt; 注释掉，因为目前还不需要进行控制器、过滤器等的添加：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//&amp;#34;simple_controllers_map&amp;#34;: [
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//  {
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;path&amp;#34;: &amp;#34;/path/name&amp;#34;,
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;controller&amp;#34;: &amp;#34;controllerClassName&amp;#34;,
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;http_methods&amp;#34;: [
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//      &amp;#34;get&amp;#34;,
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//      &amp;#34;post&amp;#34;
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    ],
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    &amp;#34;filters&amp;#34;: [
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//      &amp;#34;FilterClassName&amp;#34;
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//    ]
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//  }
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//],
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;simple_controllers_map&amp;#34;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;path&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;/path/name&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;controller&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;controllerClassName&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;http_methods&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;      &lt;span class=&#34;s2&#34;&gt;&amp;#34;get&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;      &lt;span class=&#34;s2&#34;&gt;&amp;#34;post&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;filters&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;      &lt;span class=&#34;s2&#34;&gt;&amp;#34;FilterClassName&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;,&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;修改 &lt;code&gt;main.cc&lt;/code&gt; 文件，把加载配置文件的那行代码取消注释：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span class=&#34;n&#34;&gt;drogon&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;loadConfigFile&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;../../../config.json&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
@@ -2229,7 +2404,7 @@ $$
     &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;61&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DP_MAX&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 10 Points 1 RMB
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
         &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
@@ -2239,9 +2414,9 @@ $$
             &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;n&#34;&gt;printResultByTargetPoints&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 
@@ -2261,7 +2436,7 @@ $$
         &lt;span class=&#34;n&#34;&gt;cout&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;Cost &amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34; yuan to get &amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34; points.&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在上面这部分代码中，有几个细节：&lt;/p&gt;
@@ -2306,7 +2481,7 @@ $$
     &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastTopup&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;61&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DP_MAX&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 10 Points 1 RMB
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
         &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
@@ -2321,9 +2496,9 @@ $$
             &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;n&#34;&gt;printResultByTargetPoints&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastTopup&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 
@@ -2365,39 +2540,39 @@ $$
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;执行完成，耗时：0 ms
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 202 yuan to get 2140 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198		2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198        2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 204 yuan to get 2145 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	68		715
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	68		715
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	68		715
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    68        715
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    68        715
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    68        715
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 203 yuan to get 2150 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198		2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198        2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 205 yuan to get 2155 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	68		715
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	68		715
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	68		715
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    68        715
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    68        715
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    68        715
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 204 yuan to get 2160 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198		2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198        2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;======= 此处省略若干行 =======
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;*/&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;从上面这个例子的输出可以看到：同样的 &lt;code&gt;204￥&lt;/code&gt; ，有的方案可以买到 &lt;code&gt;2145&lt;/code&gt; 点券，而有的能买到 &lt;code&gt;2160&lt;/code&gt; 点券！差了一块多！因此我们不能只打印目标点券的最优解，往上多打印几个，可能发现用相同的钱可以买到更多点券，何乐不为呢 😹&lt;/p&gt;
@@ -2413,7 +2588,7 @@ $$
     &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastPurchase&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
         &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
@@ -2427,9 +2602,9 @@ $$
             &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;n&#34;&gt;printResultByMaxCost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastPurchase&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 
@@ -2443,7 +2618,7 @@ $$
         &lt;span class=&#34;n&#34;&gt;cout&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gain&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行一下：&lt;/p&gt;
@@ -2463,28 +2638,28 @@ $$
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;执行完成，耗时：0 ms
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;You can get 5280 points using 499 yuan.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is: 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	Cost(￥)	Points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198	2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198	2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45	475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45	475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6	60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6	60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1	10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    Cost(￥)    Points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198    2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198    2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45    475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45    475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6    60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6    60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1    10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;You can get 2120 points using 200 yuan.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is: 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	Cost(￥)	Points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198	2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1	10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1	10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    Cost(￥)    Points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198    2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1    10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1    10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;You can get 200 points using 20 yuan.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is: 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	Cost(￥)	Points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6	60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6	60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6	60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1	10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1	10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    Cost(￥)    Points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6    60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6    60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6    60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1    10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1    10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;*/&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;总的代码&#34;&gt;总的代码&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C++&#34; data-lang=&#34;C++&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#define DP_MAX 0xffff
@@ -2501,7 +2676,7 @@ $$
     &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastTopup&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;61&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DP_MAX&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 10 Points 1 RMB
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
         &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
@@ -2516,9 +2691,9 @@ $$
             &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;n&#34;&gt;printResultByTargetPoints&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastTopup&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;targetPoints&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 
@@ -2553,7 +2728,7 @@ $$
     &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastPurchase&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
         &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
@@ -2567,9 +2742,9 @@ $$
             &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;n&#34;&gt;printResultByMaxCost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lastPurchase&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;maxCost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 
@@ -2583,7 +2758,7 @@ $$
         &lt;span class=&#34;n&#34;&gt;cout&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gain&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
         &lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
+
     &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; 
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 
@@ -2600,58 +2775,58 @@ $$
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;执行完成，耗时：0 ms
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 241 yuan to get 2530 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198		2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198        2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 241 yuan to get 2535 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 242 yuan to get 2540 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198		2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198        2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;Cost 242 yuan to get 2545 points.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is : 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	cost(￥)	points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    cost(￥)    points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;===== 省略若干行 =====
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;*/&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;看来我得花掉 &lt;code&gt;241￥&lt;/code&gt; ，真是一笔大数目 😿&lt;/p&gt;
@@ -2660,23 +2835,23 @@ $$
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;执行完成，耗时：0 ms
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;You can get 2535 points using 241 yuan.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is: 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	Cost(￥)	Points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	6		60
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	1		10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    Cost(￥)    Points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    6        60
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    1        10
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;You can get 2575 points using 243 yuan.
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;The method is: 
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	Cost(￥)	Points
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	198		2100
-&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;	45		475
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    Cost(￥)    Points
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    198        2100
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;    45        475
 &lt;/span&gt;&lt;span class=&#34;cm&#34;&gt;*/&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;诶？多花2块钱，即243元，能够多获取 &lt;code&gt;40&lt;/code&gt; 点券？&lt;/p&gt;
 &lt;p&gt;我先去充钱了朋友们~&lt;/p&gt;
@@ -7600,7 +7775,7 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 &lt;li&gt;房子原本有颜色，如果此颜色与 &lt;code&gt;color&lt;/code&gt; 不同，那么这种上色方案无论如何是不可行的；如果此颜色与 &lt;code&gt;color&lt;/code&gt; 相同，那么 &lt;code&gt;dp&lt;/code&gt; 值就是我们上面分析的情况。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;把这些分析加以实现，我们应该：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-伪代码&#34; data-lang=&#34;伪代码&#34;&gt;- 枚举房子下标 --&amp;gt; idx: 0 ~ m - 1
+&lt;pre&gt;&lt;code class=&#34;language-伪代码&#34; data-lang=&#34;伪代码&#34;&gt;- 枚举房子下标 --&amp;gt; idx: 0 ~ m - 1
 	- 枚举上色方案 --&amp;gt; color: 0 ~ n - 1
 		- 如果房子有颜色且不同于 color，继续枚举颜色
 		- 运行至此有两种情况：房子没有颜色，或房子有颜色且颜色就是 color
@@ -7813,14 +7988,47 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 &lt;p&gt;这一步可就厉害了！我不会向你分享镜像的链接（网上多的很），但是我要告诉你怎么突破百度网盘的限速！
 总的来说，还是分成3个步骤：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;下载IDM&lt;/li&gt;
-&lt;li&gt;下载并安装Temper Monkey&lt;/li&gt;
-&lt;li&gt;下载直链助手插件，获取直链进行下载&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下载IDM&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下载并安装Temper Monkey&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下载直链助手插件，获取直链进行下载&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id=&#34;下载idm&#34;&gt;下载IDM&lt;/h4&gt;
 &lt;p&gt;IDM（Internet Download Manager）是一个多线程下载器，具体的原理大概就是面对一个大文件时，每一个线程从不同的起点开始下载，最终把每个线程下载的多个模块还原成原本的文件。当然，我们不需要深入探查它的实现方式，只需要去 &lt;a class=&#34;link&#34; href=&#34;http://www.internetdownloadmanager.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;这个地方&lt;/a&gt; 下载软件就好了！
 安装软件的过程就不多说了，据说Edge浏览器也可以集成IDM插件，但是在我的实践中好像并没有用到它。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;2022-05-28更新&lt;/p&gt;
+&lt;p&gt;玩过黑苹果之后，没想到有一天又回到了虚拟机的怀抱 🤣&lt;/p&gt;
+&lt;p&gt;我的 &lt;code&gt;Yoga 13s&lt;/code&gt; 没有相应的Hackintosh教程，为了继续我的Mac OS之旅，决定还是装个虚拟机，以免想玩Mac的时候内心空虚。&lt;/p&gt;
+&lt;p&gt;这篇教程里面的绝大部分操作仍是可行的！从 &lt;code&gt;unlocker&lt;/code&gt; 到下文的 &lt;code&gt;Temper Monkey&lt;/code&gt; 和直连助手，没想到时隔一年，这篇小文章的可复现性还那么高，看来当初瞎折腾取得的这点实践经验还是很可贵的。&lt;/p&gt;
+&lt;p&gt;言归正传，此次复现放弃了IDM，而选用了 &lt;strong&gt;免费的&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;https://www.neatdownloadmanager.com/index.php/en/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;NDM&lt;/a&gt; ，在它跑起来的那一刻，内心泛起了一丝欣喜~&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 175; 
+			flex-basis: 421px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9.png&#34; data-size=&#34;1624x924&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9.png&#34;
+			width=&#34;1624&#34;
+			height=&#34;924&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu56c94df869d6e78dca3ae62639267d80_139285_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu56c94df869d6e78dca3ae62639267d80_139285_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;NDM&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;NDM&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;hr&gt;
 &lt;h4 id=&#34;下载并安装temper-monkey&#34;&gt;下载并安装Temper Monkey&lt;/h4&gt;
 &lt;p&gt;鼎鼎有名的Temper Monkey（油猴）是一个浏览器插件管理器，使用这个东西你可以方便地下载并使用大佬们创造并分享出来的JavaScript程序。在Edge的扩展商店中找到Temper Monkey，下载并安装就行了。&lt;/p&gt;
 &lt;h4 id=&#34;安装直链助手&#34;&gt;安装直链助手&lt;/h4&gt;
@@ -15481,7 +15689,7 @@ template&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;date = &amp;#34;2014-04-02&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;categories = [&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Development&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  	&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;golang&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;golang&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;l&#34;&gt;series = [&amp;#34;Hugo 101&amp;#34;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;author ]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;

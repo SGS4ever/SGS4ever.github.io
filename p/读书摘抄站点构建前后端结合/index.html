@@ -15,7 +15,7 @@
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .'><title>读书摘抄站点构建（前后端结合）</title>
+const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .'><title>读书摘抄站点构建（前后端结合）</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
 
@@ -53,10 +53,10 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .'>
+const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-09T00:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-06-09T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="读书摘抄站点构建（前后端结合）">
 <meta name="twitter:description" content="自后端篇之后，各方面进度逐渐加快，以至于基本没有时间慢慢跟进记录了。
 目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
@@ -72,7 +72,7 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetchData(vueThis) { axios .">
+const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -179,9 +179,12 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 </svg>
                 <time class="article-time--published">Mar 07, 2022</time>
             </div>
-        
-
-        
+        <div>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                <time class="article-time--published">
+                    Jun 09, 2022
+                </time>
+            </div>
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -192,7 +195,7 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 
 
                 <time class="article-time--reading">
-                    阅读时长: 2 分钟
+                    阅读时长: 3 分钟
                 </time>
             </div>
         
@@ -229,27 +232,27 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 <p>现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。</p>
 <p>前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 <code>fetchData()</code> 的方法，其中使用 <code>axios</code> 从后端请求数据，然后更新到实例的 <code>data</code> 上；这个方法在 <code>mounted()</code> 的时候被调用。需要注意，在 <code>fetchData()</code> 里面使用的 <code>this</code> 指向的不是组件实例，要从外部传入实例才行。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">Vue</span><span class="p">.</span><span class="nx">createApp</span><span class="p">({</span>
-	<span class="c1">// ==== 略 ====
-</span><span class="c1"></span>	<span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
-		<span class="c1">// ==== 略 ====
-</span><span class="c1"></span>		<span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">axios</span>
-				<span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/index&#39;</span><span class="p">)</span>
-				<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-					<span class="kd">var</span> <span class="nx">respJSON</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
-					<span class="nx">vueThis</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;login&#34;</span><span class="p">];</span>
-					<span class="nx">vueThis</span><span class="p">.</span><span class="nx">cards</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;cards&#34;</span><span class="p">];</span>
-					<span class="nx">vueThis</span><span class="p">.</span><span class="nx">totalBooks</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;totalBooks&#34;</span><span class="p">];</span>
-				<span class="p">})</span>
-				<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-					<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-				<span class="p">});</span>
-		<span class="p">}</span>
-	<span class="p">},</span>
-	<span class="nx">mounted</span><span class="p">()</span> <span class="p">{</span>
-		<span class="kd">let</span> <span class="nx">vueThis</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-		<span class="k">this</span><span class="p">.</span><span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">);</span>
-	<span class="p">}</span>
+    <span class="c1">// ==== 略 ====
+</span><span class="c1"></span>    <span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// ==== 略 ====
+</span><span class="c1"></span>        <span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">axios</span>
+                <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/index&#39;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">respJSON</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
+                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;login&#34;</span><span class="p">];</span>
+                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">cards</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;cards&#34;</span><span class="p">];</span>
+                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">totalBooks</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;totalBooks&#34;</span><span class="p">];</span>
+                <span class="p">})</span>
+                <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+                <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">mounted</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">vueThis</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">);</span>
+    <span class="p">}</span>
 <span class="p">}).</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
 </code></pre></div><h3 id="0x02-交互逻辑设计">0x02 交互逻辑设计</h3>
 <p><figure 
@@ -398,7 +401,7 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 <blockquote>
 <p>2022-03-09加</p>
 </blockquote>
-<p>原先就有的一个想法，希望在登录状态下能对浏览的卡片进行在线修改（例如心血来潮地添加一些评论或者纠正一下当初录入对错别字等等）。</p>
+<p>原先就有的一个想法，希望在登录状态下能对浏览的卡片进行在线修改（例如心血来潮地添加一些评论或者纠正一下当初录入的错别字等等）。</p>
 <p>这块功能在最初编写卡片代码的时候就预留出来了，按钮使用的是Bootstrap提供的三个图标，分别表示“开始编辑”、“保存编辑”、“取消编辑”。</p>
 <p>把它们各自的功能简单叙述一下。</p>
 <p><em><strong>开始编辑：</strong></em></p>
@@ -441,7 +444,138 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 </li>
 </ul>
 <p>在线更新功能的实现使整个站点的成熟度得到了飞跃，至此它已经跟一个在线记事本一样了。我可以自由地添加内容、修改内容，且每天都有数据库的备份，基本上完成了最初预想的功能。</p>
-<h3 id="0x07-to-do">0x07 To Do</h3>
+<h3 id="0x07-图片分享">0x07 图片分享</h3>
+<blockquote>
+<p>写于2022-06-09</p>
+</blockquote>
+<p>时隔三月，重新搞起了读书摘抄站点~ 🤔</p>
+<p>这次添加的是最初规划时就考虑到的分享功能，之前一直没有实现主要是因为懒，且觉得这个自娱自乐的站点貌似不太需要分享功能；最近想跟朋友分享我摘抄的一些很好的片段时，总得自己手动截图，比较难受；更有甚者，一些比较长的片段没法一次性截取完全，于是萌生出把分享功能完成的想法。</p>
+<p>一直以来比较心水一键生成图片的那种功能，这次的开发就以图片分享为目标。</p>
+<p>图片分享的基本原理：使用HTML <code>canvas</code> 绘制矢量图，之后可以选择使用 <code>canvas.toDataURL</code> 生成图片URL并生成 <code>img</code> 图片，或对 <code>canvas</code> 进行其他操作（如复制到剪贴板）。</p>
+<p>图片分享的关键步骤是如何将要分享的内容绘制到 <code>canvas</code> 上，这一步有成熟的第三方工具 <a class="link" href="http://html2canvas.hertzen.com/"  target="_blank" rel="noopener"
+    >html2canvas</a> ，可以自动解析DOM元素并生成图片，受到网上各教程的广泛使用。不过，经过我的测试，这个工具在绘制我的摘抄时会丢失一些样式，而且还得去调试它的各种参数，属于自讨苦吃，大可不必。</p>
+<p>重新思考之后，我认为我的需求比较简单：只是将要分享的 <strong>文字内容</strong> 转换成图片而已，没有多少麻烦的步骤，因此决定手撸 <code>canvas</code> 。</p>
+<p>生成分享图片的整体流程非常简单：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 99; 
+			flex-basis: 237px"
+	>
+	<a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3.png" data-size="729x736">
+		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3.png"
+			width="729"
+			height="736"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hua527065085a1154cd41fd1947186dc7b_46433_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hua527065085a1154cd41fd1947186dc7b_46433_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="流程">
+	</a>
+	
+	<figcaption>流程</figcaption>
+	
+</figure></p>
+<p>画布长宽根据屏幕大小而改变，但始终保持一个固定的比例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="kd">let</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">;</span>
+</code></pre></div><p>画布的内容组织结构也很简单，只有三个部分：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 75; 
+			flex-basis: 182px"
+	>
+	<a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4.png" data-size="752x990">
+		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4.png"
+			width="752"
+			height="990"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu8712c57ee0a1f0264ffabaf334c2c4f5_22774_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu8712c57ee0a1f0264ffabaf334c2c4f5_22774_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="内容结构">
+	</a>
+	
+	<figcaption>内容结构</figcaption>
+	
+</figure></p>
+<p>使用 <code>let ctx = canvas.getContext(&quot;2d&quot;);</code> 得到画布主体，之后获取目标内容进行绘制。</p>
+<ul>
+<li>
+<p>头部图片，设置好宽高，然后 <code>ctx.drawImage(img, 0, 0, width, imgHeight);</code> 。</p>
+</li>
+<li>
+<p>文字部分，要先绘制一个矩形背景，否则文字没有底色：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&#34;#ffffff&#34;</span><span class="p">;</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">height</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</code></pre></div></li>
+<li>
+<p>使用jQuery提取要分享的内容（通过DOM树获取书籍名称和摘抄内容的相应节点），分别在各自的位置上绘制字符串。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="c1">// 绘制文字
+</span><span class="c1"></span><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&#34;#000000&#34;</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">opt</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;headerHeight&#39;</span><span class="o">:</span> <span class="mf">0.08</span> <span class="o">*</span> <span class="nx">height</span><span class="p">,</span>
+    <span class="s1">&#39;leftPadding&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="s1">&#39;rightPadding&#39;</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;bottomPadding&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="s1">&#39;textHeight&#39;</span><span class="o">:</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="nx">height</span><span class="p">,</span>
+    <span class="s1">&#39;textWidth&#39;</span><span class="o">:</span> <span class="nx">width</span><span class="p">,</span>
+    <span class="s1">&#39;maxFontSize&#39;</span><span class="o">:</span> <span class="mi">20</span>
+<span class="p">}</span>
+<span class="c1">// 书籍名称
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">fontSize</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span><span class="p">;</span>
+<span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">fontSize</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="nx">fontSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;px &#39;</span> <span class="o">+</span> <span class="s1">&#39;Long Cang&#39;</span><span class="p">;</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">bName</span><span class="p">.</span><span class="nx">text</span><span class="p">(),</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span><span class="p">,</span> <span class="nx">imgHeight</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">);</span>
+<span class="c1">// 摘抄内容
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">exp</span><span class="p">).</span><span class="nx">text</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">realTextWidth</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">textWidth</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">rightPadding</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">realTextHeight</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">textHeight</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">bottomPadding</span><span class="p">;</span>
+<span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">realTextHeight</span> <span class="o">*</span> <span class="nx">realTextWidth</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">text</span><span class="p">.</span><span class="nx">length</span><span class="p">))));</span>
+<span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">fontSize</span><span class="p">,</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">maxFontSize</span><span class="p">);</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="nx">fontSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;px &#39;</span> <span class="o">+</span> <span class="s1">&#39;Noto Serif SC&#39;</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">cols</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">realTextWidth</span><span class="p">)</span> <span class="o">/</span> <span class="nx">fontSize</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">rows</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">text</span><span class="p">.</span><span class="nx">length</span> <span class="o">/</span> <span class="nx">cols</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">rows</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 注意 substring 和 substr 两个不同API的区别
+</span><span class="c1"></span>    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span>
+        <span class="nx">text</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">i</span> <span class="o">*</span> <span class="nx">cols</span><span class="p">,</span> <span class="nx">cols</span><span class="p">),</span> 
+        <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span><span class="p">,</span> 
+        <span class="nx">imgHeight</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span> <span class="o">+</span> <span class="nx">fontSize</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></li>
+</ul>
+<p>这里为了使得大段文字能够写入到一个固定高度的区域中，需要对 <strong>字体大小</strong> 进行一些数学上的计算。</p>
+<p>已知待写入的字符串为 <code>text</code> ，画布文字部分宽度为 <code>realTextWidth</code> ，高度为 <code>realTextHeight</code> ，令字体大小为 <code>fontSize</code> ，则</p>
+<p>$$
+\text{列数 }col = \frac{realTextWidth}{fontSize}
+$$</p>
+<p>$$
+\text{行数 }row = \frac{text.length}{col}
+$$</p>
+<p>令行高为两倍字体大小，即</p>
+<p>$$
+lineHeight = 2 \times fontSize
+$$</p>
+<p>那么文字部分总共需要占据的高度就有</p>
+<p>$$
+row \times lineHeight = \frac {text.length \times fontSize}{realTextWidth} \times fontSize \times 2
+$$</p>
+<p>它不能超过画布提供的高度，否则会溢出，也就是需要满足</p>
+<p>$$
+\frac {text.length \times fontSize}{realTextWidth} \times fontSize \times 2 \leq realTextHeight
+$$</p>
+<p>$$
+\text{解得 }fontSize \leq \sqrt{\frac{realTextHeight \times readTextWidth}{2 \times text.length}}
+$$</p>
+<p>这就是字体大小的要求。满足这一大小要求的字体才能将一个片段完整地写入画布中。</p>
+<p><strong>另一个</strong> 需要注意的地方是， <code>canvas</code> 写入文字时不能自动换行，超出画布的部分即不可见。为了实现 <strong>文字换行</strong> 的效果，需要手动对原始字符串进行切分，每一次只写入原始字符串的一部分（实际上就是写入列数 <code>col</code> 个字符），移动至下一行，再继续写入，这就是上方代码中的最后一个 <code>for</code> 循环所做的事情。</p>
+<p>完成以上几点之后，能够绘制出一张很不错的分享图了：</p>
+<!-- raw HTML omitted -->
+<p>最后，添加一个按钮，用于将这张图片一键保存到剪贴板。这里给出两篇重要参考， <a class="link" href="https://stackoverflow.com/questions/27863617/is-it-possible-to-copy-a-canvas-image-to-the-clipboard"  target="_blank" rel="noopener"
+    >第一篇</a> 教会我们如何把 <code>canvas</code> 转化为可以写入剪贴板中的数据； <a class="link" href="https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write"  target="_blank" rel="noopener"
+    >第二篇</a> 介绍了浏览器的 <code>navigator.clipboard.write</code> 接口的用法，据此，可以实现一键复制图片的功能。</p>
+<h3 id="0x08-to-do">0x08 To Do</h3>
 <p>本文的叙述相比之前的两篇简单很多，因为内容实在太多了，详写不来 😢</p>
 <p>整个站点还有一些地方是可以改进的：</p>
 <ul>
@@ -476,21 +610,37 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
 
 
     <section class="article-lastmod">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
         <span>
-            最后更新于 Mar 09, 2022 00:00 UTC
+            最后更新于 Jun 09, 2022
         </span>
     </section></footer>
 
 
 
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
     
 </article>
 
@@ -771,7 +921,8 @@ const app = Vue.createApp({ // ==== 略 ==== 	methods: { // ==== 略 ==== 	fetch
     <li><a href="#0x04-数据库">0x04 数据库</a></li>
     <li><a href="#0x05-页面修修补补">0x05 页面修修补补</a></li>
     <li><a href="#0x06-内容在线修改">0x06 内容在线修改</a></li>
-    <li><a href="#0x07-to-do">0x07 To Do</a></li>
+    <li><a href="#0x07-图片分享">0x07 图片分享</a></li>
+    <li><a href="#0x08-to-do">0x08 To Do</a></li>
   </ul>
 </nav>
                 </div>

@@ -48,7 +48,7 @@ Step2 现在先不要急着运行，我们需要做一些运行之前的准备�
 不用担心服务没有关干净，或者进程杀不掉的问题。理论上我们的 unlocker 能够自动关掉这些服务，等到解锁完毕之后再启动它们。我在这里啰嗦这些，主要是忠实地记录我的实践结果，如果你运气好的话，跳过这一步最终也是可能成功的。'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2021-04-30T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-30T00:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2021-04-30T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-05-28T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="尝尝鲜——为自己装一台Mac OS虚拟机">
 <meta name="twitter:description" content="如果你单纯地想体验一下以“简洁高效“闻名的Mac OS，那么我会强烈推荐你为自己创建一台Mac OS的虚拟机，使用这种方法，你不需要花费大几千元去购入一台Mac Book，就能得到最完整的系统体验。当然，假若你在体验之后爱上了这款系统，之后努力工作为自己的情怀买个单也是有所必要的。
 解锁VMWare 我们诸多步骤中最困难的一步就是解锁VMWare了。为什么叫解锁呢？因为我们使用的程序被作者命名为 unlocker ，就这么简单······ 我假定阅读本文的读者已经知道什么是VMWare，并且创建过自己的虚拟机，对于VMWare的安装等流程不再赘述。本文使用的是VMWare Workstation Pro 16 。
@@ -167,9 +167,12 @@ Step2 现在先不要急着运行，我们需要做一些运行之前的准备�
 </svg>
                 <time class="article-time--published">Apr 30, 2021</time>
             </div>
-        
-
-        
+        <div>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                <time class="article-time--published">
+                    May 28, 2022
+                </time>
+            </div>
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -268,14 +271,47 @@ Step2 现在先不要急着运行，我们需要做一些运行之前的准备�
 <p>这一步可就厉害了！我不会向你分享镜像的链接（网上多的很），但是我要告诉你怎么突破百度网盘的限速！
 总的来说，还是分成3个步骤：</p>
 <ul>
-<li>下载IDM</li>
-<li>下载并安装Temper Monkey</li>
-<li>下载直链助手插件，获取直链进行下载</li>
+<li>
+<p>下载IDM</p>
+</li>
+<li>
+<p>下载并安装Temper Monkey</p>
+</li>
+<li>
+<p>下载直链助手插件，获取直链进行下载</p>
+</li>
 </ul>
 <h4 id="下载idm">下载IDM</h4>
 <p>IDM（Internet Download Manager）是一个多线程下载器，具体的原理大概就是面对一个大文件时，每一个线程从不同的起点开始下载，最终把每个线程下载的多个模块还原成原本的文件。当然，我们不需要深入探查它的实现方式，只需要去 <a class="link" href="http://www.internetdownloadmanager.com/"  target="_blank" rel="noopener"
     >这个地方</a> 下载软件就好了！
 安装软件的过程就不多说了，据说Edge浏览器也可以集成IDM插件，但是在我的实践中好像并没有用到它。</p>
+<hr>
+<p>2022-05-28更新</p>
+<p>玩过黑苹果之后，没想到有一天又回到了虚拟机的怀抱 🤣</p>
+<p>我的 <code>Yoga 13s</code> 没有相应的Hackintosh教程，为了继续我的Mac OS之旅，决定还是装个虚拟机，以免想玩Mac的时候内心空虚。</p>
+<p>这篇教程里面的绝大部分操作仍是可行的！从 <code>unlocker</code> 到下文的 <code>Temper Monkey</code> 和直连助手，没想到时隔一年，这篇小文章的可复现性还那么高，看来当初瞎折腾取得的这点实践经验还是很可贵的。</p>
+<p>言归正传，此次复现放弃了IDM，而选用了 <strong>免费的</strong> <a class="link" href="https://www.neatdownloadmanager.com/index.php/en/"  target="_blank" rel="noopener"
+    >NDM</a> ，在它跑起来的那一刻，内心泛起了一丝欣喜~</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 175; 
+			flex-basis: 421px"
+	>
+	<a href="/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9.png" data-size="1624x924">
+		<img src="/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9.png"
+			width="1624"
+			height="924"
+			srcset="/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu56c94df869d6e78dca3ae62639267d80_139285_480x0_resize_box_3.png 480w, /p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu56c94df869d6e78dca3ae62639267d80_139285_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="NDM">
+	</a>
+	
+	<figcaption>NDM</figcaption>
+	
+</figure></p>
+<hr>
 <h4 id="下载并安装temper-monkey">下载并安装Temper Monkey</h4>
 <p>鼎鼎有名的Temper Monkey（油猴）是一个浏览器插件管理器，使用这个东西你可以方便地下载并使用大佬们创造并分享出来的JavaScript程序。在Edge的扩展商店中找到Temper Monkey，下载并安装就行了。</p>
 <h4 id="安装直链助手">安装直链助手</h4>
@@ -462,7 +498,12 @@ Step2 现在先不要急着运行，我们需要做一些运行之前的准备�
     </section>
 
 
-    </footer>
+    <section class="article-lastmod">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        <span>
+            最后更新于 May 28, 2022
+        </span>
+    </section></footer>
 
 
 
