@@ -7,15 +7,15 @@
 你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
 (https://github.com/VincentGarreau/particles.js)
 话不多说，let&amp;rsquo;s go!
-下载这款插件  你可以直接使用git clone或者从网页上下载它。
+下载这款插件 你可以直接使用git clone或者从网页上下载它。
 解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
- 在源码中为插件留出位置  在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在源码中为插件留出位置 在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
 在你的页面中为插件留出位置，这个操作非常简单。打开你的footer.html，找一个合适的位置（最好是最外层），加上一个标签：
 &amp;lt;div id=&amp;quot;particles-js&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
 p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
 p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/baseof.html，因为它似乎是所有页面的基本框架，适用性更强一些。
- 引入插件  你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+引入插件 你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
 我们要在第二步的div底下写入插件。
 为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
 我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&amp;lt;script&amp;gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&amp;lt;div&amp;gt;之前写入几条&amp;lt;script&amp;gt;标签。
@@ -26,12 +26,15 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，public文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。
 将两个JS文件引入，记得放在第二步的div后面：
 &amp;lt;script src=&amp;#34;xxxxx/app.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;xxxxx/particles.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
- 巧妙地获取路径  如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
+巧妙地获取路径 如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
 我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&amp;quot;/js/app.js&amp;quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了 :(
 正确的获取路径的姿势，你可以直接使用绝对路径，也就是https://yourWeb.github.io/js/app.js这样的方式。
 底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：
-&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;  代码的最终样式及推送  经过一系列的修改后，你的页面的代码就多了如下的东西：
-&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.'><title>博客搭建指南——2</title>
+&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 代码的最终样式及推送 经过一系列的修改后，你的页面的代码就多了如下的东西：
+&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 此外，你的public/js文件夹中还多了两个文件app.js和particles.js。
+现在，不要以为一切已经结束了，因为你的这个div，你的页面现在多了一个元素，如果它位于footer上方，那它会使得你的页面被撑得很长，我们要在主页面的CSS文件里修改它。
+进入public/css文件夹，如果是Keepit主题，就只有一个文件，打开它；如果是其他主题，你需要找到能发挥作用的CSS。
+在文件最末尾补上这样的代码：'><title>博客搭建指南——2</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%972/'>
 
@@ -61,15 +64,15 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
 (https://github.com/VincentGarreau/particles.js)
 话不多说，let&amp;rsquo;s go!
-下载这款插件  你可以直接使用git clone或者从网页上下载它。
+下载这款插件 你可以直接使用git clone或者从网页上下载它。
 解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
- 在源码中为插件留出位置  在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在源码中为插件留出位置 在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
 在你的页面中为插件留出位置，这个操作非常简单。打开你的footer.html，找一个合适的位置（最好是最外层），加上一个标签：
 &amp;lt;div id=&amp;quot;particles-js&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
 p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
 p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/baseof.html，因为它似乎是所有页面的基本框架，适用性更强一些。
- 引入插件  你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+引入插件 你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
 我们要在第二步的div底下写入插件。
 为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
 我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&amp;lt;script&amp;gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&amp;lt;div&amp;gt;之前写入几条&amp;lt;script&amp;gt;标签。
@@ -80,12 +83,15 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，public文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。
 将两个JS文件引入，记得放在第二步的div后面：
 &amp;lt;script src=&amp;#34;xxxxx/app.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;xxxxx/particles.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
- 巧妙地获取路径  如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
+巧妙地获取路径 如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
 我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&amp;quot;/js/app.js&amp;quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了 :(
 正确的获取路径的姿势，你可以直接使用绝对路径，也就是https://yourWeb.github.io/js/app.js这样的方式。
 底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：
-&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;  代码的最终样式及推送  经过一系列的修改后，你的页面的代码就多了如下的东西：
-&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.'>
+&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 代码的最终样式及推送 经过一系列的修改后，你的页面的代码就多了如下的东西：
+&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 此外，你的public/js文件夹中还多了两个文件app.js和particles.js。
+现在，不要以为一切已经结束了，因为你的这个div，你的页面现在多了一个元素，如果它位于footer上方，那它会使得你的页面被撑得很长，我们要在主页面的CSS文件里修改它。
+进入public/css文件夹，如果是Keepit主题，就只有一个文件，打开它；如果是其他主题，你需要找到能发挥作用的CSS。
+在文件最末尾补上这样的代码：'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%972/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2020-09-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-19T00:00:00&#43;00:00'/>
@@ -96,15 +102,15 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
 (https://github.com/VincentGarreau/particles.js)
 话不多说，let&amp;rsquo;s go!
-下载这款插件  你可以直接使用git clone或者从网页上下载它。
+下载这款插件 你可以直接使用git clone或者从网页上下载它。
 解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
- 在源码中为插件留出位置  在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在源码中为插件留出位置 在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
 在你的页面中为插件留出位置，这个操作非常简单。打开你的footer.html，找一个合适的位置（最好是最外层），加上一个标签：
 &amp;lt;div id=&amp;quot;particles-js&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
 p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
 p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/baseof.html，因为它似乎是所有页面的基本框架，适用性更强一些。
- 引入插件  你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+引入插件 你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
 我们要在第二步的div底下写入插件。
 为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
 我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&amp;lt;script&amp;gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&amp;lt;div&amp;gt;之前写入几条&amp;lt;script&amp;gt;标签。
@@ -115,12 +121,15 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，public文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。
 将两个JS文件引入，记得放在第二步的div后面：
 &amp;lt;script src=&amp;#34;xxxxx/app.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;xxxxx/particles.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
- 巧妙地获取路径  如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
+巧妙地获取路径 如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
 我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&amp;quot;/js/app.js&amp;quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了 :(
 正确的获取路径的姿势，你可以直接使用绝对路径，也就是https://yourWeb.github.io/js/app.js这样的方式。
 底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：
-&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;  代码的最终样式及推送  经过一系列的修改后，你的页面的代码就多了如下的东西：
-&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.">
+&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 代码的最终样式及推送 经过一系列的修改后，你的页面的代码就多了如下的东西：
+&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 此外，你的public/js文件夹中还多了两个文件app.js和particles.js。
+现在，不要以为一切已经结束了，因为你的这个div，你的页面现在多了一个元素，如果它位于footer上方，那它会使得你的页面被撑得很长，我们要在主页面的CSS文件里修改它。
+进入public/css文件夹，如果是Keepit主题，就只有一个文件，打开它；如果是其他主题，你需要找到能发挥作用的CSS。
+在文件最末尾补上这样的代码：">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -281,9 +290,9 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 <p>接下来的一步很重要：<strong>把这两个文件放入<code>public/js</code>文件夹中!</strong></p>
 <p>你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，<code>public</code>文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。</p>
 <p>将两个JS文件引入，记得放在第二步的div后面：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;xxxxx/app.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;xxxxx/particles.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div><p>这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;xxxxx/app.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;xxxxx/particles.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。</p>
 </blockquote>
 <h4 id="巧妙地获取路径">巧妙地获取路径</h4>
 <blockquote>
@@ -291,26 +300,26 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 <p>我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用<code>src=&quot;/js/app.js&quot;</code>这样的语句，当你打开网站的主页，它会找到<code>https://yourWeb.github.io/js/app.js</code>，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找<code>https://yourWeb.github.io/post/article1/js/app.js</code>，必然是失败的，于是你的博文就不能有漂亮的背景了 :(</p>
 <p>正确的获取路径的姿势，你可以直接使用绝对路径，也就是<code>https://yourWeb.github.io/js/app.js</code>这样的方式。</p>
 <p>底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/particles.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/app.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div></blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/particles.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/app.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></div></blockquote>
 <h4 id="代码的最终样式及推送">代码的最终样式及推送</h4>
 <blockquote>
 <p>经过一系列的修改后，你的页面的代码就多了如下的东西：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;particles-js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/particles.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/app.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div><p>此外，你的<code>public/js</code>文件夹中还多了两个文件<code>app.js</code>和<code>particles.js</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;particles-js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/particles.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://sgs4ever.github.io/js/app.js&#34;</span> <span class="na">async</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>此外，你的<code>public/js</code>文件夹中还多了两个文件<code>app.js</code>和<code>particles.js</code>。</p>
 <p>现在，不要以为一切已经结束了，因为你的这个div，你的页面现在多了一个元素，如果它位于footer上方，那它会使得你的页面被撑得很长，我们要在主页面的CSS文件里修改它。</p>
 <p>进入<code>public/css</code>文件夹，如果是Keepit主题，就只有一个文件，打开它；如果是其他主题，你需要找到能发挥作用的CSS。</p>
 <p>在文件最末尾补上这样的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">particles-js-canvas-el</span> <span class="p">{</span>
-    <span class="k">position</span><span class="p">:</span><span class="kc">fixed</span><span class="p">;</span>
-    <span class="k">top</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span>
-    <span class="k">left</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span>
-    <span class="k">width</span><span class="p">:</span><span class="mi">100</span><span class="kt">%</span>
-<span class="p">}</span>
-</code></pre></div><p>position设定为<strong>fixed</strong>，使得整块画布独立于你页面的其他元素；由于它独立了，就需要使用top、left来指定它的位置；最后是画布的宽度，填满整个屏幕即可。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="p">.</span><span class="nc">particles-js-canvas-el</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">position</span><span class="p">:</span><span class="kc">fixed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">top</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">left</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">width</span><span class="p">:</span><span class="mi">100</span><span class="kt">%</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>position设定为<strong>fixed</strong>，使得整块画布独立于你页面的其他元素；由于它独立了，就需要使用top、left来指定它的位置；最后是画布的宽度，填满整个屏幕即可。</p>
 <p>这样，就完成了所有的步骤了。</p>
 <p>我们回顾一下总共做了什么：</p>
 <hr>
@@ -438,7 +447,7 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
                 
                     
 <article class="">
-    <a href="/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
         
         
 
@@ -449,9 +458,9 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
             style="opacity: 0.3;"/>
         </div>
         <div class="article-details">
-            <h2 class="article-title">PyQt5初探——与scapy的美妙结合</h2>
+            <h2 class="article-title">RapidJson使用小记</h2>
             <footer class="article-time">
-                <time datetime=''>Apr 10, 2022</time>
+                <time datetime=''>Sep 18, 2022</time>
             </footer>
         </div>
     </a>
@@ -459,7 +468,7 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
                 
                     
 <article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
         
         
 
@@ -470,9 +479,9 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
             style="opacity: 0.3;"/>
         </div>
         <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（前后端结合）</h2>
+            <h2 class="article-title">Windows Terminal美化小记</h2>
             <footer class="article-time">
-                <time datetime=''>Mar 07, 2022</time>
+                <time datetime=''>Sep 17, 2022</time>
             </footer>
         </div>
     </a>

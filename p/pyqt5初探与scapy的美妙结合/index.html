@@ -4,25 +4,25 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='PyQt5初探 自读书摘抄站点构建完成以来，一直没有进行什么有趣的实践，这回由于毕设的需要，首次尝试进行GUI编程；此外同样由于毕设需要，使用了scapy进行流量嗅探，因此就有了这一篇四不像的记录性质的文章。
 Qt（音 cute ）是一套被广泛使用的GUI组件库，而 PyQt 则是这套框架与Python语言的结合，是Python中最强大的GUI库之一。
 本次选用这个框架其实经过了一定的曲折，因为Python的GUI库有太多了🤣
-  TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
-  PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
-  Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
-  PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
-  安装PyQt非常简单：
+TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
+PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
+Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
+PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
+安装PyQt非常简单：
 pip install PyQt5 pip install pyqt5-tools 还有简单易用的 Qt Designer ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。
 环境安装完成之后，可以照着 教程 实现一些功能。
 经过一系列的探索，我的程序初具雏形：
- 
 界面有如下几个组件：
-  在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
-  结束在线分析：顾名思义。
-  打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
-  大大的文本框：用于输出实时流量捕捉的内容。
-  运行起来的效果如下：
- 在线分析（初步） 
-总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
+在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
+结束在线分析：顾名思义。
+打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
+大大的文本框：用于输出实时流量捕捉的内容。
+运行起来的效果如下：
+在线分析（初步） 总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
 不过，还是需要先对本文的另一个主角 scapy 进行一些介绍。
-scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。'><title>PyQt5初探——与scapy的美妙结合</title>
+scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。
+这次将 scapy 和 PyQt5 结合，实际上只需要用到抓包的功能：
+def StartSniff(self): self.stopSniff = False sniff(prn=self.SniffCallBack, count=0, stop_filter=self.isStop) def SniffCallBack(self, pkt: scapy.packet.Packet) -&amp;gt; None: &amp;#39;&amp;#39;&amp;#39; Do Something &amp;#39;&amp;#39;&amp;#39; def isStop(self, pkt): return self.'><title>PyQt5初探——与scapy的美妙结合</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/'>
 
@@ -49,25 +49,25 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
 <meta property='og:description' content='PyQt5初探 自读书摘抄站点构建完成以来，一直没有进行什么有趣的实践，这回由于毕设的需要，首次尝试进行GUI编程；此外同样由于毕设需要，使用了scapy进行流量嗅探，因此就有了这一篇四不像的记录性质的文章。
 Qt（音 cute ）是一套被广泛使用的GUI组件库，而 PyQt 则是这套框架与Python语言的结合，是Python中最强大的GUI库之一。
 本次选用这个框架其实经过了一定的曲折，因为Python的GUI库有太多了🤣
-  TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
-  PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
-  Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
-  PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
-  安装PyQt非常简单：
+TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
+PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
+Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
+PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
+安装PyQt非常简单：
 pip install PyQt5 pip install pyqt5-tools 还有简单易用的 Qt Designer ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。
 环境安装完成之后，可以照着 教程 实现一些功能。
 经过一系列的探索，我的程序初具雏形：
- 
 界面有如下几个组件：
-  在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
-  结束在线分析：顾名思义。
-  打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
-  大大的文本框：用于输出实时流量捕捉的内容。
-  运行起来的效果如下：
- 在线分析（初步） 
-总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
+在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
+结束在线分析：顾名思义。
+打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
+大大的文本框：用于输出实时流量捕捉的内容。
+运行起来的效果如下：
+在线分析（初步） 总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
 不过，还是需要先对本文的另一个主角 scapy 进行一些介绍。
-scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。'>
+scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。
+这次将 scapy 和 PyQt5 结合，实际上只需要用到抓包的功能：
+def StartSniff(self): self.stopSniff = False sniff(prn=self.SniffCallBack, count=0, stop_filter=self.isStop) def SniffCallBack(self, pkt: scapy.packet.Packet) -&amp;gt; None: &amp;#39;&amp;#39;&amp;#39; Do Something &amp;#39;&amp;#39;&amp;#39; def isStop(self, pkt): return self.'>
 <meta property='og:url' content='https://xrg.fj.cn/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-04-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-04-10T00:00:00&#43;00:00'/>
@@ -75,25 +75,25 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
 <meta name="twitter:description" content="PyQt5初探 自读书摘抄站点构建完成以来，一直没有进行什么有趣的实践，这回由于毕设的需要，首次尝试进行GUI编程；此外同样由于毕设需要，使用了scapy进行流量嗅探，因此就有了这一篇四不像的记录性质的文章。
 Qt（音 cute ）是一套被广泛使用的GUI组件库，而 PyQt 则是这套框架与Python语言的结合，是Python中最强大的GUI库之一。
 本次选用这个框架其实经过了一定的曲折，因为Python的GUI库有太多了🤣
-  TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
-  PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
-  Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
-  PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
-  安装PyQt非常简单：
+TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
+PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
+Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
+PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
+安装PyQt非常简单：
 pip install PyQt5 pip install pyqt5-tools 还有简单易用的 Qt Designer ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。
 环境安装完成之后，可以照着 教程 实现一些功能。
 经过一系列的探索，我的程序初具雏形：
- 
 界面有如下几个组件：
-  在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
-  结束在线分析：顾名思义。
-  打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
-  大大的文本框：用于输出实时流量捕捉的内容。
-  运行起来的效果如下：
- 在线分析（初步） 
-总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
+在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
+结束在线分析：顾名思义。
+打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
+大大的文本框：用于输出实时流量捕捉的内容。
+运行起来的效果如下：
+在线分析（初步） 总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
 不过，还是需要先对本文的另一个主角 scapy 进行一些介绍。
-scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。">
+scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。
+这次将 scapy 和 PyQt5 结合，实际上只需要用到抓包的功能：
+def StartSniff(self): self.stopSniff = False sniff(prn=self.SniffCallBack, count=0, stop_filter=self.isStop) def SniffCallBack(self, pkt: scapy.packet.Packet) -&amp;gt; None: &amp;#39;&amp;#39;&amp;#39; Do Something &amp;#39;&amp;#39;&amp;#39; def isStop(self, pkt): return self.">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -245,9 +245,9 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
 </li>
 </ul>
 <p>安装PyQt非常简单：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">pip</span> <span class="n">install</span> <span class="n">PyQt5</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">pyqt5</span><span class="o">-</span><span class="n">tools</span>
-</code></pre></div><p>还有简单易用的 <em>Qt Designer</em> ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="n">PyQt5</span>
+</span></span><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="n">pyqt5</span><span class="o">-</span><span class="n">tools</span>
+</span></span></code></pre></div><p>还有简单易用的 <em>Qt Designer</em> ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。</p>
 <p>环境安装完成之后，可以照着 <a class="link" href="https://maicss.gitbook.io/pyqt-chinese-tutoral/pyqt5/index"  target="_blank" rel="noopener"
     >教程</a> 实现一些功能。</p>
 <p>经过一系列的探索，我的程序初具雏形：</p>
@@ -309,16 +309,16 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
 <p><a class="link" href="https://scapy.net/?msclkid=5f4b11d5b93911ec87025d4098201022"  target="_blank" rel="noopener"
     >Scapy</a> 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。</p>
 <p>这次将 <code>scapy</code> 和 <code>PyQt5</code> 结合，实际上只需要用到抓包的功能：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">StartSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">sniff</span><span class="p">(</span><span class="n">prn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SniffCallBack</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isStop</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">SniffCallBack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">:</span> <span class="n">scapy</span><span class="o">.</span><span class="n">packet</span><span class="o">.</span><span class="n">Packet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="s1">&#39;&#39;&#39; Do Something &#39;&#39;&#39;</span>
-
-<span class="k">def</span> <span class="nf">isStop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span>
-</code></pre></div><p>可以看到，这个功能只需要调用一个 <code>sniff()</code> 函数，并配置如下几个参数：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">StartSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sniff</span><span class="p">(</span><span class="n">prn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SniffCallBack</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isStop</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">SniffCallBack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">:</span> <span class="n">scapy</span><span class="o">.</span><span class="n">packet</span><span class="o">.</span><span class="n">Packet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;&#39;&#39; Do Something &#39;&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">isStop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span>
+</span></span></code></pre></div><p>可以看到，这个功能只需要调用一个 <code>sniff()</code> 函数，并配置如下几个参数：</p>
 <ul>
 <li>
 <p><code>prn</code> ：抓包的回调函数。每抓到一个数据包就会调用一次这个函数，函数有个默认参数 <code>packet</code> ，类型是 <code>scapy.packet.Packet</code> ，支持对该数据包进行一些操作。</p>
@@ -351,232 +351,232 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
 </figure></p>
 <p>当点击“在线分析“的时候，scapy需要开始抓包，但抓包的工作不能影响窗口本身的运行，这里就需要使用多线程 <code>QThread</code> 。</p>
 <p>主窗体的代码如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Analyzer</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1"># 定义用于抓包的成员</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span> <span class="o">=</span> <span class="n">Sniffer</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># 窗体 &amp; 标题</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&#34;Traffic Analyzer&#34;</span><span class="p">)</span>
-        <span class="c1"># 居中定位</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">alignCenter</span><span class="p">()</span>
-        <span class="c1"># 设置提示框字体</span>
-        <span class="n">QToolTip</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">QFont</span><span class="p">(</span><span class="s1">&#39;HanziPen TC&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-        <span class="c1"># 关联事件</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SnifferUpdate</span><span class="p">)</span>
-        <span class="c1"># 创建按钮</span>
-        <span class="c1">### 在线分析</span>
-        <span class="n">startBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
-        <span class="n">startBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;启动在线流量分析&#39;</span><span class="p">)</span>
-        <span class="n">startBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">startBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
-        <span class="c1">### 结束在线分析</span>
-        <span class="n">endBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;结束在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">pause</span><span class="p">)</span>
-        <span class="n">endBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;结束在线流量分析&#39;</span><span class="p">)</span>
-        <span class="n">endBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">endBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
-        <span class="c1">### 打开文件</span>
-        <span class="n">fileBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;打开文件&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="n">fileBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;打开一个pcap文件&#39;</span><span class="p">)</span>
-        <span class="n">fileBtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFileDialog</span><span class="p">)</span>
-        <span class="n">fileBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">fileBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
-        <span class="c1">### 文本编辑</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="c1"># 设置布局</span>
-        <span class="n">grid</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">startBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">endBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">fileBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="c1"># 呈现</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="s1">&#39;&#39;&#39; 省略若干不重要的函数 &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="nf">SnifferUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">textCursor</span><span class="p">()</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
-</code></pre></div><p>上述代码的重点在于两个按钮的定义：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">startBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
-<span class="o">...</span>
-<span class="n">endBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;结束在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">pause</span><span class="p">)</span>
-</code></pre></div><p><code>self.sniffer</code> 是一个自定义的对象，它应该基于 <code>QThread</code> 实现子线程，基于 <code>scapy</code> 实现抓包，基于 <code>pyqtSignal</code> 实现信号传递。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 继承 QThread 实现子线程</span>
-<span class="k">class</span> <span class="nc">Sniffer</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
-    <span class="c1"># 用于向主窗口传说信号</span>
-    <span class="n">updateSignal</span> <span class="o">=</span> <span class="n">pyqtSignal</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="c1"># 重写 run 函数</span>
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">StartSniff</span><span class="p">()</span>
-    <span class="c1"># 重写 pause 函数以停止抓包</span>
-    <span class="k">def</span> <span class="nf">pause</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">EndSniff</span><span class="p">()</span>
-    <span class="c1"># 基于 scapy 实现抓包</span>
-    <span class="k">def</span> <span class="nf">StartSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">sniff</span><span class="p">(</span><span class="n">prn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SniffCallBack</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isStop</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">isStop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span>
-
-    <span class="k">def</span> <span class="nf">EndSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">def</span> <span class="nf">SniffCallBack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">:</span> <span class="n">scapy</span><span class="o">.</span><span class="n">packet</span><span class="o">.</span><span class="n">Packet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">pkt</span><span class="o">.</span><span class="n">haslayer</span><span class="p">(</span><span class="s1">&#39;TCP&#39;</span><span class="p">):</span>
-            <span class="n">infoStr</span> <span class="o">=</span> <span class="n">pkt</span><span class="o">.</span><span class="n">sprintf</span><span class="p">(</span><span class="s2">&#34;TCP -&gt; %IP.src%:%TCP.sport% -&gt; %IP.dst%:%TCP.dport%&#34;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">infoStr</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-                <span class="c1"># 向主窗口发送一个信号</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
-</code></pre></div><p>在这里，定义 <code>SniffCallBack</code> 的功能为捕捉TCP数据包，每捕捉一个包就产生一条记录信息，<strong>每捉满100个包</strong> 就向主窗体发送一个信号。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Analyzer</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 定义用于抓包的成员</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span> <span class="o">=</span> <span class="n">Sniffer</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 窗体 &amp; 标题</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&#34;Traffic Analyzer&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 居中定位</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">alignCenter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 设置提示框字体</span>
+</span></span><span class="line"><span class="cl">        <span class="n">QToolTip</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">QFont</span><span class="p">(</span><span class="s1">&#39;HanziPen TC&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 关联事件</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SnifferUpdate</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 创建按钮</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 在线分析</span>
+</span></span><span class="line"><span class="cl">        <span class="n">startBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">startBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;启动在线流量分析&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">startBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">startBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 结束在线分析</span>
+</span></span><span class="line"><span class="cl">        <span class="n">endBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;结束在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">pause</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">endBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;结束在线流量分析&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">endBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">endBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 打开文件</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;打开文件&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;打开一个pcap文件&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFileDialog</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">fileBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 文本编辑</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 设置布局</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">startBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">endBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">fileBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 呈现</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;&#39;&#39; 省略若干不重要的函数 &#39;&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">SnifferUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">textCursor</span><span class="p">()</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
+</span></span></code></pre></div><p>上述代码的重点在于两个按钮的定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">startBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">endBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;结束在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">pause</span><span class="p">)</span>
+</span></span></code></pre></div><p><code>self.sniffer</code> 是一个自定义的对象，它应该基于 <code>QThread</code> 实现子线程，基于 <code>scapy</code> 实现抓包，基于 <code>pyqtSignal</code> 实现信号传递。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 继承 QThread 实现子线程</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Sniffer</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 用于向主窗口传说信号</span>
+</span></span><span class="line"><span class="cl">    <span class="n">updateSignal</span> <span class="o">=</span> <span class="n">pyqtSignal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 重写 run 函数</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">StartSniff</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 重写 pause 函数以停止抓包</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">pause</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">EndSniff</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 基于 scapy 实现抓包</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">StartSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sniff</span><span class="p">(</span><span class="n">prn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SniffCallBack</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isStop</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">isStop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">EndSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">SniffCallBack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">:</span> <span class="n">scapy</span><span class="o">.</span><span class="n">packet</span><span class="o">.</span><span class="n">Packet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">pkt</span><span class="o">.</span><span class="n">haslayer</span><span class="p">(</span><span class="s1">&#39;TCP&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">infoStr</span> <span class="o">=</span> <span class="n">pkt</span><span class="o">.</span><span class="n">sprintf</span><span class="p">(</span><span class="s2">&#34;TCP -&gt; %IP.src%:%TCP.sport% -&gt; %IP.dst%:%TCP.dport%&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">infoStr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">                <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 向主窗口发送一个信号</span>
+</span></span><span class="line"><span class="cl">                <span class="bp">self</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+</span></span></code></pre></div><p>在这里，定义 <code>SniffCallBack</code> 的功能为捕捉TCP数据包，每捕捉一个包就产生一条记录信息，<strong>每捉满100个包</strong> 就向主窗体发送一个信号。</p>
 <p>在 <code>Analyzer</code> 中对子进程信号进行了处理：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SnifferUpdate</span><span class="p">)</span>
-<span class="o">...</span>
-<span class="k">def</span> <span class="nf">SnifferUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">textCursor</span><span class="p">()</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
-</code></pre></div><p>收到信号时，主窗体从 <code>Sniffer</code> 当中取出现有的所有数据包的信息，显示到文本框上，并将文本框滚动条滑至底部。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SnifferUpdate</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">SnifferUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">textCursor</span><span class="p">()</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
+</span></span></code></pre></div><p>收到信号时，主窗体从 <code>Sniffer</code> 当中取出现有的所有数据包的信息，显示到文本框上，并将文本框滚动条滑至底部。</p>
 <p>总的代码如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">telnetlib</span> <span class="kn">import</span> <span class="n">NOP</span>
-<span class="kn">from</span> <span class="nn">turtle</span> <span class="kn">import</span> <span class="n">left</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span><span class="n">QApplication</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> 
-    <span class="n">QToolTip</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QDesktopWidget</span><span class="p">,</span> 
-    <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTextEdit</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="kn">import</span> <span class="n">QFont</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">pyqtSignal</span><span class="p">,</span> <span class="n">QThread</span>
-<span class="kn">from</span> <span class="nn">scapy.all</span> <span class="kn">import</span> <span class="o">*</span>
-
-
-<span class="k">class</span> <span class="nc">Sniffer</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
-    <span class="n">updateSignal</span> <span class="o">=</span> <span class="n">pyqtSignal</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">StartSniff</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">pause</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">EndSniff</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">StartSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">sniff</span><span class="p">(</span><span class="n">prn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SniffCallBack</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isStop</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">isStop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span>
-
-    <span class="k">def</span> <span class="nf">EndSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">def</span> <span class="nf">SniffCallBack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">:</span> <span class="n">scapy</span><span class="o">.</span><span class="n">packet</span><span class="o">.</span><span class="n">Packet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">pkt</span><span class="o">.</span><span class="n">haslayer</span><span class="p">(</span><span class="s1">&#39;TCP&#39;</span><span class="p">):</span>
-            <span class="n">infoStr</span> <span class="o">=</span> <span class="n">pkt</span><span class="o">.</span><span class="n">sprintf</span><span class="p">(</span><span class="s2">&#34;TCP -&gt; %IP.src%:%TCP.sport% -&gt; %IP.dst%:%TCP.dport%&#34;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">infoStr</span><span class="p">)</span>
-            <span class="c1"># print(infoStr + &#39;\t&#39; + str(len(self.pktInfo)))</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
-
-
-<span class="k">class</span> <span class="nc">Analyzer</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span> <span class="o">=</span> <span class="n">Sniffer</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># 窗体 &amp; 标题</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&#34;Traffic Analyzer&#34;</span><span class="p">)</span>
-        <span class="c1"># 状态栏（父类 QMainWindow 与栅格布局冲突）</span>
-        <span class="c1"># self.statusBar().showMessage(&#34;就绪&#34;)</span>
-        <span class="c1"># 居中定位</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">alignCenter</span><span class="p">()</span>
-        <span class="c1"># 设置提示框字体</span>
-        <span class="n">QToolTip</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">QFont</span><span class="p">(</span><span class="s1">&#39;HanziPen TC&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-        <span class="c1"># 关联事件</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SnifferUpdate</span><span class="p">)</span>
-        <span class="c1"># 创建按钮</span>
-        <span class="c1">### 在线分析</span>
-        <span class="n">startBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
-        <span class="n">startBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;启动在线流量分析&#39;</span><span class="p">)</span>
-        <span class="n">startBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">startBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
-        <span class="c1">### 结束在线分析</span>
-        <span class="n">endBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;结束在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">pause</span><span class="p">)</span>
-        <span class="n">endBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;结束在线流量分析&#39;</span><span class="p">)</span>
-        <span class="n">endBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">endBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
-        <span class="c1">### 打开文件</span>
-        <span class="n">fileBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;打开文件&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="n">fileBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;打开一个pcap文件&#39;</span><span class="p">)</span>
-        <span class="n">fileBtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFileDialog</span><span class="p">)</span>
-        <span class="n">fileBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">fileBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
-        <span class="c1">### 文本编辑</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="c1"># 设置布局</span>
-        <span class="n">grid</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">startBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">endBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">fileBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="c1"># 呈现</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">reply</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;关闭程序&#39;</span><span class="p">,</span> <span class="s1">&#39;确定关闭程序？&#39;</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">reply</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
-            <span class="n">event</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">event</span><span class="o">.</span><span class="n">ignore</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">alignCenter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">qr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frameGeometry</span><span class="p">()</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">availableGeometry</span><span class="p">()</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
-        <span class="n">qr</span><span class="o">.</span><span class="n">moveCenter</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">qr</span><span class="o">.</span><span class="n">topLeft</span><span class="p">())</span>
-
-    <span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Key_Escape</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">openFileDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;打开文件&#39;</span><span class="p">,</span> <span class="s1">&#39;~/&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="s1">&#39;*.py&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
-            <span class="k">with</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">SnifferUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">textCursor</span><span class="p">()</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
-    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">Analyzer</span><span class="p">()</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
-</code></pre></div><h3 id="后记">后记</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">telnetlib</span> <span class="kn">import</span> <span class="n">NOP</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">turtle</span> <span class="kn">import</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span><span class="n">QApplication</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">QToolTip</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QDesktopWidget</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">QWidget</span><span class="p">,</span> <span class="n">QTextEdit</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="kn">import</span> <span class="n">QFont</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">pyqtSignal</span><span class="p">,</span> <span class="n">QThread</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">scapy.all</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Sniffer</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">updateSignal</span> <span class="o">=</span> <span class="n">pyqtSignal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">StartSniff</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">pause</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">EndSniff</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">StartSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sniff</span><span class="p">(</span><span class="n">prn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SniffCallBack</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isStop</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">isStop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">EndSniff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">stopSniff</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">SniffCallBack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkt</span><span class="p">:</span> <span class="n">scapy</span><span class="o">.</span><span class="n">packet</span><span class="o">.</span><span class="n">Packet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">pkt</span><span class="o">.</span><span class="n">haslayer</span><span class="p">(</span><span class="s1">&#39;TCP&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">infoStr</span> <span class="o">=</span> <span class="n">pkt</span><span class="o">.</span><span class="n">sprintf</span><span class="p">(</span><span class="s2">&#34;TCP -&gt; %IP.src%:%TCP.sport% -&gt; %IP.dst%:%TCP.dport%&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">infoStr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># print(infoStr + &#39;\t&#39; + str(len(self.pktInfo)))</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">                <span class="bp">self</span><span class="o">.</span><span class="n">pktInfo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="bp">self</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Analyzer</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span> <span class="o">=</span> <span class="n">Sniffer</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 窗体 &amp; 标题</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&#34;Traffic Analyzer&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 状态栏（父类 QMainWindow 与栅格布局冲突）</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># self.statusBar().showMessage(&#34;就绪&#34;)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 居中定位</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">alignCenter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 设置提示框字体</span>
+</span></span><span class="line"><span class="cl">        <span class="n">QToolTip</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">QFont</span><span class="p">(</span><span class="s1">&#39;HanziPen TC&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 关联事件</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">updateSignal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SnifferUpdate</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 创建按钮</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 在线分析</span>
+</span></span><span class="line"><span class="cl">        <span class="n">startBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">startBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;启动在线流量分析&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">startBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">startBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 结束在线分析</span>
+</span></span><span class="line"><span class="cl">        <span class="n">endBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;结束在线分析&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">pause</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">endBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;结束在线流量分析&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">endBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">endBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 打开文件</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;打开文件&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;打开一个pcap文件&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openFileDialog</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fileBtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">fileBtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">### 文本编辑</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 设置布局</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">startBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">endBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">fileBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 呈现</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">reply</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;关闭程序&#39;</span><span class="p">,</span> <span class="s1">&#39;确定关闭程序？&#39;</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">No</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">reply</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">event</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">event</span><span class="o">.</span><span class="n">ignore</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">alignCenter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">qr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frameGeometry</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cp</span> <span class="o">=</span> <span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">availableGeometry</span><span class="p">()</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">qr</span><span class="o">.</span><span class="n">moveCenter</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">qr</span><span class="o">.</span><span class="n">topLeft</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Key_Escape</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">openFileDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fname</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;打开文件&#39;</span><span class="p">,</span> <span class="s1">&#39;~/&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="s1">&#39;*.py&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">with</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">SnifferUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sniffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textEdit</span><span class="o">.</span><span class="n">textCursor</span><span class="p">()</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">Analyzer</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
+</span></span></code></pre></div><h3 id="后记">后记</h3>
 <p>初探PyQt和Scapy，自觉本文写得杂乱，仅做自娱。代码也许还有一些参考价值，请读者自行斟酌罢。</p>
 
 </section>
@@ -607,6 +607,48 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
         <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">RapidJson使用小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Windows Terminal美化小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
                 
                     
 <article class="">
@@ -666,48 +708,6 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
             <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
             <footer class="article-time">
                 <time datetime=''>Feb 16, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（页面篇|之一）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 12, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 07, 2022</time>
             </footer>
         </div>
     </a>

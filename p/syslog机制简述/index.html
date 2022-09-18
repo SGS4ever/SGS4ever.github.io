@@ -8,16 +8,14 @@ syslog工作流程简述 不管是什么应用，日志机制永是最重要的�
 大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
 syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
 流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
- syslog处理分类分级处理信息 
-当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
+syslog处理分类分级处理信息 当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
 过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
 authpriv.* /var/log/secure
 这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
- 规则的组成 
-第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
+规则的组成 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
-#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages!'><title>syslog机制简述</title>
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages! *.'><title>syslog机制简述</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/'>
 
@@ -48,16 +46,14 @@ syslog工作流程简述 不管是什么应用，日志机制永是最重要的�
 大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
 syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
 流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
- syslog处理分类分级处理信息 
-当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
+syslog处理分类分级处理信息 当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
 过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
 authpriv.* /var/log/secure
 这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
- 规则的组成 
-第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
+规则的组成 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
-#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages!'>
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages! *.'>
 <meta property='og:url' content='https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2021-07-03T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-07-03T00:00:00&#43;00:00'/>
@@ -69,16 +65,14 @@ syslog工作流程简述 不管是什么应用，日志机制永是最重要的�
 大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
 syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
 流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
- syslog处理分类分级处理信息 
-当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
+syslog处理分类分级处理信息 当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
 过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
 authpriv.* /var/log/secure
 这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
- 规则的组成 
-第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
+规则的组成 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
-#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages!">
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages! *.">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -260,29 +254,29 @@ authpriv.* /var/log/secure
 <p>第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。</p>
 <p>你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！</p>
 <p>仔细看看配置文件吧，每一条规则都是如此的简单而实用：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1">#### RULES ####</span>
-
-<span class="c1"># Log all kernel messages to the console.</span>
-<span class="c1"># Logging much else clutters up the screen.</span>
-<span class="c1">#kern.*                                                 /dev/console</span>
-
-<span class="c1"># Log anything (except mail) of level info or higher.</span>
-<span class="c1"># Don&#39;t log private authentication messages!</span>
-*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages
-
-<span class="c1"># The authpriv file has restricted access.</span>
-authpriv.*                                              /var/log/secure
-
-<span class="c1"># Log all the mail messages in one place.</span>
-mail.*                                                  -/var/log/maillog
-
-
-<span class="c1"># Log cron stuff</span>
-cron.*                                                  /var/log/cron
-
-<span class="c1"># Everybody gets emergency messages</span>
-*.emerg                                                 :omusrmsg:*
-</code></pre></div><h4 id="facility">facility</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#### RULES ####</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Log all kernel messages to the console.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Logging much else clutters up the screen.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#kern.*                                                 /dev/console</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Log anything (except mail) of level info or higher.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Don&#39;t log private authentication messages!</span>
+</span></span><span class="line"><span class="cl">*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># The authpriv file has restricted access.</span>
+</span></span><span class="line"><span class="cl">authpriv.*                                              /var/log/secure
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Log all the mail messages in one place.</span>
+</span></span><span class="line"><span class="cl">mail.*                                                  -/var/log/maillog
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Log cron stuff</span>
+</span></span><span class="line"><span class="cl">cron.*                                                  /var/log/cron
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Everybody gets emergency messages</span>
+</span></span><span class="line"><span class="cl">*.emerg                                                 :omusrmsg:*
+</span></span></code></pre></div><h4 id="facility">facility</h4>
 <p>规则的第一部分facility指的是消息源设备的类型。syslog体系中已经将Linux中的大部分进程进行了合理的分类，例如与内核消息相关的 <code>kern</code> 类型、与授权信息相关的 <code>auth/authpriv</code> 类型等等，官方为我们总结出了如下的表格：</p>
 <p><figure 
 	
@@ -334,53 +328,53 @@ cron.*                                                  /var/log/cron
 <li>action字段形如 <code>@&lt;IP&gt;:&lt;端口&gt;</code> ，这表示将选择器选中的消息 <strong>转发</strong> 到目标服务器的目标端口上。一个 <code>@</code> 号表示使用UDP协议发送（默认），两个 <code>@</code> 号表示使用TCP协议发送。例如我们配置一条规则 <code>*.* @@192.168.0.1:514</code> 表示将所有类型的、所有级别的消息都转发到服务器 <code>192.168.0.1</code> 的 <code>514</code> 端口。</li>
 </ul>
 <p>至此，我们就了解了规则的含义，顺带地，你可以初步读懂Linux日志配置文件里的部分内容了。从这些规则出发，你能够对Linux系统下的一些日志文件有更深入的了解。我们再来看一下这些规则：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages
-<span class="c1"># 这条规则表示将除了 mail、authpriv、cron 的类型之外的所有设备类型的消息记录到 /var/log/messages 文件中</span>
-<span class="c1"># 因此，你可以在 /var/log/message 文件中找到大部分日志消息</span>
-
-authpriv.*                                              /var/log/secure
-<span class="c1"># 这条规则表示将 authpriv 类型的所有级别消息记录到 /var/log/secure 文件中</span>
-<span class="c1"># 因此，你应该在 /var/log/secure 文件中查看与授权信息相关的日志（如sshd登录记录，sudo认证记录等）</span>
-
-mail.*                                                  -/var/log/maillog
-cron.*                                                  /var/log/cron
-</code></pre></div><p>可以看到，上面三条规则的facility是互补的，把这几个文件综合起来看，相当于使用了 <code>*.*</code> 的选择器（<code>info</code> 级别已经和 <code>*</code> 差不多了），也就是说，你基本可以在上面的四个文件中查看到Linux系统产生的所有消息。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages
+</span></span><span class="line"><span class="cl"><span class="c1"># 这条规则表示将除了 mail、authpriv、cron 的类型之外的所有设备类型的消息记录到 /var/log/messages 文件中</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 因此，你可以在 /var/log/message 文件中找到大部分日志消息</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">authpriv.*                                              /var/log/secure
+</span></span><span class="line"><span class="cl"><span class="c1"># 这条规则表示将 authpriv 类型的所有级别消息记录到 /var/log/secure 文件中</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 因此，你应该在 /var/log/secure 文件中查看与授权信息相关的日志（如sshd登录记录，sudo认证记录等）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mail.*                                                  -/var/log/maillog
+</span></span><span class="line"><span class="cl">cron.*                                                  /var/log/cron
+</span></span></code></pre></div><p>可以看到，上面三条规则的facility是互补的，把这几个文件综合起来看，相当于使用了 <code>*.*</code> 的选择器（<code>info</code> 级别已经和 <code>*</code> 差不多了），也就是说，你基本可以在上面的四个文件中查看到Linux系统产生的所有消息。</p>
 <h3 id="模板template">模板Template</h3>
 <p>阅读至此，我们能够把任何需要的消息用我们希望的办法进行记录或转发，但仅仅采用默认的格式可能还远远不够。</p>
 <p>正常情况下，一条Linux日志长成这样：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">Jul  <span class="m">2</span> 23:30:03 localhost su: pam_unix<span class="o">(</span>su:session<span class="o">)</span>: session opened <span class="k">for</span> user root by xr_g<span class="o">(</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">)</span>
-</code></pre></div><p>这一条日志分为几个部分： <code>[时间戳] [主机名] [进程名和进程ID] [消息体]</code> 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Jul  <span class="m">2</span> 23:30:03 localhost su: pam_unix<span class="o">(</span>su:session<span class="o">)</span>: session opened <span class="k">for</span> user root by xr_g<span class="o">(</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">)</span>
+</span></span></code></pre></div><p>这一条日志分为几个部分： <code>[时间戳] [主机名] [进程名和进程ID] [消息体]</code> 。</p>
 <p>这可不是我瞎说的，因为rsyslog在记录日志的时候使用了默认的 <em>模板</em> 。</p>
 <p>如果你使用过Django或者什么其他的后端编程框架，很可能已经了解了模板的概念；如果你没接触过模板，不妨简单地将其看作一种 <em>格式</em> ，就像你写论文时候的格式要求那样，所有的消息都要按照这种格式进行记录。而与你写论文时相同，论文模板里总是会指定一些较为宽泛的 <em>属性</em> ，比如开头要写上摘要和关键字，所有人的论文都是相同的结构，但摘要和关键字的具体内容就因人而异了。</p>
 <p>日志的模板也正是如此，一条模板指定了日志的大致结构，就像上面提到的那样；而这一结构由一个一个的属性组成，日志守护进程需要根据这些属性往模板里填充数据，从而产生一条具体的日志。</p>
 <h4 id="模板的定义">模板的定义</h4>
 <p>模板的定义办法有新旧两种，我个人比较习惯旧式的模板定义办法：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># $template [模板名] [模板格式]</span>
-<span class="nv">$template</span> MyTmp,<span class="s2">&#34;%timestamp% %hostname% %syslogfacility-text% %syslogseverity-text% %msg%\n&#34;</span>
-</code></pre></div><p>而新版的模板定义办法有若干个，例如：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;tpl3&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
-         <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n&#34;</span>
-        <span class="o">)</span>
-</code></pre></div><h4 id="模板的使用">模板的使用</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># $template [模板名] [模板格式]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$template</span> MyTmp,<span class="s2">&#34;%timestamp% %hostname% %syslogfacility-text% %syslogseverity-text% %msg%\n&#34;</span>
+</span></span></code></pre></div><p>而新版的模板定义办法有若干个，例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;tpl3&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
+</span></span><span class="line"><span class="cl">         <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">)</span>
+</span></span></code></pre></div><h4 id="模板的使用">模板的使用</h4>
 <p>定义好了自己的模板之后，可以直接将模板应用在action字段上，具体办法就是在action原本的内容后加一个分号 <code>;</code> ，然后写上自己的模板名。</p>
 <p>例如修改 <code>/var/log/message</code> 内容为我们自定义的格式：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Step1 设置模板，使用模板</span>
-<span class="o">[</span>root@localhost log<span class="o">]</span><span class="c1"># cat /etc/rsyslog.conf </span>
-···
-<span class="nv">$template</span> MyTmp,<span class="s2">&#34;%timestamp% %hostname% %syslogfacility-text% %syslogseverity-text% %msg%\n&#34;</span>
-···
-*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages<span class="p">;</span>MyTmp  <span class="c1"># 注意这里！！！！</span>
-
-<span class="c1"># Step2 重启rsyslog服务</span>
-<span class="o">[</span>root@localhost log<span class="o">]</span><span class="c1"># systemctl restart rsyslog</span>
-
-<span class="c1"># Step3 观察日志内容的变化</span>
-<span class="o">[</span>root@localhost log<span class="o">]</span><span class="c1"># tail /var/log/messages </span>
-···
-Jul  <span class="m">2</span> 23:57:55 localhost daemon info Stopped System Logging Service.
-Jul  <span class="m">2</span> 23:57:55 localhost daemon info Starting System Logging Service...
-···
-</code></pre></div><p>rsyslog给出了一些模板中可用的属性，此处列出几个常用的属性，详细信息可以查看参考资料[2]。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># Step1 设置模板，使用模板</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@localhost log<span class="o">]</span><span class="c1"># cat /etc/rsyslog.conf </span>
+</span></span><span class="line"><span class="cl">···
+</span></span><span class="line"><span class="cl"><span class="nv">$template</span> MyTmp,<span class="s2">&#34;%timestamp% %hostname% %syslogfacility-text% %syslogseverity-text% %msg%\n&#34;</span>
+</span></span><span class="line"><span class="cl">···
+</span></span><span class="line"><span class="cl">*.info<span class="p">;</span>mail.none<span class="p">;</span>authpriv.none<span class="p">;</span>cron.none                /var/log/messages<span class="p">;</span>MyTmp  <span class="c1"># 注意这里！！！！</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Step2 重启rsyslog服务</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@localhost log<span class="o">]</span><span class="c1"># systemctl restart rsyslog</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Step3 观察日志内容的变化</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@localhost log<span class="o">]</span><span class="c1"># tail /var/log/messages </span>
+</span></span><span class="line"><span class="cl">···
+</span></span><span class="line"><span class="cl">Jul  <span class="m">2</span> 23:57:55 localhost daemon info Stopped System Logging Service.
+</span></span><span class="line"><span class="cl">Jul  <span class="m">2</span> 23:57:55 localhost daemon info Starting System Logging Service...
+</span></span><span class="line"><span class="cl">···
+</span></span></code></pre></div><p>rsyslog给出了一些模板中可用的属性，此处列出几个常用的属性，详细信息可以查看参考资料[2]。</p>
 <table>
 <thead>
 <tr>
@@ -420,12 +414,12 @@ Jul  <span class="m">2</span> 23:57:55 localhost daemon info Starting System Log
 </tbody>
 </table>
 <p>我们需要为自定义的模板命名，当然，不能与系统默认保留的一些模板重名，比如下面几个系统自带的模板：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_TraditionalForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
-     <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;&lt;%PRI%&gt;%TIMESTAMP% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%&#34;</span><span class="o">)</span>
-     
-template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_ForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
-     <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;&lt;%PRI%&gt;%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%&#34;</span><span class="o">)</span>
-</code></pre></div><p>更多的内容可以阅读参考资料[3]。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_TraditionalForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
+</span></span><span class="line"><span class="cl">     <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;&lt;%PRI%&gt;%TIMESTAMP% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">     
+</span></span><span class="line"><span class="cl">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_ForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
+</span></span><span class="line"><span class="cl">     <span class="nv">string</span><span class="o">=</span><span class="s2">&#34;&lt;%PRI%&gt;%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%&#34;</span><span class="o">)</span>
+</span></span></code></pre></div><p>更多的内容可以阅读参考资料[3]。</p>
 <p>注意上面给出的第一个系统模板 <code>RSYSLOG_TraditionalForwardFormat</code> ，这正是Linux系统中默认的日志格式，现在你明白前面我们对系统日志的格式解释是从何而来的了。</p>
 <h3 id="小结">小结</h3>
 <p>在实际工作中，syslog还有一些其他的玩法（如配置远程转发，日志模板的进阶使用等），在此就不予介绍了，之后有时间再开一篇。</p>

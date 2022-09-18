@@ -3,19 +3,21 @@
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='美好的二月从WA一道简单题开始。
 题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
- 描述
+描述
 爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
 因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
 返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
 如果有多个答案，你可以返回其中任何一个。保证答案存在。
 示例1
-  输入： A = [1,1], B = [2,2]
-  输出：[1,2]
-  示例2
-  输入： A = [1,2], B = [2,3]
-  输出：[1,2]
-  数据范围
- 1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。'><title>错题本 | LeetCode888. 公平的糖果棒交换</title>
+输入： A = [1,1], B = [2,2]
+输出：[1,2]
+示例2
+输入： A = [1,2], B = [2,3]
+输出：[1,2]
+数据范围
+1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。 分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。
+我们设Allice拿来交换的大小是changeA，Bob拿来交换的大小是changeB；两人交换前分别具有sumA和sumB总量的糖果，则两人交换之后拥有的总量分别是：
+Allice：sumA - changeA &#43; changeB Bob：sumB - changeB &#43; changeA 两个式子是相等的，那么我们进行相减，得到sumA - sumB &#43; 2changeB - 2changeA = 0；'><title>错题本 | LeetCode888. 公平的糖果棒交换</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/'>
 
@@ -41,38 +43,42 @@
 <meta property='og:title' content='错题本 | LeetCode888. 公平的糖果棒交换'>
 <meta property='og:description' content='美好的二月从WA一道简单题开始。
 题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
- 描述
+描述
 爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
 因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
 返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
 如果有多个答案，你可以返回其中任何一个。保证答案存在。
 示例1
-  输入： A = [1,1], B = [2,2]
-  输出：[1,2]
-  示例2
-  输入： A = [1,2], B = [2,3]
-  输出：[1,2]
-  数据范围
- 1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。'>
+输入： A = [1,1], B = [2,2]
+输出：[1,2]
+示例2
+输入： A = [1,2], B = [2,3]
+输出：[1,2]
+数据范围
+1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。 分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。
+我们设Allice拿来交换的大小是changeA，Bob拿来交换的大小是changeB；两人交换前分别具有sumA和sumB总量的糖果，则两人交换之后拥有的总量分别是：
+Allice：sumA - changeA &#43; changeB Bob：sumB - changeB &#43; changeA 两个式子是相等的，那么我们进行相减，得到sumA - sumB &#43; 2changeB - 2changeA = 0；'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-02-01T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-02-01T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="错题本 | LeetCode888. 公平的糖果棒交换">
 <meta name="twitter:description" content="美好的二月从WA一道简单题开始。
 题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
- 描述
+描述
 爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
 因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
 返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
 如果有多个答案，你可以返回其中任何一个。保证答案存在。
 示例1
-  输入： A = [1,1], B = [2,2]
-  输出：[1,2]
-  示例2
-  输入： A = [1,2], B = [2,3]
-  输出：[1,2]
-  数据范围
- 1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。">
+输入： A = [1,1], B = [2,2]
+输出：[1,2]
+示例2
+输入： A = [1,2], B = [2,3]
+输出：[1,2]
+数据范围
+1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。 分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。
+我们设Allice拿来交换的大小是changeA，Bob拿来交换的大小是changeB；两人交换前分别具有sumA和sumB总量的糖果，则两人交换之后拥有的总量分别是：
+Allice：sumA - changeA &#43; changeB Bob：sumB - changeB &#43; changeA 两个式子是相等的，那么我们进行相减，得到sumA - sumB &#43; 2changeB - 2changeA = 0；">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -254,73 +260,73 @@
 <p>使用二分搜索，一层循环<code>changeA</code>，每个<code>changeA</code>搜索对应的<code>changeB</code>只需要花费<em>logn</em>，则总复杂度是<em>O(nlogn)</em>，可以一试。</p>
 <p>第一次WA，二分写错了&hellip;</p>
 <h4 id="暴力二分ac代码">暴力二分，AC代码：</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
-
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">INF</span> <span class="o">=</span> <span class="mh">0xffffff</span><span class="p">;</span>
-
-    <span class="kt">int</span> <span class="nf">bSearch</span><span class="p">(</span><span class="kt">int</span> <span class="n">target</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
-
-        <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>  <span class="c1">// 答案在右半部分
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>  <span class="c1">// 答案在左半部分
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="n">target</span><span class="p">;</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>  <span class="c1">// 没找到，-INF；找到，target
-</span><span class="c1"></span>    <span class="p">}</span>
-
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">fairCandySwap</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">sort</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">A</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-        <span class="n">sort</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">B</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-
-        <span class="n">LL</span> <span class="n">sum_a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">LL</span> <span class="n">sum_b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">sum_a</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">B</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">sum_b</span> <span class="o">+=</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-
-        <span class="n">LL</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">sum_a</span> <span class="o">-</span> <span class="n">sum_b</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">change_a</span><span class="p">,</span> <span class="n">change_b</span><span class="p">;</span>
-        <span class="c1">// change_a = change_b + diff / 2
-</span><span class="c1"></span>        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">change_a</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">change_b</span> <span class="o">=</span> <span class="n">change_a</span> <span class="o">-</span> <span class="n">diff</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-            <span class="c1">// cout &lt;&lt; change_a &lt;&lt; &#34; &#34; &lt;&lt; change_b &lt;&lt; endl;
-</span><span class="c1"></span>            <span class="k">if</span><span class="p">(</span><span class="n">bSearch</span><span class="p">(</span><span class="n">change_b</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="n">INF</span><span class="p">)</span>  <span class="c1">// 找到
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">change_a</span><span class="p">);</span>
-                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">change_b</span><span class="p">);</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">int</span> <span class="n">INF</span> <span class="o">=</span> <span class="mh">0xffffff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">bSearch</span><span class="p">(</span><span class="kt">int</span> <span class="n">target</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>  <span class="c1">// 答案在右半部分
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>  <span class="c1">// 答案在左半部分
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">res</span> <span class="o">=</span> <span class="n">target</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>  <span class="c1">// 没找到，-INF；找到，target
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">fairCandySwap</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">A</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">B</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">LL</span> <span class="n">sum_a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LL</span> <span class="n">sum_b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sum_a</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">B</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sum_b</span> <span class="o">+=</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">LL</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">sum_a</span> <span class="o">-</span> <span class="n">sum_b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">change_a</span><span class="p">,</span> <span class="n">change_b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// change_a = change_b + diff / 2
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">change_a</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">change_b</span> <span class="o">=</span> <span class="n">change_a</span> <span class="o">-</span> <span class="n">diff</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; change_a &lt;&lt; &#34; &#34; &lt;&lt; change_b &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span><span class="p">(</span><span class="n">bSearch</span><span class="p">(</span><span class="n">change_b</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="n">INF</span><span class="p">)</span>  <span class="c1">// 找到
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">change_a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">change_b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><blockquote>
 <p>对于一个<code>vector</code>进行二分查找，初始化<code>right = v.size() - 1</code>，第一次WA的时候没有减一；</p>
 <p>while循环，判断条件应该是<code>left &lt;= right</code>，第一次WA的时候也没有等号。</p>
 <p>二分还是细啊o(╥﹏╥)o</p>
@@ -356,49 +362,49 @@
 <p>此法的正确性主要来自于集合的有序性。第一种情况出现时，说明<code>pB</code>指向的元素太小了，<code>changeB</code>需要再大一点，故将<code>pB</code>向后移动；当第二种情况出现的时候，说明<code>pA</code>指向的元素太小了，<code>changeA</code>需要再大一点。</p>
 <p>二分和双指针法的最大复杂度其实都是<em>O(nlogn)</em>（排序），但是在查找过程中显然双指针更快一些。</p>
 <h4 id="ac代码">AC代码：</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
-    
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">fairCandySwap</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">sort</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">A</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-        <span class="n">sort</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">B</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-
-        <span class="n">LL</span> <span class="n">sum_a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">LL</span> <span class="n">sum_b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">sum_a</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">B</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">sum_b</span> <span class="o">+=</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        
-        <span class="n">LL</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">sum_a</span> <span class="o">-</span> <span class="n">sum_b</span><span class="p">;</span>
-
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">pA</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">pB</span> <span class="o">=</span> <span class="n">B</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
-
-        <span class="k">while</span> <span class="p">(</span><span class="n">pA</span> <span class="o">!=</span> <span class="n">A</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">pB</span> <span class="o">!=</span> <span class="n">B</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
-        <span class="p">{</span>            
-            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pA</span> <span class="o">&gt;</span> <span class="o">*</span><span class="n">pB</span> <span class="o">+</span> <span class="n">diff</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1">// pB指向的目标太小
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">pB</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pA</span> <span class="o">&lt;</span> <span class="o">*</span><span class="n">pB</span> <span class="o">+</span> <span class="n">diff</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1">// pA指向的目标太小
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">pA</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="n">pA</span><span class="p">);</span>
-                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="n">pB</span><span class="p">);</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p>表现还不错。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">LL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">fairCandySwap</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">A</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">B</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">LL</span> <span class="n">sum_a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LL</span> <span class="n">sum_b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sum_a</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">B</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sum_b</span> <span class="o">+=</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">LL</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">sum_a</span> <span class="o">-</span> <span class="n">sum_b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">pA</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">pB</span> <span class="o">=</span> <span class="n">B</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">pA</span> <span class="o">!=</span> <span class="n">A</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">pB</span> <span class="o">!=</span> <span class="n">B</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>            
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pA</span> <span class="o">&gt;</span> <span class="o">*</span><span class="n">pB</span> <span class="o">+</span> <span class="n">diff</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1">// pB指向的目标太小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pB</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pA</span> <span class="o">&lt;</span> <span class="o">*</span><span class="n">pB</span> <span class="o">+</span> <span class="n">diff</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1">// pA指向的目标太小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pA</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="n">pA</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="n">pB</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>表现还不错。</p>
 <p><figure 
 	
 		class="gallery-image" 

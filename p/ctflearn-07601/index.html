@@ -2,16 +2,15 @@
 <html lang="en-us">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：(https://ctflearn.com/challenge/97)
-  一道隐写题，信息隐藏在给出的图片文件里。
-  打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
-  010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
-  使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
-  解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
-  010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl &#43; f查找ctf字样，得到flag。
-  回顾
-   这道题大概做了将近一小时&amp;hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
-使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&amp;hellip;&amp;hellip;
- '><title>CTFLearn-07601</title>
+一道隐写题，信息隐藏在给出的图片文件里。
+打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
+010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
+使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
+解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
+010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl &#43; f查找ctf字样，得到flag。
+回顾
+这道题大概做了将近一小时&amp;hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
+使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&amp;hellip;&amp;hellip;'><title>CTFLearn-07601</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/ctflearn-07601/'>
 
@@ -36,31 +35,29 @@
 
 <meta property='og:title' content='CTFLearn-07601'>
 <meta property='og:description' content='题目链接：(https://ctflearn.com/challenge/97)
-  一道隐写题，信息隐藏在给出的图片文件里。
-  打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
-  010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
-  使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
-  解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
-  010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl &#43; f查找ctf字样，得到flag。
-  回顾
-   这道题大概做了将近一小时&amp;hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
-使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&amp;hellip;&amp;hellip;
- '>
+一道隐写题，信息隐藏在给出的图片文件里。
+打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
+010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
+使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
+解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
+010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl &#43; f查找ctf字样，得到flag。
+回顾
+这道题大概做了将近一小时&amp;hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
+使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&amp;hellip;&amp;hellip;'>
 <meta property='og:url' content='https://xrg.fj.cn/p/ctflearn-07601/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CTF' /><meta property='article:published_time' content='2020-09-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-18T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="CTFLearn-07601">
 <meta name="twitter:description" content="题目链接：(https://ctflearn.com/challenge/97)
-  一道隐写题，信息隐藏在给出的图片文件里。
-  打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
-  010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
-  使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
-  解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
-  010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl &#43; f查找ctf字样，得到flag。
-  回顾
-   这道题大概做了将近一小时&amp;hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
-使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&amp;hellip;&amp;hellip;
- ">
+一道隐写题，信息隐藏在给出的图片文件里。
+打开图片，是一张普通的png，使用010editor打开，发现实际上是jpg格式（以FF开头）。
+010 editor搜索FF D9，找到偏移量为0x256E处的那个，发现其后有敏感的PK字样，这是zip文件的开头，线索已经出现了。
+使用命令分离出zip文件。dd if=AGT.png bs=1 skip=9584 of=foo.zip
+解压文件，得到一个文件夹，里面含有一张图片I Warned You.jpeg
+010 editor打开该文件，发现它实际上不符合JPG文件的格式。用记事本打开，ctrl &#43; f查找ctf字样，得到flag。
+回顾
+这道题大概做了将近一小时&amp;hellip; 是我接触隐写题的简单解法之后第一次实践。解压之后的jpg文件使我一度怀疑自己对偏移量的计算存在问题，万万没想到这jpg格式完全是用来坑爹的（= = ||）。
+使用记事本一开始查找的是flag字串，结果是没找到，居然也没有再找一下其他可能的形式，就这么回去又反复检查zip文件的偏移地址了&amp;hellip;&amp;hellip;">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>

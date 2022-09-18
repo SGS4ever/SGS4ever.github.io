@@ -16,15 +16,12 @@
       <description>近期一好友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
 今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
 动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
- 旧主页   新Stack主页（未修改) 
- 旧文章页面   新Stack文章页面（未修改) 
-Part 1 左边栏 图标 图标显示 修改配置文件和 page
+旧主页 新Stack主页（未修改) 旧文章页面 新Stack文章页面（未修改) Part 1 左边栏 图标 图标显示 修改配置文件和 page
 首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
- 左边栏 
-发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+左边栏 发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
 根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
 以 config.yaml 中的内容为例，以前的 menu 是这样的：
-menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：</description>
+menu: main: - identifier: home name: 博文 url: / weight: -100 pre: home 修改过后，要变成这样：</description>
     </item>
     
     <item>
@@ -35,20 +32,24 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
       <guid>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/</guid>
       <description>总不能让这个博客老是在记录家常菜啊。
 本篇主要介绍hugo博客的进阶美化方法，根据本篇的讲解，结合自己的主题进行实践，有助于打造一个真正属于自己的博客。
- 1. CSS和SCSS  CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。
+1. CSS和SCSS CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。
 Sass（Syntatically Awesome Style Sheets）是一种CSS预处理器，它可以用来定义一套新的语法规则和函数，以加强和提升CSS。
 举例来说，一个页面中可能需要用到许多次颜色#000，即白色；在原始的CSS代码中这个#000需要不断地出现在各个位置，如color: #000、background: #000等，这就为样式的改变带来了麻烦，假如我们需要整体性地改变页面颜色主题，就只能找到所有的#000并将其修改，实在不够方便。而Sass引入了变量，其概念和C/C++等语言中的变量并无二致，极大地简化了数值的维护。现在可以使用如下的写法来设置页面颜色：
 $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: $WHITE; } 然而，最初的Sass的语法规则和CSS有太多的出入，后来官方在2010年推出了一个全新的语法，叫做SCSS（Sassy CSS），试图弥合Sass和CSS之间的差别。现在我们看到的代码多数已经是SCSS，而其灵魂就是变量，如此理解便好。
- 2. hugo和SCSS  hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
+2. hugo和SCSS hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
 你的网站样式存放在根目录下asset/css文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块include/import进来，实现完整的页面样式。
 我的KeepIt主题有一个内容如下的主文件，功能正如我所述：
- main.scss 
-按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
+main.scss 按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
 如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为str的类，我们的CSS文件中存在两种定义：
 /* line 11 */ .str { color: #efefef; } ... /* line 20 */ .str { color: #ffdab9; } 那么，位于20行的定义会覆盖位于11行的定义，使得具有str类的标签内容呈现#ffdab9这种颜色。
 这种覆盖原则就是我们自定义hugo样式的基础。
- 3. 精确定义样式  基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
-在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：</description>
+3. 精确定义样式 基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
+在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：
+main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件，这使得定义在其中的样式位于最终CSS文件的末尾，其中重复定义的样式会被作为页面的最终效果。
+于是我们的问题就变得很简单了：找到你希望修改的元素和它对应的选择器，重新定义这个选择器即可。
+所幸，现代浏览器为我们提供的开发者工具使得这一切都变得无比简单。以Edge Beta为例，按下F12弹出开发者工具，使用左上角的小箭头使你的鼠标变成一个查看器，现在你点击页面上的任何元素，立即可以在右边的窗口看到这个元素对应的源码。
+例如，在我的博客中有这样的元素已经让我不爽很久了：
+精确选取元素 可以看到跟这个project相同的aboutme.md这个单词被拆成了两半，真是岂有此理。</description>
     </item>
     
     <item>
@@ -63,15 +64,15 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
 你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
 (https://github.com/VincentGarreau/particles.js)
 话不多说，let&amp;rsquo;s go!
-下载这款插件  你可以直接使用git clone或者从网页上下载它。
+下载这款插件 你可以直接使用git clone或者从网页上下载它。
 解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
- 在源码中为插件留出位置  在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在源码中为插件留出位置 在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
 在你的页面中为插件留出位置，这个操作非常简单。打开你的footer.html，找一个合适的位置（最好是最外层），加上一个标签：
 &amp;lt;div id=&amp;quot;particles-js&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
 p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
 p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/baseof.html，因为它似乎是所有页面的基本框架，适用性更强一些。
- 引入插件  你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+引入插件 你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
 我们要在第二步的div底下写入插件。
 为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
 我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&amp;lt;script&amp;gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&amp;lt;div&amp;gt;之前写入几条&amp;lt;script&amp;gt;标签。
@@ -82,12 +83,15 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，public文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。
 将两个JS文件引入，记得放在第二步的div后面：
 &amp;lt;script src=&amp;#34;xxxxx/app.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;xxxxx/particles.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
- 巧妙地获取路径  如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
+巧妙地获取路径 如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
 我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&amp;quot;/js/app.js&amp;quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了 :(
 正确的获取路径的姿势，你可以直接使用绝对路径，也就是https://yourWeb.github.io/js/app.js这样的方式。
 底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：
-&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;  代码的最终样式及推送  经过一系列的修改后，你的页面的代码就多了如下的东西：
-&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.</description>
+&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 代码的最终样式及推送 经过一系列的修改后，你的页面的代码就多了如下的东西：
+&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 此外，你的public/js文件夹中还多了两个文件app.js和particles.js。
+现在，不要以为一切已经结束了，因为你的这个div，你的页面现在多了一个元素，如果它位于footer上方，那它会使得你的页面被撑得很长，我们要在主页面的CSS文件里修改它。
+进入public/css文件夹，如果是Keepit主题，就只有一个文件，打开它；如果是其他主题，你需要找到能发挥作用的CSS。
+在文件最末尾补上这样的代码：</description>
     </item>
     
     <item>
@@ -114,17 +118,17 @@ https://github.com/gohugoio/hugo/releases
 hugo new site [yourSiteName]
 就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
 如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
- 新建站点 
-选择主题 “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
-你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
+新建站点 选择主题 “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/
+实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
 当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
 就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
- 2022-04-05注：目前博客的主题已经不是KeepIt，而是Stack，详情参见 Hugo Stack主题更新小记 (xrg.fj.cn) 。
- 配置页面 现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+2022-04-05注：目前博客的主题已经不是KeepIt，而是Stack，详情参见 Hugo Stack主题更新小记 (xrg.fj.cn) 。
+配置页面 现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
 回到你的网站上吧，看看效果。
 什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
 打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
- 2022-04-05注：为了日后换主题的方便，已经不建议将 exampleSite 全部复制到根目录中。目前来看，我们只需要复制里面的 content 文件夹和 config 文件即可。修改主题时直接进入 theme 文件夹修改，这样一来日后可以更加方便地改变博客主题。</description>
+2022-04-05注：为了日后换主题的方便，已经不建议将 exampleSite 全部复制到根目录中。目前来看，我们只需要复制里面的 content 文件夹和 config 文件即可。修改主题时直接进入 theme 文件夹修改，这样一来日后可以更加方便地改变博客主题。</description>
     </item>
     
   </channel>

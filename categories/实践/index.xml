@@ -6,7 +6,47 @@
     <description>Recent content in 实践 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RapidJson使用小记</title>
+      <link>https://xrg.fj.cn/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</guid>
+      <description>近期有个需求需要对 JSON 数据进行解析，上周五搞了一点点之后就去忙其他的事情了，正好用周末时间搞一搞，输出点东西。
+RapidJson 是一个C++的JSON解析器及生成器，特点详见官网，此处仅作使用记录。
+环境：
+Windows 11 64bit
+WSL2 Ubuntu 22.04
+cmake version 3.22.1
+gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1)
+读者需要具备的一些前置知识：
+cmake基本使用、c++、Linux基本使用
+Step 1 安装 RapidJson 项目是一个纯头文件库，直接把仓库中的 include/rapidjson 拷贝到我们CPP项目的头文件包含路径内即可。
+Step 1.1 cmake install 对于cmake项目来说，只需要创建一个合适的地方来存放头文件：
+albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson$ tree . ├── CMakeLists.txt ├── build ├── include │ └── rapidjson │ ├── allocators.h │ ├── cursorstreamwrapper.h │ ├── document.h │ ├── encodedstream.h │ ├── encodings.h │ ├── error │ │ ├── en.h │ │ └── error.</description>
+    </item>
+    
+    <item>
+      <title>Windows Terminal美化小记</title>
+      <link>https://xrg.fj.cn/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Sat, 17 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/</guid>
+      <description>背景 近来发现工作 &amp;amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
+Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&amp;rsquo;◡&amp;rsquo;●)
+Step 1 background 对于一个又大又黑的终端来说，一个非常显著的提升颜值的办法就是换上一张自己满意的背景图片。
+点击Windows Terminal顶栏的小倒三角，进入【设置】——【Windows Powershell】——【外观】——【背景图片】，选择图片路径即可。
+再微调一下透明度，整个质感会马上提高：
+background image 审美各异，勿杠。
+Step 2 安装oh-my-posh oh-my-posh 是一个终端美化程序，类似MacOS终端美化常用的zsh。
+建议 不要使用 官网介绍的下载办法：
+# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&amp;#39;https://ohmyposh.dev/install.ps1&amp;#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
+可以手动下载上述命令中提到的安装脚本 https://ohmyposh.dev/install.ps1 ，看一眼就知道实际上它就是到 Github release 上把安装程序下载下来而已，不是很理解为什么要用户用一个反人类的命令安装。
+因此，我们直接把对应的 installer 下到本地（访问GitHub的时候可以科学上网，或使用gitee镜像），运行，即可完成 oh-my-posh 的安装。
+Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之前我们要先安装字体，以便正确显示特殊字符。</description>
+    </item>
+    
     <item>
       <title>PyQt5初探——与scapy的美妙结合</title>
       <link>https://xrg.fj.cn/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/</link>
@@ -16,25 +56,25 @@
       <description>PyQt5初探 自读书摘抄站点构建完成以来，一直没有进行什么有趣的实践，这回由于毕设的需要，首次尝试进行GUI编程；此外同样由于毕设需要，使用了scapy进行流量嗅探，因此就有了这一篇四不像的记录性质的文章。
 Qt（音 cute ）是一套被广泛使用的GUI组件库，而 PyQt 则是这套框架与Python语言的结合，是Python中最强大的GUI库之一。
 本次选用这个框架其实经过了一定的曲折，因为Python的GUI库有太多了🤣
-  TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
-  PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
-  Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
-  PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
-  安装PyQt非常简单：
+TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
+PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
+Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
+PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
+安装PyQt非常简单：
 pip install PyQt5 pip install pyqt5-tools 还有简单易用的 Qt Designer ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。
 环境安装完成之后，可以照着 教程 实现一些功能。
 经过一系列的探索，我的程序初具雏形：
- 
 界面有如下几个组件：
-  在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
-  结束在线分析：顾名思义。
-  打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
-  大大的文本框：用于输出实时流量捕捉的内容。
-  运行起来的效果如下：
- 在线分析（初步） 
-总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
+在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
+结束在线分析：顾名思义。
+打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
+大大的文本框：用于输出实时流量捕捉的内容。
+运行起来的效果如下：
+在线分析（初步） 总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
 不过，还是需要先对本文的另一个主角 scapy 进行一些介绍。
-scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。</description>
+scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。
+这次将 scapy 和 PyQt5 结合，实际上只需要用到抓包的功能：
+def StartSniff(self): self.stopSniff = False sniff(prn=self.SniffCallBack, count=0, stop_filter=self.isStop) def SniffCallBack(self, pkt: scapy.packet.Packet) -&amp;gt; None: &amp;#39;&amp;#39;&amp;#39; Do Something &amp;#39;&amp;#39;&amp;#39; def isStop(self, pkt): return self.</description>
     </item>
     
     <item>
@@ -47,17 +87,17 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
 目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
 本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
 0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows+VisualStudio 改换到 CentOS 7+VSCode远程开发 ，引发这个决定的因素主要有几点：
-  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
-  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
-  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
-  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
+VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
 在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
 0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
 前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .</description>
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .</description>
     </item>
     
     <item>
@@ -68,9 +108,9 @@ const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetch
       <guid>https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/</guid>
       <description>最近太闲，时常想着把老电脑重装一下，不过Windows的C盘总是莫名其妙地渐渐跑满，非常烦人；加之一直以来对Mac OS的好奇，决定在老电脑上搞个黑苹果（Hackintosh）玩一玩。
 黑苹果指的是在 非Apple设备上运行Mac OS ，可以理解为在自己的机器上运行一个盗版系统，一般来说会导致几个问题：
- 硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。  本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
-Step0 Video教程  From YouTube。请科学上网 😊
-   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
+硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。 本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
+Step0 Video教程 From YouTube。请科学上网 😊
+这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
 Step 1 EFI 教程里面有用到EFI文件。这是黑苹果启动时需要的文件，每个机型的引导文件不尽相同。如果EFI不合适的话，自然就不能启动啦！
 我的电脑是 ASUS FL8000UQ ，使用了 https://github.com/alexanderkin/ASUS-FL8000UQ-Hackintosh 开源的EFI文件。
 各机型和其对应的EFI可以从 https://gitee.com/softxing/Hackintosh 找到。
@@ -79,10 +119,10 @@ Step 2 解锁CFG Lock CFG Lock用于保护MSR 0xE2单元，开启CFG锁之后，
 Step 3 修改config.plist 这一步就在 Video教程 里面而已，主要就是改一下 三码 ，照着做即可！
 Step 4 禁用各种BIOS选项 重要！我刚开始做的时候就是因为漏掉某些选项没有禁，搞得系统一直装不上！
 教程里面有清单的，或者按照下图的选项逐一禁用：
- Img 
-Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
+Img Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
 Step 6 安装 直接U盘启动啊！So Easy！
-安装过程中有一些小插曲：</description>
+安装过程中有一些小插曲：
+磁盘识别不到。因为原本的Win10系统用的是MBR分区，而Mac只能识别GPT分区，搞得我特别难受。后面重新制作了个Windows的启动盘，在安装界面用了命令行操作把磁盘重新格式化了，然后才重新开始Mac的安装。详见 此篇 ，只能说CSDN偶尔还是有点好东西 😏 安装完毕之后进不了系统，重启的时候还是只能从U盘进入恢复模式。这个问题非常烦人，使我重装了N遍系统（为我的硬盘感到忧伤），一度使我想要放弃，最后按照上一步的指示把Mindate改掉即可。 Step 7 更新Wi-Fi驱动 我的网卡是原装的AR9565，按照 这篇文章 完美搞定Wi-Fi驱动。</description>
     </item>
     
     <item>
@@ -96,8 +136,7 @@ Step 6 安装 直接U盘启动啊！So Easy！
 Step0 环境配置 VCPKG安装+集成 第一步是安装VCPKG，这是微软开发的一款C++软件包管理工具，Drogon就通过这款工具下载。
 去到 microsoft/vcpkg: C++ Library Manager for Windows, Linux, and MacOS (github.com) 下载代码或克隆仓库，运行 bootstrap-vcpkg.bat 完成安装。会生成一个 vcpkg.exe ，可以添加环境变量以便全局使用。
 使用 vcpkg search drogon 既可以初步观察到Drogon库的情况；同时，这条命令的顺利运行也就表示我们的安装已经成功。
- vcpkg安装成功 
-使用命令 vcpkg integrate install 可以将vcpkg进行全局集成，此后从VCPKG下载的库都能在Visual Studio里面直接使用。全局集成可以通过 vcpkg integrate remove 来移除。
+vcpkg安装成功 使用命令 vcpkg integrate install 可以将vcpkg进行全局集成，此后从VCPKG下载的库都能在Visual Studio里面直接使用。全局集成可以通过 vcpkg integrate remove 来移除。
 对于工程项目的集成，应该通过 vcpkg integrate project 来完成，这样在单一项目中下载的库不会影响到其他项目，较为理想。具体做法参见参考资料 [1] ，我选择直接使用全局集成。
 Drogon安装 使用命令 vcpkg install drogon 或命令 vcpkg install drogon:x64-windows 来安装Drogon，前者安装的是X86的包，后者安装的是X64的包。
 安装完成之后，应该从 [VCPKG PATH]\installed\x86-windows\tools\drogon 文件夹中找到 drogon_ctl 工具，该工具可以帮助我们生成Drogon项目及一系列组件，很有意义；我在初次安装的时候并没有找到这个工具，通过 vcpkg install drogon[ctl] 实现手动安装。
@@ -115,9 +154,9 @@ Drogon安装 使用命令 vcpkg install drogon 或命令 vcpkg install drogon:x6
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
 开工大吉！ ☀️
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
- 前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载+加载时的页面动画  已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载+加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
- 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。  正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
+摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
 &amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;amp;family=Ma+Shan+Zheng&amp;amp;family=Noto+Sans+SC:wght@300&amp;amp;family=Noto+Serif+SC:wght@300&amp;amp;family=Zhi+Mang+Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.</description>
@@ -132,11 +171,10 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
       <description>前情提要 在 上一篇PCPP使用记录 中，我记录了PcapPlusPlus这个库的环境安装和简单使用，紧接着，就准备基于这个库来实现一些具体的、有用的功能了。
 数据包解析 PCPP这个库将一个原始数据包解析为若干层，每一层的协议信息由一个变量来保存，我们可以自由读写这些解析后的数据。
 一个 RawPacket 表示原始的字节流，也就是我们最开始从 pcap 文件中读进来的一个数据包，经过解析，可以将这个数据包拆分成我们熟悉的若干层数据！PCPP的一个特性是它不保存多个副本，而只是在同一个数据包上标记各层协议的起点，这些起点可以由上一层解析结果访问到。
- 示例 
-例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
+示例 例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
 PCPP提供的数据包解析方法有两种，我们分别来看。
 首先还是需要先创建一个 reader ，如果你还记得第一章的内容，那就很简单了：
-#include &amp;lt;iostream&amp;gt;#include &amp;lt;IPv4Layer.h&amp;gt;#include &amp;lt;Packet.h&amp;gt;#include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 	// open a pcap file for reading 	pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!</description>
+#include &amp;lt;iostream&amp;gt; #include &amp;lt;IPv4Layer.h&amp;gt; #include &amp;lt;Packet.h&amp;gt; #include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 // open a pcap file for reading pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!</description>
     </item>
     
     <item>
@@ -150,11 +188,12 @@ PCPP提供的数据包解析方法有两种，我们分别来看。
 预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
 本文使用的环境是：Win10 + VisualStudio2019 。
 要使用这个库，我们需要先安装一些依赖。
- 个人建议将这些依赖下载到同一个地方，方便管理！
-  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C++ Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+个人建议将这些依赖下载到同一个地方，方便管理！
+安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C++ Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！ 下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
 到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
- 现有的文件 
-All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：</description>
+现有的文件 All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：
+ExampleProject文件结构 没问题的话，就准备运行示例程序了！
+运行示例程序 熟悉VS的朋友可能要迫不及待地把那个 .</description>
     </item>
     
     <item>
@@ -168,9 +207,8 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
 嗯？等等，好像要破费？！
 虽然APP Store有充值赠送机制，但当我需要的目标数额多起来时，怎么获取最优化的充值方案呢？似乎是个有趣的问题 😼
 所谓 最优化的充值方案 ，即是指两种情况：
- 花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。  这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
- APP Store充值方案 
-场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
+花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。 这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
+APP Store充值方案 场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
 既然文章标题都已经点明了我的用意，那就直接从DP的角度开始思考了 😏
 令 dp[i] 表示 购买 i 点券的最少花销 ，那么对于目标点券 i ，它可以由上图中所有可能的方案组成。例如我们需要购买 1430 点券，那么我们可以花费若干个 1￥ 购买若干份 10点券 ，也可以花费两个 68￥ 购买两份 715(680+35)点券 。唯一的限制是，不能使用比 i 更大的购买方案，例如我们需要 1430 点券，那就不能花费 648￥ 去买到六千多点券，不然就很浪费！
 既然要使用DP，那么我们得到的状态转移方程应该是什么呢？
@@ -186,15 +224,12 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
       <description>近期一好友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
 今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
 动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
- 旧主页   新Stack主页（未修改) 
- 旧文章页面   新Stack文章页面（未修改) 
-Part 1 左边栏 图标 图标显示 修改配置文件和 page
+旧主页 新Stack主页（未修改) 旧文章页面 新Stack文章页面（未修改) Part 1 左边栏 图标 图标显示 修改配置文件和 page
 首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
- 左边栏 
-发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+左边栏 发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
 根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
 以 config.yaml 中的内容为例，以前的 menu 是这样的：
-menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：</description>
+menu: main: - identifier: home name: 博文 url: / weight: -100 pre: home 修改过后，要变成这样：</description>
     </item>
     
     <item>
@@ -211,15 +246,12 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 启动之后，可以使用DHCP获取IP，或者手动配置IP；虚拟机会要求你设置口令，你可以使用用户名 perc 和你设置的口令来远程登录到系统上。
 成功启动之后，会出现 WANemControl@PERC&amp;gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
 一般来说，你现在就可以在另一台机器的浏览器上使用 http://&amp;lt;WANem IP&amp;gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
- 成功访问WANem 
-配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
+成功访问WANem 配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
 点击导航栏中的 Advanced Mode 进入高级配置，我们看到如下的界面：
- Advanced Mode 
-界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
+Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
 可以指定我们的规则的适用范围，如果你只希望你配置的规则在两台特定主机之间生效，那么就填写下图红框框出的一行，否则保留原样即可。
- 规则 
-使用 保存我们设置好的规则，即刻开始使用它吧。
-我们的两台实验机器分别是 CentOS7 192.</description>
+规则 使用 保存我们设置好的规则，即刻开始使用它吧。
+我们的两台实验机器分别是 CentOS7 192.168.213.128 和 Ubuntu 192.168.213.129 ，WANem是 192.168.213.130 。</description>
     </item>
     
     <item>
@@ -231,14 +263,15 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
       <description>如果你单纯地想体验一下以“简洁高效“闻名的Mac OS，那么我会强烈推荐你为自己创建一台Mac OS的虚拟机，使用这种方法，你不需要花费大几千元去购入一台Mac Book，就能得到最完整的系统体验。当然，假若你在体验之后爱上了这款系统，之后努力工作为自己的情怀买个单也是有所必要的。
 解锁VMWare 我们诸多步骤中最困难的一步就是解锁VMWare了。为什么叫解锁呢？因为我们使用的程序被作者命名为 unlocker ，就这么简单······ 我假定阅读本文的读者已经知道什么是VMWare，并且创建过自己的虚拟机，对于VMWare的安装等流程不再赘述。本文使用的是VMWare Workstation Pro 16 。
 正常的VMWare在创建虚拟机的时候，需要选择虚拟机操作系统，而且只有简单的几个选项（Windows/Linux/···）。我们在选项列表中看不到 apple MacOS 这类的字眼，因此我们要做的第一件事就是让VMWare能够创建 Mac OS 类型的虚拟机。 这一步真是非常的简单啊。总体而言，我们只需要进行三个步骤：
- 下载 unlocker 软件 软件运行之前做一些前期的准备 运行！  Amazing，看起来一点都不难吧？
+下载 unlocker 软件 软件运行之前做一些前期的准备 运行！ Amazing，看起来一点都不难吧？
 Step1 我们去 这个网址 下载所需要的软件。
 对应于本文所使用的VMWare 16，你可以有两种选择：
- Auto-Unlocker v1.1.3 以一个 exe 的形式封装好了所有的流程，在我的测试中，这个软件总是不能成功解锁VMWare，令人生气。 根据某个 issue 中的办法，去 这里 下载另一个版本的 unlocker ，兄弟，这个办法真的管用！  使用第二个办法，下载的文件解压之后大概是这样的：  unlocker files  相信你能自己找到 win-install.cmd 这个文件，对吧？
+Auto-Unlocker v1.1.3 以一个 exe 的形式封装好了所有的流程，在我的测试中，这个软件总是不能成功解锁VMWare，令人生气。 根据某个 issue 中的办法，去 这里 下载另一个版本的 unlocker ，兄弟，这个办法真的管用！ 使用第二个办法，下载的文件解压之后大概是这样的： unlocker files 相信你能自己找到 win-install.cmd 这个文件，对吧？
 Step2 现在先不要急着运行，我们需要做一些运行之前的准备。
 打开任务管理器，首先杀掉跟VMWare有关的进程，它们一般都以 VM- 这样的格式开头。
 然后进入到任务管理器的【服务】面板，停止跟VMWare有关的服务，如 VMNetDHCP 等，它们的格式也都以 VM- 开头。
-不用担心服务没有关干净，或者进程杀不掉的问题。理论上我们的 unlocker 能够自动关掉这些服务，等到解锁完毕之后再启动它们。我在这里啰嗦这些，主要是忠实地记录我的实践结果，如果你运气好的话，跳过这一步最终也是可能成功的。</description>
+不用担心服务没有关干净，或者进程杀不掉的问题。理论上我们的 unlocker 能够自动关掉这些服务，等到解锁完毕之后再启动它们。我在这里啰嗦这些，主要是忠实地记录我的实践结果，如果你运气好的话，跳过这一步最终也是可能成功的。
+Step3 万事俱备，我们右键那个 win-install.cmd ，以管理员身份运行，等它运行完毕了，你的VMWare应该就支持 Mac OS 了！ New option Q：VMWare 16，按照上面的流程走，没有效果怎么办？ A：首先可以尝试使用 VMWare installer 进行一个 repair 的操作，也就是修复VMWare的安装了。如果这一步还不行的话，可以试试其他版本的 unlocker 。 下载Mac OS镜像 这一步可就厉害了！我不会向你分享镜像的链接（网上多的很），但是我要告诉你怎么突破百度网盘的限速！ 总的来说，还是分成3个步骤：</description>
     </item>
     
     <item>
@@ -249,20 +282,24 @@ Step2 现在先不要急着运行，我们需要做一些运行之前的准备�
       <guid>https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/</guid>
       <description>总不能让这个博客老是在记录家常菜啊。
 本篇主要介绍hugo博客的进阶美化方法，根据本篇的讲解，结合自己的主题进行实践，有助于打造一个真正属于自己的博客。
- 1. CSS和SCSS  CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。
+1. CSS和SCSS CSS（层叠样式表）是一种用来表现HTML或XML等文件样式的计算机语言。CSS的存在使得HTML页面源码可以更专注于网页架构的设计，而不用在源码中加入许多关于样式的字段，极大地提高了代码的可读性和简洁性，同时，使得网页样式变得更好维护。
 Sass（Syntatically Awesome Style Sheets）是一种CSS预处理器，它可以用来定义一套新的语法规则和函数，以加强和提升CSS。
 举例来说，一个页面中可能需要用到许多次颜色#000，即白色；在原始的CSS代码中这个#000需要不断地出现在各个位置，如color: #000、background: #000等，这就为样式的改变带来了麻烦，假如我们需要整体性地改变页面颜色主题，就只能找到所有的#000并将其修改，实在不够方便。而Sass引入了变量，其概念和C/C++等语言中的变量并无二致，极大地简化了数值的维护。现在可以使用如下的写法来设置页面颜色：
 $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: $WHITE; } 然而，最初的Sass的语法规则和CSS有太多的出入，后来官方在2010年推出了一个全新的语法，叫做SCSS（Sassy CSS），试图弥合Sass和CSS之间的差别。现在我们看到的代码多数已经是SCSS，而其灵魂就是变量，如此理解便好。
- 2. hugo和SCSS  hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
+2. hugo和SCSS hugo支持SCSS，因此你所能见到的较为现代的主题多是使用SCSS来定义样式。
 你的网站样式存放在根目录下asset/css文件夹中，不同的主题可能有不同的组织形式，其结构总体上类似于一个分工良好的C/Python程序——各个部位的样式分成各个独立的文件来进行定义，最终使用一个主文件将各个模块include/import进来，实现完整的页面样式。
 我的KeepIt主题有一个内容如下的主文件，功能正如我所述：
- main.scss 
-按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
+main.scss 按照import的顺序，HTML文档中的各个标签、各个Class都被其相应的文件赋上了特定的样式，最终形成了一个和谐美观的主题。
 如果你了解CSS，应该知道CSS中的“覆盖”原则，即对于同一个选择器，其后面的属性会覆盖先前出现的属性。比如对于名为str的类，我们的CSS文件中存在两种定义：
 /* line 11 */ .str { color: #efefef; } ... /* line 20 */ .str { color: #ffdab9; } 那么，位于20行的定义会覆盖位于11行的定义，使得具有str类的标签内容呈现#ffdab9这种颜色。
 这种覆盖原则就是我们自定义hugo样式的基础。
- 3. 精确定义样式  基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
-在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：</description>
+3. 精确定义样式 基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
+在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：
+main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件，这使得定义在其中的样式位于最终CSS文件的末尾，其中重复定义的样式会被作为页面的最终效果。
+于是我们的问题就变得很简单了：找到你希望修改的元素和它对应的选择器，重新定义这个选择器即可。
+所幸，现代浏览器为我们提供的开发者工具使得这一切都变得无比简单。以Edge Beta为例，按下F12弹出开发者工具，使用左上角的小箭头使你的鼠标变成一个查看器，现在你点击页面上的任何元素，立即可以在右边的窗口看到这个元素对应的源码。
+例如，在我的博客中有这样的元素已经让我不爽很久了：
+精确选取元素 可以看到跟这个project相同的aboutme.md这个单词被拆成了两半，真是岂有此理。</description>
     </item>
     
     <item>
@@ -273,25 +310,30 @@ $WHITE: #000; /* 设置变量 */ .code { background: $WHITE; } .header { color: 
       <guid>https://xrg.fj.cn/p/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/</guid>
       <description>谁能想到我在考试前一天还在写桌面美化的博客呢？
 电脑桌面是每天开机后进入工作之前第一眼看到的东西，一个美观的桌面能从心情上给人以振奋。我在整机重装之后学习了一下如何美化桌面，现在我的Window10系统桌面长成这样：
- 桌面效果 
-1. rainmeter  rainmeter实际上是一个系统状态监视软件，由于其强大的可定制性及扩展性，诸多使用者在原来的基础上开发了成百上千的插件程序和皮肤样式，使得现在的rainmeter几乎成为一款完美的系统美化工具。你可以从官网上下载它：
- Rainmeter, desktop customization tool
- 下载安装完成之后，打开这个程序，自带一个简单的样式，使得你可以在桌面上看到CPU使用率、磁盘使用情况等等。
+桌面效果 1. rainmeter rainmeter实际上是一个系统状态监视软件，由于其强大的可定制性及扩展性，诸多使用者在原来的基础上开发了成百上千的插件程序和皮肤样式，使得现在的rainmeter几乎成为一款完美的系统美化工具。你可以从官网上下载它：
+Rainmeter, desktop customization tool
+下载安装完成之后，打开这个程序，自带一个简单的样式，使得你可以在桌面上看到CPU使用率、磁盘使用情况等等。
 要达到美化的效果，仅仅使用自带的组件样式是不够的。我们需要从网络上寻找好看的rainmeter皮肤资源，这里首先给出官方的社区，本次桌面的效果就是使用社区中michaelpuerses大佬做的Sonder皮肤：
- Sonder - Rainmeter skin by michaelpurses on DeviantArt
- 需要注意的是，访问此网站需要科学上网，且最好选择漂亮国的节点，并开启全局模式。如果你不会，我也不打算教你，你可以从很多其他地方找到皮肤资源（如GitHub、国内各论坛等等）。此外，下载皮肤时要求进行注册，亲测gamil有效。
+Sonder - Rainmeter skin by michaelpurses on DeviantArt
+需要注意的是，访问此网站需要科学上网，且最好选择漂亮国的节点，并开启全局模式。如果你不会，我也不打算教你，你可以从很多其他地方找到皮肤资源（如GitHub、国内各论坛等等）。此外，下载皮肤时要求进行注册，亲测gamil有效。
 rainmeter的皮肤有两种形式：
- .rmskin文件格式。这类文件直接双击打开，自动安装皮肤。 文件夹格式。这类皮肤需要手动放入你的rainmeter皮肤路径下，具体做法为：右键右下角的rainmeter小图标 &amp;ndash;&amp;gt; 皮肤 &amp;ndash;&amp;gt; 打开皮肤目录，将你下好（并解压）的文件夹放进去。  我在寻找皮肤的过程中，发现国内网站的相关内容真是少的可怜，找到一个论坛，下载皮肤的时候居然还要交钱买邀请码进行登录，属实有点离谱；百度rainmeter贴吧上面有些大佬的作品看着还可以，我没有试用过。
+.rmskin文件格式。这类文件直接双击打开，自动安装皮肤。 文件夹格式。这类皮肤需要手动放入你的rainmeter皮肤路径下，具体做法为：右键右下角的rainmeter小图标 &amp;ndash;&amp;gt; 皮肤 &amp;ndash;&amp;gt; 打开皮肤目录，将你下好（并解压）的文件夹放进去。 我在寻找皮肤的过程中，发现国内网站的相关内容真是少的可怜，找到一个论坛，下载皮肤的时候居然还要交钱买邀请码进行登录，属实有点离谱；百度rainmeter贴吧上面有些大佬的作品看着还可以，我没有试用过。
 你还可以从知乎或者一些外文评测贴中找到很多好看的主题推荐，这里给出两个外文帖子，我的主题就是在第二篇文章的推荐下找到的：
- 43 Best Rainmeter Skins For Windows in 2020
+43 Best Rainmeter Skins For Windows in 2020
 35 Spectacular Rainmeter Skins For Windows
- 放张效果图吧，除了我现在使用的桌面外，rainmeter还能这样玩：
- Enigma主题效果图 
-看完是不是很想开启自己的皮肤邂逅之旅了？
- 2. TaskbarX  实际上，我的桌面还有处地方值得注意：任务栏图标居中。看似细小处，实则是整个和谐的视觉体系中不可或缺的一部分。在很多Windows的美化教程中，都使用各式各样的软件来制作出类似MacOS的dock效果，而且实际上rainmeter也能制作dock效果，不过michaelpuerses大佬没有在我这款皮肤中实现dock。
+放张效果图吧，除了我现在使用的桌面外，rainmeter还能这样玩：
+Enigma主题效果图 看完是不是很想开启自己的皮肤邂逅之旅了？
+2. TaskbarX 实际上，我的桌面还有处地方值得注意：任务栏图标居中。看似细小处，实则是整个和谐的视觉体系中不可或缺的一部分。在很多Windows的美化教程中，都使用各式各样的软件来制作出类似MacOS的dock效果，而且实际上rainmeter也能制作dock效果，不过michaelpuerses大佬没有在我这款皮肤中实现dock。
 就我个人而言，完全仿照MacOS进行美化实在是有点过头了。很多好看的主题，只需要将任务栏透明化、图标居中之后就会产生画龙点睛的效果。
 于是引出我们要下载的第二款软件：TaskbarX。这款软件能使你的任务栏图标始终保持居中状态，其原理大概是每隔固定的时间进行检查与调整（我猜的）。链接如下：
- TaskbarX | Center taskbar icons (chrisandriessen.</description>
+TaskbarX | Center taskbar icons (chrisandriessen.nl)
+我下载的是Zip包，因为微软商店的UWP版本要交钱，我没有钱。
+安装完成之后，你可以在安装路径中找到TaskbarX.exe和TaskbarX Configurator.exe，运行前者，实现对任务栏进行修改；运行后者，对任务栏样式进行设置。
+运行后者弹出一个设置界面，Style一栏控制任务栏背景样式，在我们的主题中，将其设置为透明且有些许模糊的效果：
+任务栏style 第二栏的Animation设置任务栏图标数量发生变化之后的动画效果，随自己喜好去设置即可。
+3. 一些细节 如果你要使用我的主题，你可能还需要注意到一个方面：我的桌面是没有图标的。
+桌面效果 这种蛋疼的做法实际上使得你的桌面除了美观，没有其他的优点，毕竟你无法使用快捷方式了。
+但是我已经习惯从资源管理器里面找程序或文件了，所以可以接受这种布局；实在特别常用的程序，固定到任务栏即可。</description>
     </item>
     
     <item>
@@ -306,15 +348,15 @@ rainmeter的皮肤有两种形式：
 你可以在下面这个链接找到这款应用的源码，虽然我成功使用这款插件的历程比较艰辛，但是我还是非常敬佩能写出这种代码的人。
 (https://github.com/VincentGarreau/particles.js)
 话不多说，let&amp;rsquo;s go!
-下载这款插件  你可以直接使用git clone或者从网页上下载它。
+下载这款插件 你可以直接使用git clone或者从网页上下载它。
 解压完成之后，你可以看到一个Demo文件夹，不妨先进去看看正确使用这款应用的时候能产生什么效果。
- 在源码中为插件留出位置  在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
+在源码中为插件留出位置 在插件作者的GitHub仓库里实际上已经写明了使用方法，但是我要结合hugo和我的主题——Keepit——再详细地介绍一次。
 在你的页面中为插件留出位置，这个操作非常简单。打开你的footer.html，找一个合适的位置（最好是最外层），加上一个标签：
 &amp;lt;div id=&amp;quot;particles-js&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 然后，就没有然后了！现在你的插件已经能够找到它的容身之所了，准备让它运行起来吧！
 p.s footer.html在文件夹partials里，看过第一篇博文的你，应该很熟悉它的内容了吧？关于我们为什么要在这个文件里加上这个东西，主要是考虑到任何界面都有这么一个版权说明模块，那么也就是任何界面到时候都会有漂漂亮亮的背景！还有，我认为可能存在某些主题没有footer.html文件，但是这根本没什么关系，你也可以把这个div加在任何你想要的的地方。
 p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/baseof.html，因为它似乎是所有页面的基本框架，适用性更强一些。
- 引入插件  你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
+引入插件 你可能会认为，这篇博文的第二步和第三步完全可以调换顺序，如果你这么想了，也这么做了，那我祝你不要踩到我踩过的坑。
 我们要在第二步的div底下写入插件。
 为什么这样？因为JavaScript的加载顺序是从前往后的。有过Bootstrap框架使用经验的朋友应该知道，在使用Bootstrap的JS应用时，要在之前首先引入jQuery，否则整个页面将无法实现应有的功能！
 我们的顺序也是如此。在我使用这个插件的时候，尝试过过几种方法：在/asset/js文件夹中放入相应的JS文件；在partials文件夹中写一个custom_js.html文件，里面是几条简单的&amp;lt;script&amp;gt;标签；修改partials文件夹中的head.html文件，在头部就引入插件；在第二步的&amp;lt;div&amp;gt;之前写入几条&amp;lt;script&amp;gt;标签。
@@ -325,12 +367,15 @@ p.p.s 2021年1月14日，现在我把这部分代码加在了layouts/_default/ba
 你都看到这篇文章了，肯定已经在GitHub上有自己的第一个页面了吧？你会发现，public文件夹的结构跟你的仓库的结构是一样的，我们的GitPage的CSS、JS等文件，都存在对应的路径底下。也就是说，**当你把这两个JS文件放到了public/js文件夹底下，你等一下git push的时候就会把这两个文件也一并推送到远程仓库的对应位置。**这样，你的源码就能找到JS文件了。
 将两个JS文件引入，记得放在第二步的div后面：
 &amp;lt;script src=&amp;#34;xxxxx/app.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;xxxxx/particles.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; 这里的“xxxx”是你放置这两个文件的路径，我接下来要教你一个取巧的办法。
- 巧妙地获取路径  如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
+巧妙地获取路径 如果你的代码中，这两个JS文件的路径出了问题，那很不幸，当你打开页面的时候一定是见不到背景的，而且，你按下F12，还能看到控制台给你报出的无情的404 Not Found。
 我们要怎么使远程仓库中的代码也能找到正确的路径呢？如果使用src=&amp;quot;/js/app.js&amp;quot;这样的语句，当你打开网站的主页，它会找到https://yourWeb.github.io/js/app.js，看起来非常的正确；但是当你在网站里面的某个页面里，比如某一篇博文中，它就会去找https://yourWeb.github.io/post/article1/js/app.js，必然是失败的，于是你的博文就不能有漂亮的背景了 :(
 正确的获取路径的姿势，你可以直接使用绝对路径，也就是https://yourWeb.github.io/js/app.js这样的方式。
 底下是我的代码，绝对路径的方法理论上适用于所有主题，你应该把代码里的src值改成自己的仓库：
-&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;  代码的最终样式及推送  经过一系列的修改后，你的页面的代码就多了如下的东西：
-&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.</description>
+&amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 代码的最终样式及推送 经过一系列的修改后，你的页面的代码就多了如下的东西：
+&amp;lt;div id=&amp;#34;particles-js&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/particles.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://sgs4ever.github.io/js/app.js&amp;#34; async=&amp;#34;&amp;#34; &amp;gt;&amp;lt;/script&amp;gt; 此外，你的public/js文件夹中还多了两个文件app.js和particles.js。
+现在，不要以为一切已经结束了，因为你的这个div，你的页面现在多了一个元素，如果它位于footer上方，那它会使得你的页面被撑得很长，我们要在主页面的CSS文件里修改它。
+进入public/css文件夹，如果是Keepit主题，就只有一个文件，打开它；如果是其他主题，你需要找到能发挥作用的CSS。
+在文件最末尾补上这样的代码：</description>
     </item>
     
     <item>
@@ -357,17 +402,17 @@ https://github.com/gohugoio/hugo/releases
 hugo new site [yourSiteName]
 就完事了！这里的 [yourSiteName] 可以替换成任何你想要的名字，为你的网站起个好名吧！
 如果顺利的话，你将会得到一个名字为yourSiteName的文件夹，里面有一些hugo为你初始化好的文件夹，你可以使用ls查看它们。
- 新建站点 
-选择主题 “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
-你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
+新建站点 选择主题 “一款好看的主题是你坚持写博客的最大动力。” ——沃兹·基·硕德
+你现在浏览的——也就是我的博客——主题是：https://themes.gohugo.io/keepit/
+实际上，在上面这个网站上还有非常多的酷炫的主题，完全看你的喜好去选择——不考虑配置难度的情况下 ヽ(ー_ー)ノ
 当你选定了一个主题，点进去，一般都会在底下有一个非常周到的安装指南（真的只是安装指南o(╥﹏╥)o）。
 就以这款KeepIt主题为例，我们的网站根目录下有一个themes文件夹，你只需要进入这个文件夹，使用命令git clone https://github.com/Fastbyte01/KeepIt.git，就可以将这个主题下载到你的网站里了。从此，你就可以快乐地使用themes文件夹底下存在的主题，而且变换主题的成本非常之低，这个我们之后会讲。
- 2022-04-05注：目前博客的主题已经不是KeepIt，而是Stack，详情参见 Hugo Stack主题更新小记 (xrg.fj.cn) 。
- 配置页面 现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
+2022-04-05注：目前博客的主题已经不是KeepIt，而是Stack，详情参见 Hugo Stack主题更新小记 (xrg.fj.cn) 。
+配置页面 现在让你的命令行回到网站的根目录下，写下命令hugo server --theme=keepit -D，然后你就发现hugo已经在你的电脑上跑起了一个Web服务。打开浏览器，根据命令行的提示输入地址，就可以访问你的页面了！刚才说过，当你的themes文件夹下面有多个主题时，你可以轻易地更换它们，具体的操作就是将--theme这个参数指定为你想用的主题的名字，就问你简单不？
 回到你的网站上吧，看看效果。
 什么？你说你的页面现在空无一物？或者你的页面还只是个模板？理所当然。因为你还没有配置它。
 打开你刚才下载的主题文件夹，一般来讲，里面都有一个exampleSite文件夹，打开它，把里面的所有文件复制到网站根目录，直接替换掉你原有的东西即可。
- 2022-04-05注：为了日后换主题的方便，已经不建议将 exampleSite 全部复制到根目录中。目前来看，我们只需要复制里面的 content 文件夹和 config 文件即可。修改主题时直接进入 theme 文件夹修改，这样一来日后可以更加方便地改变博客主题。</description>
+2022-04-05注：为了日后换主题的方便，已经不建议将 exampleSite 全部复制到根目录中。目前来看，我们只需要复制里面的 content 文件夹和 config 文件即可。修改主题时直接进入 theme 文件夹修改，这样一来日后可以更加方便地改变博客主题。</description>
     </item>
     
   </channel>

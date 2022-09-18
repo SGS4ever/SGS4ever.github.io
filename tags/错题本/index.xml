@@ -21,8 +21,8 @@
 同一个坐标上可以有多个点。你所在的位置也可能存在一些点，但不管你的怎么旋转，总是可以看到这些点。同时，点不会阻碍你看到其他点。
 返回你能看到的点的最大数目。
 示例1
- exp1 
- 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。  示例2</description>
+exp1 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。 示例2
+exp2 输入： points = [[1,0],[2,1]], angle = 13, location = [1,1] 输出： 1 数据范围</description>
     </item>
     
     <item>
@@ -32,12 +32,13 @@
       
       <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/</guid>
       <description>题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/
-题目  给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+题目 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
 示例1
- 输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。  示例2
- 输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3]  数据范围
- 1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列   分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ</description>
+输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。 示例2
+输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3] 数据范围
+1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列 分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ
+一道乍看简单，细想麻烦的题目，放在 错题本 这个分类里，主要是由于朴素的暴力做法是能通过的。当然，题解里面的想法更为强大，当然，并不是特别难想，但是细节是较多的，也是本次错得最多的地方。</description>
     </item>
     
     <item>
@@ -48,19 +49,26 @@
       <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode567.-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/</guid>
       <description>今天是农历除夕，然而近年来年味渐淡，凡有亲朋在，便是好时节，也无需对此日特别注重了。
 题目链接：https://leetcode-cn.com/problems/permutation-in-string/
-题目  给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
+题目 给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
 换句话说，第一个字符串的排列之一是第二个字符串的子串。
 示例1
-  输入： s1 = &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidbaooo&amp;rdquo;
-  输出： True
-  解释： s2包含s1的排列之一（“ba”）
-  示例2
-  输入： s1= &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidboaoo&amp;rdquo;
-  输出： False
-  数据范围
- 输入的字符串只包含小写字母 两个字符串的长度都在 [1, 10,000] 之间   分析  s2的某个子串包含s1的排列，即s2的某个子串中字母分布与s1完全一样。
+输入： s1 = &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidbaooo&amp;rdquo;
+输出： True
+解释： s2包含s1的排列之一（“ba”）
+示例2
+输入： s1= &amp;ldquo;ab&amp;rdquo; s2 = &amp;ldquo;eidboaoo&amp;rdquo;
+输出： False
+数据范围
+输入的字符串只包含小写字母 两个字符串的长度都在 [1, 10,000] 之间 分析 s2的某个子串包含s1的排列，即s2的某个子串中字母分布与s1完全一样。
 我最先想到使用一个集合来保存s1的所有字母，使用滑动窗口left ~ right遍历s2中的每个子串：
- 当某个字符不在集合中时，left = right = right + 1 当某个字符在集合中时，从集合中删除该字符  按照上面的规则，当某个子串完全包含s1中的所有字符时，遍历完这个子串之后集合就变为空。</description>
+当某个字符不在集合中时，left = right = right + 1 当某个字符在集合中时，从集合中删除该字符 按照上面的规则，当某个子串完全包含s1中的所有字符时，遍历完这个子串之后集合就变为空。
+我竟能想到如此NT的做法！
+WA了一次后发现，当某个字符不在集合中时直接使left = right = right + 1可能直接使得窗口向右滑动很多个距离，忽略了一些子串。
+WA的测试用例如下：
+&amp;ldquo;adc&amp;rdquo;
+&amp;ldquo;dcda&amp;rdquo;
+可以看到，当窗口right == 2时，这个字符d已经在第0位被删除，故认为此字符不在s1中，窗口直接指向最后一个字符，输出为False。然而，这个d是在最开始被占用掉了，它实际上存在于s1中，窗口不应如此移动。
+WA代码1 class Solution { public: bool checkInclusion(string s1, string s2) { multiset&amp;lt;char&amp;gt; s1_set; multiset&amp;lt;char&amp;gt; tmp; multiset&amp;lt;char&amp;gt;::iterator itr; for (auto t : s1) { s1_set.</description>
     </item>
     
     <item>
@@ -71,13 +79,20 @@
       <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/</guid>
       <description>不是吧啊Sir，这种题也错？😢
 题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
-题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+题目 设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
 请实现 KthLargest 类：
- KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
-  输出： [null, 4, 5, 5, 8, 8]
-  示例2
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]</description>
+KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。 示例1
+输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+输出： [null, 4, 5, 5, 8, 8]
+示例2
+输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]
+输出： [null,-1,0,0,0,1]
+分析 啪地一下，我就想到了双堆对顶，很快嗷！
+然而又想复杂了o(╥﹏╥)o。要求第K大数，实际上只需要使用一个小根堆，堆中一共有K个元素，堆顶就是目标。
+当然，这K个元素不是随随便便的K个元素，而是将初始数组中所有元素都放入小根堆后，逐个弹出，直到只剩K个元素。
+当我们希望添加元素时，首先可以比较此元素与堆顶元素的大小关系，当此元素比堆顶元素小时，不会对前K个大数的顺序产生影响，直接返回堆顶元素即可；当此元素大于堆顶元素，第K大数一定会改变，我们将其放入堆中，再从堆中弹出一个元素，此时的堆中还是K个元素，堆顶元素即为答案。
+我最开始的想法，双堆对顶又是什么呢？这是一种同时使用小根堆和大根堆来维护整个数组的办法，小根堆larger中的所有元素都比堆顶元素更大，大根堆smaller中的所有元素都比堆顶元素小。这样，任何时刻，数组中的数据被组织如下：
+双堆对顶 这种办法可以用于快速求解数据流的中位数，是个困难题，我还没做。根据中位数的定义，中间部分的数据正需要满足比左边都大，比右边都小的性质，使用双堆对顶的办法可以在 O(1) 的时间内找到数据流中的中位数。</description>
     </item>
     
     <item>
@@ -88,19 +103,21 @@
       <guid>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode888.-%E5%85%AC%E5%B9%B3%E7%9A%84%E7%B3%96%E6%9E%9C%E6%A3%92%E4%BA%A4%E6%8D%A2/</guid>
       <description>美好的二月从WA一道简单题开始。
 题目链接：https://leetcode-cn.com/problems/fair-candy-swap/
- 描述
+描述
 爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
 因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
 返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
 如果有多个答案，你可以返回其中任何一个。保证答案存在。
 示例1
-  输入： A = [1,1], B = [2,2]
-  输出：[1,2]
-  示例2
-  输入： A = [1,2], B = [2,3]
-  输出：[1,2]
-  数据范围
- 1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。   分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。</description>
+输入： A = [1,1], B = [2,2]
+输出：[1,2]
+示例2
+输入： A = [1,2], B = [2,3]
+输出：[1,2]
+数据范围
+1 &amp;lt;= A.length &amp;lt;= 10000 1 &amp;lt;= B.length &amp;lt;= 10000 1 &amp;lt;= A[i] &amp;lt;= 100000 1 &amp;lt;= B[i] &amp;lt;= 100000 保证爱丽丝与鲍勃的糖果总量不同。 答案肯定存在。 分析 希望满足交换后的总和相等，不难看出交换的数量需要满足一定的关系。
+我们设Allice拿来交换的大小是changeA，Bob拿来交换的大小是changeB；两人交换前分别具有sumA和sumB总量的糖果，则两人交换之后拥有的总量分别是：
+Allice：sumA - changeA + changeB Bob：sumB - changeB + changeA 两个式子是相等的，那么我们进行相减，得到sumA - sumB + 2changeB - 2changeA = 0；</description>
     </item>
     
     <item>
@@ -115,8 +132,8 @@
 分析 这种题目居然WA了一次。。。
 依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
 这题的特殊情况有两种：
- 一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。  直接放代码了。
-class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 + b = y1; ax2 + b = y2  // a(x1 - x2) = y1 - y2  // a = (y1 - y2) / (x1 - x2)  // b = y1 - ax1  if (coordinates.</description>
+一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。 直接放代码了。
+class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 + b = y1; ax2 + b = y2 // a(x1 - x2) = y1 - y2 // a = (y1 - y2) / (x1 - x2) // b = y1 - ax1 if (coordinates.size() == 2) return true; bool vertical = false; // 垂直，无斜率 float a = 0, b = 0; if (coordinates[0][0] == coordinates[1][0]) vertical = true; else { a = (float)(coordinates[0][1] - coordinates[1][1]) / (coordinates[0][0] - coordinates[1][0]); b = coordinates[0][1] - a * coordinates[0][0]; } if (vertical) { for (int i = 2; i &amp;lt; coordinates.</description>
     </item>
     
     <item>
@@ -130,10 +147,13 @@ class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&
 如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
 给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
 示例1
- 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示： 移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。 分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
 暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
 分析：
- 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。</description>
+由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。
+于是题目转化为了以行列为依据的并查集问题。对于一块石头idx，其坐标为(x, y)，如果x行上已经有了先来的石头root_x[x]，那么将idx加入先前就存在的root_x[x]的并查集中；否则表示idx是这一行最先到达的石头，其后的所有石头都要加入idx的并查集中。对于y列来说同理。
+于是实现并查集如下：
+int parent[1010]; // 并查集 // memset(parent, -1, sizeof(parent)); // 或者 // for (i = 0; i &amp;lt; 1010; i++) parent[i] = i; void join(int parent_idx, int son_idx) { int root_p = find(parent_idx); int root_s = find(son_idx); if (root_p == root_s) return; else parent[root_s] = root_p; } int find(int idx) { if (parent[idx] == -1) return idx; parent[idx] = find(parent[idx]); // 路径压缩 return parent[idx]; } 我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。</description>
     </item>
     
   </channel>

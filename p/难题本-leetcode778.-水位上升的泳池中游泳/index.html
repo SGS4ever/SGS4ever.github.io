@@ -9,10 +9,10 @@ BFS Breadth First Search，宽度优先搜素。
 使用一个队列q维护当前正在访问的点，每次从队首中取出head来进行操作。对于head的邻接点tmp，若我们之前没有访问过它，则源点到它的距离就是源点到head的距离加1。我们记dist[tmp] = dist[head] &#43; 1，然后将tmp放入队列q中，之后的某个时刻，tmp会被取出，然后继续找出与它邻接且没被访问过的点，直到队列为空，所有可达的点都被访问过了。
 BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张，最终遍历结束，涟漪消散。
 使用当年蹭HDU数据结构课的一道作业来进行BFS的回顾：
- 题目描述
+题目描述
 一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
 输入格式
-第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&#39;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&#39;。
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&amp;rsquo;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&amp;rsquo;。
 输出格式
 输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
 输入1：
@@ -23,9 +23,9 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 #.#.#
 #.#..
 输出1： 8
- 这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&#39;#&#39;）且该点未被访问，则记录它到源点的距离。
+这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&amp;rsquo;#&amp;rsquo;）且该点未被访问，则记录它到源点的距离。
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
-#include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.'><title>难题本 | LeetCode778. 水位上升的泳池中游泳</title>
+#include &amp;lt;queue&amp;gt; #include &amp;lt;iostream&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.'><title>难题本 | LeetCode778. 水位上升的泳池中游泳</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/'>
 
@@ -57,10 +57,10 @@ BFS Breadth First Search，宽度优先搜素。
 使用一个队列q维护当前正在访问的点，每次从队首中取出head来进行操作。对于head的邻接点tmp，若我们之前没有访问过它，则源点到它的距离就是源点到head的距离加1。我们记dist[tmp] = dist[head] &#43; 1，然后将tmp放入队列q中，之后的某个时刻，tmp会被取出，然后继续找出与它邻接且没被访问过的点，直到队列为空，所有可达的点都被访问过了。
 BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张，最终遍历结束，涟漪消散。
 使用当年蹭HDU数据结构课的一道作业来进行BFS的回顾：
- 题目描述
+题目描述
 一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
 输入格式
-第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&#39;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&#39;。
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&amp;rsquo;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&amp;rsquo;。
 输出格式
 输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
 输入1：
@@ -71,9 +71,9 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 #.#.#
 #.#..
 输出1： 8
- 这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&#39;#&#39;）且该点未被访问，则记录它到源点的距离。
+这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&amp;rsquo;#&amp;rsquo;）且该点未被访问，则记录它到源点的距离。
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
-#include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.'>
+#include &amp;lt;queue&amp;gt; #include &amp;lt;iostream&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-30T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-30T00:00:00&#43;00:00'/>
@@ -86,10 +86,10 @@ BFS Breadth First Search，宽度优先搜素。
 使用一个队列q维护当前正在访问的点，每次从队首中取出head来进行操作。对于head的邻接点tmp，若我们之前没有访问过它，则源点到它的距离就是源点到head的距离加1。我们记dist[tmp] = dist[head] &#43; 1，然后将tmp放入队列q中，之后的某个时刻，tmp会被取出，然后继续找出与它邻接且没被访问过的点，直到队列为空，所有可达的点都被访问过了。
 BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张，最终遍历结束，涟漪消散。
 使用当年蹭HDU数据结构课的一道作业来进行BFS的回顾：
- 题目描述
+题目描述
 一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
 输入格式
-第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&#39;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&#39;。
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&amp;rsquo;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&amp;rsquo;。
 输出格式
 输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
 输入1：
@@ -100,9 +100,9 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 #.#.#
 #.#..
 输出1： 8
- 这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&#39;#&#39;）且该点未被访问，则记录它到源点的距离。
+这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&amp;rsquo;#&amp;rsquo;）且该点未被访问，则记录它到源点的距离。
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
-#include &amp;lt;queue&amp;gt;#include &amp;lt;iostream&amp;gt;#include &amp;lt;algorithm&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 	tmp.">
+#include &amp;lt;queue&amp;gt; #include &amp;lt;iostream&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -245,7 +245,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 <p><strong>题目描述</strong></p>
 <p>一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。</p>
 <p><strong>输入格式</strong></p>
-<p>第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&lt;= R，C &lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用'.&lsquo;表示，有障碍物的格子用&rsquo;#&lsquo;表示。 迷宫左上角和右下角都是&rsquo;.'。</p>
+<p>第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&lt;= R，C &lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&rsquo;.&lsquo;表示，有障碍物的格子用&rsquo;#&lsquo;表示。 迷宫左上角和右下角都是&rsquo;.&rsquo;。</p>
 <p><strong>输出格式</strong></p>
 <p>输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.</p>
 <p><strong>输入1：</strong></p>
@@ -257,85 +257,84 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 <p>#.#..</p>
 <p><strong>输出1：</strong> 8</p>
 </blockquote>
-<p>这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（'#'）且该点未被访问，则记录它到源点的距离。</p>
+<p>这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&rsquo;#&rsquo;）且该点未被访问，则记录它到源点的距离。</p>
 <p>我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
-	<span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">Point</span><span class="p">;</span>
-
-<span class="kt">char</span> <span class="n">graph</span><span class="p">[</span><span class="mi">44</span><span class="p">][</span><span class="mi">44</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="mi">44</span><span class="p">][</span><span class="mi">44</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">dist</span><span class="p">[</span><span class="mi">44</span><span class="p">][</span><span class="mi">44</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">R</span><span class="p">,</span> <span class="n">C</span><span class="p">;</span>
-<span class="n">queue</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dirs</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span> <span class="p">};</span>
-
-<span class="kt">void</span> <span class="nf">bfs</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="n">Point</span> <span class="n">head</span><span class="p">;</span>
-	<span class="n">Point</span> <span class="n">tmp</span><span class="p">;</span>
-	<span class="c1">// 源点入队
-</span><span class="c1"></span>	<span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-	<span class="n">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-	<span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-    <span class="c1">// 开始宽搜
-</span><span class="c1"></span>	<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
-	<span class="p">{</span>
-		<span class="n">head</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-		<span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-		<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="p">[</span><span class="n">dirx</span><span class="p">,</span> <span class="n">diry</span><span class="p">]</span> <span class="o">:</span> <span class="n">dirs</span><span class="p">)</span>
-		<span class="p">{</span>
-			<span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dirx</span><span class="p">;</span>
-			<span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">diry</span><span class="p">;</span>
-			<span class="k">if</span> <span class="p">(</span>
-				<span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">R</span> <span class="o">&amp;&amp;</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">C</span> <span class="o">&amp;&amp;</span>
-				<span class="n">graph</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;#&#39;</span> <span class="o">&amp;&amp;</span>
-				<span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span>
-			<span class="p">)</span>
-			<span class="p">{</span>
-				<span class="n">dist</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-				<span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- 				<span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-			<span class="p">}</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">R</span> <span class="o">&gt;&gt;</span> <span class="n">C</span><span class="p">;</span>
-	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">R</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">C</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-		<span class="p">{</span>
-			<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
-			<span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xffff</span><span class="p">;</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-
-	<span class="n">bfs</span><span class="p">();</span>
-
-	<span class="k">if</span> <span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="n">R</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">C</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0xffff</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">R</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">C</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-	<span class="p">}</span>
-	<span class="k">else</span>
-	<span class="p">{</span>
-		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;NO</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-	<span class="p">}</span>
-
-	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-</code></pre></div><h2 id="spfa">SPFA</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">Point</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">graph</span><span class="p">[</span><span class="mi">44</span><span class="p">][</span><span class="mi">44</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="mi">44</span><span class="p">][</span><span class="mi">44</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">dist</span><span class="p">[</span><span class="mi">44</span><span class="p">][</span><span class="mi">44</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">R</span><span class="p">,</span> <span class="n">C</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">queue</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dirs</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">bfs</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Point</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Point</span> <span class="n">tmp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// 源点入队
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 开始宽搜
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">head</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">		<span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="p">[</span><span class="n">dirx</span><span class="p">,</span> <span class="n">diry</span><span class="p">]</span> <span class="o">:</span> <span class="n">dirs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dirx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">			<span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">diry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">				<span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">R</span> <span class="o">&amp;&amp;</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">C</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">				<span class="n">graph</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;#&#39;</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">				<span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">			<span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="n">dist</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">				<span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 				<span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">R</span> <span class="o">&gt;&gt;</span> <span class="n">C</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">R</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">C</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">			<span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xffff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">bfs</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="n">R</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">C</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0xffff</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">R</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">C</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;NO</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="spfa">SPFA</h2>
 <p>终于来到了正题。</p>
 <p>SPFA是求单源最短路径的一种算法，其思想与宽搜十分相近。实际上，我当年在完全没有接触此算法的情况下独立地将宽搜改写为了一个粗糙的SPFA，用它通过了一些求最短路的题目。由此可见，在理解宽搜的前提下理解SPFA是比较简单的。</p>
 <p>大概还是需要讨论讨论BFS的正确性：我们将当前节点的邻接节点加入队列，由于当前节点到源节点最短，则其邻接节点到源节点也最短。</p>
@@ -426,68 +425,68 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 </blockquote>
 <p>这道题可以使用变相的SPFA来解决。我们的<code>dist</code>不再是源点到任一点的距离，而是<strong>源点到达任一点所需要的时间</strong>。对于一个点的邻接点，如果自己的高度比它高，则说明我们到达当前这个点的时候，水面已经没过了这个邻接点；如果自己的高度比它低，说明我们到达当前这个点的时候还没办法到达邻接点，因为至少需要等待水面没过它；所以采用当前这条路径，要到达这个邻接点的时间就是<code>max(grid[tmp.x][tmp.y], distance[head.x][head.y])</code>。</p>
 <p>那么根据SPFA的逻辑，就能得到如下的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
-    <span class="p">}</span> <span class="n">Point</span><span class="p">;</span>
-
-    <span class="kt">int</span> <span class="nf">swimInWater</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">grid</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-        <span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="mi">51</span><span class="p">][</span><span class="mi">51</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
-        <span class="kt">int</span> <span class="n">distance</span><span class="p">[</span><span class="mi">51</span><span class="p">][</span><span class="mi">51</span><span class="p">];</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dirs</span> <span class="o">=</span> <span class="p">{{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">}};</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="c1">// SPFA
-</span><span class="c1"></span>        <span class="n">queue</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
-        <span class="n">Point</span> <span class="n">head</span><span class="p">;</span>
-        <span class="n">Point</span> <span class="n">tmp</span><span class="p">;</span>
-
-        <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">distance</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
-        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-        <span class="n">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-
-        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
-        <span class="p">{</span>
-            <span class="n">head</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-            <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-            <span class="n">visited</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 提供再次入队的可能性
-</span><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="p">[</span><span class="n">dirx</span><span class="p">,</span> <span class="n">diry</span><span class="p">]</span> <span class="o">:</span> <span class="n">dirs</span><span class="p">)</span>  <span class="c1">// 对于所有邻接点
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dirx</span><span class="p">;</span>
-                <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">diry</span><span class="p">;</span>
-
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
-                    <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
-                    <span class="n">distance</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">&gt;</span> 
-                    	<span class="n">max</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">],</span> <span class="n">distance</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">])</span>
-                <span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">distance</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> 
-                        <span class="n">max</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">],</span> <span class="n">distance</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">]);</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">])</span>
-                    <span class="p">{</span>
-                        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-                        <span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        
-        <span class="k">return</span> <span class="n">distance</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p>表现一般，主要是由于SPFA算法在<strong>稀疏图</strong>的情况下表现更好，在这种稠密图中时间复杂度退化了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">Point</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">swimInWater</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">grid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">visited</span><span class="p">[</span><span class="mi">51</span><span class="p">][</span><span class="mi">51</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">distance</span><span class="p">[</span><span class="mi">51</span><span class="p">][</span><span class="mi">51</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">dirs</span> <span class="o">=</span> <span class="p">{{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">}};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// SPFA
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">queue</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Point</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Point</span> <span class="n">tmp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">distance</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">visited</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">visited</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 提供再次入队的可能性
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="p">[</span><span class="n">dirx</span><span class="p">,</span> <span class="n">diry</span><span class="p">]</span> <span class="o">:</span> <span class="n">dirs</span><span class="p">)</span>  <span class="c1">// 对于所有邻接点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dirx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">head</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">diry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">distance</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">&gt;</span> 
+</span></span><span class="line"><span class="cl">                    	<span class="n">max</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">],</span> <span class="n">distance</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                <span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">distance</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> 
+</span></span><span class="line"><span class="cl">                        <span class="n">max</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">],</span> <span class="n">distance</span><span class="p">[</span><span class="n">head</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">head</span><span class="p">.</span><span class="n">y</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">visited</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">distance</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>表现一般，主要是由于SPFA算法在<strong>稀疏图</strong>的情况下表现更好，在这种稠密图中时间复杂度退化了。</p>
 <p><figure 
 	
 		class="gallery-image" 

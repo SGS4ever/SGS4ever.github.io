@@ -2,22 +2,25 @@
 <html lang="en-us">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
-题目  存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+题目 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
 返回同样按升序排列的结果链表。
 示例1
-  输入： head = [1,2,3,3,4,4,5]
-  输出： [1,2,5]
-  示例2
-  输入： head = [1,1,1,2,3]
-  输出： [2,3]
-  数据范围
- 链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列   分析  在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
+输入： head = [1,2,3,3,4,4,5]
+输出： [1,2,5]
+示例2
+输入： head = [1,1,1,2,3]
+输出： [2,3]
+数据范围
+链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列 分析 在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
 而两次遍历的办法则更为简单，也是最初浮现在我脑海中的念头。考虑到链表节点的数据范围在 [-100, 100] 区间中，我们在第一次遍历的过程中记录每个数值出现的次数，而在第二次遍历过程中考虑下一个节点（的数值）是否应该存在于最终的结果中即可。
- 当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
+当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
 在有序的数组中取得一段相同元素的子数组，直接考虑滑动窗口。
 我们使用一个指针，指向窗口 左边界的左邻居 ，使用两个指针维护窗口的左右边界。当窗口右边界数值等于左边界数值时，窗口向右扩张，否则进行一定的更新操作。
 容易想象，在不发生重复的情况下，窗口的大小（right - left）始终为 1 ，而发生重复的时候整段窗口需要全部从链表上删除。
- 窗口中无重复'><title>难题本 | LeetCode82. 删除排序链表中的重复元素 II</title>
+窗口中无重复 窗口中有重复 需要注意，由于我们的规则是：right指针指向的元素与 left 指向的元素不同时，才停止窗口的扩张，进入更新操作，因此，right 指针指向的元素并不属于窗口本身。
+那么如何更新呢？
+我们注意到，当 right == left-&amp;gt;next 时，即 winSize == 1 时，不需要对窗口中的元素进行操作，则将三个指针往后移动，直接进入下一步的窗口更新环节即可。
+窗口大小为1时的更新办法 而窗口大小大于1时，就比较有趣了。我们直接将窗口 左边界的左邻居 ，即此处的 Out-left 指向的元素链向 right 元素，这样就直接跳过了整个重复的部分，示意如下：'><title>难题本 | LeetCode82. 删除排序链表中的重复元素 II</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/'>
 
@@ -42,43 +45,49 @@
 
 <meta property='og:title' content='难题本 | LeetCode82. 删除排序链表中的重复元素 II'>
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
-题目  存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+题目 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
 返回同样按升序排列的结果链表。
 示例1
-  输入： head = [1,2,3,3,4,4,5]
-  输出： [1,2,5]
-  示例2
-  输入： head = [1,1,1,2,3]
-  输出： [2,3]
-  数据范围
- 链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列   分析  在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
+输入： head = [1,2,3,3,4,4,5]
+输出： [1,2,5]
+示例2
+输入： head = [1,1,1,2,3]
+输出： [2,3]
+数据范围
+链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列 分析 在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
 而两次遍历的办法则更为简单，也是最初浮现在我脑海中的念头。考虑到链表节点的数据范围在 [-100, 100] 区间中，我们在第一次遍历的过程中记录每个数值出现的次数，而在第二次遍历过程中考虑下一个节点（的数值）是否应该存在于最终的结果中即可。
- 当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
+当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
 在有序的数组中取得一段相同元素的子数组，直接考虑滑动窗口。
 我们使用一个指针，指向窗口 左边界的左邻居 ，使用两个指针维护窗口的左右边界。当窗口右边界数值等于左边界数值时，窗口向右扩张，否则进行一定的更新操作。
 容易想象，在不发生重复的情况下，窗口的大小（right - left）始终为 1 ，而发生重复的时候整段窗口需要全部从链表上删除。
- 窗口中无重复'>
+窗口中无重复 窗口中有重复 需要注意，由于我们的规则是：right指针指向的元素与 left 指向的元素不同时，才停止窗口的扩张，进入更新操作，因此，right 指针指向的元素并不属于窗口本身。
+那么如何更新呢？
+我们注意到，当 right == left-&amp;gt;next 时，即 winSize == 1 时，不需要对窗口中的元素进行操作，则将三个指针往后移动，直接进入下一步的窗口更新环节即可。
+窗口大小为1时的更新办法 而窗口大小大于1时，就比较有趣了。我们直接将窗口 左边界的左邻居 ，即此处的 Out-left 指向的元素链向 right 元素，这样就直接跳过了整个重复的部分，示意如下：'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode82.-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-ii/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-03-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-03-25T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="难题本 | LeetCode82. 删除排序链表中的重复元素 II">
 <meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
-题目  存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+题目 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
 返回同样按升序排列的结果链表。
 示例1
-  输入： head = [1,2,3,3,4,4,5]
-  输出： [1,2,5]
-  示例2
-  输入： head = [1,1,1,2,3]
-  输出： [2,3]
-  数据范围
- 链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列   分析  在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
+输入： head = [1,2,3,3,4,4,5]
+输出： [1,2,5]
+示例2
+输入： head = [1,1,1,2,3]
+输出： [2,3]
+数据范围
+链表中节点数目在范围 [0, 300] 内 -100 &amp;lt;= Node.val &amp;lt;= 100 题目数据保证链表已经按升序排列 分析 在 有序 的链表中去重，表示我们理论上只需要进行一次遍历即可。
 而两次遍历的办法则更为简单，也是最初浮现在我脑海中的念头。考虑到链表节点的数据范围在 [-100, 100] 区间中，我们在第一次遍历的过程中记录每个数值出现的次数，而在第二次遍历过程中考虑下一个节点（的数值）是否应该存在于最终的结果中即可。
- 当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
+当然，两次遍历的办法随着节点数据范围的变大很快就失效了，投机不可取，一次遍历的办法如何实现呢？
 在有序的数组中取得一段相同元素的子数组，直接考虑滑动窗口。
 我们使用一个指针，指向窗口 左边界的左邻居 ，使用两个指针维护窗口的左右边界。当窗口右边界数值等于左边界数值时，窗口向右扩张，否则进行一定的更新操作。
 容易想象，在不发生重复的情况下，窗口的大小（right - left）始终为 1 ，而发生重复的时候整段窗口需要全部从链表上删除。
- 窗口中无重复">
+窗口中无重复 窗口中有重复 需要注意，由于我们的规则是：right指针指向的元素与 left 指向的元素不同时，才停止窗口的扩张，进入更新操作，因此，right 指针指向的元素并不属于窗口本身。
+那么如何更新呢？
+我们注意到，当 right == left-&amp;gt;next 时，即 winSize == 1 时，不需要对窗口中的元素进行操作，则将三个指针往后移动，直接进入下一步的窗口更新环节即可。
+窗口大小为1时的更新办法 而窗口大小大于1时，就比较有趣了。我们直接将窗口 左边界的左邻居 ，即此处的 Out-left 指向的元素链向 right 元素，这样就直接跳过了整个重复的部分，示意如下：">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -334,85 +343,85 @@
 <p>同理进行 <code>Out-left</code> 指针的判断。</p>
 </blockquote>
 <h3 id="ac代码1">AC代码1</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
-</span><span class="cm"> * Definition for singly-linked list.
-</span><span class="cm"> * struct ListNode {
-</span><span class="cm"> *     int val;
-</span><span class="cm"> *     ListNode *next;
-</span><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
-</span><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
-</span><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
-</span><span class="cm"> * };
-</span><span class="cm"> */</span>
-<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">ListNode</span><span class="o">*</span> <span class="n">deleteDuplicates</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">head</span> <span class="o">||</span> <span class="o">!</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
-
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">lefleft</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">left</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">right</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">winSize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-
-        <span class="k">while</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">// cout &lt;&lt; right-&gt;val &lt;&lt; endl;
-</span><span class="c1"></span>            <span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">winSize</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="c1">// cout &lt;&lt; right-&gt;val &lt;&lt; endl;
-</span><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">winSize</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// delete the window
-</span><span class="c1"></span>                <span class="p">{</span>
-                    <span class="c1">// cout &lt;&lt; &#34;WinSize: &#34; &lt;&lt; winSize &lt;&lt; endl;
-</span><span class="c1"></span>                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">lefleft</span><span class="p">)</span>  <span class="c1">// do not have previous node
-</span><span class="c1"></span>                    <span class="p">{</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">||</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">!=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
-                        <span class="p">{</span>
-                            <span class="n">ret</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
-                            <span class="n">lefleft</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                    <span class="k">else</span>
-                    <span class="p">{</span>
-                        <span class="n">lefleft</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
-                    <span class="p">}</span>
-                    <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
-                    <span class="n">winSize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">else</span>
-                <span class="p">{</span>
-                    <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="nl">left</span> <span class="p">:</span> <span class="n">ret</span><span class="p">);</span>
-                    <span class="n">lefleft</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
-                    <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="c1">// right points to the last node
-</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">winSize</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// delete the window
-</span><span class="c1"></span>        <span class="p">{</span>
-            <span class="c1">// cout &lt;&lt; &#34;WinSize: &#34; &lt;&lt; winSize &lt;&lt; endl;
-</span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">lefleft</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">lefleft</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="nl">left</span> <span class="p">:</span> <span class="n">ret</span><span class="p">);</span>
-            <span class="n">lefleft</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p><figure 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">deleteDuplicates</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">head</span> <span class="o">||</span> <span class="o">!</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">lefleft</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">left</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">right</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">winSize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; right-&gt;val &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">winSize</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// cout &lt;&lt; right-&gt;val &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">winSize</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// delete the window
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// cout &lt;&lt; &#34;WinSize: &#34; &lt;&lt; winSize &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">lefleft</span><span class="p">)</span>  <span class="c1">// do not have previous node
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">||</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">!=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">ret</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">lefleft</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">lefleft</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">winSize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="nl">left</span> <span class="p">:</span> <span class="n">ret</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">lefleft</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// right points to the last node
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">winSize</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// delete the window
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; &#34;WinSize: &#34; &lt;&lt; winSize &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">lefleft</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">lefleft</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="nl">left</span> <span class="p">:</span> <span class="n">ret</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">lefleft</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">left</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p><figure 
 	
 		class="gallery-image" 
 		style="
@@ -439,60 +448,60 @@
 <p>于是一种较为简洁的思想诞生了：使用 <code>pre</code> 、 <code>now</code> 、 <code>nxt</code> 三个指针来标识前一个节点、现在的节点和下一个节点。还是按照之前的办法对 <code>now</code> （即之前的 <code>left</code> ）和 <code>nxt</code> （即之前的 <code>right</code> ）进行更新。由于 <code>pre</code> 被初始化为 <code>dummy</code> 节点，故一轮遍历之后，<code>dummy-&gt;next</code> 所指向的节点一定是第一次符合条件的节点，为返回的链表头部。</p>
 </blockquote>
 <h3 id="ac代码2">AC代码2</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/**
-</span><span class="cm"> * Definition for singly-linked list.
-</span><span class="cm"> * struct ListNode {
-</span><span class="cm"> *     int val;
-</span><span class="cm"> *     ListNode *next;
-</span><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
-</span><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
-</span><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
-</span><span class="cm"> * };
-</span><span class="cm"> */</span>
-<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">ListNode</span><span class="o">*</span> <span class="n">deleteDuplicates</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">head</span> <span class="o">||</span> <span class="o">!</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
-
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-        <span class="n">dummy</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="n">dummy</span><span class="p">;</span>
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">now</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
-        <span class="n">ListNode</span><span class="o">*</span> <span class="n">nxt</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-
-        <span class="k">while</span> <span class="p">(</span><span class="n">nxt</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">nxt</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">now</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">nxt</span> <span class="o">==</span> <span class="n">now</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">pre</span> <span class="o">=</span> <span class="n">now</span><span class="p">;</span>
-                    <span class="n">now</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">;</span>
-                    <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">else</span>
-                <span class="p">{</span>
-                    <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">;</span>
-                    <span class="n">now</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">;</span>
-                    <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-		<span class="c1">// 注意此处细节，循环结束之后进行最后一次判断
-</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">nxt</span> <span class="o">!=</span> <span class="n">now</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-        <span class="p">}</span>
-        
-        <span class="k">return</span> <span class="n">dummy</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p><figure 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">deleteDuplicates</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">head</span> <span class="o">||</span> <span class="o">!</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dummy</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="n">dummy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">now</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">nxt</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">nxt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nxt</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">now</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">nxt</span> <span class="o">==</span> <span class="n">now</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">pre</span> <span class="o">=</span> <span class="n">now</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">now</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">now</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// 注意此处细节，循环结束之后进行最后一次判断
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">nxt</span> <span class="o">!=</span> <span class="n">now</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">dummy</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p><figure 
 	
 		class="gallery-image" 
 		style="

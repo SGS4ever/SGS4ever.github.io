@@ -7,8 +7,8 @@
 分析 这种题目居然WA了一次。。。
 依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
 这题的特殊情况有两种：
- 一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。  直接放代码了。
-class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 &#43; b = y1; ax2 &#43; b = y2  // a(x1 - x2) = y1 - y2  // a = (y1 - y2) / (x1 - x2)  // b = y1 - ax1  if (coordinates.'><title>错题本 | LeetCode1232. 缀点成线</title>
+一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。 直接放代码了。
+class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 &#43; b = y1; ax2 &#43; b = y2 // a(x1 - x2) = y1 - y2 // a = (y1 - y2) / (x1 - x2) // b = y1 - ax1 if (coordinates.size() == 2) return true; bool vertical = false; // 垂直，无斜率 float a = 0, b = 0; if (coordinates[0][0] == coordinates[1][0]) vertical = true; else { a = (float)(coordinates[0][1] - coordinates[1][1]) / (coordinates[0][0] - coordinates[1][0]); b = coordinates[0][1] - a * coordinates[0][0]; } if (vertical) { for (int i = 2; i &amp;lt; coordinates.'><title>错题本 | LeetCode1232. 缀点成线</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/'>
 
@@ -38,8 +38,8 @@ class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&
 分析 这种题目居然WA了一次。。。
 依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
 这题的特殊情况有两种：
- 一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。  直接放代码了。
-class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 &#43; b = y1; ax2 &#43; b = y2  // a(x1 - x2) = y1 - y2  // a = (y1 - y2) / (x1 - x2)  // b = y1 - ax1  if (coordinates.'>
+一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。 直接放代码了。
+class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 &#43; b = y1; ax2 &#43; b = y2 // a(x1 - x2) = y1 - y2 // a = (y1 - y2) / (x1 - x2) // b = y1 - ax1 if (coordinates.size() == 2) return true; bool vertical = false; // 垂直，无斜率 float a = 0, b = 0; if (coordinates[0][0] == coordinates[1][0]) vertical = true; else { a = (float)(coordinates[0][1] - coordinates[1][1]) / (coordinates[0][0] - coordinates[1][0]); b = coordinates[0][1] - a * coordinates[0][0]; } if (vertical) { for (int i = 2; i &amp;lt; coordinates.'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1232.-%E7%BC%80%E7%82%B9%E6%88%90%E7%BA%BF/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-17T00:00:00&#43;00:00'/>
@@ -50,8 +50,8 @@ class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&
 分析 这种题目居然WA了一次。。。
 依题意，判断给出的所有点是否都在同一直线上，我们只需要按照前两点的坐标计算斜率和截距，得到由前两点确定的直线方程，将后面的坐标套入此方程即可。
 这题的特殊情况有两种：
- 一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。  直接放代码了。
-class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 &#43; b = y1; ax2 &#43; b = y2  // a(x1 - x2) = y1 - y2  // a = (y1 - y2) / (x1 - x2)  // b = y1 - ax1  if (coordinates.">
+一共只给出两个点。两点确定一条直线，直接返回true。 所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。 直接放代码了。
+class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&amp;gt;&amp;gt;&amp;amp; coordinates) { // ax1 &#43; b = y1; ax2 &#43; b = y2 // a(x1 - x2) = y1 - y2 // a = (y1 - y2) / (x1 - x2) // b = y1 - ax1 if (coordinates.size() == 2) return true; bool vertical = false; // 垂直，无斜率 float a = 0, b = 0; if (coordinates[0][0] == coordinates[1][0]) vertical = true; else { a = (float)(coordinates[0][1] - coordinates[1][1]) / (coordinates[0][0] - coordinates[1][0]); b = coordinates[0][1] - a * coordinates[0][0]; } if (vertical) { for (int i = 2; i &amp;lt; coordinates.">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -325,46 +325,46 @@ class Solution { public: bool checkStraightLine(vector&amp;lt;vector&amp;lt;int&
 <li>所有点垂直于x轴。这样的直线没有斜率，需要单独拎出来讨论（第一次提交就挂在这里了）。</li>
 </ul>
 <p>直接放代码了。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">bool</span> <span class="n">checkStraightLine</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">coordinates</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// ax1 + b = y1; ax2 + b = y2
-</span><span class="c1"></span>        <span class="c1">// a(x1 - x2) = y1 - y2
-</span><span class="c1"></span>        <span class="c1">// a = (y1 - y2) / (x1 - x2)
-</span><span class="c1"></span>        <span class="c1">// b = y1 - ax1
-</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">coordinates</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="kt">bool</span> <span class="n">vertical</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>  <span class="c1">// 垂直，无斜率
-</span><span class="c1"></span>        <span class="kt">float</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">vertical</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)(</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> 
-                <span class="p">(</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span>
-            <span class="n">b</span> <span class="o">=</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
-        <span class="p">}</span>
-        
-        <span class="k">if</span> <span class="p">(</span><span class="n">vertical</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">coordinates</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">coordinates</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">coordinates</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span> <span class="o">!=</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        
-        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">checkStraightLine</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">coordinates</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ax1 + b = y1; ax2 + b = y2
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// a(x1 - x2) = y1 - y2
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// a = (y1 - y2) / (x1 - x2)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// b = y1 - ax1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">coordinates</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="n">vertical</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>  <span class="c1">// 垂直，无斜率
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">float</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vertical</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)(</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> 
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">b</span> <span class="o">=</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">vertical</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">coordinates</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">coordinates</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">coordinates</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span> <span class="o">!=</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
 </section>
 
 

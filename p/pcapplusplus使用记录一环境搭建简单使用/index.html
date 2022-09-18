@@ -6,11 +6,12 @@
 预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
 本文使用的环境是：Win10 &#43; VisualStudio2019 。
 要使用这个库，我们需要先安装一些依赖。
- 个人建议将这些依赖下载到同一个地方，方便管理！
-  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+个人建议将这些依赖下载到同一个地方，方便管理！
+安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！ 下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
 到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
- 现有的文件 
-All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：'><title>PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</title>
+现有的文件 All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：
+ExampleProject文件结构 没问题的话，就准备运行示例程序了！
+运行示例程序 熟悉VS的朋友可能要迫不及待地把那个 .'><title>PcapPlusPlus使用记录（一、环境搭建&amp;简单使用）</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/'>
 
@@ -39,11 +40,12 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
 预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
 本文使用的环境是：Win10 &#43; VisualStudio2019 。
 要使用这个库，我们需要先安装一些依赖。
- 个人建议将这些依赖下载到同一个地方，方便管理！
-  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+个人建议将这些依赖下载到同一个地方，方便管理！
+安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！ 下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
 到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
- 现有的文件 
-All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：'>
+现有的文件 All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：
+ExampleProject文件结构 没问题的话，就准备运行示例程序了！
+运行示例程序 熟悉VS的朋友可能要迫不及待地把那个 .'>
 <meta property='og:url' content='https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2022-02-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-02-05T00:00:00&#43;00:00'/>
@@ -53,11 +55,12 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
 预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
 本文使用的环境是：Win10 &#43; VisualStudio2019 。
 要使用这个库，我们需要先安装一些依赖。
- 个人建议将这些依赖下载到同一个地方，方便管理！
-  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+个人建议将这些依赖下载到同一个地方，方便管理！
+安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C&#43;&#43; Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！ 下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
 到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
- 现有的文件 
-All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：">
+现有的文件 All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：
+ExampleProject文件结构 没问题的话，就准备运行示例程序了！
+运行示例程序 熟悉VS的朋友可能要迫不及待地把那个 .">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -253,39 +256,38 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
 <p>熟悉VS的朋友可能要迫不及待地把那个 <code>.sln</code> 文件给打开了~不要心急！</p>
 <p>首先我们应该修改 <code>.props</code> 文件，这个文件是用来指定项目里面的一些属性的；具体地说，其实就是指定刚才下载的几个依赖的路径而已！如果不修改这个文件，贸然打开 <code>.sln</code> ，那必然是要报错的！</p>
 <p>最原始的 <code>.props</code> 文件内容如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span> 
-<span class="nt">&lt;Project</span> <span class="na">ToolsVersion=</span><span class="s">&#34;4.0&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/developer/msbuild/2003&#34;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;ImportGroup</span> <span class="na">Label=</span><span class="s">&#34;PropertySheets&#34;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;PropertyGroup</span> <span class="na">Label=</span><span class="s">&#34;UserMacros&#34;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;PcapPlusPlusHome&gt;</span>Drive:\your\PcapPlusPlus\folder<span class="nt">&lt;/PcapPlusPlusHome&gt;</span>
-    <span class="nt">&lt;PcapSdkHome&gt;</span>Drive:\WpdPack\folder<span class="nt">&lt;/PcapSdkHome&gt;</span>
-    <span class="nt">&lt;PThreadWin32Home&gt;</span>Drive:\pthread-win32\folder<span class="nt">&lt;/PThreadWin32Home&gt;</span>
-  <span class="nt">&lt;/PropertyGroup&gt;</span>
-  <span class="nt">&lt;PropertyGroup</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;ItemDefinitionGroup</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;ItemGroup</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/Project&gt;</span>
-</code></pre></div><p>看到吗？这个文件指定三个关键路径：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span> 
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;Project</span> <span class="na">ToolsVersion=</span><span class="s">&#34;4.0&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/developer/msbuild/2003&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;ImportGroup</span> <span class="na">Label=</span><span class="s">&#34;PropertySheets&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;PropertyGroup</span> <span class="na">Label=</span><span class="s">&#34;UserMacros&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;PcapPlusPlusHome&gt;</span>Drive:\your\PcapPlusPlus\folder<span class="nt">&lt;/PcapPlusPlusHome&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;PcapSdkHome&gt;</span>Drive:\WpdPack\folder<span class="nt">&lt;/PcapSdkHome&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;PThreadWin32Home&gt;</span>Drive:\pthread-win32\folder<span class="nt">&lt;/PThreadWin32Home&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/PropertyGroup&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;PropertyGroup</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;ItemDefinitionGroup</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;ItemGroup</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/Project&gt;</span>
+</span></span></code></pre></div><p>看到吗？这个文件指定三个关键路径：</p>
 <ul>
 <li><em>PcapPlusPlusHome</em> ：就是刚才解压出来的PCPP目录，也就是现在这个 <code>ExampleProject</code> 的上级目录！</li>
 <li><em>PcapSdkHome</em> ：用于处理 <code>pcap</code> 文件的SDK工具的目录，在 <a class="link" href="#%e9%a2%84%e8%a3%85%e4%be%9d%e8%b5%96" >预装依赖</a> 小节里面我们下载了WinPcap，还记得吗？把它的路径写在这里即可！如果你选用的是Npcap，道理也一样~</li>
 <li><em>PThreadWin32Home</em> ：多线程库！把pthread路径填进去吧 😀</li>
 </ul>
 <p>在我的PC上，修改完成之后这个文件差不多是这样：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span> 
-<span class="nt">&lt;Project</span> <span class="na">ToolsVersion=</span><span class="s">&#34;4.0&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/developer/msbuild/2003&#34;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;ImportGroup</span> <span class="na">Label=</span><span class="s">&#34;PropertySheets&#34;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;PropertyGroup</span> <span class="na">Label=</span><span class="s">&#34;UserMacros&#34;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;PcapPlusPlusHome&gt;</span>E:\PcapPlusPlus\pcapplusplus-21.11-windows-vs2019<span class="nt">&lt;/PcapPlusPlusHome&gt;</span>
-    <span class="nt">&lt;PcapSdkHome&gt;</span>E:\PcapPlusPlus\WpdPack<span class="nt">&lt;/PcapSdkHome&gt;</span>
-    <span class="nt">&lt;PThreadWin32Home&gt;</span>E:\PcapPlusPlus\pthreads-w32-2-9-1-release<span class="nt">&lt;/PThreadWin32Home&gt;</span>
-  <span class="nt">&lt;/PropertyGroup&gt;</span>
-  <span class="nt">&lt;PropertyGroup</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;ItemDefinitionGroup</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;ItemGroup</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/Project&gt;</span>
-
-</code></pre></div><p>之后，就可以打开 <code>.sln</code> 文件了！示例项目即刻出现！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span> 
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;Project</span> <span class="na">ToolsVersion=</span><span class="s">&#34;4.0&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/developer/msbuild/2003&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;ImportGroup</span> <span class="na">Label=</span><span class="s">&#34;PropertySheets&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;PropertyGroup</span> <span class="na">Label=</span><span class="s">&#34;UserMacros&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;PcapPlusPlusHome&gt;</span>E:\PcapPlusPlus\pcapplusplus-21.11-windows-vs2019<span class="nt">&lt;/PcapPlusPlusHome&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;PcapSdkHome&gt;</span>E:\PcapPlusPlus\WpdPack<span class="nt">&lt;/PcapSdkHome&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;PThreadWin32Home&gt;</span>E:\PcapPlusPlus\pthreads-w32-2-9-1-release<span class="nt">&lt;/PThreadWin32Home&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/PropertyGroup&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;PropertyGroup</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;ItemDefinitionGroup</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;ItemGroup</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/Project&gt;</span>
+</span></span></code></pre></div><p>之后，就可以打开 <code>.sln</code> 文件了！示例项目即刻出现！</p>
 <p><code>main.cpp</code> 简单使用PcapPlusPlus解析了一下示例项目里面的 <code>1_packet.pcap</code> 文件，这个文件只有一个数据包，程序把源IP和目的IP输出了一下而已！</p>
 <p>直接编译运行即可：</p>
 <p><figure 
@@ -330,60 +332,59 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
 	
 </figure></p>
 <p>先把代码贴出来，再慢慢解释吧~</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;IPv4Layer.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;Packet.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;PcapFileDevice.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;ctime&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="c1">// Part 1
-</span><span class="c1"></span>	<span class="c1">// open a pcap file for reading
-</span><span class="c1"></span>	<span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">::</span><span class="n">getReader</span><span class="p">(</span><span class="s">&#34;test_file_1.pcap&#34;</span><span class="p">);</span>
-	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot determine reader for file type&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">open</span><span class="p">())</span>
-	<span class="p">{</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot open input.pcap for reading&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="p">}</span>
-    <span class="c1">// Part 2
-</span><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">setFilter</span><span class="p">(</span><span class="s">&#34;tcp and port 80&#34;</span><span class="p">))</span>
-	<span class="p">{</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot set filter for file reader&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="p">}</span>
-	<span class="c1">// Part 3
-</span><span class="c1"></span>	<span class="n">pcpp</span><span class="o">::</span><span class="n">RawPacket</span> <span class="n">rawPacket</span><span class="p">;</span>
-	<span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">dstIPSet</span><span class="p">;</span>
-	<span class="n">clock_t</span> <span class="n">BEGIN</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
-	<span class="k">while</span> <span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">getNextPacket</span><span class="p">(</span><span class="n">rawPacket</span><span class="p">))</span>
-	<span class="p">{</span>
-		<span class="n">pcpp</span><span class="o">::</span><span class="n">Packet</span> <span class="n">parsedPacket</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rawPacket</span><span class="p">);</span>
-		<span class="k">if</span> <span class="p">(</span><span class="n">parsedPacket</span><span class="p">.</span><span class="n">isPacketOfType</span><span class="p">(</span><span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4</span><span class="p">))</span>
-		<span class="p">{</span>
-			<span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Address</span> <span class="n">dstIP</span> <span class="o">=</span> <span class="n">parsedPacket</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Layer</span><span class="o">&gt;</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getDstIPv4Address</span><span class="p">();</span>
-			<span class="k">if</span> <span class="p">(</span><span class="n">dstIPSet</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">dstIP</span><span class="p">.</span><span class="n">toString</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-				<span class="n">dstIPSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dstIP</span><span class="p">.</span><span class="n">toString</span><span class="p">());</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="n">clock_t</span> <span class="n">END</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
-	<span class="c1">// Part 4
-</span><span class="c1"></span>	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;There are total &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dstIPSet</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; destination IP address.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Total time: &#34;</span> <span class="o">&lt;&lt;</span> <span class="kt">double</span><span class="p">(</span><span class="n">END</span> <span class="o">-</span> <span class="n">BEGIN</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLK_TCK</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; ms.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-	<span class="c1">// Part 5
-</span><span class="c1"></span>	<span class="n">reader</span><span class="o">-&gt;</span><span class="n">close</span><span class="p">();</span>
-	<span class="k">delete</span> <span class="n">reader</span><span class="p">;</span>
-
-	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-</code></pre></div><p>根据 <a class="link" href="https://pcapplusplus.github.io/docs/tutorials/read-write-pcap"  target="_blank" rel="noopener"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;IPv4Layer.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;Packet.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;PcapFileDevice.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ctime&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Part 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// open a pcap file for reading
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">pcpp</span><span class="o">::</span><span class="n">IFileReaderDevice</span><span class="o">::</span><span class="n">getReader</span><span class="p">(</span><span class="s">&#34;test_file_1.pcap&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot determine reader for file type&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">open</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot open input.pcap for reading&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Part 2
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">setFilter</span><span class="p">(</span><span class="s">&#34;tcp and port 80&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cannot set filter for file reader&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Part 3
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">pcpp</span><span class="o">::</span><span class="n">RawPacket</span> <span class="n">rawPacket</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">dstIPSet</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">clock_t</span> <span class="n">BEGIN</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span> <span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">getNextPacket</span><span class="p">(</span><span class="n">rawPacket</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">pcpp</span><span class="o">::</span><span class="n">Packet</span> <span class="n">parsedPacket</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rawPacket</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">parsedPacket</span><span class="p">.</span><span class="n">isPacketOfType</span><span class="p">(</span><span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Address</span> <span class="n">dstIP</span> <span class="o">=</span> <span class="n">parsedPacket</span><span class="p">.</span><span class="n">getLayerOfType</span><span class="o">&lt;</span><span class="n">pcpp</span><span class="o">::</span><span class="n">IPv4Layer</span><span class="o">&gt;</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getDstIPv4Address</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="p">(</span><span class="n">dstIPSet</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">dstIP</span><span class="p">.</span><span class="n">toString</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="n">dstIPSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dstIP</span><span class="p">.</span><span class="n">toString</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="n">clock_t</span> <span class="n">END</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Part 4
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;There are total &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dstIPSet</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; destination IP address.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Total time: &#34;</span> <span class="o">&lt;&lt;</span> <span class="kt">double</span><span class="p">(</span><span class="n">END</span> <span class="o">-</span> <span class="n">BEGIN</span><span class="p">)</span> <span class="o">/</span> <span class="n">CLK_TCK</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; ms.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Part 5
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">reader</span><span class="o">-&gt;</span><span class="n">close</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="k">delete</span> <span class="n">reader</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>根据 <a class="link" href="https://pcapplusplus.github.io/docs/tutorials/read-write-pcap"  target="_blank" rel="noopener"
     >参考资料[4]</a> ，我们这次使用的 <code>reader</code> 跟刚才示例代码使用的不太一样，用的是 <code>IFileReaderDevice</code> 里面的 <code>getReader()</code> API，它会根据文件名来为我们返回合适的Reader！代码里面的 <code>Part 1</code> 就是在干这个事情而已，创建一个合适的Reader，然后打开它，准备读取文件了！</p>
 <p>紧接着，我为这个Reader设置了一个过滤器。 <code>reader-&gt;setFilter(&quot;tcp and port 80&quot;)</code> 表明我只希望读取协议为TCP的、且端口为 <code>80</code> 的数据包，其它的数据包（如ICMP、UDP等等）我就不关心了。这个 <code>setFilter</code> 在将来的场景里面应该是蛮有用的，它使用的是 <a class="link" href="https://biot.com/capstats/bpf.html"  target="_blank" rel="noopener"
     >Berkeley Packet Filter (BPF) syntax</a> 。</p>
@@ -495,6 +496,48 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
                 
                     
 <article class="">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">RapidJson使用小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Windows Terminal美化小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
     <a href="/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/">
         
         
@@ -509,48 +552,6 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
             <h2 class="article-title">PyQt5初探——与scapy的美妙结合</h2>
             <footer class="article-time">
                 <time datetime=''>Apr 10, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（前后端结合）</h2>
-            <footer class="article-time">
-                <time datetime=''>Mar 07, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">Hackintosh小记</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 22, 2022</time>
             </footer>
         </div>
     </a>

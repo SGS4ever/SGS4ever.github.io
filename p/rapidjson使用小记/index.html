@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='近期有个需求需要对 JSON 数据进行解析，上周五搞了一点点之后就去忙其他的事情了，正好用周末时间搞一搞，输出点东西。
+RapidJson 是一个C&#43;&#43;的JSON解析器及生成器，特点详见官网，此处仅作使用记录。
+环境：
+Windows 11 64bit
+WSL2 Ubuntu 22.04
+cmake version 3.22.1
+gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1)
+读者需要具备的一些前置知识：
+cmake基本使用、c&#43;&#43;、Linux基本使用
+Step 1 安装 RapidJson 项目是一个纯头文件库，直接把仓库中的 include/rapidjson 拷贝到我们CPP项目的头文件包含路径内即可。
+Step 1.1 cmake install 对于cmake项目来说，只需要创建一个合适的地方来存放头文件：
+albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson$ tree . ├── CMakeLists.txt ├── build ├── include │ └── rapidjson │ ├── allocators.h │ ├── cursorstreamwrapper.h │ ├── document.h │ ├── encodedstream.h │ ├── encodings.h │ ├── error │ │ ├── en.h │ │ └── error.'><title>RapidJson使用小记</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='RapidJson使用小记'>
+<meta property='og:description' content='近期有个需求需要对 JSON 数据进行解析，上周五搞了一点点之后就去忙其他的事情了，正好用周末时间搞一搞，输出点东西。
+RapidJson 是一个C&#43;&#43;的JSON解析器及生成器，特点详见官网，此处仅作使用记录。
+环境：
+Windows 11 64bit
+WSL2 Ubuntu 22.04
+cmake version 3.22.1
+gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1)
+读者需要具备的一些前置知识：
+cmake基本使用、c&#43;&#43;、Linux基本使用
+Step 1 安装 RapidJson 项目是一个纯头文件库，直接把仓库中的 include/rapidjson 拷贝到我们CPP项目的头文件包含路径内即可。
+Step 1.1 cmake install 对于cmake项目来说，只需要创建一个合适的地方来存放头文件：
+albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson$ tree . ├── CMakeLists.txt ├── build ├── include │ └── rapidjson │ ├── allocators.h │ ├── cursorstreamwrapper.h │ ├── document.h │ ├── encodedstream.h │ ├── encodings.h │ ├── error │ │ ├── en.h │ │ └── error.'>
+<meta property='og:url' content='https://xrg.fj.cn/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-09-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-09-18T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="RapidJson使用小记">
+<meta name="twitter:description" content="近期有个需求需要对 JSON 数据进行解析，上周五搞了一点点之后就去忙其他的事情了，正好用周末时间搞一搞，输出点东西。
+RapidJson 是一个C&#43;&#43;的JSON解析器及生成器，特点详见官网，此处仅作使用记录。
+环境：
+Windows 11 64bit
+WSL2 Ubuntu 22.04
+cmake version 3.22.1
+gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1)
+读者需要具备的一些前置知识：
+cmake基本使用、c&#43;&#43;、Linux基本使用
+Step 1 安装 RapidJson 项目是一个纯头文件库，直接把仓库中的 include/rapidjson 拷贝到我们CPP项目的头文件包含路径内即可。
+Step 1.1 cmake install 对于cmake项目来说，只需要创建一个合适的地方来存放头文件：
+albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson$ tree . ├── CMakeLists.txt ├── build ├── include │ └── rapidjson │ ├── allocators.h │ ├── cursorstreamwrapper.h │ ├── document.h │ ├── encodedstream.h │ ├── encodings.h │ ├── error │ │ ├── en.h │ │ └── error.">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">RapidJson使用小记</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 18, 2022</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 9 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>近期有个需求需要对 <code>JSON</code> 数据进行解析，上周五搞了一点点之后就去忙其他的事情了，正好用周末时间搞一搞，输出点东西。</p>
+<p><a class="link" href="https://rapidjson.org/zh-cn/"  target="_blank" rel="noopener"
+    >RapidJson</a> 是一个C++的JSON解析器及生成器，特点详见官网，此处仅作使用记录。</p>
+<blockquote>
+<p>环境：</p>
+<ul>
+<li>
+<p>Windows 11 64bit</p>
+</li>
+<li>
+<p>WSL2 Ubuntu 22.04</p>
+</li>
+<li>
+<p>cmake version 3.22.1</p>
+</li>
+<li>
+<p>gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1)</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>读者需要具备的一些前置知识：</p>
+<p>cmake基本使用、c++、Linux基本使用</p>
+</blockquote>
+<h3 id="step-1-安装">Step 1 安装</h3>
+<p><a class="link" href="https://github.com/Tencent/rapidjson/"  target="_blank" rel="noopener"
+    >RapidJson</a> 项目是一个纯头文件库，直接把仓库中的 <code>include/rapidjson</code> 拷贝到我们CPP项目的头文件包含路径内即可。</p>
+<h4 id="step-11-cmake-install">Step 1.1 cmake install</h4>
+<p>对于cmake项目来说，只需要创建一个合适的地方来存放头文件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson$ tree
+</span></span><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── CMakeLists.txt
+</span></span><span class="line"><span class="cl">├── build
+</span></span><span class="line"><span class="cl">├── include
+</span></span><span class="line"><span class="cl">│   └── rapidjson
+</span></span><span class="line"><span class="cl">│       ├── allocators.h
+</span></span><span class="line"><span class="cl">│       ├── cursorstreamwrapper.h
+</span></span><span class="line"><span class="cl">│       ├── document.h
+</span></span><span class="line"><span class="cl">│       ├── encodedstream.h
+</span></span><span class="line"><span class="cl">│       ├── encodings.h
+</span></span><span class="line"><span class="cl">│       ├── error
+</span></span><span class="line"><span class="cl">│       │   ├── en.h
+</span></span><span class="line"><span class="cl">│       │   └── error.h
+</span></span><span class="line"><span class="cl">│       ├── filereadstream.h
+</span></span><span class="line"><span class="cl">│       ├── filewritestream.h
+</span></span><span class="line"><span class="cl">│       ├── fwd.h
+</span></span><span class="line"><span class="cl">│       ├── internal
+</span></span><span class="line"><span class="cl">│       │   ├── biginteger.h
+</span></span><span class="line"><span class="cl">│       │   ├── clzll.h
+</span></span><span class="line"><span class="cl">│       │   ├── diyfp.h
+</span></span><span class="line"><span class="cl">│       │   ├── dtoa.h
+</span></span><span class="line"><span class="cl">│       │   ├── ieee754.h
+</span></span><span class="line"><span class="cl">│       │   ├── itoa.h
+</span></span><span class="line"><span class="cl">│       │   ├── meta.h
+</span></span><span class="line"><span class="cl">│       │   ├── pow10.h
+</span></span><span class="line"><span class="cl">│       │   ├── regex.h
+</span></span><span class="line"><span class="cl">│       │   ├── stack.h
+</span></span><span class="line"><span class="cl">│       │   ├── strfunc.h
+</span></span><span class="line"><span class="cl">│       │   ├── strtod.h
+</span></span><span class="line"><span class="cl">│       │   └── swap.h
+</span></span><span class="line"><span class="cl">│       ├── istreamwrapper.h
+</span></span><span class="line"><span class="cl">│       ├── memorybuffer.h
+</span></span><span class="line"><span class="cl">│       ├── memorystream.h
+</span></span><span class="line"><span class="cl">│       ├── msinttypes
+</span></span><span class="line"><span class="cl">│       │   ├── inttypes.h
+</span></span><span class="line"><span class="cl">│       │   └── stdint.h
+</span></span><span class="line"><span class="cl">│       ├── ostreamwrapper.h
+</span></span><span class="line"><span class="cl">│       ├── pointer.h
+</span></span><span class="line"><span class="cl">│       ├── prettywriter.h
+</span></span><span class="line"><span class="cl">│       ├── rapidjson.h
+</span></span><span class="line"><span class="cl">│       ├── reader.h
+</span></span><span class="line"><span class="cl">│       ├── schema.h
+</span></span><span class="line"><span class="cl">│       ├── stream.h
+</span></span><span class="line"><span class="cl">│       ├── stringbuffer.h
+</span></span><span class="line"><span class="cl">│       ├── uri.h
+</span></span><span class="line"><span class="cl">│       └── writer.h
+</span></span><span class="line"><span class="cl">└── src
+</span></span><span class="line"><span class="cl">    ├── CMakeLists.txt
+</span></span><span class="line"><span class="cl">    ├── core
+</span></span><span class="line"><span class="cl">    ├── main
+</span></span><span class="line"><span class="cl">    └── main.cpp
+</span></span></code></pre></div><p>然后在 <code>src/CMakeLists.txt</code> 文件里指定 <code>INCLUDE_DIRECTORIES(../include)</code> 即可。</p>
+<h4 id="step-12-vscode-install">Step 1.2 VSCode install</h4>
+<p>按照上一步完成配置，则cmake可以正确地完成编译工作；但我们通常在VSCode里进行编码，也有部分读者习惯通过VSCode进行运行/调试，因此有必要对VSCode也进行配置。</p>
+<p>按 <code>F1</code> 调出指令框，输入 <code>c/c++: Edit Configurations</code> 打开 <code>C/C++</code> 插件的JSON配置文件:</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 904; 
+			flex-basis: 2170px"
+	>
+	<a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1.png" data-size="1275x141">
+		<img src="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1.png"
+			width="1275"
+			height="141"
+			srcset="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1_hu08a8fb27b9e2c6aef0e92007d732d25a_14100_480x0_resize_box_3.png 480w, /p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1_hu08a8fb27b9e2c6aef0e92007d732d25a_14100_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="f1">
+	</a>
+	
+	<figcaption>f1</figcaption>
+	
+</figure></p>
+<p>指定 <code>includePath</code> ：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 370; 
+			flex-basis: 888px"
+	>
+	<a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2.png" data-size="1033x279">
+		<img src="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2.png"
+			width="1033"
+			height="279"
+			srcset="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2_hu995033bbc2e8888d7d4356d569b29ac7_31774_480x0_resize_box_3.png 480w, /p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2_hu995033bbc2e8888d7d4356d569b29ac7_31774_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="include path">
+	</a>
+	
+	<figcaption>include path</figcaption>
+	
+</figure></p>
+<p>这样，编码时就能完成头文件的查找和自动补全了。</p>
+<p><strong>紧接着</strong> ，我们要配置一键编译运行的查找路径。VSCode编码时使用的头文件路径和编译时使用的头文件路径并不共享，我们单击右上角的小三角来一键运行时，本质上是快捷执行了一条终端命令而已，因此要对这条命令来进行额外配置。</p>
+<p>在工作区根目录下找到 <code>.vscode</code> 文件夹，打开 <code>tasks.json</code> ：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 169; 
+			flex-basis: 405px"
+	>
+	<a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/3.png" data-size="742x439">
+		<img src="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/3.png"
+			width="742"
+			height="439"
+			srcset="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/3_huf34c679f48e280ea001ecdbbb4a8646e_45696_480x0_resize_box_3.png 480w, /p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/3_huf34c679f48e280ea001ecdbbb4a8646e_45696_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="tasks.json">
+	</a>
+	
+	<figcaption>tasks.json</figcaption>
+	
+</figure></p>
+<p>如果不存在这个文件夹或不存在这个文件，可以自己新建。</p>
+<p><code>tasks.json</code> 文件当中有一键运行的配置项，我们在编译参数里面新增 <code>-I</code> 来指定包含路径，这里贴出我的 <code>tasks.json</code> ，供参考：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;tasks&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;cppbuild&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;label&#34;</span><span class="p">:</span> <span class="s2">&#34;C/C++: g++ build active file&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;/usr/bin/g++&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;-fdiagnostics-color=always&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;-g&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;${file}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;-o&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;${fileDirname}/${fileBasenameNoExtension}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;-I${workspaceFolder}/RapidJson/include&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;-I${workspaceFolder}/RapidJson/third/googletest/include&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;options&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;cwd&#34;</span><span class="p">:</span> <span class="s2">&#34;${fileDirname}&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;problemMatcher&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;$gcc&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;group&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;kind&#34;</span><span class="p">:</span> <span class="s2">&#34;build&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;isDefault&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;detail&#34;</span><span class="p">:</span> <span class="s2">&#34;Task generated by Debugger.&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;2.0.0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>完成之后，就可以一键运行/调试我们的cpp文件了。</p>
+<h3 id="step-2-使用">Step 2 使用</h3>
+<h4 id="step-21-读json">Step 2.1 读JSON</h4>
+<p>RapidJson将一个JSON字符串解析成一个文档对象模型（Document Object Model，DOM），类似Javascript对HTML页面的操作。</p>
+<p>Talk is cheap ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;rapidjson/document.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">rapidjson</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">atgv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">jsonStr</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;{</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m1</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">afcdeb1238</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m2</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">1234567675</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m3</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">sdasdqwsad</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">list</span><span class="se">\&#34;</span><span class="s">: [</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               {</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">afafa</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">alkkk</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">abcdf</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">asdqw</span><span class="se">\&#34;\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               }</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;           ]</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 解析JSON字符串
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Document</span> <span class="n">doc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">.</span><span class="n">c_str</span><span class="p">()).</span><span class="n">HasParseError</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">doc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ==== snip ====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>上面这段代码中，我们对一个JSON字符串进行了解析，按照 <a class="link" href="http://rapidjson.org/zh-cn/md_doc_tutorial_8zh-cn.html#ValueDocument"  target="_blank" rel="noopener"
+    >官方文档</a> 的说法，我们得到的是一个 <code>Object</code> 对象，它是DOM树的根节点：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 173; 
+			flex-basis: 415px"
+	>
+	<a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4.png" data-size="1571x908">
+		<img src="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4.png"
+			width="1571"
+			height="908"
+			srcset="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4_hu4e4240b16863f425db7ba5d9a4a91086_103774_480x0_resize_box_3.png 480w, /p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4_hu4e4240b16863f425db7ba5d9a4a91086_103774_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="DOM tree">
+	</a>
+	
+	<figcaption>DOM tree</figcaption>
+	
+</figure></p>
+<p>我们可以针对一个节点进行一些操作：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;rapidjson/document.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">rapidjson</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">atgv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">jsonStr</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;{</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m1</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">afcdeb1238</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m2</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">1234567675</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m3</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">sdasdqwsad</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">list</span><span class="se">\&#34;</span><span class="s">: [</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               {</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">afafa</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">alkkk</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">abcdf</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">asdqw</span><span class="se">\&#34;\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               }</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;           ]</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 解析JSON字符串
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Document</span> <span class="n">doc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">.</span><span class="n">c_str</span><span class="p">()).</span><span class="n">HasParseError</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">doc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 输出member
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">HasMember</span><span class="p">(</span><span class="s">&#34;m1&#34;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">doc</span><span class="p">[</span><span class="s">&#34;m1&#34;</span><span class="p">].</span><span class="n">IsString</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">doc</span><span class="p">[</span><span class="s">&#34;m1&#34;</span><span class="p">].</span><span class="n">GetString</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ==== snip ====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake ..
+</span></span><span class="line"><span class="cl">make 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">./test_rapid_json 
+</span></span><span class="line"><span class="cl"><span class="c1"># afcdeb1238</span>
+</span></span></code></pre></div><h4 id="step-22-检查json合法性lambda">Step 2.2 检查JSON合法性（lambda）</h4>
+<p>通常在业务中收到JSON数据时，可能由于这样那样的原因，少掉了一些键，或者键的类型不对。例如我们在上一步通过 <code>doc[&quot;m1&quot;].GetString()</code> 取出了 <code>m1</code> 的值，转化成了 <code>std::string</code> 进行输出，但如果 <code>m1</code> 不存在呢？或者 <code>m1</code> 不是个字符串、而是个列表呢？因此在这一步，我们要对解析后的JSON对象的合法性进行检查。</p>
+<p>对于一个RapidJson对象，可以使用 <code>HasMember()</code> 和 <code>Isxxxx()</code> 来检查对象的合法性，例如上面的代码在输出 <code>m1</code> 前使用了 <code>HasMember</code> 和 <code>IsString()</code> 来进行检查，但假如我们要检查的键变多了，每一次都要使用这样的 <code>if</code> 语句来进行判断，代码非常不简洁。</p>
+<p>检查函数的目标是，可以一次性完成合法性检验，我们把要检查的键和类型传入，函数完成检查；只要某一个键不存在、或某一个键的类型有问题，就说明JSON数据有误，返回 <code>false</code> 。</p>
+<p>我实现的代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">JsonObj</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="n">JsonObj</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">jsonStr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">).</span><span class="n">HasParseError</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">IsNullDoc</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">doc</span><span class="p">.</span><span class="n">IsNull</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">Validation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="k">const</span> <span class="n">Value</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;&gt;</span> <span class="n">valid</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Document</span> <span class="n">doc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">Validation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="k">const</span> <span class="n">Value</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;&gt;</span> <span class="n">valid</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">IsNull</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">valid</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">iter</span> <span class="p">:</span> <span class="n">valid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">HasMember</span><span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">const</span> <span class="n">Value</span> <span class="o">&amp;</span><span class="n">memberObj</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">second</span><span class="p">(</span><span class="n">memberObj</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed type check.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed type check.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">jsonStr</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;{</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m1</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">afcdeb1238</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m2</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">1234567675</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m3</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">sdasdqwsad</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">list</span><span class="se">\&#34;</span><span class="s">: [</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               {</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">afafa</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">alkkk</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">abcdf</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">asdqw</span><span class="se">\&#34;\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               }</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;           ]</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// std::cout &lt;&lt; jsonStr &lt;&lt; std::endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">JsonObj</span> <span class="n">jobj</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="k">const</span> <span class="n">Value</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;&gt;</span> <span class="n">valid</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;m1&#34;</span><span class="p">,</span> <span class="p">[](</span><span class="k">const</span> <span class="n">Value</span> <span class="o">&amp;</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">obj</span><span class="p">.</span><span class="n">IsString</span><span class="p">();</span> <span class="p">}},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;m2&#34;</span><span class="p">,</span> <span class="p">[](</span><span class="k">const</span> <span class="n">Value</span> <span class="o">&amp;</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">obj</span><span class="p">.</span><span class="n">IsString</span><span class="p">();</span> <span class="p">}},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;list&#34;</span><span class="p">,</span> <span class="p">[](</span><span class="k">const</span> <span class="n">Value</span> <span class="o">&amp;</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span> <span class="k">return</span> <span class="n">obj</span><span class="p">.</span><span class="n">IsArray</span><span class="p">();</span> <span class="p">}}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">jobj</span><span class="p">.</span><span class="n">Validation</span><span class="p">(</span><span class="n">valid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>函数接收一个 <code>std::map</code> ， <code>map</code> 的键就是要检查的键， <code>map</code> 的值是这个键对应的类型检查函数，类型是 <code>std::function</code> ；例如对于键 <code>m1</code> 要调用 <code>IsString()</code> ，而对于键 <code>list</code> 要调用 <code>IsArray()</code> 。在构造这个 <code>map</code> 的时候，可以使用lambda表达式来作为 <code>std::function</code> 的对象，函数内部将自动调用对应的lambda表达式来检查类型。</p>
+<p>这个实现谈不上优雅，或者简直是有点挫，因为在编写这些代码的时候还不熟悉RapidJson的其他API；但可以算作一次积极的尝试，也算是对 <code>std::function</code> 和lambda表达式的一次练习。</p>
+<h4 id="step-23-检查json合法性gettype">Step 2.3 检查JSON合法性（GetType）</h4>
+<p>在官方文档 <a class="link" href="http://rapidjson.org/zh-cn/md_doc_tutorial_8zh-cn.html#QueryObject"  target="_blank" rel="noopener"
+    >查询Object</a> 一栏中，发现了RapidJson对于对象类型的定义和查询方法：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">kTypeNames</span><span class="p">[]</span> <span class="o">=</span> 
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="s">&#34;Null&#34;</span><span class="p">,</span> <span class="s">&#34;False&#34;</span><span class="p">,</span> <span class="s">&#34;True&#34;</span><span class="p">,</span> <span class="s">&#34;Object&#34;</span><span class="p">,</span> <span class="s">&#34;Array&#34;</span><span class="p">,</span> <span class="s">&#34;String&#34;</span><span class="p">,</span> <span class="s">&#34;Number&#34;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">Value</span><span class="o">::</span><span class="n">ConstMemberIterator</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">document</span><span class="p">.</span><span class="n">MemberBegin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">itr</span> <span class="o">!=</span> <span class="n">document</span><span class="p">.</span><span class="n">MemberEnd</span><span class="p">();</span> <span class="o">++</span><span class="n">itr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Type of member %s is %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">itr</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">.</span><span class="n">GetString</span><span class="p">(),</span> <span class="n">kTypeNames</span><span class="p">[</span><span class="n">itr</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">.</span><span class="n">GetType</span><span class="p">()]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Type of member hello is String
+</span></span><span class="line"><span class="cl">Type of member t is True
+</span></span><span class="line"><span class="cl">Type of member f is False
+</span></span><span class="line"><span class="cl">Type of member n is Null
+</span></span><span class="line"><span class="cl">Type of member i is Number
+</span></span><span class="line"><span class="cl">Type of member pi is Number
+</span></span><span class="line"><span class="cl">Type of member a is Array
+</span></span></code></pre></div><p>可以看到，成员函数 <code>GetType</code> 返回的是这个对象的类型ID，而类型的名称就按照这里的 <code>kTypeNames</code> 的顺序定义。</p>
+<p>这是非常好的，对于我们的检查函数来说，我们也可以按照这样的顺序来把类型名称固定下来，检查的时候，只要检查类型名称就可以，大大提高了可读性：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">JsonObj</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="n">JsonObj</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">jsonStr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">).</span><span class="n">HasParseError</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">IsNullDoc</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">doc</span><span class="p">.</span><span class="n">IsNull</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">Validation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">valid</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Document</span> <span class="n">doc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">kTypeNames</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Null&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;False&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;True&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Object&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Array&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;String&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Number&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">Validation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">valid</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">IsNull</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">valid</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">iter</span> <span class="p">:</span> <span class="n">valid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">HasMember</span><span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">typeId</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()].</span><span class="n">GetType</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">kTypeNames</span><span class="p">[</span><span class="n">typeId</span><span class="p">]</span> <span class="o">==</span> <span class="n">iter</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed type check.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed type check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;real type: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">kTypeNames</span><span class="p">[</span><span class="n">typeId</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">Validation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">valid</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">IsNull</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">valid</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">iter</span> <span class="p">:</span> <span class="n">valid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">HasMember</span><span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">typeId</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()].</span><span class="n">GetType</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">kTypeNames</span><span class="p">[</span><span class="n">typeId</span><span class="p">]</span> <span class="o">==</span> <span class="n">iter</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed type check.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed type check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;real type: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">kTypeNames</span><span class="p">[</span><span class="n">typeId</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">jsonStr</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;{</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m1</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">afcdeb1238</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m2</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">1234567675</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m3</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">sdasdqwsad</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">list</span><span class="se">\&#34;</span><span class="s">: [</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               {</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">afafa</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">alkkk</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">abcdf</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">asdqw</span><span class="se">\&#34;\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;               }</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;           ]</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// std::cout &lt;&lt; jsonStr &lt;&lt; std::endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">JsonObj</span> <span class="n">jobj</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="k">const</span> <span class="n">Value</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;&gt;</span> <span class="n">valid</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;m1&#34;</span><span class="p">,</span> <span class="s">&#34;String&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;m2&#34;</span><span class="p">,</span> <span class="s">&#34;String&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;list&#34;</span><span class="p">,</span> <span class="s">&#34;Array&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">jobj</span><span class="p">.</span><span class="n">Validation</span><span class="p">(</span><span class="n">valid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span></code></pre></div><p>由于类型检查本质上是在检查它的数值形式的 <code>typeId</code> ，则我们也可以把类型名称从字符串形式优化成枚举值的形式，节约存储空间和比较的时间，在这里就不多写了。</p>
+<h4 id="step-24-写json">Step 2.4 写JSON</h4>
+<p>可以使用 <code>Writer</code> 或 <code>PrettyWriter</code> 来将DOM对象转化成JSON串。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;rapidjson/document.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;rapidjson/writer.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;rapidjson/prettywriter.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;rapidjson/stringbuffer.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;gtest/gtest.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">rapidjson</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">JsonObj</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JsonObj</span><span class="p">()</span> <span class="p">{</span> <span class="n">doc</span><span class="p">.</span><span class="n">SetObject</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="nf">JsonObj</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">jsonStr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">).</span><span class="n">HasParseError</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">AddMember</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">PrintJsonStr</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">Value</span><span class="o">&amp;</span> <span class="n">GetObj</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">doc</span><span class="p">.</span><span class="n">GetObject</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Document</span> <span class="n">doc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">AddMember</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">doc</span><span class="p">.</span><span class="n">IsObject</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="o">&amp;</span><span class="n">allocator</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">GetAllocator</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Value</span> <span class="nf">memKey</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Value</span> <span class="nf">memVal</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">doc</span><span class="p">.</span><span class="n">AddMember</span><span class="p">(</span><span class="n">memKey</span><span class="p">,</span> <span class="n">memVal</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">AddMember</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">doc</span><span class="p">.</span><span class="n">IsObject</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="o">&amp;</span><span class="n">allocator</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">GetAllocator</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Value</span> <span class="nf">memKey</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">doc</span><span class="p">.</span><span class="n">AddMember</span><span class="p">(</span><span class="n">memKey</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">AddMember</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="kt">bool</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">doc</span><span class="p">.</span><span class="n">IsObject</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="o">&amp;</span><span class="n">allocator</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">GetAllocator</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Value</span> <span class="nf">memKey</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">doc</span><span class="p">.</span><span class="n">AddMember</span><span class="p">(</span><span class="n">memKey</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">AddMember</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">doc</span><span class="p">.</span><span class="n">IsObject</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="o">&amp;</span><span class="n">allocator</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">GetAllocator</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Value</span> <span class="nf">memKey</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Value</span> <span class="nf">memVal</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">doc</span><span class="p">.</span><span class="n">AddMember</span><span class="p">(</span><span class="n">memKey</span><span class="p">,</span> <span class="n">memVal</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">PrintJsonStr</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">doc</span><span class="p">.</span><span class="n">IsObject</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">StringBuffer</span> <span class="n">buffer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Writer&lt;StringBuffer&gt; writer(buffer);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">PrettyWriter</span><span class="o">&lt;</span><span class="n">StringBuffer</span><span class="o">&gt;</span> <span class="n">writer</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">doc</span><span class="p">.</span><span class="n">Accept</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">buffer</span><span class="p">.</span><span class="n">GetString</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">RapidJsonTest</span> <span class="o">:</span> <span class="k">public</span> <span class="n">testing</span><span class="o">::</span><span class="n">Test</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">SetUp</span><span class="p">()</span> <span class="k">override</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">TearDown</span><span class="p">()</span> <span class="k">override</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">TEST_F</span><span class="p">(</span><span class="n">RapidJsonTest</span><span class="p">,</span> <span class="n">TestValidation</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JsonObj</span> <span class="n">obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Document</span> <span class="n">doc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">allocator</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">GetAllocator</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">AddMember</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;app_id&#34;</span><span class="p">,</span> <span class="s">&#34;00&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">AddMember</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;func&#34;</span><span class="p">,</span> <span class="s">&#34;import&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">AddMember</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;num&#34;</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Value</span> <span class="nf">vArray</span><span class="p">(</span><span class="n">kArrayType</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Value</span> <span class="nf">tmp</span><span class="p">(</span><span class="n">kObjectType</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tmp</span><span class="p">.</span><span class="n">AddMember</span><span class="p">(</span><span class="s">&#34;m4&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tmp</span><span class="p">.</span><span class="n">AddMember</span><span class="p">(</span><span class="s">&#34;m5&#34;</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vArray</span><span class="p">.</span><span class="n">PushBack</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">AddMember</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;obj_list&#34;</span><span class="p">,</span> <span class="n">vArray</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">obj</span><span class="p">.</span><span class="n">PrintJsonStr</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">testing</span><span class="o">::</span><span class="n">InitGoogleTest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">RUN_ALL_TESTS</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson/build$ ./test_rapid_json 
+</span></span><span class="line"><span class="cl">Running main<span class="o">()</span> from /mnt/d/Scripts/CPPScripts/RapidJson/third/googletest/src/gtest_main.cc
+</span></span><span class="line"><span class="cl"><span class="o">[==========]</span> Running <span class="m">1</span> <span class="nb">test</span> from <span class="m">1</span> <span class="nb">test</span> suite.
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> Global <span class="nb">test</span> environment set-up.
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> <span class="m">1</span> <span class="nb">test</span> from RapidJsonTest
+</span></span><span class="line"><span class="cl"><span class="o">[</span> RUN      <span class="o">]</span> RapidJsonTest.TestValidation
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;app_id&#34;</span>: <span class="s2">&#34;00&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;func&#34;</span>: <span class="s2">&#34;import&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;num&#34;</span>: 100,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;obj_list&#34;</span>: <span class="o">[</span>
+</span></span><span class="line"><span class="cl">        <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;m4&#34;</span>: 0,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;m5&#34;</span>: <span class="m">10</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>,
+</span></span><span class="line"><span class="cl">        <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;m4&#34;</span>: 1,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;m5&#34;</span>: <span class="m">11</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>,
+</span></span><span class="line"><span class="cl">        <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;m4&#34;</span>: 2,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;m5&#34;</span>: <span class="m">12</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>       OK <span class="o">]</span> RapidJsonTest.TestValidation <span class="o">(</span><span class="m">0</span> ms<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> <span class="m">1</span> <span class="nb">test</span> from RapidJsonTest <span class="o">(</span><span class="m">0</span> ms total<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> Global <span class="nb">test</span> environment tear-down
+</span></span><span class="line"><span class="cl"><span class="o">[==========]</span> <span class="m">1</span> <span class="nb">test</span> from <span class="m">1</span> <span class="nb">test</span> suite ran. <span class="o">(</span><span class="m">0</span> ms total<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>  PASSED  <span class="o">]</span> <span class="m">1</span> test.
+</span></span></code></pre></div><p>在上面的代码中，对 <code>Object</code> 额外封装了一个模板成员函数 <code>AddMember</code> 来添加JSON键值，但实际操作起来之后发现RapidJson在创建 <code>Value</code> 的时候居然要对 <code>std::string</code> 、 <code>int/bool</code> 、<code>Array</code> 等进行不同的操作，简直是逆天，搞得我特化了三四种模板，基本等于重载 (lll￢ω￢) 。</p>
+<p>不过考虑到明天上班可能还需要再参考一下今天写出来的代码，就先放到博客上吧，这部分有一点点烂尾，见谅。</p>
+<h3 id="番外rapidjson-in-gtest">番外：RapidJson In GTest</h3>
+<p>在 <a class="link" href="https://blog.csdn.net/freesonWANG/article/details/78482931"  target="_blank" rel="noopener"
+    >开发者测试</a> 的概念中，编码时不仅要实现业务功能，还要编写有相应的测试用例。<a class="link" href="https://github.com/google/googletest"  target="_blank" rel="noopener"
+    >GTest</a> 就是一个很好的测试框架，可以帮助我们快速地完成用例编写。</p>
+<p>可以直接把源码拉下来，然后把仓库中 <code>googletest</code> 文件夹复制到cmake项目中的任意位置。</p>
+<p>在根目录的 <code>CMakeLists.txt</code> 中把GTest源码包含进项目中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">PROJECT</span><span class="p">(</span><span class="s">TRY_RAPID_JSON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># GoogleTest requires at least C++14
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">GOOGLETEST_VERSION</span> <span class="s">1.12.1</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">ADD_SUBDIRECTORY</span><span class="p">(</span><span class="s">third/googletest</span> <span class="s">.</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">ADD_SUBDIRECTORY</span><span class="p">(</span><span class="s">src</span> <span class="s">.</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>在源码目录的 <code>CMakeLists.txt</code> 中把GTest库连接到我们的程序里：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">PROJECT</span><span class="p">(</span><span class="s">TRY_RAPID_JSON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">INCLUDE_DIRECTORIES</span><span class="p">(</span><span class="s">../include</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">ADD_EXECUTABLE</span><span class="p">(</span><span class="s">test_rapid_json</span> <span class="s">main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s">test_rapid_json</span>
+</span></span><span class="line"><span class="cl">    <span class="s">GTest::gtest_main</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>之后就可以愉快地使用GTest了。</p>
+<blockquote>
+<p>对于VSCode的头文件的包含，可以参考 <a class="link" href="" >Step 1.2 VSCode install</a> ，不过一键运行我没有配置，目前还是有bug的。</p>
+</blockquote>
+<p>在 <code>main.cpp</code> 里面编写测试用例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;rapidjson/document.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;gtest/gtest.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">rapidjson</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">JsonObj</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="n">JsonObj</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">jsonStr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">).</span><span class="n">HasParseError</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">IsNullDoc</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">doc</span><span class="p">.</span><span class="n">IsNull</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">Validation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">valid</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Document</span> <span class="n">doc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">kTypeNames</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Null&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;False&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;True&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Object&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Array&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;String&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Number&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">JsonObj</span><span class="o">::</span><span class="n">Validation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">valid</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">IsNull</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">valid</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">iter</span> <span class="p">:</span> <span class="n">valid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">HasMember</span><span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed existance check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">typeId</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">()].</span><span class="n">GetType</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">kTypeNames</span><span class="p">[</span><span class="n">typeId</span><span class="p">]</span> <span class="o">==</span> <span class="n">iter</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; passed type check.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; failed type check.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;real type: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">kTypeNames</span><span class="p">[</span><span class="n">typeId</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">RapidJsonTest</span> <span class="o">:</span> <span class="k">public</span> <span class="n">testing</span><span class="o">::</span><span class="n">Test</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">SetUp</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jsonStr</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;{</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m1</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">ab123</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m2</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">1234567675</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m3</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">sdasdqwsad</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">list</span><span class="se">\&#34;</span><span class="s">: [</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;               {</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">afafa</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">alkkk</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;                   </span><span class="se">\&#34;</span><span class="s">abcdf</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">asdqw</span><span class="se">\&#34;\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;               }</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;           ]</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">invalidJsonStr</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;{</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m1</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">afcdeb1238</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m2</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">1234567675</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">m3</span><span class="se">\&#34;</span><span class="s">: </span><span class="se">\&#34;</span><span class="s">sdasdqwsad</span><span class="se">\&#34;</span><span class="s">,</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;   </span><span class="se">\&#34;</span><span class="s">list</span><span class="se">\&#34;</span><span class="s">: [</span><span class="se">\n</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">jsonStr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">invalidJsonStr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">TEST_F</span><span class="p">(</span><span class="n">RapidJsonTest</span><span class="p">,</span> <span class="n">TestValidation</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// std::cout &lt;&lt; jsonStr &lt;&lt; std::endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">JsonObj</span> <span class="nf">jobj</span><span class="p">(</span><span class="n">jsonStr</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JsonObj</span> <span class="nf">invalidJobj</span><span class="p">(</span><span class="n">invalidJsonStr</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">valid</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;m1&#34;</span><span class="p">,</span> <span class="s">&#34;String&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;m2&#34;</span><span class="p">,</span> <span class="s">&#34;String&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;list&#34;</span><span class="p">,</span> <span class="s">&#34;Array&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_FALSE</span><span class="p">(</span><span class="n">jobj</span><span class="p">.</span><span class="n">IsNullDoc</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">jobj</span><span class="p">.</span><span class="n">Validation</span><span class="p">(</span><span class="n">valid</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">invalidJobj</span><span class="p">.</span><span class="n">IsNullDoc</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_FALSE</span><span class="p">(</span><span class="n">invalidJobj</span><span class="p">.</span><span class="n">Validation</span><span class="p">(</span><span class="n">valid</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">testing</span><span class="o">::</span><span class="n">InitGoogleTest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">RUN_ALL_TESTS</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson/build$ ./test_rapid_json 
+</span></span><span class="line"><span class="cl">Running main<span class="o">()</span> from /mnt/d/Scripts/CPPScripts/RapidJson/third/googletest/src/gtest_main.cc
+</span></span><span class="line"><span class="cl"><span class="o">[==========]</span> Running <span class="m">1</span> <span class="nb">test</span> from <span class="m">1</span> <span class="nb">test</span> suite.
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> Global <span class="nb">test</span> environment set-up.
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> <span class="m">1</span> <span class="nb">test</span> from RapidJsonTest
+</span></span><span class="line"><span class="cl"><span class="o">[</span> RUN      <span class="o">]</span> RapidJsonTest.TestValidation
+</span></span><span class="line"><span class="cl">list passed existance check.
+</span></span><span class="line"><span class="cl">list passed <span class="nb">type</span> check.
+</span></span><span class="line"><span class="cl">m1 passed existance check.
+</span></span><span class="line"><span class="cl">m1 passed <span class="nb">type</span> check.
+</span></span><span class="line"><span class="cl">m2 passed existance check.
+</span></span><span class="line"><span class="cl">m2 passed <span class="nb">type</span> check.
+</span></span><span class="line"><span class="cl"><span class="o">[</span>       OK <span class="o">]</span> RapidJsonTest.TestValidation <span class="o">(</span><span class="m">0</span> ms<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> <span class="m">1</span> <span class="nb">test</span> from RapidJsonTest <span class="o">(</span><span class="m">0</span> ms total<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>----------<span class="o">]</span> Global <span class="nb">test</span> environment tear-down
+</span></span><span class="line"><span class="cl"><span class="o">[==========]</span> <span class="m">1</span> <span class="nb">test</span> from <span class="m">1</span> <span class="nb">test</span> suite ran. <span class="o">(</span><span class="m">0</span> ms total<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>  PASSED  <span class="o">]</span> <span class="m">1</span> test.
+</span></span></code></pre></div><p>就可以完成函数的简单测试。</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Windows Terminal美化小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">PyQt5初探——与scapy的美妙结合</h2>
+            <footer class="article-time">
+                <time datetime=''>Apr 10, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（前后端结合）</h2>
+            <footer class="article-time">
+                <time datetime=''>Mar 07, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Hackintosh小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 22, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 16, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#step-1-安装">Step 1 安装</a>
+      <ul>
+        <li><a href="#step-11-cmake-install">Step 1.1 cmake install</a></li>
+        <li><a href="#step-12-vscode-install">Step 1.2 VSCode install</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-2-使用">Step 2 使用</a>
+      <ul>
+        <li><a href="#step-21-读json">Step 2.1 读JSON</a></li>
+        <li><a href="#step-22-检查json合法性lambda">Step 2.2 检查JSON合法性（lambda）</a></li>
+        <li><a href="#step-23-检查json合法性gettype">Step 2.3 检查JSON合法性（GetType）</a></li>
+        <li><a href="#step-24-写json">Step 2.4 写JSON</a></li>
+      </ul>
+    </li>
+    <li><a href="#番外rapidjson-in-gtest">番外：RapidJson In GTest</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

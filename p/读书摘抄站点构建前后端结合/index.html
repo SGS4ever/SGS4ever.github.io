@@ -5,17 +5,17 @@
 目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
 本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
 0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows&#43;VisualStudio 改换到 CentOS 7&#43;VSCode远程开发 ，引发这个决定的因素主要有几点：
-  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
-  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
-  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
-  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
+VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
 在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
 0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
 前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .'><title>读书摘抄站点构建（前后端结合）</title>
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .'><title>读书摘抄站点构建（前后端结合）</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
 
@@ -43,17 +43,17 @@ const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetch
 目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
 本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
 0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows&#43;VisualStudio 改换到 CentOS 7&#43;VSCode远程开发 ，引发这个决定的因素主要有几点：
-  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
-  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
-  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
-  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
+VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
 在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
 0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
 前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .'>
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-06-09T00:00:00&#43;00:00'/>
@@ -62,17 +62,17 @@ const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetch
 目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
 本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
 0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows&#43;VisualStudio 改换到 CentOS 7&#43;VSCode远程开发 ，引发这个决定的因素主要有几点：
-  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
-  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
-  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
-  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
+VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
 在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
 0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
 前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .">
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -231,30 +231,30 @@ const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetch
     >VUE</a> 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。</p>
 <p>现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。</p>
 <p>前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 <code>fetchData()</code> 的方法，其中使用 <code>axios</code> 从后端请求数据，然后更新到实例的 <code>data</code> 上；这个方法在 <code>mounted()</code> 的时候被调用。需要注意，在 <code>fetchData()</code> 里面使用的 <code>this</code> 指向的不是组件实例，要从外部传入实例才行。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">Vue</span><span class="p">.</span><span class="nx">createApp</span><span class="p">({</span>
-    <span class="c1">// ==== 略 ====
-</span><span class="c1"></span>    <span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
-        <span class="c1">// ==== 略 ====
-</span><span class="c1"></span>        <span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">axios</span>
-                <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/index&#39;</span><span class="p">)</span>
-                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">var</span> <span class="nx">respJSON</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
-                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;login&#34;</span><span class="p">];</span>
-                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">cards</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;cards&#34;</span><span class="p">];</span>
-                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">totalBooks</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;totalBooks&#34;</span><span class="p">];</span>
-                <span class="p">})</span>
-                <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-                <span class="p">});</span>
-        <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="nx">mounted</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">let</span> <span class="nx">vueThis</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}).</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
-</code></pre></div><h3 id="0x02-交互逻辑设计">0x02 交互逻辑设计</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-JavaScript" data-lang="JavaScript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">Vue</span><span class="p">.</span><span class="nx">createApp</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ==== 略 ====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ==== 略 ====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">axios</span>
+</span></span><span class="line"><span class="cl">                <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/index&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="kd">var</span> <span class="nx">respJSON</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;login&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">cards</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;cards&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">vueThis</span><span class="p">.</span><span class="nx">totalBooks</span> <span class="o">=</span> <span class="nx">respJSON</span><span class="p">[</span><span class="s2">&#34;totalBooks&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="p">})</span>
+</span></span><span class="line"><span class="cl">                <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">});</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">mounted</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nx">vueThis</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">fetchData</span><span class="p">(</span><span class="nx">vueThis</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}).</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="0x02-交互逻辑设计">0x02 交互逻辑设计</h3>
 <p><figure 
 	
 		class="gallery-image" 
@@ -476,9 +476,9 @@ const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetch
 	
 </figure></p>
 <p>画布长宽根据屏幕大小而改变，但始终保持一个固定的比例：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="kd">let</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">;</span>
-<span class="kd">let</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">;</span>
-</code></pre></div><p>画布的内容组织结构也很简单，只有三个部分：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">;</span>
+</span></span></code></pre></div><p>画布的内容组织结构也很简单，只有三个部分：</p>
 <p><figure 
 	
 		class="gallery-image" 
@@ -505,45 +505,45 @@ const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetch
 </li>
 <li>
 <p>文字部分，要先绘制一个矩形背景，否则文字没有底色：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&#34;#ffffff&#34;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">height</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&#34;#ffffff&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">height</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</span></span></code></pre></div></li>
 <li>
 <p>使用jQuery提取要分享的内容（通过DOM树获取书籍名称和摘抄内容的相应节点），分别在各自的位置上绘制字符串。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="c1">// 绘制文字
-</span><span class="c1"></span><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&#34;#000000&#34;</span><span class="p">;</span>
-<span class="kd">let</span> <span class="nx">opt</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;headerHeight&#39;</span><span class="o">:</span> <span class="mf">0.08</span> <span class="o">*</span> <span class="nx">height</span><span class="p">,</span>
-    <span class="s1">&#39;leftPadding&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
-    <span class="s1">&#39;rightPadding&#39;</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;bottomPadding&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
-    <span class="s1">&#39;textHeight&#39;</span><span class="o">:</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="nx">height</span><span class="p">,</span>
-    <span class="s1">&#39;textWidth&#39;</span><span class="o">:</span> <span class="nx">width</span><span class="p">,</span>
-    <span class="s1">&#39;maxFontSize&#39;</span><span class="o">:</span> <span class="mi">20</span>
-<span class="p">}</span>
-<span class="c1">// 书籍名称
-</span><span class="c1"></span><span class="kd">let</span> <span class="nx">fontSize</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span><span class="p">;</span>
-<span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">fontSize</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="nx">fontSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;px &#39;</span> <span class="o">+</span> <span class="s1">&#39;Long Cang&#39;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">bName</span><span class="p">.</span><span class="nx">text</span><span class="p">(),</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span><span class="p">,</span> <span class="nx">imgHeight</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">);</span>
-<span class="c1">// 摘抄内容
-</span><span class="c1"></span><span class="kd">let</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">exp</span><span class="p">).</span><span class="nx">text</span><span class="p">();</span>
-<span class="kd">let</span> <span class="nx">realTextWidth</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">textWidth</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">rightPadding</span><span class="p">;</span>
-<span class="kd">let</span> <span class="nx">realTextHeight</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">textHeight</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">bottomPadding</span><span class="p">;</span>
-<span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">realTextHeight</span> <span class="o">*</span> <span class="nx">realTextWidth</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">text</span><span class="p">.</span><span class="nx">length</span><span class="p">))));</span>
-<span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">fontSize</span><span class="p">,</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">maxFontSize</span><span class="p">);</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="nx">fontSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;px &#39;</span> <span class="o">+</span> <span class="s1">&#39;Noto Serif SC&#39;</span><span class="p">;</span>
-<span class="kd">let</span> <span class="nx">cols</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">realTextWidth</span><span class="p">)</span> <span class="o">/</span> <span class="nx">fontSize</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">rows</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">text</span><span class="p">.</span><span class="nx">length</span> <span class="o">/</span> <span class="nx">cols</span><span class="p">);</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">rows</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 注意 substring 和 substr 两个不同API的区别
-</span><span class="c1"></span>    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span>
-        <span class="nx">text</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">i</span> <span class="o">*</span> <span class="nx">cols</span><span class="p">,</span> <span class="nx">cols</span><span class="p">),</span> 
-        <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span><span class="p">,</span> 
-        <span class="nx">imgHeight</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span> <span class="o">+</span> <span class="nx">fontSize</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// 绘制文字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&#34;#000000&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">opt</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;headerHeight&#39;</span><span class="o">:</span> <span class="mf">0.08</span> <span class="o">*</span> <span class="nx">height</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;leftPadding&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;rightPadding&#39;</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;bottomPadding&#39;</span><span class="o">:</span> <span class="mi">16</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;textHeight&#39;</span><span class="o">:</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="nx">height</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;textWidth&#39;</span><span class="o">:</span> <span class="nx">width</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;maxFontSize&#39;</span><span class="o">:</span> <span class="mi">20</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 书籍名称
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">let</span> <span class="nx">fontSize</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">fontSize</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="nx">fontSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;px &#39;</span> <span class="o">+</span> <span class="s1">&#39;Long Cang&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">bName</span><span class="p">.</span><span class="nx">text</span><span class="p">(),</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span><span class="p">,</span> <span class="nx">imgHeight</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 摘抄内容
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">let</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">exp</span><span class="p">).</span><span class="nx">text</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">realTextWidth</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">textWidth</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">rightPadding</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">realTextHeight</span> <span class="o">=</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">textHeight</span> <span class="o">-</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">bottomPadding</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">realTextHeight</span> <span class="o">*</span> <span class="nx">realTextWidth</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">text</span><span class="p">.</span><span class="nx">length</span><span class="p">))));</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fontSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">fontSize</span><span class="p">,</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">maxFontSize</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="nx">fontSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;px &#39;</span> <span class="o">+</span> <span class="s1">&#39;Noto Serif SC&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">cols</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">realTextWidth</span><span class="p">)</span> <span class="o">/</span> <span class="nx">fontSize</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">rows</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">text</span><span class="p">.</span><span class="nx">length</span> <span class="o">/</span> <span class="nx">cols</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">rows</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 注意 substring 和 substr 两个不同API的区别
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">text</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">i</span> <span class="o">*</span> <span class="nx">cols</span><span class="p">,</span> <span class="nx">cols</span><span class="p">),</span> 
+</span></span><span class="line"><span class="cl">        <span class="nx">opt</span><span class="p">.</span><span class="nx">leftPadding</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">        <span class="nx">imgHeight</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">.</span><span class="nx">headerHeight</span> <span class="o">+</span> <span class="nx">fontSize</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></li>
 </ul>
 <p>这里为了使得大段文字能够写入到一个固定高度的区域中，需要对 <strong>字体大小</strong> 进行一些数学上的计算。</p>
 <p>已知待写入的字符串为 <code>text</code> ，画布文字部分宽度为 <code>realTextWidth</code> ，高度为 <code>realTextHeight</code> ，令字体大小为 <code>fontSize</code> ，则</p>
@@ -571,7 +571,25 @@ $$</p>
 <p>这就是字体大小的要求。满足这一大小要求的字体才能将一个片段完整地写入画布中。</p>
 <p><strong>另一个</strong> 需要注意的地方是， <code>canvas</code> 写入文字时不能自动换行，超出画布的部分即不可见。为了实现 <strong>文字换行</strong> 的效果，需要手动对原始字符串进行切分，每一次只写入原始字符串的一部分（实际上就是写入列数 <code>col</code> 个字符），移动至下一行，再继续写入，这就是上方代码中的最后一个 <code>for</code> 循环所做的事情。</p>
 <p>完成以上几点之后，能够绘制出一张很不错的分享图了：</p>
-<!-- raw HTML omitted -->
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 78; 
+			flex-basis: 187px"
+	>
+	<a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5.png" data-size="559x716">
+		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5.png"
+			width="559"
+			height="716"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5_huaf459d47493527683fbe343a39552bfc_174656_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5_huaf459d47493527683fbe343a39552bfc_174656_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="分享图">
+	</a>
+	
+	<figcaption>分享图</figcaption>
+	
+</figure></p>
 <p>最后，添加一个按钮，用于将这张图片一键保存到剪贴板。这里给出两篇重要参考， <a class="link" href="https://stackoverflow.com/questions/27863617/is-it-possible-to-copy-a-canvas-image-to-the-clipboard"  target="_blank" rel="noopener"
     >第一篇</a> 教会我们如何把 <code>canvas</code> 转化为可以写入剪贴板中的数据； <a class="link" href="https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write"  target="_blank" rel="noopener"
     >第二篇</a> 介绍了浏览器的 <code>navigator.clipboard.write</code> 接口的用法，据此，可以实现一键复制图片的功能。</p>
@@ -655,6 +673,48 @@ $$</p>
                 
                     
 <article class="">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">RapidJson使用小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Windows Terminal美化小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
     <a href="/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/">
         
         
@@ -711,48 +771,6 @@ $$</p>
             <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
             <footer class="article-time">
                 <time datetime=''>Feb 16, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（页面篇|之一）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 12, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 07, 2022</time>
             </footer>
         </div>
     </a>

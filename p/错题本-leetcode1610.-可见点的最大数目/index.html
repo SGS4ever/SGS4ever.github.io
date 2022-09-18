@@ -9,8 +9,8 @@
 同一个坐标上可以有多个点。你所在的位置也可能存在一些点，但不管你的怎么旋转，总是可以看到这些点。同时，点不会阻碍你看到其他点。
 返回你能看到的点的最大数目。
 示例1
- exp1 
- 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。  示例2'><title>错题本 | LeetCode1610. 可见点的最大数目</title>
+exp1 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。 示例2
+exp2 输入： points = [[1,0],[2,1]], angle = 13, location = [1,1] 输出： 1 数据范围'><title>错题本 | LeetCode1610. 可见点的最大数目</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1610.-%E5%8F%AF%E8%A7%81%E7%82%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/'>
 
@@ -42,8 +42,8 @@
 同一个坐标上可以有多个点。你所在的位置也可能存在一些点，但不管你的怎么旋转，总是可以看到这些点。同时，点不会阻碍你看到其他点。
 返回你能看到的点的最大数目。
 示例1
- exp1 
- 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。  示例2'>
+exp1 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。 示例2
+exp2 输入： points = [[1,0],[2,1]], angle = 13, location = [1,1] 输出： 1 数据范围'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1610.-%E5%8F%AF%E8%A7%81%E7%82%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-12-16T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-12-16T00:00:00&#43;00:00'/>
@@ -56,8 +56,8 @@
 同一个坐标上可以有多个点。你所在的位置也可能存在一些点，但不管你的怎么旋转，总是可以看到这些点。同时，点不会阻碍你看到其他点。
 返回你能看到的点的最大数目。
 示例1
- exp1 
- 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。  示例2">
+exp1 输入： points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1] 输出： 3 解释： 阴影区域代表你的视野。在你的视野中，所有的点都清晰可见，尽管 [2,2] 和 [3,3]在同一条直线上，你仍然可以看到 [3,3] 。 示例2
+exp2 输入： points = [[1,0],[2,1]], angle = 13, location = [1,1] 输出： 1 数据范围">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -259,48 +259,48 @@
 <p>所谓 <strong>极坐标</strong> ，是以观测点为原点，将某点表示为 <code>(ρ,θ)</code> 的形式，即表示为 <code>(极径,极角)</code> 的形式。</p>
 <p>这里我们不需要确切知道某个点到观测点的距离，只需要知道它的 <strong>极角</strong> ，即它和观测点的夹角，约定以X轴正方向为零度，逆时针增加度数。</p>
 <p>因此得到了一个将直角坐标转化为极坐标的函数：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#define PI 3.1415926535897932384626
-</span><span class="cp"></span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">pointsInPolar</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">changePointsIntoPolar</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">points</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">O</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">ox</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">oy</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="n">numberOfSuperpositionPoints</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">points</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">px</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-        <span class="kt">int</span> <span class="n">py</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span> <span class="o">&amp;&amp;</span> <span class="n">py</span> <span class="o">==</span> <span class="n">oy</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">numberOfSuperpositionPoints</span><span class="o">++</span><span class="p">;</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">oy</span><span class="p">)</span>
-                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">90.0</span><span class="p">);</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mf">90.0</span><span class="p">);</span>
-                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">270.0</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">// 计算夹角
-</span><span class="c1"></span>        <span class="kt">double</span> <span class="n">pointAngleInPolar</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">py</span> <span class="o">-</span> <span class="n">oy</span><span class="p">,</span> <span class="n">px</span> <span class="o">-</span> <span class="n">ox</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
-        <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">+</span> <span class="mf">360.0</span><span class="p">);</span>
-    <span class="p">}</span>
-    
-    <span class="n">sort</span><span class="p">(</span><span class="n">pointsInPolar</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>有几个重点要注意：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#define PI 3.1415926535897932384626
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">pointsInPolar</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">changePointsIntoPolar</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">points</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">O</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">ox</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">oy</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">numberOfSuperpositionPoints</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">points</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">px</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">py</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span> <span class="o">&amp;&amp;</span> <span class="n">py</span> <span class="o">==</span> <span class="n">oy</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">numberOfSuperpositionPoints</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">oy</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">90.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mf">90.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">270.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 计算夹角
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">double</span> <span class="n">pointAngleInPolar</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">py</span> <span class="o">-</span> <span class="n">oy</span><span class="p">,</span> <span class="n">px</span> <span class="o">-</span> <span class="n">ox</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">+</span> <span class="mf">360.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">sort</span><span class="p">(</span><span class="n">pointsInPolar</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>有几个重点要注意：</p>
 <ul>
 <li>C++函数 <code>atan2</code> 用法参见 <a class="link" href="https://www.cplusplus.com/reference/cmath/atan2/"  target="_blank" rel="noopener"
     >atan2 - C++ Reference (cplusplus.com)</a> ，它得到的值是 <strong>弧度</strong> ，要转为角度（乘180再除以π）；</li>
@@ -341,115 +341,115 @@
 <h4 id="求解">求解</h4>
 <p>现在我们已知视野下边和观察角，相当于也已知视野上边了。要快速从所有点中找到可见点的数目，很简单，做一个二分查找即可。</p>
 <p>使用二分查找的办法快速找到 <strong>第一个视野上边之上</strong> 的点。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">calcVvisiablePointsNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">startPointIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">visiableAngle</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">double</span> <span class="n">finalVisiablePoint</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">[</span><span class="n">startPointIndex</span><span class="p">]</span> <span class="o">+</span> <span class="n">visiableAngle</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">r</span> <span class="o">-</span> <span class="n">startPointIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
-            <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">else</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">l</span> <span class="o">-</span> <span class="n">startPointIndex</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>我们遍历所有点，分别以它们作为视野下边，用二分求出可见点数，时间复杂度 <code>O(nlogn)</code> 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">calcVvisiablePointsNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">startPointIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">visiableAngle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">finalVisiablePoint</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">[</span><span class="n">startPointIndex</span><span class="p">]</span> <span class="o">+</span> <span class="n">visiableAngle</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">r</span> <span class="o">-</span> <span class="n">startPointIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">l</span> <span class="o">-</span> <span class="n">startPointIndex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>我们遍历所有点，分别以它们作为视野下边，用二分求出可见点数，时间复杂度 <code>O(nlogn)</code> 。</p>
 <h3 id="ac-代码">AC 代码</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">private</span><span class="o">:</span>
-    <span class="cp">#define PI 3.1415926535897932384626
-</span><span class="cp"></span>    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">pointsInPolar</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">;</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">void</span> <span class="n">changePointsIntoPolar</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">points</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">O</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">ox</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-        <span class="kt">int</span> <span class="n">oy</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-        <span class="n">numberOfSuperpositionPoints</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">points</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">px</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-            <span class="kt">int</span> <span class="n">py</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span> <span class="o">&amp;&amp;</span> <span class="n">py</span> <span class="o">==</span> <span class="n">oy</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">numberOfSuperpositionPoints</span><span class="o">++</span><span class="p">;</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">oy</span><span class="p">)</span>
-                    <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">90.0</span><span class="p">);</span>
-                <span class="k">else</span>
-                <span class="p">{</span>
-                    <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mf">90.0</span><span class="p">);</span>
-                    <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">270.0</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="c1">// 计算夹角
-</span><span class="c1"></span>            <span class="kt">double</span> <span class="n">pointAngleInPolar</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">py</span> <span class="o">-</span> <span class="n">oy</span><span class="p">,</span> <span class="n">px</span> <span class="o">-</span> <span class="n">ox</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
-            <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">+</span> <span class="mf">360.0</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="n">sort</span><span class="p">(</span><span class="n">pointsInPolar</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-
-        <span class="k">return</span> <span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kt">int</span> <span class="nf">calcVvisiablePointsNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">startPointIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">visiableAngle</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">finalVisiablePoint</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">[</span><span class="n">startPointIndex</span><span class="p">]</span> <span class="o">+</span> <span class="n">visiableAngle</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">r</span> <span class="o">-</span> <span class="n">startPointIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
-                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">else</span>
-                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">l</span> <span class="o">-</span> <span class="n">startPointIndex</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kt">void</span> <span class="nf">debugOut</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">agl</span> <span class="p">:</span> <span class="n">pointsInPolar</span><span class="p">)</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">agl</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kt">int</span> <span class="nf">visiblePoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">points</span><span class="p">,</span> <span class="kt">int</span> <span class="n">angle</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">location</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">changePointsIntoPolar</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
-        
-        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">;</span>
-
-        <span class="c1">// debugOut();
-</span><span class="c1"></span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">nowVisiablePointNumber</span> <span class="o">=</span> <span class="n">calcVvisiablePointsNumber</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">angle</span><span class="p">);</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">nowVisiablePointNumber</span> <span class="o">+</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p><figure 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#define PI 3.1415926535897932384626
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">pointsInPolar</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">changePointsIntoPolar</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">points</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">O</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ox</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">oy</span> <span class="o">=</span> <span class="n">O</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">numberOfSuperpositionPoints</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">points</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">px</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">py</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span> <span class="o">&amp;&amp;</span> <span class="n">py</span> <span class="o">==</span> <span class="n">oy</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">numberOfSuperpositionPoints</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">px</span> <span class="o">==</span> <span class="n">ox</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">py</span> <span class="o">&gt;</span> <span class="n">oy</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">90.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mf">90.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">270.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 计算夹角
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">double</span> <span class="n">pointAngleInPolar</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">py</span> <span class="o">-</span> <span class="n">oy</span><span class="p">,</span> <span class="n">px</span> <span class="o">-</span> <span class="n">ox</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pointAngleInPolar</span> <span class="o">+</span> <span class="mf">360.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">pointsInPolar</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">calcVvisiablePointsNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">startPointIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">visiableAngle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">double</span> <span class="n">finalVisiablePoint</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">[</span><span class="n">startPointIndex</span><span class="p">]</span> <span class="o">+</span> <span class="n">visiableAngle</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">r</span> <span class="o">-</span> <span class="n">startPointIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">pointsInPolar</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">finalVisiablePoint</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">l</span> <span class="o">-</span> <span class="n">startPointIndex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">debugOut</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">agl</span> <span class="p">:</span> <span class="n">pointsInPolar</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">agl</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">visiblePoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">points</span><span class="p">,</span> <span class="kt">int</span> <span class="n">angle</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">location</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">changePointsIntoPolar</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// debugOut();
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pointsInPolar</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nowVisiablePointNumber</span> <span class="o">=</span> <span class="n">calcVvisiablePointsNumber</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">angle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">nowVisiablePointNumber</span> <span class="o">+</span> <span class="n">numberOfSuperpositionPoints</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p><figure 
 	
 		class="gallery-image" 
 		style="

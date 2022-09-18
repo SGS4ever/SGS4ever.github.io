@@ -6,9 +6,9 @@
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
 开工大吉！ ☀️
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
- 前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画  已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
- 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。  正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
+摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
 &amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;amp;family=Ma&#43;Shan&#43;Zheng&amp;amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;amp;family=Zhi&#43;Mang&#43;Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.'><title>读书摘抄站点构建（页面篇|之一）</title>
@@ -40,9 +40,9 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
 开工大吉！ ☀️
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
- 前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画  已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
- 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。  正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
+摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
 &amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;amp;family=Ma&#43;Shan&#43;Zheng&amp;amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;amp;family=Zhi&#43;Mang&#43;Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.'>
@@ -55,9 +55,9 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
 开工大吉！ ☀️
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
- 前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画  已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
- 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。  正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
+摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
 &amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;amp;family=Ma&#43;Shan&#43;Zheng&amp;amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;amp;family=Zhi&#43;Mang&#43;Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.">
@@ -221,200 +221,199 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
     >【CSS】App Store 卡片展开效果</a> 视频！Amazing！</p>
 <p>我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。</p>
 <p>我照着视频实现的总的代码为：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en-us&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Test<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com&#34;</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.gstatic.com&#34;</span> <span class="na">crossorigin</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;family=Ma+Shan+Zheng&amp;family=Noto+Sans+SC:wght@300&amp;family=Noto+Serif+SC:wght@300&amp;family=Zhi+Mang+Xing&amp;display=swap&#34;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
-            <span class="p">:</span><span class="nd">root</span> <span class="p">{</span>
-                <span class="k">font-size</span><span class="p">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
-                <span class="k">font-family</span><span class="p">:</span> <span class="s1">&#39;Zhi Mang Xing&#39;</span><span class="p">,</span> <span class="kc">cursive</span><span class="p">;</span>
-                <span class="nv">--body-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-                <span class="nv">--card-width</span><span class="p">:</span> <span class="mi">420</span><span class="kt">px</span><span class="p">;</span>
-                <span class="nv">--card-height</span><span class="p">:</span> <span class="mi">280</span><span class="kt">px</span><span class="p">;</span>
-                <span class="nv">--img-height</span><span class="p">:</span> <span class="mi">226</span><span class="kt">px</span><span class="p">;</span>
-                <span class="nv">--img-height-expended</span><span class="p">:</span> <span class="mi">320</span><span class="kt">px</span><span class="p">;</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#333</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nt">body</span> <span class="p">{</span>
-                <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">body</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#eee</span><span class="p">;</span>
-                <span class="k">margin</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
-                <span class="k">display</span><span class="p">:</span> <span class="kc">flex</span><span class="p">;</span>
-                <span class="k">flex-direction</span><span class="p">:</span> <span class="kc">column</span><span class="p">;</span>
-                <span class="k">align-items</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
-                <span class="k">min-height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
-                <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nt">body</span><span class="p">.</span><span class="nc">noscroll</span> <span class="p">{</span>
-                <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span> <span class="p">{</span>
-                <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
-                <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">height</span><span class="p">);</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-                <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-                <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">.2</span><span class="kt">rem</span> <span class="mi">2</span><span class="kt">rem</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.1</span><span class="p">);</span>
-                <span class="k">margin</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="nb">cubic-bezier</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span> <span class="nt">img</span> <span class="p">{</span>
-                <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
-                <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-                <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">img</span><span class="o">-</span><span class="n">height</span><span class="p">);</span>
-                <span class="k">object-fit</span><span class="p">:</span> <span class="kc">cover</span><span class="p">;</span>
-                <span class="k">border-top-left-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-                <span class="k">border-top-right-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span> <span class="nt">h4</span> <span class="p">{</span>
-                <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
-                <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
-                <span class="k">padding</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-                <span class="k">line-height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">rem</span><span class="p">;</span>
-                <span class="k">letter-spacing</span><span class="p">:</span> <span class="mf">-.5</span><span class="kt">px</span><span class="p">;</span>
-                <span class="k">padding-bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
-                <span class="k">height</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
-                <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-out</span><span class="p">;</span>
-                <span class="k">opacity</span><span class="p">:</span> <span class="mf">.8</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">.</span><span class="nc">content</span> <span class="p">{</span>
-                <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-                <span class="k">overflow</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span> <span class="nt">p</span> <span class="p">{</span>
-                <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
-                <span class="k">line-height</span><span class="p">:</span> <span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
-
-            <span class="p">}</span>
-
-            <span class="c">/* active classes */</span>
-            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">{</span>
-                <span class="k">transform</span><span class="p">:</span> <span class="nb">translateY</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">offset</span><span class="o">-</span><span class="kc">top</span><span class="p">))</span> <span class="nb">scale</span><span class="p">(</span><span class="nb">calc</span><span class="p">(</span><span class="mi">480</span><span class="o">/</span><span class="mi">420</span><span class="p">));</span>
-                <span class="k">transform-origin</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">border-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="nt">h4</span> <span class="p">{</span>
-                <span class="k">padding-bottom</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="nt">img</span> <span class="p">{</span>
-                <span class="k">border-top-left-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">border-top-right-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">img</span><span class="o">-</span><span class="n">height</span><span class="o">-</span><span class="n">expended</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
-                <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
-                <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-in</span><span class="p">;</span>
-                <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            
-            <span class="p">::</span><span class="nd">-webkit-scrollbar</span> <span class="p">{</span>
-                <span class="k">width</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-            <span class="p">}</span>
-            
-            <span class="p">::</span><span class="nd">-webkit-scrollbar-track</span> <span class="p">{</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="kc">transparent</span><span class="p">;</span>
-            <span class="p">}</span>
-            
-            <span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span> <span class="p">{</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
-                <span class="k">border-radius</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-                <span class="k">border</span><span class="p">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
-                <span class="k">background-clip</span><span class="p">:</span> <span class="kc">content-box</span><span class="p">;</span>
-            <span class="p">}</span>
-            
-            <span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span><span class="p">:</span><span class="nd">hover</span> <span class="p">{</span>
-                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
-            <span class="p">}</span>
-            
-        <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-
-        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text/javascript&#34;</span><span class="p">&gt;</span>
-            <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kd">let</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">);</span>
-                    <span class="kd">let</span> <span class="nx">card_offset_scrolltop</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">scrollTop</span><span class="p">();</span>
-
-                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;--data-offset-top&#39;</span><span class="p">,</span> <span class="nx">card_offset_scrolltop</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="p">);</span>
-                    
-                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">toggleClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
-
-                    <span class="kd">let</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
-                    <span class="kd">let</span> <span class="nx">ratio</span> <span class="o">=</span> <span class="mi">480</span><span class="o">/</span><span class="mi">420</span><span class="p">;</span>
-                    <span class="nx">height</span> <span class="o">-=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">).</span><span class="nx">outerHeight</span><span class="p">()</span> <span class="o">*</span> <span class="nx">ratio</span><span class="p">;</span>
-                    <span class="nx">height</span> <span class="o">-=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;h4&#39;</span><span class="p">).</span><span class="nx">outerHeight</span><span class="p">()</span> <span class="o">*</span> <span class="nx">ratio</span><span class="p">;</span>
-                    <span class="nx">height</span> <span class="o">/=</span> <span class="nx">ratio</span><span class="p">;</span>
-
-                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.content&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
-
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">))</span> <span class="p">{</span>
-                        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
-                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
-                    <span class="p">}</span>
-                <span class="p">});</span>
-            <span class="p">}</span>
-        <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-
-    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,1&#34;</span> <span class="p">/&gt;</span>
-            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title1<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,2&#34;</span> <span class="p">/&gt;</span>
-            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title2<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,3&#34;</span> <span class="p">/&gt;</span>
-            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title3<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,4&#34;</span> <span class="p">/&gt;</span>
-            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title4<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-
-</code></pre></div><h3 id="step02-移除图片样式调整">Step02 移除图片&amp;样式调整</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en-us&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Test<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.gstatic.com&#34;</span> <span class="na">crossorigin</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;family=Ma+Shan+Zheng&amp;family=Noto+Sans+SC:wght@300&amp;family=Noto+Serif+SC:wght@300&amp;family=Zhi+Mang+Xing&amp;display=swap&#34;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">:</span><span class="nd">root</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">font-size</span><span class="p">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">font-family</span><span class="p">:</span> <span class="s1">&#39;Zhi Mang Xing&#39;</span><span class="p">,</span> <span class="kc">cursive</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">--body-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">--card-width</span><span class="p">:</span> <span class="mi">420</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">--card-height</span><span class="p">:</span> <span class="mi">280</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">--img-height</span><span class="p">:</span> <span class="mi">226</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">--img-height-expended</span><span class="p">:</span> <span class="mi">320</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#333</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">body</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">body</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#eee</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">margin</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">display</span><span class="p">:</span> <span class="kc">flex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">flex-direction</span><span class="p">:</span> <span class="kc">column</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">align-items</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">min-height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">body</span><span class="p">.</span><span class="nc">noscroll</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">height</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">.2</span><span class="kt">rem</span> <span class="mi">2</span><span class="kt">rem</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">margin</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="nb">cubic-bezier</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span> <span class="nt">img</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">img</span><span class="o">-</span><span class="n">height</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">object-fit</span><span class="p">:</span> <span class="kc">cover</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border-top-left-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border-top-right-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span> <span class="nt">h4</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">padding</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">line-height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">letter-spacing</span><span class="p">:</span> <span class="mf">-.5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">padding-bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">height</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-out</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">opacity</span><span class="p">:</span> <span class="mf">.8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">.</span><span class="nc">content</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">overflow</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span> <span class="nt">p</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">line-height</span><span class="p">:</span> <span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c">/* active classes */</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">transform</span><span class="p">:</span> <span class="nb">translateY</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">offset</span><span class="o">-</span><span class="kc">top</span><span class="p">))</span> <span class="nb">scale</span><span class="p">(</span><span class="nb">calc</span><span class="p">(</span><span class="mi">480</span><span class="o">/</span><span class="mi">420</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">                <span class="k">transform-origin</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="nt">h4</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">padding-bottom</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="nt">img</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border-top-left-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border-top-right-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">img</span><span class="o">-</span><span class="n">height</span><span class="o">-</span><span class="n">expended</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-in</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">width</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar-track</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="kc">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border-radius</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">border</span><span class="p">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-clip</span><span class="p">:</span> <span class="kc">content-box</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span><span class="p">:</span><span class="nd">hover</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text/javascript&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="kd">let</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="kd">let</span> <span class="nx">card_offset_scrolltop</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">scrollTop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;--data-offset-top&#39;</span><span class="p">,</span> <span class="nx">card_offset_scrolltop</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    
+</span></span><span class="line"><span class="cl">                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">toggleClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="kd">let</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="kd">let</span> <span class="nx">ratio</span> <span class="o">=</span> <span class="mi">480</span><span class="o">/</span><span class="mi">420</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">height</span> <span class="o">-=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">).</span><span class="nx">outerHeight</span><span class="p">()</span> <span class="o">*</span> <span class="nx">ratio</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">height</span> <span class="o">-=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;h4&#39;</span><span class="p">).</span><span class="nx">outerHeight</span><span class="p">()</span> <span class="o">*</span> <span class="nx">ratio</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">height</span> <span class="o">/=</span> <span class="nx">ratio</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.content&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">});</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title1<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,2&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title2<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,3&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title3<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;card&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://source.unsplash.com/900x600/?nature,water,4&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>Title4<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content-wrapper&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></div><h3 id="step02-移除图片样式调整">Step02 移除图片&amp;样式调整</h3>
 <p>Steven大佬做出来的效果，对 <code>img</code> 的操作占了比较大的部分；不过我的需求是文字摘抄，并不需要这么多的图片，因此决定将这些图片移除掉。同时，把CSS中关于图片的样式也全部移除。</p>
 <p>此外，在demo中限定了 <code>--card-width: 420px</code> ，这是因为作者假设了使用场景是小屏幕；我的使用场景不是小屏幕，因此将这个数值改大一些： <code>--card-width: 80%</code> 。</p>
 <p>现有的布局结构是一个 <code>card </code> 下有一个标题 <code>h4</code> 和内容部分 <code>content-wrapper</code> ，我决定将他们全部保留，不过移除了图片之后，样式变得有点奇怪，需要进行一些调整。</p>
@@ -425,103 +424,103 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 <li>滚动条美化（老技能了）。</li>
 </ul>
 <p>调整之后的CSS变为：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="p">:</span><span class="nd">root</span> <span class="p">{</span>
-    <span class="k">font-size</span><span class="p">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
-    <span class="k">font-family</span><span class="p">:</span> <span class="s1">&#39;Zhi Mang Xing&#39;</span><span class="p">,</span> <span class="kc">cursive</span><span class="p">;</span>
-    <span class="nv">--body-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-    <span class="nv">--card-width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
-    <span class="nv">--card-height</span><span class="p">:</span> <span class="mi">150</span><span class="kt">px</span><span class="p">;</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#333</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">::</span><span class="nd">-webkit-scrollbar</span> <span class="p">{</span>
-    <span class="k">width</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#eee</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">::</span><span class="nd">-webkit-scrollbar-track</span> <span class="p">{</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="kc">transparent</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span> <span class="p">{</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
-    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-    <span class="k">border</span><span class="p">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
-    <span class="k">background-clip</span><span class="p">:</span> <span class="kc">content-box</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span><span class="p">:</span><span class="nd">hover</span> <span class="p">{</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nt">body</span> <span class="p">{</span>
-    <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">body</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#eee</span><span class="p">;</span>
-    <span class="k">margin</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
-    <span class="k">display</span><span class="p">:</span> <span class="kc">flex</span><span class="p">;</span>
-    <span class="k">flex-direction</span><span class="p">:</span> <span class="kc">column</span><span class="p">;</span>
-    <span class="k">align-items</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
-    <span class="k">min-height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
-    <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nt">body</span><span class="p">.</span><span class="nc">noscroll</span> <span class="p">{</span>
-    <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="p">.</span><span class="nc">card</span> <span class="p">{</span>
-    <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
-    <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">height</span><span class="p">);</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-    <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">.2</span><span class="kt">rem</span> <span class="mi">2</span><span class="kt">rem</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.1</span><span class="p">);</span>
-    <span class="k">margin</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="nb">cubic-bezier</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">card</span> <span class="nt">h4</span> <span class="p">{</span>
-    <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.8</span><span class="kt">rem</span><span class="p">;</span>
-    <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
-    <span class="k">padding</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-    <span class="k">line-height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">rem</span><span class="p">;</span>
-    <span class="k">letter-spacing</span><span class="p">:</span> <span class="mf">-.5</span><span class="kt">px</span><span class="p">;</span>
-    <span class="k">padding-bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
-    <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-out</span><span class="p">;</span>
-    <span class="k">opacity</span><span class="p">:</span> <span class="mf">.8</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">.</span><span class="nc">content</span> <span class="p">{</span>
-    <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-    <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
-    <span class="k">display</span><span class="p">:</span> <span class="kp">-webkit-</span><span class="n">box</span><span class="p">;</span>
-    <span class="kp">-webkit-</span><span class="n">box-orient</span><span class="p">:</span> <span class="kc">vertical</span><span class="p">;</span>
-    <span class="kp">-webkit-</span><span class="n">line-clamp</span><span class="p">:</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">card</span> <span class="nt">p</span> <span class="p">{</span>
-    <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
-    <span class="k">line-height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">rem</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c">/* active classes */</span>
-<span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">{</span>
-    <span class="k">transform</span><span class="p">:</span> <span class="nb">translateY</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">offset</span><span class="o">-</span><span class="kc">top</span><span class="p">))</span> <span class="nb">scale</span><span class="p">(</span><span class="nb">calc</span><span class="p">(</span><span class="mi">480</span><span class="o">/</span><span class="mi">420</span><span class="p">));</span>
-    <span class="k">transform-origin</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">z-index</span><span class="p">:</span> <span class="mi">99</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="nt">h4</span> <span class="p">{</span>
-    <span class="k">padding-bottom</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
-    <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
-    <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-in</span><span class="p">;</span>
-    <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">.</span><span class="nc">content</span> <span class="p">{</span>
-    <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
-    <span class="k">height</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p><figure 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="p">:</span><span class="nd">root</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">font-size</span><span class="p">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">font-family</span><span class="p">:</span> <span class="s1">&#39;Zhi Mang Xing&#39;</span><span class="p">,</span> <span class="kc">cursive</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">--body-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">--card-width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">--card-height</span><span class="p">:</span> <span class="mi">150</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#333</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">::</span><span class="nd">-webkit-scrollbar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">width</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#eee</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">::</span><span class="nd">-webkit-scrollbar-track</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="kc">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">border</span><span class="p">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-clip</span><span class="p">:</span> <span class="kc">content-box</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span><span class="p">:</span><span class="nd">hover</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">body</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">body</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#eee</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">margin</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">display</span><span class="p">:</span> <span class="kc">flex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">flex-direction</span><span class="p">:</span> <span class="kc">column</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">align-items</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">min-height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nt">body</span><span class="p">.</span><span class="nc">noscroll</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">width</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">width</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">height</span><span class="p">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card</span><span class="o">-</span><span class="n">height</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">.2</span><span class="kt">rem</span> <span class="mi">2</span><span class="kt">rem</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">margin</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="nb">cubic-bezier</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span> <span class="nt">h4</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.8</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">padding</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">line-height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">letter-spacing</span><span class="p">:</span> <span class="mf">-.5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">padding-bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-out</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">opacity</span><span class="p">:</span> <span class="mf">.8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">.</span><span class="nc">content</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span> <span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">display</span><span class="p">:</span> <span class="kp">-webkit-</span><span class="n">box</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kp">-webkit-</span><span class="n">box-orient</span><span class="p">:</span> <span class="kc">vertical</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kp">-webkit-</span><span class="n">line-clamp</span><span class="p">:</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span> <span class="nt">p</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">line-height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">/* active classes */</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">transform</span><span class="p">:</span> <span class="nb">translateY</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">offset</span><span class="o">-</span><span class="kc">top</span><span class="p">))</span> <span class="nb">scale</span><span class="p">(</span><span class="nb">calc</span><span class="p">(</span><span class="mi">480</span><span class="o">/</span><span class="mi">420</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">transform-origin</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">border-radius</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">z-index</span><span class="p">:</span> <span class="mi">99</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="nt">h4</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">padding-bottom</span><span class="p">:</span> <span class="mf">.8</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">transition</span><span class="p">:</span> <span class="mf">.3</span><span class="kt">s</span> <span class="kc">all</span> <span class="kc">ease-in</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">active</span> <span class="p">.</span><span class="nc">content-wrapper</span> <span class="p">.</span><span class="nc">content</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">height</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><figure 
 	
 		class="gallery-image" 
 		style="
@@ -565,14 +564,14 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 <p>优化的思路很简单，使用一个CSS变量来设置颜色；配合此前已经有了的jQuery对点击事件的判断，改变这个背景颜色即可。</p>
 <p>既然已经提到了使用变量，我就 <strong>统一将各个背景颜色全部使用变量进行控制</strong> ，作出的相应修改在此不表。</p>
 <p>使用 <code>--scrollbar-bg-color: #eee;</code> 作为滚动条默认背景颜色（与 <code>body</code> 背景颜色一致），在jQuery判断点击的那部分代码中加上对这个颜色变量的控制：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;:root&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;--scrollbar-bg-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#fff&#39;</span><span class="p">);</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;:root&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;--scrollbar-bg-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#eee&#39;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>搞定！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;:root&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;--scrollbar-bg-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#fff&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;noscroll&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;:root&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;--scrollbar-bg-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#eee&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>搞定！</p>
 <h4 id="卡片缩放美化">卡片缩放美化</h4>
 <p>Steven大佬的卡片缩放，由于有一张尺寸较大的图，使得原本“顶天立地”的缩放效果就显得很出色。在我的使用场景中，已经将图片去掉了，如果继续“顶天立地”下去，就会造成卡片下端的大量空白。</p>
 <p><figure 
@@ -666,16 +665,16 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 	
 </figure></p>
 <p>修复它的做法比较简单：在 <code>click</code> 事件中判断一下当前是否选中了文本，若存在，则说明卡片缩放的步骤不应该执行，否则再按照原有的流程执行卡片缩放。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">txt</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">txt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">selection</span><span class="p">.</span><span class="nx">createRange</span><span class="p">().</span><span class="nx">text</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">txt</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 原有的卡片缩放步骤
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p><figure 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">txt</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">txt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">selection</span><span class="p">.</span><span class="nx">createRange</span><span class="p">().</span><span class="nx">text</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">txt</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 原有的卡片缩放步骤
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p><figure 
 	
 		class="gallery-image" 
 		style="
@@ -844,6 +843,48 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
                 
                     
 <article class="">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">RapidJson使用小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Windows Terminal美化小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
     <a href="/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/">
         
         
@@ -900,48 +941,6 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
             <h2 class="article-title">Hackintosh小记</h2>
             <footer class="article-time">
                 <time datetime=''>Feb 22, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 16, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%BA%8C%E9%80%9A%E8%BF%87%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%8C%85%E5%AE%9E%E7%8E%B0%E4%BC%9A%E8%AF%9D%E5%88%86%E5%89%B2/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">PcapPlusPlus使用记录（二、通过解析数据包实现会话分割）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 07, 2022</time>
             </footer>
         </div>
     </a>

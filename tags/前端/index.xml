@@ -18,9 +18,9 @@
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
 开工大吉！ ☀️
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
- 前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载+加载时的页面动画  已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载+加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
- 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。  正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
+摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
 &amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;amp;family=Ma+Shan+Zheng&amp;amp;family=Noto+Sans+SC:wght@300&amp;amp;family=Noto+Serif+SC:wght@300&amp;amp;family=Zhi+Mang+Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.</description>

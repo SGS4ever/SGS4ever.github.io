@@ -6,10 +6,13 @@
 如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
 给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
 示例1
- 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示： 移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。 分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
 暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
 分析：
- 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。'><title>错题本 | LeetCode947. 移除最多的同行或同列石头</title>
+由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。
+于是题目转化为了以行列为依据的并查集问题。对于一块石头idx，其坐标为(x, y)，如果x行上已经有了先来的石头root_x[x]，那么将idx加入先前就存在的root_x[x]的并查集中；否则表示idx是这一行最先到达的石头，其后的所有石头都要加入idx的并查集中。对于y列来说同理。
+于是实现并查集如下：
+int parent[1010]; // 并查集 // memset(parent, -1, sizeof(parent)); // 或者 // for (i = 0; i &amp;lt; 1010; i&#43;&#43;) parent[i] = i; void join(int parent_idx, int son_idx) { int root_p = find(parent_idx); int root_s = find(son_idx); if (root_p == root_s) return; else parent[root_s] = root_p; } int find(int idx) { if (parent[idx] == -1) return idx; parent[idx] = find(parent[idx]); // 路径压缩 return parent[idx]; } 我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。'><title>错题本 | LeetCode947. 移除最多的同行或同列石头</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/'>
 
@@ -38,10 +41,13 @@
 如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
 给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
 示例1
- 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示： 移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。 分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
 暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
 分析：
- 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。'>
+由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。
+于是题目转化为了以行列为依据的并查集问题。对于一块石头idx，其坐标为(x, y)，如果x行上已经有了先来的石头root_x[x]，那么将idx加入先前就存在的root_x[x]的并查集中；否则表示idx是这一行最先到达的石头，其后的所有石头都要加入idx的并查集中。对于y列来说同理。
+于是实现并查集如下：
+int parent[1010]; // 并查集 // memset(parent, -1, sizeof(parent)); // 或者 // for (i = 0; i &amp;lt; 1010; i&#43;&#43;) parent[i] = i; void join(int parent_idx, int son_idx) { int root_p = find(parent_idx); int root_s = find(son_idx); if (root_p == root_s) return; else parent[root_s] = root_p; } int find(int idx) { if (parent[idx] == -1) return idx; parent[idx] = find(parent[idx]); // 路径压缩 return parent[idx]; } 我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode947.-%E7%A7%BB%E9%99%A4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%90%8C%E8%A1%8C%E6%88%96%E5%90%8C%E5%88%97%E7%9F%B3%E5%A4%B4/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-15T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-15T00:00:00&#43;00:00'/>
@@ -51,10 +57,13 @@
 如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
 给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
 示例1
- 输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示：  移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。    分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
+输入： stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]] 输出： 5 解释： 一种移除 5 块石头的方法如下所示： 移除石头 [2,2] ，因为它和 [2,1] 同行。 移除石头 [2,1] ，因为它和 [0,1] 同列。 移除石头 [1,2] ，因为它和 [1,0] 同行。 移除石头 [1,0] ，因为它和 [0,0] 同列。 移除石头 [0,1] ，因为它和 [0,0] 同行。 石头 [0,0] 不能移除，因为它没有与另一块石头同行/列。 分析 其实不知道这题该算错题还是难题，毕竟它的思路是简单的，但是我并没有想到。
 暂且归为错题罢。借由此题捡回了并查集的相关知识，在实现并查集的过程中有一些细节上的错误导致了一次WA，本篇将加以记录。
 分析：
- 由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。">
+由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。
+于是题目转化为了以行列为依据的并查集问题。对于一块石头idx，其坐标为(x, y)，如果x行上已经有了先来的石头root_x[x]，那么将idx加入先前就存在的root_x[x]的并查集中；否则表示idx是这一行最先到达的石头，其后的所有石头都要加入idx的并查集中。对于y列来说同理。
+于是实现并查集如下：
+int parent[1010]; // 并查集 // memset(parent, -1, sizeof(parent)); // 或者 // for (i = 0; i &amp;lt; 1010; i&#43;&#43;) parent[i] = i; void join(int parent_idx, int son_idx) { int root_p = find(parent_idx); int root_s = find(son_idx); if (root_p == root_s) return; else parent[root_s] = root_p; } int find(int idx) { if (parent[idx] == -1) return idx; parent[idx] = find(parent[idx]); // 路径压缩 return parent[idx]; } 我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -343,124 +352,124 @@
 <p>由题意可知，在同一行或同一列上的石头属于同一个集合。显然，这样的集合永远可以找到一个删除的顺序，使得集合中只剩下唯一一个石头。</p>
 <p>于是题目转化为了以行列为依据的并查集问题。对于一块石头<code>idx</code>，其坐标为<code>(x, y)</code>，如果x行上已经有了先来的石头<code>root_x[x]</code>，那么将<code>idx</code>加入先前就存在的<code>root_x[x]</code>的并查集中；否则表示<code>idx</code>是这一行最先到达的石头，其后的所有石头都要加入<code>idx</code>的并查集中。对于y列来说同理。</p>
 <p>于是实现并查集如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
-</span><span class="c1">// memset(parent, -1, sizeof(parent));
-</span><span class="c1">// 或者
-</span><span class="c1">// for (i = 0; i &lt; 1010; i++) parent[i] = i;
-</span><span class="c1"></span><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">root_p</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent_idx</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">root_s</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">son_idx</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root_p</span> <span class="o">==</span> <span class="n">root_s</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="k">else</span>
-        <span class="n">parent</span><span class="p">[</span><span class="n">root_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_p</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
-    <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>  <span class="c1">// 路径压缩
-</span><span class="c1"></span>    <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
-<span class="p">}</span>
-</code></pre></div><p>我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
+</span></span></span><span class="line"><span class="cl"><span class="c1">// memset(parent, -1, sizeof(parent));
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 或者
+</span></span></span><span class="line"><span class="cl"><span class="c1">// for (i = 0; i &lt; 1010; i++) parent[i] = i;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">root_p</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent_idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">root_s</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">son_idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">root_p</span> <span class="o">==</span> <span class="n">root_s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="n">parent</span><span class="p">[</span><span class="n">root_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>  <span class="c1">// 路径压缩
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>我们遍历所有石头，谁先到达某一行，之后这一行上的石头都要作为它的子节点；谁先到达某一列，之后这一列上的石头都要作为它的子节点。</p>
 <p>这一轮遍历之后，所有同行同列的石头都处于同一个并查集中；而全局中并查集的个数就是剩余的石头个数。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">root_x</span><span class="p">[</span><span class="mi">10010</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">root_y</span><span class="p">[</span><span class="mi">10010</span><span class="p">];</span>
-    <span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">root_p</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent_idx</span><span class="p">);</span>
-        <span class="kt">int</span> <span class="n">root_s</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">son_idx</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">root_p</span> <span class="o">==</span> <span class="n">root_s</span><span class="p">)</span>
-            <span class="k">return</span><span class="p">;</span>
-        <span class="k">else</span>
-            <span class="n">parent</span><span class="p">[</span><span class="n">root_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_p</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
-        <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>  <span class="c1">// 路径压缩
-</span><span class="c1"></span>        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="kt">int</span> <span class="nf">removeStones</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">stones</span><span class="p">)</span> <span class="p">{</span>
-        
-        <span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
-        <span class="n">memset</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">parent</span><span class="p">));</span>
-        <span class="n">memset</span><span class="p">(</span><span class="n">root_x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">root_x</span><span class="p">));</span>
-        <span class="n">memset</span><span class="p">(</span><span class="n">root_y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">root_y</span><span class="p">));</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">join</span><span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">join</span><span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">==</span> <span class="n">idx</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
-                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">idx</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">cnt</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div></blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1010</span><span class="p">];</span>  <span class="c1">// 并查集
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">root_x</span><span class="p">[</span><span class="mi">10010</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">root_y</span><span class="p">[</span><span class="mi">10010</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">root_p</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent_idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">root_s</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">son_idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">root_p</span> <span class="o">==</span> <span class="n">root_s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="n">parent</span><span class="p">[</span><span class="n">root_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>  <span class="c1">// 路径压缩
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">removeStones</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">stones</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">memset</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">parent</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">memset</span><span class="p">(</span><span class="n">root_x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">root_x</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">memset</span><span class="p">(</span><span class="n">root_y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">root_y</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">x</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">y</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">join</span><span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">join</span><span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">==</span> <span class="n">idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">idx</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">cnt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div></blockquote>
 <p><strong>错误记录</strong></p>
 <blockquote>
 <p>并查集中的<code>join</code>函数，原本的写法为：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">parent</span><span class="p">[</span><span class="n">son_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_idx</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>这样的写法是错误的，且非常之离谱。我们知道，两个属于不同并查集的元素的合并意味着两个并查集的合并，显然不能单纯地修改这两个元素本身，而要考虑到这两个并查集的根节点。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">join</span><span class="p">(</span><span class="kt">int</span> <span class="n">parent_idx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">son_idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">parent</span><span class="p">[</span><span class="n">son_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这样的写法是错误的，且非常之离谱。我们知道，两个属于不同并查集的元素的合并意味着两个并查集的合并，显然不能单纯地修改这两个元素本身，而要考虑到这两个并查集的根节点。</p>
 <p>就本题来说，这样的写法无法通过这个测试样例：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="na">[[0,1],[1,0],[1,1]]</span>
-</code></pre></div><p>对于最后一块石头<code>(1, 1)</code>，第1行已经有了石头<code>1</code>，第1列已经有了石头<code>0</code>。按照遍历过程的逻辑：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
-<span class="p">{</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="n">join</span><span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="n">join</span><span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
-        <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>最后一块石头最终将加入<code>0</code>号并查集。且此时剩余独立的并查集有<code>0</code>和<code>1</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="na">[[0,1],[1,0],[1,1]]</span>
+</span></span></code></pre></div><p>对于最后一块石头<code>(1, 1)</code>，第1行已经有了石头<code>1</code>，第1列已经有了石头<code>0</code>。按照遍历过程的逻辑：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">stones</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">idx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">y</span> <span class="o">=</span> <span class="n">stones</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">join</span><span class="p">(</span><span class="n">root_x</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">join</span><span class="p">(</span><span class="n">root_y</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">idx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>最后一块石头最终将加入<code>0</code>号并查集。且此时剩余独立的并查集有<code>0</code>和<code>1</code>。</p>
 <p>然而，最后一块石头实际上是<code>0</code>和<code>1</code>的交汇点。按照正确的流程，它根据x坐标首先加入<code>1</code>号并查集后，再加入<code>0</code>号并查集，这时就会将<code>1</code>号石头也带入<code>0</code>号并查集，这也是本题使用并查集思路的正确性所在。</p>
 <p>正确的办法是在合并时考虑根节点的修改，详见前文代码。</p>
 <p>此外，本题使用的并查集还可以进行优化，包括针对本题的封装（参考[1]），和针对并查集这一结构本身的按秩合并和路径压缩（参考[2]）。</p>

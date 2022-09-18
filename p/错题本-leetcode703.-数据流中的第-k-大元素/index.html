@@ -3,13 +3,20 @@
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='不是吧啊Sir，这种题也错？😢
 题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
-题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+题目 设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
 请实现 KthLargest 类：
- KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
-  输出： [null, 4, 5, 5, 8, 8]
-  示例2
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]'><title>错题本 | LeetCode703. 数据流中的第 K 大元素</title>
+KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。 示例1
+输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+输出： [null, 4, 5, 5, 8, 8]
+示例2
+输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]
+输出： [null,-1,0,0,0,1]
+分析 啪地一下，我就想到了双堆对顶，很快嗷！
+然而又想复杂了o(╥﹏╥)o。要求第K大数，实际上只需要使用一个小根堆，堆中一共有K个元素，堆顶就是目标。
+当然，这K个元素不是随随便便的K个元素，而是将初始数组中所有元素都放入小根堆后，逐个弹出，直到只剩K个元素。
+当我们希望添加元素时，首先可以比较此元素与堆顶元素的大小关系，当此元素比堆顶元素小时，不会对前K个大数的顺序产生影响，直接返回堆顶元素即可；当此元素大于堆顶元素，第K大数一定会改变，我们将其放入堆中，再从堆中弹出一个元素，此时的堆中还是K个元素，堆顶元素即为答案。
+我最开始的想法，双堆对顶又是什么呢？这是一种同时使用小根堆和大根堆来维护整个数组的办法，小根堆larger中的所有元素都比堆顶元素更大，大根堆smaller中的所有元素都比堆顶元素小。这样，任何时刻，数组中的数据被组织如下：
+双堆对顶 这种办法可以用于快速求解数据流的中位数，是个困难题，我还没做。根据中位数的定义，中间部分的数据正需要满足比左边都大，比右边都小的性质，使用双堆对顶的办法可以在 O(1) 的时间内找到数据流中的中位数。'><title>错题本 | LeetCode703. 数据流中的第 K 大元素</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/'>
 
@@ -35,26 +42,40 @@
 <meta property='og:title' content='错题本 | LeetCode703. 数据流中的第 K 大元素'>
 <meta property='og:description' content='不是吧啊Sir，这种题也错？😢
 题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
-题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+题目 设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
 请实现 KthLargest 类：
- KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
-  输出： [null, 4, 5, 5, 8, 8]
-  示例2
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]'>
+KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。 示例1
+输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+输出： [null, 4, 5, 5, 8, 8]
+示例2
+输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]
+输出： [null,-1,0,0,0,1]
+分析 啪地一下，我就想到了双堆对顶，很快嗷！
+然而又想复杂了o(╥﹏╥)o。要求第K大数，实际上只需要使用一个小根堆，堆中一共有K个元素，堆顶就是目标。
+当然，这K个元素不是随随便便的K个元素，而是将初始数组中所有元素都放入小根堆后，逐个弹出，直到只剩K个元素。
+当我们希望添加元素时，首先可以比较此元素与堆顶元素的大小关系，当此元素比堆顶元素小时，不会对前K个大数的顺序产生影响，直接返回堆顶元素即可；当此元素大于堆顶元素，第K大数一定会改变，我们将其放入堆中，再从堆中弹出一个元素，此时的堆中还是K个元素，堆顶元素即为答案。
+我最开始的想法，双堆对顶又是什么呢？这是一种同时使用小根堆和大根堆来维护整个数组的办法，小根堆larger中的所有元素都比堆顶元素更大，大根堆smaller中的所有元素都比堆顶元素小。这样，任何时刻，数组中的数据被组织如下：
+双堆对顶 这种办法可以用于快速求解数据流的中位数，是个困难题，我还没做。根据中位数的定义，中间部分的数据正需要满足比左边都大，比右边都小的性质，使用双堆对顶的办法可以在 O(1) 的时间内找到数据流中的中位数。'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode703.-%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%AD%E7%9A%84%E7%AC%AC-k-%E5%A4%A7%E5%85%83%E7%B4%A0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-02-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-02-11T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="错题本 | LeetCode703. 数据流中的第 K 大元素">
 <meta name="twitter:description" content="不是吧啊Sir，这种题也错？😢
 题目链接：https://leetcode-cn.com/problems/kth-largest-element-in-a-stream/
-题目  设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
+题目 设计一个找到数据流中第 k 大元素的类（class）。注意是排序后的第 k 大元素，不是第 k 个不同的元素。
 请实现 KthLargest 类：
- KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。  示例1
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
-  输出： [null, 4, 5, 5, 8, 8]
-  示例2
-  输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]">
+KthLargest(int k, int[] nums) 使用整数 k 和整数流 nums 初始化对象。 int add(int val) 将 val 插入数据流 nums 后，返回当前数据流中第 k 大的元素。 示例1
+输入： [&amp;ldquo;KthLargest&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;, &amp;ldquo;add&amp;rdquo;] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+输出： [null, 4, 5, 5, 8, 8]
+示例2
+输入： [&amp;ldquo;KthLargest&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;,&amp;ldquo;add&amp;rdquo;] [[2,[0]],[-1],[1],[-2],[-4],[3]]
+输出： [null,-1,0,0,0,1]
+分析 啪地一下，我就想到了双堆对顶，很快嗷！
+然而又想复杂了o(╥﹏╥)o。要求第K大数，实际上只需要使用一个小根堆，堆中一共有K个元素，堆顶就是目标。
+当然，这K个元素不是随随便便的K个元素，而是将初始数组中所有元素都放入小根堆后，逐个弹出，直到只剩K个元素。
+当我们希望添加元素时，首先可以比较此元素与堆顶元素的大小关系，当此元素比堆顶元素小时，不会对前K个大数的顺序产生影响，直接返回堆顶元素即可；当此元素大于堆顶元素，第K大数一定会改变，我们将其放入堆中，再从堆中弹出一个元素，此时的堆中还是K个元素，堆顶元素即为答案。
+我最开始的想法，双堆对顶又是什么呢？这是一种同时使用小根堆和大根堆来维护整个数组的办法，小根堆larger中的所有元素都比堆顶元素更大，大根堆smaller中的所有元素都比堆顶元素小。这样，任何时刻，数组中的数据被组织如下：
+双堆对顶 这种办法可以用于快速求解数据流的中位数，是个困难题，我还没做。根据中位数的定义，中间部分的数据正需要满足比左边都大，比右边都小的性质，使用双堆对顶的办法可以在 O(1) 的时间内找到数据流中的中位数。">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -246,124 +267,124 @@
 <p>而且，这种办法在额外考虑<strong>初始数组为空</strong>的情况、以及<strong>初始数组的大小小于K</strong>的情况时比较繁琐，我在这里WA了两次😢</p>
 </blockquote>
 <h3 id="ac代码1">AC代码1</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
-    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">less</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">smaller</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="c1">// larger是个小顶堆，堆顶元素是最小的
-</span><span class="c1"></span>    <span class="c1">// smaller是个大顶堆，堆顶元素是最大的
-</span><span class="c1"></span>    <span class="c1">// 第K大数，表示有K - 1个数比他更大
-</span><span class="c1"></span>    <span class="c1">// 有len - K个数比他更小
-</span><span class="c1"></span>    <span class="c1">// e.g 4,5,8,2中的第三大数
-</span><span class="c1"></span>    <span class="c1">// 有两个比他小，有一个比他大
-</span><span class="c1"></span>    <span class="c1">// 我们以larger.top()为第K大数，则smaller里面始终保持len - K个元素
-</span><span class="c1"></span>    <span class="n">KthLargest</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">nums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">);</span>  <span class="c1">// 放入一个极小值，对第K大数无影响
-</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">t</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
-                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">// larger里的所有元素都大于堆顶
-</span><span class="c1"></span>        <span class="c1">// 故保持larger个数为K个，即可从堆顶中获取第K大数
-</span><span class="c1"></span>        <span class="c1">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
-</span><span class="c1"></span>    <span class="p">}</span>
-
-
-    <span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">larger_not_full</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-            <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">())</span>  <span class="c1">// 比第K大数还大，第K大数可能改变
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
-                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-                <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-                <span class="c1">// cout &lt;&lt; larger.top() &lt;&lt; endl;
-</span><span class="c1"></span>                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="k">else</span>  <span class="c1">// 插入了一个更小的数，不会改变第K大数
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-                <span class="c1">// cout &lt;&lt; larger.top() &lt;&lt; endl;
-</span><span class="c1"></span>                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="cm">/**
-</span><span class="cm"> * Your KthLargest object will be instantiated and called as such:
-</span><span class="cm"> * KthLargest* obj = new KthLargest(k, nums);
-</span><span class="cm"> * int param_1 = obj-&gt;add(val);
-</span><span class="cm"> */</span>
-</code></pre></div><h3 id="ac代码2">AC代码2</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">K</span><span class="p">;</span>
-    <span class="n">KthLargest</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">K</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">t</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="c1">// larger里的所有元素都大于堆顶
-</span><span class="c1"></span>        <span class="c1">// 故保持larger个数为K个，即可从堆顶中获取第K大数
-</span><span class="c1"></span>        <span class="c1">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
-</span><span class="c1"></span>    <span class="p">}</span>
-
-    <span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">())</span>  <span class="c1">// 比第K大数还大，第K大数可能改变
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="k">else</span>  <span class="c1">// 插入了一个更小的数，不会改变第K大数
-</span><span class="c1"></span>            <span class="p">{</span>
-                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="cm">/**
-</span><span class="cm"> * Your KthLargest object will be instantiated and called as such:
-</span><span class="cm"> * KthLargest* obj = new KthLargest(k, nums);
-</span><span class="cm"> * int param_1 = obj-&gt;add(val);
-</span><span class="cm"> */</span>
-</code></pre></div><p>优化掉<code>smaller</code>堆之后，表现会好一些。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">less</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">smaller</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// larger是个小顶堆，堆顶元素是最小的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// smaller是个大顶堆，堆顶元素是最大的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 第K大数，表示有K - 1个数比他更大
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 有len - K个数比他更小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// e.g 4,5,8,2中的第三大数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 有两个比他小，有一个比他大
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 我们以larger.top()为第K大数，则smaller里面始终保持len - K个元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">KthLargest</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">);</span>  <span class="c1">// 放入一个极小值，对第K大数无影响
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">t</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// larger里的所有元素都大于堆顶
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// 故保持larger个数为K个，即可从堆顶中获取第K大数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">larger_not_full</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">larger_not_full</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">())</span>  <span class="c1">// 比第K大数还大，第K大数可能改变
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// cout &lt;&lt; larger.top() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>  <span class="c1">// 插入了一个更小的数，不会改变第K大数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">smaller</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// cout &lt;&lt; larger.top() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Your KthLargest object will be instantiated and called as such:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * KthLargest* obj = new KthLargest(k, nums);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * int param_1 = obj-&gt;add(val);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div><h3 id="ac代码2">AC代码2</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">KthLargest</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">larger</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">K</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">KthLargest</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">K</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">t</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// larger里的所有元素都大于堆顶
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// 故保持larger个数为K个，即可从堆顶中获取第K大数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// cout &lt;&lt; &#34;Original &#34; &lt;&lt; k &lt;&lt; &#34;th. largest is &#34; &lt;&lt; larger.top() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">larger</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">())</span>  <span class="c1">// 比第K大数还大，第K大数可能改变
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">larger</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">larger</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>  <span class="c1">// 插入了一个更小的数，不会改变第K大数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">res</span> <span class="o">=</span> <span class="n">larger</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Your KthLargest object will be instantiated and called as such:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * KthLargest* obj = new KthLargest(k, nums);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * int param_1 = obj-&gt;add(val);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div><p>优化掉<code>smaller</code>堆之后，表现会好一些。</p>
 <p><figure 
 	
 		class="gallery-image" 

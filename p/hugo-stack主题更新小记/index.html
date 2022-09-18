@@ -4,15 +4,12 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='近期一好友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
 今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
 动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
- 旧主页   新Stack主页（未修改) 
- 旧文章页面   新Stack文章页面（未修改) 
-Part 1 左边栏 图标 图标显示 修改配置文件和 page
+旧主页 新Stack主页（未修改) 旧文章页面 新Stack文章页面（未修改) Part 1 左边栏 图标 图标显示 修改配置文件和 page
 首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
- 左边栏 
-发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+左边栏 发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
 根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
 以 config.yaml 中的内容为例，以前的 menu 是这样的：
-menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：'><title>Hugo Stack主题更新小记</title>
+menu: main: - identifier: home name: 博文 url: / weight: -100 pre: home 修改过后，要变成这样：'><title>Hugo Stack主题更新小记</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/'>
 
@@ -39,15 +36,12 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <meta property='og:description' content='近期一好友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
 今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
 动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
- 旧主页   新Stack主页（未修改) 
- 旧文章页面   新Stack文章页面（未修改) 
-Part 1 左边栏 图标 图标显示 修改配置文件和 page
+旧主页 新Stack主页（未修改) 旧文章页面 新Stack文章页面（未修改) Part 1 左边栏 图标 图标显示 修改配置文件和 page
 首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
- 左边栏 
-发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+左边栏 发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
 根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
 以 config.yaml 中的内容为例，以前的 menu 是这样的：
-menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：'>
+menu: main: - identifier: home name: 博文 url: / weight: -100 pre: home 修改过后，要变成这样：'>
 <meta property='og:url' content='https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2022-01-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-01-22T00:00:00&#43;00:00'/>
@@ -55,15 +49,12 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <meta name="twitter:description" content="近期一好友搭建博客，使用了跟我一样的 Hugo Stack主题 ，在自定义的过程当中痛不欲生。我才发现JimmyCai大佬已经把这个主题更新了好几版，无怪乎我旧有的一些经验已经不起作用了。
 今天下载了 3.6.0 版本的 Release ，打算这几天把作者更新出来的一些好东西和我之前自己修改的一些东西结合一下，两者都有所扬弃，总的来说就是希望把我这个自娱自乐的博客弄得再好看一些。
 动工前纪念 动工之前，把旧有的博客样式和 未作修改之前的 新版Stack样式进行一下合影留念，也算是这个博客样貌成长的一个里程碑吧。其实我想最终的样子跟现有的样子相比，不会有很大的变化，但应该能够把我此前很不爽且无能为力的一些细节消灭掉，后文细说~
- 旧主页   新Stack主页（未修改) 
- 旧文章页面   新Stack文章页面（未修改) 
-Part 1 左边栏 图标 图标显示 修改配置文件和 page
+旧主页 新Stack主页（未修改) 旧文章页面 新Stack文章页面（未修改) Part 1 左边栏 图标 图标显示 修改配置文件和 page
 首先，可以看到新版的主题左边栏的几个跳转按钮（后文使用 menu 来指代这几个东西）是没有图标的，光秃秃的很不好看。
- 左边栏 
-发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
+左边栏 发生这种情况的原因是新版的 menu 图标与旧版的图标不同。在旧版主题中， menu 图标由 menu.main.pre 来指定，而新版的图标由 menu.main.params.icon 来指定，参数都不一样了，图标丢失是当然的了！
 根据作者的 文档 ，添加页面有两种方式，一种是在 content/page 页面的 Front Matter 中加上 menu.main 参数，另一种是在 config.yaml 文件中添加 menu.main 参数。旧有的主题也是这么工作的， 我们只需要把跟图标相关的参数修改一下就行了 。
 以 config.yaml 中的内容为例，以前的 menu 是这样的：
-menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要变成这样：">
+menu: main: - identifier: home name: 博文 url: / weight: -100 pre: home 修改过后，要变成这样：">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -304,23 +295,23 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <p>根据作者的 <a class="link" href="https://docs.stack.jimmycai.com/configuration/custom-menu.html"  target="_blank" rel="noopener"
     >文档</a> ，添加页面有两种方式，一种是在 <code>content/page</code> 页面的 <code>Front Matter</code> 中加上 <code>menu.main</code> 参数，另一种是在 <code>config.yaml</code> 文件中添加 <code>menu.main</code> 参数。旧有的主题也是这么工作的， <strong>我们只需要把跟图标相关的参数修改一下就行了</strong> 。</p>
 <p>以 <code>config.yaml</code> 中的内容为例，以前的 <code>menu</code> 是这样的：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">menu</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
-</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">博文</span><span class="w">
-</span><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
-</span><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
-</span><span class="w">          </span><span class="nt">pre</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
-</span></code></pre></div><p>修改过后，要变成这样：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">menu</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
-</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">主页</span><span class="w">
-</span><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
-</span><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
-</span><span class="w">          </span><span class="nt">params</span><span class="p">:</span><span class="w">
-</span><span class="w">            </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
-</span></code></pre></div><p>在 <code>page</code> 当中的那些页面也要如此修改。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">menu</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">博文</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">pre</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></span></span></code></pre></div><p>修改过后，要变成这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">menu</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">主页</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">params</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></span></span></code></pre></div><p>在 <code>page</code> 当中的那些页面也要如此修改。</p>
 <p>于是我们的图标就回来了！</p>
 <p><figure 
 	
@@ -382,24 +373,24 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 </figure></p>
 <p>新版的主题只有一点小问题，那就是主页的图标没办法高亮。</p>
 <p>在 <code>layouts/partials/sidebar/left.html</code> 中找到了图标高亮的相关代码，从第 <code>56</code> 行开始：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">ol</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;menu&#34;</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;main-menu&#34;</span><span class="p">&gt;</span>
-        {{ $currentPage := . }}
-        {{ range .Site.Menus.main }}
-        {{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent &#34;main&#34; .) ($currentPage.IsMenuCurrent &#34;main&#34; .)) }}
-
-        <span class="p">&lt;</span><span class="nt">li</span> <span class="err">{{</span> <span class="na">if</span> <span class="err">$</span><span class="na">active</span> <span class="err">}}</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;current&#39;</span> <span class="err">{{</span> <span class="na">end</span> <span class="err">}}</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;{{ .URL | relLangURL }}&#39;</span> <span class="err">{{</span> <span class="na">if</span> <span class="na">eq</span> <span class="err">.</span><span class="na">Params</span><span class="err">.</span><span class="na">newTab</span> <span class="na">true</span> <span class="err">}}</span><span class="na">target</span><span class="o">=</span><span class="s">&#34;_blank&#34;</span><span class="err">{{</span> <span class="na">end</span> <span class="err">}}</span><span class="p">&gt;</span>
-                {{ $icon := default .Pre .Params.Icon }}
-                {{ if .Pre }}
-                    {{ warnf &#34;Menu item [%s] is using [pre] field to set icon, please use [params.icon] instead.\nMore information: https://docs.stack.jimmycai.com/configuration/custom-menu.html&#34; .URL }}
-                {{ end }}
-                {{ with $icon }}
-                    {{ partial &#34;helper/icon&#34; . }}
-                {{ end }}
-                <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>{{- .Name -}}<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-</code></pre></div><p>注意代码片段中的第四行，即控制 <code>active</code> 这个属性的部分，当 <code>active</code> 为 <code>true</code> 时，左边栏的对应图标就高亮了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">ol</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;menu&#34;</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;main-menu&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        {{ $currentPage := . }}
+</span></span><span class="line"><span class="cl">        {{ range .Site.Menus.main }}
+</span></span><span class="line"><span class="cl">        {{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent &#34;main&#34; .) ($currentPage.IsMenuCurrent &#34;main&#34; .)) }}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">li</span> <span class="err">{{</span> <span class="na">if</span> <span class="err">$</span><span class="na">active</span> <span class="err">}}</span> <span class="na">class</span><span class="o">=</span><span class="s">&#39;current&#39;</span> <span class="err">{{</span> <span class="na">end</span> <span class="err">}}</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;{{ .URL | relLangURL }}&#39;</span> <span class="err">{{</span> <span class="na">if</span> <span class="na">eq</span> <span class="err">.</span><span class="na">Params</span><span class="err">.</span><span class="na">newTab</span> <span class="na">true</span> <span class="err">}}</span><span class="na">target</span><span class="o">=</span><span class="s">&#34;_blank&#34;</span><span class="err">{{</span> <span class="na">end</span> <span class="err">}}</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                {{ $icon := default .Pre .Params.Icon }}
+</span></span><span class="line"><span class="cl">                {{ if .Pre }}
+</span></span><span class="line"><span class="cl">                    {{ warnf &#34;Menu item [%s] is using [pre] field to set icon, please use [params.icon] instead.\nMore information: https://docs.stack.jimmycai.com/configuration/custom-menu.html&#34; .URL }}
+</span></span><span class="line"><span class="cl">                {{ end }}
+</span></span><span class="line"><span class="cl">                {{ with $icon }}
+</span></span><span class="line"><span class="cl">                    {{ partial &#34;helper/icon&#34; . }}
+</span></span><span class="line"><span class="cl">                {{ end }}
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>{{- .Name -}}<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>注意代码片段中的第四行，即控制 <code>active</code> 这个属性的部分，当 <code>active</code> 为 <code>true</code> 时，左边栏的对应图标就高亮了。</p>
 <p>什么情况下 <code>active</code> 会是 <code>true</code> 呢？作者在这边写的语句比较复杂，其实只有两种情况：</p>
 <ul>
 <li>当前页面的 <strong>标题</strong> 和某个 <code>menu.name</code> 相同；</li>
@@ -422,23 +413,23 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <p>在主页，页面标题是站点标题即 <code>XR_S's Blog</code> ，而 <code>menu.name</code> 是 <em>主页</em> ，因而第一个条件不成立；在更早的分析中， 我认为由于hugo API的问题使得第二个条件对于 <code>/</code> 路径也不成立，因此主页的入口没有显示高亮。</p>
 <p>那么我们应该添加什么逻辑呢？</p>
 <p>首先我们知道主页的 <code>menu</code> 是添加在 <code>config</code> 文件中的，它的配置是：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">menu</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
-</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">主页</span><span class="w">
-</span><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
-</span><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
-</span><span class="w">          </span><span class="nt">params</span><span class="p">:</span><span class="w">
-</span><span class="w">            </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
-</span></code></pre></div><p>这里有它的独一无二的属性就是 <code>identifier</code> ，利用这个属性，我们可以获取到代表主页的这一个 <code>menu</code> 入口。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">menu</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">主页</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span>-<span class="m">100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">params</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l">home</span><span class="w">
+</span></span></span></code></pre></div><p>这里有它的独一无二的属性就是 <code>identifier</code> ，利用这个属性，我们可以获取到代表主页的这一个 <code>menu</code> 入口。</p>
 <p>我选用的逻辑是： <strong>假如当前的页面标题与网站标题相同，我就将主页的 <code>menu</code> 入口设置为高亮</strong> 。</p>
 <p>因此修改 <code>$active</code> 部分的相关代码为：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{ $currentPage := . }}
-{{ $siteTitle := .Site.Title }}
-{{ range .Site.Menus.main }}
-{{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent &#34;main&#34; .) ($currentPage.IsMenuCurrent &#34;main&#34; .)) }}
-{{ $active := or ($active) (and (eq $currentPage.Title $siteTitle ) (eq .Identifier &#34;home&#34;)) }}
-</code></pre></div><p>成功让主页菜单高亮了！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">{{ $currentPage := . }}
+</span></span><span class="line"><span class="cl">{{ $siteTitle := .Site.Title }}
+</span></span><span class="line"><span class="cl">{{ range .Site.Menus.main }}
+</span></span><span class="line"><span class="cl">{{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent &#34;main&#34; .) ($currentPage.IsMenuCurrent &#34;main&#34; .)) }}
+</span></span><span class="line"><span class="cl">{{ $active := or ($active) (and (eq $currentPage.Title $siteTitle ) (eq .Identifier &#34;home&#34;)) }}
+</span></span></code></pre></div><p>成功让主页菜单高亮了！</p>
 <h4 id="主页布局">主页布局</h4>
 <p>主页的布局可以说是整个新主题当中最令人不满意的地方。</p>
 <p>我没有美学基础，只从最基本的个人的视觉喜好出发，首先对比一下新旧两个主题主页布局的差异。</p>
@@ -508,108 +499,108 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 </figure></p>
 <p>我们知道这三个模块构成了主页，它的 <code>class</code> 是 <code>container</code> ；直接到CSS文件目录中查找，发现 <code>container</code> 这个类的样式是在 <code>grid.scss</code> 这个文件中定义。</p>
 <p>开始阅读这个文件，在很靠前的地方就发现了它的重要内容哈！</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.container</span> <span class="p">{</span>
-    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
-    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
-
-    <span class="nc">.left-sidebar</span> <span class="p">{</span>
-        <span class="na">max-width</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="ni">left</span><span class="o">-</span><span class="n">sidebar-max-width</span><span class="p">);</span>
-        <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="nc">.right-sidebar</span> <span class="p">{</span>
-        <span class="na">max-width</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="ni">right</span><span class="o">-</span><span class="n">sidebar-max-width</span><span class="p">);</span>
-
-        <span class="c1">/// Display right sidebar when min-width: lg
-</span><span class="c1"></span>        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">display</span><span class="o">:</span> <span class="ni">block</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1536</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">15</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="o">===</span> <span class="nt">snip</span> <span class="o">===</span>
-<span class="p">}</span>
-</code></pre></div><p>我们看到，作者在这个文件中限制了 <code>container</code> 的子元素 <code>left-sidebar</code> 和 <code>right-sidebar</code> 的最大宽度，分别用 <code>--left-sidebar-max-width</code> 和 <code>--right-sidebar-max-width</code> 来表示最大宽度的限制，然后动态调整这两个变量的值，来实现对不同设备屏幕的适应。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nc">.container</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nc">.left-sidebar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">max-width</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="ni">left</span><span class="o">-</span><span class="n">sidebar-max-width</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nc">.right-sidebar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">max-width</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="ni">right</span><span class="o">-</span><span class="n">sidebar-max-width</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">/// Display right sidebar when min-width: lg
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">display</span><span class="o">:</span> <span class="ni">block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1536</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">15</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">===</span> <span class="nt">snip</span> <span class="o">===</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>我们看到，作者在这个文件中限制了 <code>container</code> 的子元素 <code>left-sidebar</code> 和 <code>right-sidebar</code> 的最大宽度，分别用 <code>--left-sidebar-max-width</code> 和 <code>--right-sidebar-max-width</code> 来表示最大宽度的限制，然后动态调整这两个变量的值，来实现对不同设备屏幕的适应。</p>
 <p>在Stack新主题的各个CSS文件中，经常要看到 <code>@include respond()</code> 这种写法，它是什么东西呢？</p>
 <p>我们找到了 <code>asset/scss/breakpoints.scss</code> 这个文件，它的内容是这样的：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nv">$breakpoints</span><span class="o">:</span> <span class="p">(</span>
-    <span class="na">sm</span><span class="o">:</span> <span class="mi">640</span><span class="kt">px</span><span class="o">,</span>
-    <span class="na">md</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="o">,</span>
-    <span class="na">lg</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="o">,</span>
-    <span class="na">xl</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="o">,</span>
-    <span class="na">2xl</span><span class="o">:</span> <span class="mi">1536</span><span class="kt">px</span><span class="o">,</span>
-<span class="p">);</span>
-
-<span class="k">@mixin</span><span class="nf"> respond</span><span class="p">(</span><span class="nv">$breakpoint</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">@if</span> <span class="ow">not</span> <span class="nf">map-has-key</span><span class="p">(</span><span class="nv">$breakpoints</span><span class="o">,</span> <span class="nv">$breakpoint</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">@warn</span> <span class="s2">&#34;&#39;</span><span class="si">#{</span><span class="nv">$breakpoint</span><span class="si">}</span><span class="s2">&#39; is not a valid breakpoint&#34;</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">@else</span> <span class="p">{</span>
-        <span class="k">@media</span> <span class="p">(</span><span class="na">min-width</span><span class="o">:</span> <span class="nf">map-get</span><span class="p">(</span><span class="nv">$breakpoints</span><span class="o">,</span> <span class="nv">$breakpoint</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">@content</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>啊哈，原来 <code>respond</code> 函数就是个CSS中的 <code>@media</code> 关键字的封装嘛。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nv">$breakpoints</span><span class="o">:</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="na">sm</span><span class="o">:</span> <span class="mi">640</span><span class="kt">px</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">    <span class="na">md</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">    <span class="na">lg</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">    <span class="na">xl</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">    <span class="na">2xl</span><span class="o">:</span> <span class="mi">1536</span><span class="kt">px</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">@mixin</span><span class="nf"> respond</span><span class="p">(</span><span class="nv">$breakpoint</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">@if</span> <span class="ow">not</span> <span class="nf">map-has-key</span><span class="p">(</span><span class="nv">$breakpoints</span><span class="o">,</span> <span class="nv">$breakpoint</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@warn</span> <span class="s2">&#34;&#39;</span><span class="si">#{</span><span class="nv">$breakpoint</span><span class="si">}</span><span class="s2">&#39; is not a valid breakpoint&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">@else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@media</span> <span class="p">(</span><span class="na">min-width</span><span class="o">:</span> <span class="nf">map-get</span><span class="p">(</span><span class="nv">$breakpoints</span><span class="o">,</span> <span class="nv">$breakpoint</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">@content</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>啊哈，原来 <code>respond</code> 函数就是个CSS中的 <code>@media</code> 关键字的封装嘛。</p>
 <p>例如在上面的样式中，我们看到 <code>@include respond(md)</code> 这样的用法，翻译翻译就是 <code>@media(min-width: 768px)</code> 而已！表示这个样式要在屏幕宽度 <code>768px</code> 以上才能生效！</p>
 <p>看到这里，这些自适应的布局就没那么吓人了，就是 <strong>在不同的设备上指定不同的左右侧边栏宽度</strong> 而已。</p>
 <p>我使用的笔记本电脑屏幕宽度是在 <code>1024px</code> 以上的，也就是说我只要修改 <code>@include respond(lg)</code> 底下的样式就行了。</p>
 <p>在 <code>asset/scss/custom.scss</code> 文件中添加如下的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.container</span> <span class="p">{</span>
-    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
-    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
-
-    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
-        <span class="cm">/* range: 768-1024 */</span>
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="cm">/* range: 1024-1280 */</span>
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">22</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">&amp;</span><span class="nc">.compact</span> <span class="p">{</span>
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>其中在我的电脑上真正起到作用的只有 <code>@include respond(lg)</code> 部分而已！我把左侧边栏的宽度放宽到 <code>25%</code> ，右侧边栏宽度放到 <code>22%</code> ，是我个人比较舒服的数字。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nc">.container</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* range: 768-1024 */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* range: 1024-1280 */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">22</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">&amp;</span><span class="nc">.compact</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>其中在我的电脑上真正起到作用的只有 <code>@include respond(lg)</code> 部分而已！我把左侧边栏的宽度放宽到 <code>25%</code> ，右侧边栏宽度放到 <code>22%</code> ，是我个人比较舒服的数字。</p>
 <h5 id="修改非自适应布局">修改非自适应布局</h5>
 <p>经过上面的修改，现在的主页应该是这样的：</p>
 <p><figure 
@@ -641,81 +632,81 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 </li>
 </ul>
 <p>我们针对 <code>left-sidebar</code> 和 <code>right-sidebar</code> 再进行一下微调，在 <code>custom.scss</code> 中继续追加：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.left-sidebar</span> <span class="p">{</span>
-    <span class="na">--sidebar-avatar-size</span><span class="o">:</span> <span class="mi">120</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">--sidebar-element-separation</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
-    <span class="na">padding</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">main-top-padding</span><span class="p">)</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">max-height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
-    <span class="na">padding-right</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nc">.right-sidebar</span> <span class="p">{</span>
-    <span class="na">margin-left</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>这部分内容是经过旧参数的试验，发现的视觉上比较舒服的参数，而这些东西不用随着屏幕变化而变化，因此不写在刚才的自适应布局中，直接放在最外层。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nc">.left-sidebar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">--sidebar-avatar-size</span><span class="o">:</span> <span class="mi">120</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">--sidebar-element-separation</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">padding</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">main-top-padding</span><span class="p">)</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">max-height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">padding-right</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nc">.right-sidebar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-left</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这部分内容是经过旧参数的试验，发现的视觉上比较舒服的参数，而这些东西不用随着屏幕变化而变化，因此不写在刚才的自适应布局中，直接放在最外层。</p>
 <p>至此，我的主页就调整完毕了。 <code>custom.scss</code> 文件全部内容如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.container</span> <span class="p">{</span>
-    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
-    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
-
-    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
-        <span class="cm">/* min-width: 812 
-</span><span class="cm">        @media (min-width: $on-phone) {
-</span><span class="cm">            max-width: 800px;
-</span><span class="cm">
-</span><span class="cm">            --left-sidebar-max-width: 25%;
-</span><span class="cm">        }
-</span><span class="cm">        */</span>
-        <span class="cm">/* range: 768-1024 */</span>
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="cm">/* range: 1024-1280 */</span>
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">22</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">&amp;</span><span class="nc">.compact</span> <span class="p">{</span>
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
-            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cm">/* 
-</span><span class="cm">跟上面 container 中的 left-sidebar 没有区别
-</span><span class="cm">但是这部分内容不需要使用 respond 函数，因此直接放在最外层固定下来即可
-</span><span class="cm">*/</span>
-<span class="nc">.left-sidebar</span> <span class="p">{</span>
-    <span class="na">--sidebar-avatar-size</span><span class="o">:</span> <span class="mi">120</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">--sidebar-element-separation</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
-    <span class="na">padding</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">main-top-padding</span><span class="p">)</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">max-height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
-    <span class="na">padding-right</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nc">.right-sidebar</span> <span class="p">{</span>
-    <span class="na">margin-left</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>在修改中，我没有完全复刻旧主题，因为我在修改过程中发现了现有布局的一些优点，放到下一小节分析。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nc">.container</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-left</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-right</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">&amp;</span><span class="nc">.extended</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* min-width: 812 
+</span></span></span><span class="line"><span class="cl"><span class="cm">        @media (min-width: $on-phone) {
+</span></span></span><span class="line"><span class="cl"><span class="cm">            max-width: 800px;
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">            --left-sidebar-max-width: 25%;
+</span></span></span><span class="line"><span class="cl"><span class="cm">        }
+</span></span></span><span class="line"><span class="cl"><span class="cm">        */</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* range: 768-1024 */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* range: 1024-1280 */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--right-sidebar-max-width</span><span class="o">:</span> <span class="mi">22</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">&amp;</span><span class="nc">.compact</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">md</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">25</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">768</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">lg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1024</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">--left-sidebar-max-width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">@include</span><span class="nd"> respond</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">max-width</span><span class="o">:</span> <span class="mi">1280</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 
+</span></span></span><span class="line"><span class="cl"><span class="cm">跟上面 container 中的 left-sidebar 没有区别
+</span></span></span><span class="line"><span class="cl"><span class="cm">但是这部分内容不需要使用 respond 函数，因此直接放在最外层固定下来即可
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="nc">.left-sidebar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">--sidebar-avatar-size</span><span class="o">:</span> <span class="mi">120</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">--sidebar-element-separation</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">padding</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">main-top-padding</span><span class="p">)</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">max-height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">padding-right</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nc">.right-sidebar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">margin-left</span><span class="o">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>在修改中，我没有完全复刻旧主题，因为我在修改过程中发现了现有布局的一些优点，放到下一小节分析。</p>
 <h5 id="主页视觉分析">主页视觉分析</h5>
 <p><figure 
 	
@@ -843,74 +834,74 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <p>在新主题中，作者已经写好了Table Of Conents（即文章目录），且它的位置就在页面右侧。我希望直接在该组件的下方添加一个返回顶部的按钮，当页面不处于顶部时，该按钮出现，点击之后返回页面的顶部。</p>
 <p>按钮的核心函数直接参考了 <a class="link" href="https://github.com/zhe/hugo-theme-slim"  target="_blank" rel="noopener"
     >Slim主题</a> ，具体做法是在 <code>layouts/partials/head/script.html</code> 中添加如下的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&#34;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&#34;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
-
-<span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
-    <span class="c1">// Check to see if the window is top if not then display button
-</span><span class="c1"></span>    <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">scroll</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">scrollTop</span><span class="p">())</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">fadeIn</span><span class="p">();</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="p">});</span>
-
-    <span class="c1">// Click event to scroll to top
-</span><span class="c1"></span>    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html, body&#39;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span><span class="nx">scrollTop</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
-    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="p">});</span>
-<span class="o">&lt;</span><span class="err">/script&gt;</span>
-</code></pre></div><p>函数使用了 <code>jQuery</code> 监听窗口的滚动，并控制按钮的出现与消失，其核心是一个具备 <code>back-to-top</code> ID的HTML元素，在原本的主题（Slim主题）中，这个元素就是一个简单的 <code>&lt;a&gt;</code> 标签。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&#34;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&#34;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Check to see if the window is top if not then display button
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">scroll</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">scrollTop</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">fadeIn</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Click event to scroll to top
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#back-to-top&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html, body&#39;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span><span class="nx">scrollTop</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">/script&gt;</span>
+</span></span></code></pre></div><p>函数使用了 <code>jQuery</code> 监听窗口的滚动，并控制按钮的出现与消失，其核心是一个具备 <code>back-to-top</code> ID的HTML元素，在原本的主题（Slim主题）中，这个元素就是一个简单的 <code>&lt;a&gt;</code> 标签。</p>
 <p>我希望自定义返回顶部按钮的外观，并决定使用一张图片来代替Slim主题中朴素的 <code>^</code> 号。</p>
 <h5 id="添加组件">添加组件</h5>
 <p>此前已经提过，我希望这个按钮就放置在文章目录下方，那么我们就要找到文章目录的HTML代码，然后在它下方插入这个按钮的代码。</p>
 <p>找到 <code>layouts/_default/single.html</code> ，在它的第 <code>47</code> 行找到了TOC的代码，在 <code>aside</code> 内部、TOC底部插入下面的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-HTML" data-lang="HTML">{{ $topImg := resources.Get (&#34;img/top.png&#34;) }}
-{{ $topImg := $topImg.Resize &#34;40x&#34; }}
-<span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;back-to-top&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;#&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $topImg.RelPermalink }}&#34;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-</code></pre></div><p>这段代码是我仿照 <code>Avatar</code> 部分的代码写出来的，作者用类似的代码实现了主页左边栏的头像。需要把代码的图片跟头像的图片放在一起，也就是放在 <code>[网站根目录]/assets/img</code> 文件中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-HTML" data-lang="HTML"><span class="line"><span class="cl">{{ $topImg := resources.Get (&#34;img/top.png&#34;) }}
+</span></span><span class="line"><span class="cl">{{ $topImg := $topImg.Resize &#34;40x&#34; }}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;back-to-top&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;#&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $topImg.RelPermalink }}&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>这段代码是我仿照 <code>Avatar</code> 部分的代码写出来的，作者用类似的代码实现了主页左边栏的头像。需要把代码的图片跟头像的图片放在一起，也就是放在 <code>[网站根目录]/assets/img</code> 文件中。</p>
 <p>那么，TOC部分的代码就变成了这样子：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-HTML" data-lang="HTML">{{ define &#34;right-sidebar&#34; }}
-    {{ if (.Scratch.Get &#34;hasTOC&#34;) }}
-        <span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;sidebar right-sidebar sticky&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">section</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget archives&#34;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget-icon&#34;</span><span class="p">&gt;</span>
-                    {{ partial &#34;helper/icon&#34; &#34;hash&#34; }}
-                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget-title section-title&#34;</span><span class="p">&gt;</span>{{ T &#34;article.tableOfContents&#34; }}<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-                
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget--toc&#34;</span><span class="p">&gt;</span>
-                    {{ .TableOfContents }}
-                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
-
-            {{ $topImg := resources.Get (&#34;img/top.png&#34;) }}
-            {{ $topImg := $topImg.Resize &#34;40x&#34; }}
-            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;back-to-top&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;#&#34;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $topImg.RelPermalink }}&#34;</span> <span class="p">/&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">aside</span><span class="p">&gt;</span>
-    {{ end }}
-{{ end }}
-</code></pre></div><h5 id="添加样式">添加样式</h5>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-HTML" data-lang="HTML"><span class="line"><span class="cl">{{ define &#34;right-sidebar&#34; }}
+</span></span><span class="line"><span class="cl">    {{ if (.Scratch.Get &#34;hasTOC&#34;) }}
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;sidebar right-sidebar sticky&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">section</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget archives&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget-icon&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    {{ partial &#34;helper/icon&#34; &#34;hash&#34; }}
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget-title section-title&#34;</span><span class="p">&gt;</span>{{ T &#34;article.tableOfContents&#34; }}<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;widget--toc&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    {{ .TableOfContents }}
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            {{ $topImg := resources.Get (&#34;img/top.png&#34;) }}
+</span></span><span class="line"><span class="cl">            {{ $topImg := $topImg.Resize &#34;40x&#34; }}
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;back-to-top&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;#&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $topImg.RelPermalink }}&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">aside</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    {{ end }}
+</span></span><span class="line"><span class="cl">{{ end }}
+</span></span></code></pre></div><h5 id="添加样式">添加样式</h5>
 <p>最后一步是很简单的，我们还是需要为这个组件添加CSS样式。</p>
 <p>找到熟悉的 <code>custom.scss</code> 文件，追加下面的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nv">$hover</span><span class="o">:</span> <span class="mi">0</span><span class="mf">.2</span><span class="kt">s</span> <span class="ni">ease-in-out</span><span class="p">;</span>
-<span class="nn">#back-to-top</span> <span class="p">{</span>
-    <span class="na">bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">30</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">right</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">display</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
-    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>  
-    <span class="na">border</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="na">transition</span><span class="o">:</span> <span class="ni">transform</span> <span class="nv">$hover</span><span class="p">;</span>
-    <span class="k">&amp;</span><span class="nd">:hover</span> <span class="p">{</span>
-      <span class="na">transform</span><span class="o">:</span> <span class="nf">translateY</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="kt">px</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>这里只需要注意两个重点（也就是我在添加这个组件过程中踩坑的点）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nv">$hover</span><span class="o">:</span> <span class="mi">0</span><span class="mf">.2</span><span class="kt">s</span> <span class="ni">ease-in-out</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nn">#back-to-top</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">30</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">right</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">display</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>  
+</span></span><span class="line"><span class="cl">    <span class="na">border</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">transition</span><span class="o">:</span> <span class="ni">transform</span> <span class="nv">$hover</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">&amp;</span><span class="nd">:hover</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="na">transform</span><span class="o">:</span> <span class="nf">translateY</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="kt">px</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这里只需要注意两个重点（也就是我在添加这个组件过程中踩坑的点）：</p>
 <ul>
 <li><code>position: absolute</code> ，能够将按钮固定，且它的父元素是我们上面看到的 <code>&lt;aside&gt;</code> 标签，就能将按钮跟TOC的相对位置固定起来（因为他们同属于一个父元素）；如果使用 <code>position: fixed</code> 就不能起到这个效果，因为 <code>fixed</code> 属性会直接将它的父元素设置为浏览器窗口。</li>
 <li><code>bottom: -30px</code> ，使得这个按钮不会被TOC的边界包住，而且在屏幕缩放时不会超出屏幕底端（其实就是个试验值）。</li>
@@ -938,18 +929,18 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <h4 id="字体样式修改">字体样式修改</h4>
 <p>把这一项归在文章页面似乎不太合适，因为主页的字体样式也被我更改了；但其实字体样式主要地还是与文章有关，好的字体让人看起文章来心情愉悦。</p>
 <p>作者在 <code>layouts/partials/footer/components/custom-font.html</code> 中进行了字体的自定义：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-    <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="kr">const</span> <span class="nx">customFont</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;link&#39;</span><span class="p">);</span>
-        <span class="nx">customFont</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">&#34;https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&amp;display=swap&#34;</span><span class="p">;</span>
-
-        <span class="nx">customFont</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&#34;text/css&#34;</span><span class="p">;</span>
-        <span class="nx">customFont</span><span class="p">.</span><span class="nx">rel</span> <span class="o">=</span> <span class="s2">&#34;stylesheet&#34;</span><span class="p">;</span>
-
-        <span class="nb">document</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">customFont</span><span class="p">);</span>
-    <span class="p">}());</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div><p>他使用的字体是 <code>Lato</code> ，这个字体不支持中文，因此最终呈现出来的字体是平平无奇的微软雅黑（其实是作者放置的默认选项）。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kr">const</span> <span class="nx">customFont</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;link&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">customFont</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">&#34;https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&amp;display=swap&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nx">customFont</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&#34;text/css&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">customFont</span><span class="p">.</span><span class="nx">rel</span> <span class="o">=</span> <span class="s2">&#34;stylesheet&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">document</span><span class="p">.</span><span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">customFont</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}());</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>他使用的字体是 <code>Lato</code> ，这个字体不支持中文，因此最终呈现出来的字体是平平无奇的微软雅黑（其实是作者放置的默认选项）。</p>
 <p>更改字体的方式有几种：</p>
 <ul>
 <li>使用在线字体；</li>
@@ -979,31 +970,31 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 	
 </figure></p>
 <p>我现在的 <code>custom-font.html</code> 内容如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="c">&lt;!-- &lt;script&gt;
-</span><span class="c">    (function () {
-</span><span class="c">        const customFont = document.createElement(&#39;link&#39;);
-</span><span class="c">        customFont.href = &#34;https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&amp;display=swap&#34;;
-</span><span class="c">
-</span><span class="c">        customFont.type = &#34;text/css&#34;;
-</span><span class="c">        customFont.rel = &#34;stylesheet&#34;;
-</span><span class="c">
-</span><span class="c">        document.head.appendChild(customFont);
-</span><span class="c">    }());
-</span><span class="c">&lt;/script&gt; --&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com&#34;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.gstatic.com&#34;</span> <span class="na">crossorigin</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;family=Ma+Shan+Zheng&amp;family=Noto+Sans+SC:wght@300&amp;family=Noto+Serif+SC:wght@300&amp;family=Zhi+Mang+Xing&amp;display=swap&#34;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span><span class="p">&gt;</span>
-</code></pre></div><p>一次性引入了几款我认为还不错的字体，以便自由选择。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="c">&lt;!-- &lt;script&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c">    (function () {
+</span></span></span><span class="line"><span class="cl"><span class="c">        const customFont = document.createElement(&#39;link&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="c">        customFont.href = &#34;https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&amp;display=swap&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">        customFont.type = &#34;text/css&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="c">        customFont.rel = &#34;stylesheet&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">        document.head.appendChild(customFont);
+</span></span></span><span class="line"><span class="cl"><span class="c">    }());
+</span></span></span><span class="line"><span class="cl"><span class="c">&lt;/script&gt; --&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;preconnect&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.gstatic.com&#34;</span> <span class="na">crossorigin</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;family=Ma+Shan+Zheng&amp;family=Noto+Sans+SC:wght@300&amp;family=Noto+Serif+SC:wght@300&amp;family=Zhi+Mang+Xing&amp;display=swap&#34;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>一次性引入了几款我认为还不错的字体，以便自由选择。</p>
 <p>引入字体之后，来到我们的老朋友 <code>custom.scss</code> 文件中，把 <code>body</code> 和 <code>.article-content</code> 的字体改为我们引入的字体的名字即可。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nt">body</span><span class="o">,</span> <span class="nc">.article-content</span> <span class="p">{</span>
-    <span class="c1">// font-family: &#39;Long Cang&#39;, cursive;
-</span><span class="c1"></span>    <span class="c1">// font-family: &#39;Ma Shan Zheng&#39;, cursive;
-</span><span class="c1"></span>    <span class="c1">// font-family: &#39;Noto Sans SC&#39;, sans-serif;
-</span><span class="c1"></span>    <span class="na">font-family</span><span class="o">:</span> <span class="s1">&#39;Noto Serif SC&#39;</span><span class="o">,</span> <span class="ni">serif</span><span class="p">;</span>
-    <span class="c1">// font-family: &#39;Zhi Mang Xing&#39;, cursive;
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><h4 id="目录项紧凑">目录项紧凑</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nt">body</span><span class="o">,</span> <span class="nc">.article-content</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// font-family: &#39;Long Cang&#39;, cursive;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// font-family: &#39;Ma Shan Zheng&#39;, cursive;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// font-family: &#39;Noto Sans SC&#39;, sans-serif;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="na">font-family</span><span class="o">:</span> <span class="s1">&#39;Noto Serif SC&#39;</span><span class="o">,</span> <span class="ni">serif</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// font-family: &#39;Zhi Mang Xing&#39;, cursive;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><h4 id="目录项紧凑">目录项紧凑</h4>
 <p>作者默认的文章页面是这样的：</p>
 <p><figure 
 	
@@ -1045,106 +1036,106 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 	
 </figure></p>
 <p>老规矩，开发者工具选中、找class、搜索一条龙，在 <code>assets/scss/partials/layout/article.scss</code> 中找到了控制TOC格式的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.widget--toc</span> <span class="p">{</span>
-    <span class="na">background-color</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-background</span><span class="p">);</span>
-    <span class="na">border-radius</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-border-radius</span><span class="p">);</span>
-    <span class="na">box-shadow</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">shadow-l1</span><span class="p">);</span>
-    <span class="na">display</span><span class="o">:</span> <span class="ni">flex</span><span class="p">;</span>
-    <span class="na">flex-direction</span><span class="o">:</span> <span class="ni">column</span><span class="p">;</span>
-    <span class="na">color</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-text-color-main</span><span class="p">);</span>
-    <span class="na">overflow</span><span class="o">:</span> <span class="ni">hidden</span><span class="p">;</span>
-
-    <span class="nn">#TableOfContents</span> <span class="p">{</span>
-        <span class="na">overflow-x</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
-        <span class="na">max-height</span><span class="o">:</span> <span class="mi">75</span><span class="kt">vh</span><span class="p">;</span>
-
-        <span class="nt">ol</span><span class="o">,</span>
-        <span class="nt">ul</span> <span class="p">{</span>
-            <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="nt">ol</span> <span class="p">{</span>
-            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
-            <span class="na">counter-reset</span><span class="o">:</span> <span class="n">item</span><span class="p">;</span>
-
-            <span class="nt">li</span><span class="nd">:before</span> <span class="p">{</span>
-                <span class="na">counter-increment</span><span class="o">:</span> <span class="n">item</span><span class="p">;</span>
-                <span class="na">content</span><span class="o">:</span> <span class="nf">counters</span><span class="p">(</span><span class="n">item</span><span class="o">,</span> <span class="s2">&#34;.&#34;</span><span class="p">)</span> <span class="s2">&#34;. &#34;</span><span class="p">;</span>
-                <span class="na">font-weight</span><span class="o">:</span> <span class="ni">bold</span><span class="p">;</span>
-                <span class="na">margin-right</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
-            <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="nt">li</span> <span class="p">{</span>
-            <span class="na">margin</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-            <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-
-            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
-            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
-                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-
-                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
-                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>只需要把重点放在诸如 <code>padding</code> 、 <code>margin</code> 一类的字眼上即可。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nc">.widget--toc</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">background-color</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-background</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="na">border-radius</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-border-radius</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="na">box-shadow</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">shadow-l1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="na">display</span><span class="o">:</span> <span class="ni">flex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">flex-direction</span><span class="o">:</span> <span class="ni">column</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">color</span><span class="o">:</span> <span class="nf">var</span><span class="p">(</span><span class="o">--</span><span class="n">card-text-color-main</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="na">overflow</span><span class="o">:</span> <span class="ni">hidden</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nn">#TableOfContents</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">overflow-x</span><span class="o">:</span> <span class="ni">auto</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">max-height</span><span class="o">:</span> <span class="mi">75</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">ol</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">ol</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">counter-reset</span><span class="o">:</span> <span class="n">item</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="nt">li</span><span class="nd">:before</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="na">counter-increment</span><span class="o">:</span> <span class="n">item</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">content</span><span class="o">:</span> <span class="nf">counters</span><span class="p">(</span><span class="n">item</span><span class="o">,</span> <span class="s2">&#34;.&#34;</span><span class="p">)</span> <span class="s2">&#34;. &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">font-weight</span><span class="o">:</span> <span class="ni">bold</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-right</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">li</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">margin</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>只需要把重点放在诸如 <code>padding</code> 、 <code>margin</code> 一类的字眼上即可。</p>
 <p>审视 <code>#TableOfContents</code> 选择器底下的几个属性（已经删去较不重要的样式）：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nn">#TableOfContents</span> <span class="p">{</span>
-    <span class="na">max-height</span><span class="o">:</span> <span class="mi">75</span><span class="kt">vh</span><span class="p">;</span>  <span class="c1">// 控制目录的最大高度
-</span><span class="c1"></span>
-    <span class="nt">li</span> <span class="p">{</span>
-        <span class="na">margin</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 控制列表项之间的距离（重要！）
-</span><span class="c1"></span>        <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-
-        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
-        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
-            <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 控制子列表和父列表项之间的距离（当TOC不只有一层目录的时候有用）
-</span><span class="c1"></span>            <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 子列表项的向右缩进距离（当TOC不只有一层目录的时候有用）
-</span><span class="c1"></span>            <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-
-            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
-                <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>经过一番修改，我在 <code>custom.scss</code> 中添加了如下的样式：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.widget--toc</span> <span class="p">{</span>
-    <span class="nn">#TableOfContents</span> <span class="p">{</span>
-        <span class="na">max-height</span><span class="o">:</span> <span class="mi">65</span><span class="kt">vh</span><span class="p">;</span>
-
-        <span class="nt">ol</span><span class="o">,</span>
-        <span class="nt">ul</span> <span class="p">{</span>
-            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="nt">li</span> <span class="p">{</span>
-            <span class="na">margin</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-
-            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
-            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
-                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-
-                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
-                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>主要解决了几个问题：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nn">#TableOfContents</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">max-height</span><span class="o">:</span> <span class="mi">75</span><span class="kt">vh</span><span class="p">;</span>  <span class="c1">// 控制目录的最大高度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="nt">li</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">margin</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 控制列表项之间的距离（重要！）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">        <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 控制子列表和父列表项之间的距离（当TOC不只有一层目录的时候有用）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>  <span class="c1">// 子列表项的向右缩进距离（当TOC不只有一层目录的时候有用）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>经过一番修改，我在 <code>custom.scss</code> 中添加了如下的样式：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nc">.widget--toc</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nn">#TableOfContents</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">max-height</span><span class="o">:</span> <span class="mi">65</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">ol</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">li</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">margin</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>主要解决了几个问题：</p>
 <ul>
 <li>目录太高了，使得之前添加的返回顶部按钮可能会被顶出屏幕；</li>
 <li>目录项前面的小黑点不太好看，隐去；</li>
@@ -1193,51 +1184,51 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <p>网络上有非常多自定义滚动条的教程，但是我懒得自行调试，直接使用Cabriel大佬在 <a class="link" href="https://dev.to/xtrp/how-to-create-a-beautiful-custom-scrollbar-for-your-site-in-plain-css-1mjg"  target="_blank" rel="noopener"
     >这篇文章</a> 中给出的 <a class="link" href="https://codepen.io/xtrp/pen/QWjREeo"  target="_blank" rel="noopener"
     >代码</a> ，将代码中自定义滚动条的部分加到上一小节中TOC的样式里，使得上一小节里修改过的TOC样式变成下面的样子：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nc">.widget--toc</span> <span class="p">{</span>
-    <span class="nn">#TableOfContents</span> <span class="p">{</span>
-        <span class="na">max-height</span><span class="o">:</span> <span class="mi">65</span><span class="kt">vh</span><span class="p">;</span>
-
-        <span class="nt">ol</span><span class="o">,</span>
-        <span class="nt">ul</span> <span class="p">{</span>
-            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="nt">li</span> <span class="p">{</span>
-            <span class="na">margin</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-
-            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
-            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
-                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-
-                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
-                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="nd">::-webkit-scrollbar</span> <span class="p">{</span>
-        <span class="na">width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-      <span class="p">}</span>
-      
-      <span class="nd">::-webkit-scrollbar-track</span> <span class="p">{</span>
-        <span class="na">background-color</span><span class="o">:</span> <span class="ni">transparent</span><span class="p">;</span>
-      <span class="p">}</span>
-      
-      <span class="nd">::-webkit-scrollbar-thumb</span> <span class="p">{</span>
-        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
-        <span class="na">border-radius</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-        <span class="na">border</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="ni">solid</span> <span class="ni">transparent</span><span class="p">;</span>
-        <span class="na">background-clip</span><span class="o">:</span> <span class="ni">content-box</span><span class="p">;</span>
-      <span class="p">}</span>
-      
-      <span class="nd">::-webkit-scrollbar-thumb:hover</span> <span class="p">{</span>
-        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
-      <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p><figure 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nc">.widget--toc</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nn">#TableOfContents</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">max-height</span><span class="o">:</span> <span class="mi">65</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">ol</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">list-style-type</span><span class="o">:</span> <span class="ni">none</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">li</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="na">margin</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ol</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">            <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">ul</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="na">margin-bottom</span><span class="o">:</span> <span class="o">-</span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">&amp;</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:last-child</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">::-webkit-scrollbar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="nd">::-webkit-scrollbar-track</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-color</span><span class="o">:</span> <span class="ni">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="nd">::-webkit-scrollbar-thumb</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">border-radius</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">border</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="ni">solid</span> <span class="ni">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-clip</span><span class="o">:</span> <span class="ni">content-box</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="nd">::-webkit-scrollbar-thumb:hover</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><figure 
 	
 		class="gallery-image" 
 		style="
@@ -1318,27 +1309,27 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <p>无法忍受！</p>
 <p>因此我决定直接将滚动条优化的代码拿出来，作用到 <strong>整个网站</strong> 上！没错，我希望使得访客在我的博客的任意一个角落都不会见到原始的、丑陋的滚动条！</p>
 <p>简单粗暴地在 <code>custom.scss</code> 追加：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nt">html</span><span class="p">{</span>
-    <span class="nd">::-webkit-scrollbar</span> <span class="p">{</span>
-        <span class="na">width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-      <span class="p">}</span>
-      
-      <span class="nd">::-webkit-scrollbar-track</span> <span class="p">{</span>
-        <span class="na">background-color</span><span class="o">:</span> <span class="ni">transparent</span><span class="p">;</span>
-      <span class="p">}</span>
-      
-      <span class="nd">::-webkit-scrollbar-thumb</span> <span class="p">{</span>
-        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
-        <span class="na">border-radius</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-        <span class="na">border</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="ni">solid</span> <span class="ni">transparent</span><span class="p">;</span>
-        <span class="na">background-clip</span><span class="o">:</span> <span class="ni">content-box</span><span class="p">;</span>
-      <span class="p">}</span>
-      
-      <span class="nd">::-webkit-scrollbar-thumb:hover</span> <span class="p">{</span>
-        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
-      <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>注意，为了使得代码简洁，我们把滚动条美化的部分拿出来之后，要回到TOC样式那边把相同的这些代码删掉。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nt">html</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">::-webkit-scrollbar</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">width</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="nd">::-webkit-scrollbar-track</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-color</span><span class="o">:</span> <span class="ni">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="nd">::-webkit-scrollbar-thumb</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">border-radius</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">border</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="ni">solid</span> <span class="ni">transparent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-clip</span><span class="o">:</span> <span class="ni">content-box</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="nd">::-webkit-scrollbar-thumb:hover</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>注意，为了使得代码简洁，我们把滚动条美化的部分拿出来之后，要回到TOC样式那边把相同的这些代码删掉。</p>
 <p>现在，在我网站的所有地方，乃至于最外层的窗口右侧的滚动条都已经变成了优雅的样子 😏 。</p>
 <p><em>注：希望读者使用的 <strong>不是</strong> FireFox浏览器</em> 。</p>
 <h4 id="相关文章组件美化">相关文章组件美化</h4>
@@ -1369,38 +1360,37 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <li>不使用文章封面（本来也不打算每个文章都配封面）而是展示我们自行选定的图片。</li>
 </ul>
 <p>依然是熟悉的开发者工具选中操作，在 <code>layouts/partials/article/components/related-contents.html</code> 找到 <em>相关文章</em> 组件的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;related-contents--wrapper&#34;</span><span class="p">&gt;</span>
-    {{ $related := (where (.Site.RegularPages.Related .) &#34;Params.hidden&#34; &#34;!=&#34; true) | first 5 }}
-    {{ with $related }}
-        <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;section-title&#34;</span><span class="p">&gt;</span>{{ T &#34;article.relatedContents&#34; }}<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;related-contents&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;flex article-list--tile&#34;</span><span class="p">&gt;</span>
-                {{ range . }}
-                    {{ partial &#34;article-list/tile&#34; (dict &#34;context&#34; . &#34;size&#34; &#34;250x150&#34; &#34;Type&#34; &#34;articleList&#34;) }}
-                {{ end }}
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    {{ end }}
-<span class="p">&lt;/</span><span class="nt">aside</span><span class="p">&gt;</span>
-
-</code></pre></div><p>从代码中可以看到，它使用的是 <code>layouts/partials/article-list/tile.html</code> 这个页面提供的文章列表，其代码为：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{ $image := partialCached &#34;helper/image&#34; (dict &#34;Context&#34; .context &#34;Type&#34; .Type) .context.RelPermalink .Type }}
-<span class="p">&lt;</span><span class="nt">article</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ if $image.exists }}has-image{{ end }}&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;{{ .context.RelPermalink }}&#34;</span><span class="p">&gt;</span>
-        {{ if $image.exists }}  <span class="c">&lt;!-- 必然为 false，因为我们的文章没配封面 --&gt;</span>
-        	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
-			<span class="c">&lt;!-- ==== 因此这部分代码不重要，略 ===== --&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        {{ end }}
-
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-details&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-title&#34;</span><span class="p">&gt;</span>
-                {{- .context.Title -}}
-            <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">article</span><span class="p">&gt;</span>
-</code></pre></div><p>根据我们的两点目标，我们应该：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;related-contents--wrapper&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    {{ $related := (where (.Site.RegularPages.Related .) &#34;Params.hidden&#34; &#34;!=&#34; true) | first 5 }}
+</span></span><span class="line"><span class="cl">    {{ with $related }}
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;section-title&#34;</span><span class="p">&gt;</span>{{ T &#34;article.relatedContents&#34; }}<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;related-contents&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;flex article-list--tile&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                {{ range . }}
+</span></span><span class="line"><span class="cl">                    {{ partial &#34;article-list/tile&#34; (dict &#34;context&#34; . &#34;size&#34; &#34;250x150&#34; &#34;Type&#34; &#34;articleList&#34;) }}
+</span></span><span class="line"><span class="cl">                {{ end }}
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    {{ end }}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">aside</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>从代码中可以看到，它使用的是 <code>layouts/partials/article-list/tile.html</code> 这个页面提供的文章列表，其代码为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">{{ $image := partialCached &#34;helper/image&#34; (dict &#34;Context&#34; .context &#34;Type&#34; .Type) .context.RelPermalink .Type }}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">article</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ if $image.exists }}has-image{{ end }}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;{{ .context.RelPermalink }}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        {{ if $image.exists }}  <span class="c">&lt;!-- 必然为 false，因为我们的文章没配封面 --&gt;</span>
+</span></span><span class="line"><span class="cl">        	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">			<span class="c">&lt;!-- ==== 因此这部分代码不重要，略 ===== --&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        {{ end }}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-details&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-title&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                {{- .context.Title -}}
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">article</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>根据我们的两点目标，我们应该：</p>
 <ul>
 <li>在下面一个 <code>div</code> 中添加 <code>title</code> 之外的元素，在这里我希望把文章的发表日期也呈现出来；</li>
 <li>绕过 <code>image.exists</code> 的逻辑，直接用作者的 <code>div</code> 包住自己选用的图片。</li>
@@ -1408,37 +1398,37 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <p>第一点非常简单，仿照 <code>layouts/partials/article-list/compact.html</code> 代码，在 <code>h2</code> 标签下添加一个 <code>footer</code> 即可；</p>
 <p>第二点同样简单，此前已经仿照Avatar的代码写过返回顶部按钮，则在这里使用相同的办法添加一张图片即可。</p>
 <p>修改过后的 <code>tile.html</code> 代码如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{ $image := partialCached &#34;helper/image&#34; (dict &#34;Context&#34; .context &#34;Type&#34; .Type) .context.RelPermalink .Type }}
-<span class="p">&lt;</span><span class="nt">article</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ if $image.exists }}has-image{{ end }}&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;{{ .context.RelPermalink }}&#34;</span><span class="p">&gt;</span>
-        {{ if $image.exists }}  <span class="c">&lt;!-- 必然为 false，因为我们的文章没配封面 --&gt;</span>
-        	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
-			<span class="c">&lt;!-- ==== 因此这部分代码不重要，略 ===== --&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        {{ end }}
-	
-        <span class="c">&lt;!-- 自行增加的图片 --&gt;</span>
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
-            {{ $relatedImage := resources.Get (&#34;img/related-content.png&#34;) }}
-            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $relatedImage.RelPermalink }}&#34;</span> <span class="na">loading</span><span class="o">=</span><span class="s">&#34;lazy&#34;</span> 
-            <span class="na">data-key</span><span class="o">=</span><span class="s">&#34;{{ .context.Slug }}&#34;</span> <span class="na">data-hash</span><span class="o">=</span><span class="s">&#34;{{ $image.permalink }}&#34;</span> 
-            <span class="na">style</span><span class="o">=</span><span class="s">&#34;opacity: 0.3;&#34;</span><span class="p">/&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-details&#34;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-title&#34;</span><span class="p">&gt;</span>
-                {{- .context.Title -}}
-            <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-            <span class="c">&lt;!-- 自行增加的文章发布日期 --&gt;</span>
-            <span class="p">&lt;</span><span class="nt">footer</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-time&#34;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">time</span> <span class="na">datetime</span><span class="o">=</span><span class="s">&#39;{{ .Date.Format &#34;2006-01-02T15:04:05Z07:00&#34; }}&#39;</span><span class="p">&gt;</span>
-                    {{- .context.Date.Format (or .Site.Params.dateFormat.published &#34;Jan 02, 2006&#34;) -}}
-                <span class="p">&lt;/</span><span class="nt">time</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">footer</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">article</span><span class="p">&gt;</span>
-</code></pre></div><p><figure 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">{{ $image := partialCached &#34;helper/image&#34; (dict &#34;Context&#34; .context &#34;Type&#34; .Type) .context.RelPermalink .Type }}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">article</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ if $image.exists }}has-image{{ end }}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;{{ .context.RelPermalink }}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        {{ if $image.exists }}  <span class="c">&lt;!-- 必然为 false，因为我们的文章没配封面 --&gt;</span>
+</span></span><span class="line"><span class="cl">        	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">			<span class="c">&lt;!-- ==== 因此这部分代码不重要，略 ===== --&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        {{ end }}
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl">        <span class="c">&lt;!-- 自行增加的图片 --&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-image&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            {{ $relatedImage := resources.Get (&#34;img/related-content.png&#34;) }}
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;{{ $relatedImage.RelPermalink }}&#34;</span> <span class="na">loading</span><span class="o">=</span><span class="s">&#34;lazy&#34;</span> 
+</span></span><span class="line"><span class="cl">            <span class="na">data-key</span><span class="o">=</span><span class="s">&#34;{{ .context.Slug }}&#34;</span> <span class="na">data-hash</span><span class="o">=</span><span class="s">&#34;{{ $image.permalink }}&#34;</span> 
+</span></span><span class="line"><span class="cl">            <span class="na">style</span><span class="o">=</span><span class="s">&#34;opacity: 0.3;&#34;</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-details&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-title&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                {{- .context.Title -}}
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="c">&lt;!-- 自行增加的文章发布日期 --&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;</span><span class="nt">footer</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;article-time&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">time</span> <span class="na">datetime</span><span class="o">=</span><span class="s">&#39;{{ .Date.Format &#34;2006-01-02T15:04:05Z07:00&#34; }}&#39;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                    {{- .context.Date.Format (or .Site.Params.dateFormat.published &#34;Jan 02, 2006&#34;) -}}
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">time</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">&lt;/</span><span class="nt">footer</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">article</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p><figure 
 	
 		class="gallery-image" 
 		style="
@@ -1479,11 +1469,11 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <h4 id="选中样式美化">选中样式美化</h4>
 <p>直接使用 <a class="link" href="https://munlelee.github.io/post/hugo%E5%8D%9A%E5%AE%A2-stack%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9%E7%AC%AC%E4%B8%80%E7%AB%99/#%E4%BF%AE%E6%94%B9%E9%80%89%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F"  target="_blank" rel="noopener"
     >好友的样式</a> ，在 <code>custom.scss</code> 中添加：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nd">::selection</span> <span class="p">{</span>
-    <span class="na">color</span><span class="o">:</span> <span class="mh">#fff</span><span class="p">;</span>
-    <span class="na">background</span><span class="o">:</span> <span class="mh">#557697</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>必须夸一句，颜色选得不错 😆 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nd">::selection</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">color</span><span class="o">:</span> <span class="mh">#fff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">background</span><span class="o">:</span> <span class="mh">#557697</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>必须夸一句，颜色选得不错 😆 。</p>
 <h3 id="part-3-页面载入动画">Part 3 页面载入动画</h3>
 <p>这部分一定要单独拎出来！它实在是 <strong>SO COOL！</strong></p>
 <p>事情的由来是这样的：虽然我在几个月之前就给我的博客（在GitPage上）布置了 <a class="link" href="https://www.netlify.com/"  target="_blank" rel="noopener"
@@ -1520,162 +1510,162 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
 <p>这个加载动画的大致原理呢，就是在原本的比较大的页面加载完成之前，先加载出一些比较简单的元素，为这些元素制作一些简单的动效，这样访客就不会等得太无聊了！等原本的页面加载完成之后，再把这个组件隐匿掉即可！</p>
 <p>因此，需要在原本的主题结构里面新增跟加载动画相关的组件。</p>
 <p>我把这个小组件放在 <code>layouts/partials/widget/preload.html</code>  文件里，注意，这个文件是自己创建的：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{ if .Site.Params.enablePreloadingAnim }}
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;loading-box&#34;</span><span class="p">&gt;</span>
-                <span class="c">&lt;!-- 页面加载完成之后帷幕拉开的效果 --&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-left-bg&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-right-bg&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                <span class="c">&lt;!-- 旋转盒子动效 --&gt;</span>
-                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;spinner-box&#34;</span><span class="p">&gt;</span>
-                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-border-1&#34;</span><span class="p">&gt;</span>
-                                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-core&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-border-2&#34;</span><span class="p">&gt;</span>
-                                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-core&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-word&#34;</span><span class="p">&gt;</span>加载中...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-      <span class="c">&lt;!-- 页面加载动画 --&gt;</span>
-      <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-        <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-                <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;loading-box&#39;</span><span class="p">).</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&#34;loaded&#34;</span><span class="p">)</span>
-        <span class="p">})</span>
-      <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-{{ end }}
-</code></pre></div><p>可以看到，这个文件里面有几个组成部分，非常简单：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">{{ if .Site.Params.enablePreloadingAnim }}
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;loading-box&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="c">&lt;!-- 页面加载完成之后帷幕拉开的效果 --&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-left-bg&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-right-bg&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="c">&lt;!-- 旋转盒子动效 --&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;spinner-box&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-border-1&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-core&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-border-2&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;configure-core&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;loading-word&#34;</span><span class="p">&gt;</span>加载中...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- 页面加载动画 --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;loading-box&#39;</span><span class="p">).</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&#34;loaded&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">{{ end }}
+</span></span></code></pre></div><p>可以看到，这个文件里面有几个组成部分，非常简单：</p>
 <ul>
 <li>Hugo的 <code>if</code> 判断句，便于我们在配置文件里控制这个组件要不要启用；</li>
 <li>用于呈现动效的几个简单的HTML元素；</li>
 <li>jQuery的函数，直接使用 <code>ready</code> 函数，当页面载入完成之后把动效组件隐匿掉！</li>
 </ul>
 <p>万事俱备，把这个组件直接加到网站模板里面就行了！Stack主题的网页模板在 <code>layouts/_default/baseof.html</code> ，我们找到 <code>body</code> 标签，在它底下加上这么一句：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ block `body-class` . }}{{ end }}&#34;</span><span class="p">&gt;</span>
-    <span class="c">&lt;!-- 下面这个是新加的 --&gt;</span>
-    {{- partial &#34;widget/preload&#34; . -}}
-    <span class="c">&lt;!-- 下面就是Stack作者原本的代码了 --&gt;</span>
-    {{- partial &#34;head/colorScheme&#34; . -}}
-   	<span class="c">&lt;!-- 省略省略省略 --&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-</code></pre></div><p>一切就OK了！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">body</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;{{ block `body-class` . }}{{ end }}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- 下面这个是新加的 --&gt;</span>
+</span></span><span class="line"><span class="cl">    {{- partial &#34;widget/preload&#34; . -}}
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- 下面就是Stack作者原本的代码了 --&gt;</span>
+</span></span><span class="line"><span class="cl">    {{- partial &#34;head/colorScheme&#34; . -}}
+</span></span><span class="line"><span class="cl">   	<span class="c">&lt;!-- 省略省略省略 --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>一切就OK了！</p>
 <h4 id="step-2-组件样式">Step 2 组件样式</h4>
 <p>我们刚才看到的jQuery函数非常简单，是因为这个动效最灵魂的地方是在组件的CSS啊！</p>
 <p>找到老朋友 <code>assets/scss/custom.scss</code> ，在文件里面 <strong>追加</strong> ：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="nn">#loading-box</span> <span class="nc">.loading-left-bg</span><span class="o">,</span>
-<span class="nn">#loading-box</span> <span class="nc">.loading-right-bg</span> <span class="p">{</span>
-    <span class="na">position</span><span class="o">:</span> <span class="ni">fixed</span><span class="p">;</span>
-    <span class="na">z-index</span><span class="o">:</span> <span class="mi">1000</span><span class="p">;</span>
-    <span class="na">width</span><span class="o">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
-    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-    <span class="c1">// 我在这里小改了一下颜色，
-</span><span class="c1"></span>    <span class="na">background-color</span><span class="o">:</span> <span class="mh">#b1c0c7</span><span class="p">;</span>
-    <span class="na">transition</span><span class="o">:</span> <span class="ni">all</span> <span class="mi">0</span><span class="mf">.5</span><span class="kt">s</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nn">#loading-box</span> <span class="nc">.loading-right-bg</span> <span class="p">{</span>
-    <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nn">#loading-box</span><span class="o">&gt;</span><span class="nc">.spinner-box</span> <span class="p">{</span>
-    <span class="na">position</span><span class="o">:</span> <span class="ni">fixed</span><span class="p">;</span>
-    <span class="na">z-index</span><span class="o">:</span> <span class="mi">1001</span><span class="p">;</span>
-    <span class="na">display</span><span class="o">:</span> <span class="ni">flex</span><span class="p">;</span>
-    <span class="na">justify-content</span><span class="o">:</span> <span class="ni">center</span><span class="p">;</span>
-    <span class="na">align-items</span><span class="o">:</span> <span class="ni">center</span><span class="p">;</span>
-    <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-border-1</span> <span class="p">{</span>
-    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>
-    <span class="na">padding</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">width</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">height</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">background</span><span class="o">:</span> <span class="mh">#ffab91</span><span class="p">;</span>
-    <span class="na">animation</span><span class="o">:</span> <span class="n">configure-clockwise</span> <span class="mi">3</span><span class="kt">s</span> <span class="ni">ease-in-out</span> <span class="mi">0</span><span class="kt">s</span> <span class="ni">infinite</span> <span class="ni">alternate</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-border-2</span> <span class="p">{</span>
-    <span class="na">left</span><span class="o">:</span> <span class="o">-</span><span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">padding</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">width</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">height</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
-    <span class="na">background</span><span class="o">:</span> <span class="nf">rgb</span><span class="p">(</span><span class="mi">63</span><span class="o">,</span> <span class="mi">249</span><span class="o">,</span> <span class="mi">220</span><span class="p">);</span>
-    <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="na">animation</span><span class="o">:</span> <span class="n">configure-xclockwise</span> <span class="mi">3</span><span class="kt">s</span> <span class="ni">ease-in-out</span> <span class="mi">0</span><span class="kt">s</span> <span class="ni">infinite</span> <span class="ni">alternate</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.loading-word</span> <span class="p">{</span>
-    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>
-    <span class="na">color</span><span class="o">:</span> <span class="mh">#ffffff</span><span class="p">;</span>
-    <span class="c1">// 我在这里小改了一下文字大小和字体，注意！
-</span><span class="c1"></span>    <span class="na">font-size</span><span class="o">:</span> <span class="mi">1</span><span class="mf">.8</span><span class="kt">rem</span><span class="p">;</span>
-    <span class="na">font-family</span><span class="o">:</span> <span class="s1">&#39;Zhi Mang Xing&#39;</span><span class="o">,</span> <span class="ni">cursive</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-core</span> <span class="p">{</span>
-    <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-    <span class="na">background-color</span><span class="o">:</span> <span class="mh">#37474f</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.loading-left-bg</span> <span class="p">{</span>
-    <span class="na">transform</span><span class="o">:</span> <span class="nf">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">0</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.loading-right-bg</span> <span class="p">{</span>
-    <span class="na">transform</span><span class="o">:</span> <span class="nf">translate</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">0</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.spinner-box</span> <span class="p">{</span>
-    <span class="c1">// 你可以把这个注释掉，这样就能一直看那个动画的效果了！
-</span><span class="c1"></span>    <span class="na">display</span><span class="o">:</span> <span class="ni">none</span> <span class="k">!important</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">@keyframes</span> <span class="nt">configure-clockwise</span> <span class="p">{</span>
-    <span class="nt">0</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">25</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">90</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">50</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">180</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">75</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">270</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">100</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">360</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">@keyframes</span> <span class="nt">configure-xclockwise</span> <span class="p">{</span>
-    <span class="nt">0</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">25</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">50</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">135</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">75</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">225</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="nt">100</span><span class="err">%</span> <span class="p">{</span>
-        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">315</span><span class="kt">deg</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>OK，搞定！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="nn">#loading-box</span> <span class="nc">.loading-left-bg</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl"><span class="nn">#loading-box</span> <span class="nc">.loading-right-bg</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">position</span><span class="o">:</span> <span class="ni">fixed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">z-index</span><span class="o">:</span> <span class="mi">1000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">width</span><span class="o">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 我在这里小改了一下颜色，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="na">background-color</span><span class="o">:</span> <span class="mh">#b1c0c7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">transition</span><span class="o">:</span> <span class="ni">all</span> <span class="mi">0</span><span class="mf">.5</span><span class="kt">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nn">#loading-box</span> <span class="nc">.loading-right-bg</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nn">#loading-box</span><span class="o">&gt;</span><span class="nc">.spinner-box</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">position</span><span class="o">:</span> <span class="ni">fixed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">z-index</span><span class="o">:</span> <span class="mi">1001</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">display</span><span class="o">:</span> <span class="ni">flex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">justify-content</span><span class="o">:</span> <span class="ni">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">align-items</span><span class="o">:</span> <span class="ni">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">vh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-border-1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">padding</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">width</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">height</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">background</span><span class="o">:</span> <span class="mh">#ffab91</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">animation</span><span class="o">:</span> <span class="n">configure-clockwise</span> <span class="mi">3</span><span class="kt">s</span> <span class="ni">ease-in-out</span> <span class="mi">0</span><span class="kt">s</span> <span class="ni">infinite</span> <span class="ni">alternate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-border-2</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">left</span><span class="o">:</span> <span class="o">-</span><span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">padding</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">width</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">height</span><span class="o">:</span> <span class="mi">115</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">background</span><span class="o">:</span> <span class="nf">rgb</span><span class="p">(</span><span class="mi">63</span><span class="o">,</span> <span class="mi">249</span><span class="o">,</span> <span class="mi">220</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="na">animation</span><span class="o">:</span> <span class="n">configure-xclockwise</span> <span class="mi">3</span><span class="kt">s</span> <span class="ni">ease-in-out</span> <span class="mi">0</span><span class="kt">s</span> <span class="ni">infinite</span> <span class="ni">alternate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.loading-word</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">position</span><span class="o">:</span> <span class="ni">absolute</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">color</span><span class="o">:</span> <span class="mh">#ffffff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 我在这里小改了一下文字大小和字体，注意！
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="na">font-size</span><span class="o">:</span> <span class="mi">1</span><span class="mf">.8</span><span class="kt">rem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">font-family</span><span class="o">:</span> <span class="s1">&#39;Zhi Mang Xing&#39;</span><span class="o">,</span> <span class="ni">cursive</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nn">#loading-box</span> <span class="nc">.spinner-box</span> <span class="nc">.configure-core</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">background-color</span><span class="o">:</span> <span class="mh">#37474f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.loading-left-bg</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">transform</span><span class="o">:</span> <span class="nf">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.loading-right-bg</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">transform</span><span class="o">:</span> <span class="nf">translate</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">div</span><span class="nc">.loaded</span> <span class="nt">div</span><span class="nc">.spinner-box</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 你可以把这个注释掉，这样就能一直看那个动画的效果了！
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="na">display</span><span class="o">:</span> <span class="ni">none</span> <span class="k">!important</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">@keyframes</span> <span class="nt">configure-clockwise</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">0</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">25</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">90</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">50</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">180</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">75</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">270</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">100</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">360</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">@keyframes</span> <span class="nt">configure-xclockwise</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">0</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">25</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">45</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">50</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">135</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">75</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">225</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">100</span><span class="err">%</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="na">transform</span><span class="o">:</span> <span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">315</span><span class="kt">deg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>OK，搞定！</p>
 <p>在这里，我们没必要搞清楚动画原理，因为我感觉这个动画自定义的空间不大了。读者可以在网络上查找一下 <em>CSS页面载入动画</em> 这种相关内容，会发现其实已经有超级多设计师大牛把他们的作品开源了，我们没必要自己调整，总能找到一个很满意的啦！</p>
 <h4 id="step-3-配置文件">Step 3 配置文件</h4>
 <p>完成上面两步之后，动画暂时还不能生效，因为我们新增组件的时候加了个 <code>if</code> 判断，还记得吗？</p>
@@ -1790,7 +1780,7 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
                 
                     
 <article class="">
-    <a href="/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
         
         
 
@@ -1801,9 +1791,9 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
             style="opacity: 0.3;"/>
         </div>
         <div class="article-details">
-            <h2 class="article-title">PyQt5初探——与scapy的美妙结合</h2>
+            <h2 class="article-title">RapidJson使用小记</h2>
             <footer class="article-time">
-                <time datetime=''>Apr 10, 2022</time>
+                <time datetime=''>Sep 18, 2022</time>
             </footer>
         </div>
     </a>
@@ -1811,7 +1801,7 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
                 
                     
 <article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
         
         
 
@@ -1822,9 +1812,9 @@ menu:main:- identifier:homename:博文url:/weight:-100pre:home修改过后，要
             style="opacity: 0.3;"/>
         </div>
         <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（前后端结合）</h2>
+            <h2 class="article-title">Windows Terminal美化小记</h2>
             <footer class="article-time">
-                <time datetime=''>Mar 07, 2022</time>
+                <time datetime=''>Sep 17, 2022</time>
             </footer>
         </div>
     </a>

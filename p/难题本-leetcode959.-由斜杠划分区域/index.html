@@ -6,15 +6,21 @@
 题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
 （请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
 返回区域的数目。
-分析  将单元格进一步细分，便于并查集操作。
+分析 将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
- 图1. 单元格划分 
-  格内合并
- 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
- 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
- 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
- 输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
- 图2. 网格'><title>难题本 | LeetCode959. 由斜杠划分区域</title>
+图1. 单元格划分 格内合并
+当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。 格间合并
+格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。 最终操作
+遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。 模拟 考虑对于示例4：
+输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5 网格如下：
+图2. 网格 我们从左上到右下进行遍历。
+首先第一个单元格进行格内合并：
+Step1 第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。
+Step2 第二个单元格的格内合并：
+Step3 格间合并，此时它已经没有右邻居：
+Step4 第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：
+Final AC代码 将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标(x, y)的单元格位于一维数组中的n * x &#43; y处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。
+最终，坐标(x, y)的单元格位于4 * (n * x &#43; y)到4 * (n * x &#43; y) &#43; 3的下标位置。'><title>难题本 | LeetCode959. 由斜杠划分区域</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/'>
 
@@ -43,15 +49,21 @@
 题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
 （请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
 返回区域的数目。
-分析  将单元格进一步细分，便于并查集操作。
+分析 将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
- 图1. 单元格划分 
-  格内合并
- 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
- 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
- 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
- 输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
- 图2. 网格'>
+图1. 单元格划分 格内合并
+当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。 格间合并
+格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。 最终操作
+遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。 模拟 考虑对于示例4：
+输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5 网格如下：
+图2. 网格 我们从左上到右下进行遍历。
+首先第一个单元格进行格内合并：
+Step1 第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。
+Step2 第二个单元格的格内合并：
+Step3 格间合并，此时它已经没有右邻居：
+Step4 第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：
+Final AC代码 将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标(x, y)的单元格位于一维数组中的n * x &#43; y处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。
+最终，坐标(x, y)的单元格位于4 * (n * x &#43; y)到4 * (n * x &#43; y) &#43; 3的下标位置。'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-25T00:00:00&#43;00:00'/>
@@ -61,15 +73,21 @@
 题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
 （请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
 返回区域的数目。
-分析  将单元格进一步细分，便于并查集操作。
+分析 将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
- 图1. 单元格划分 
-  格内合并
- 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。    格间合并
- 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。    最终操作
- 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。     模拟  考虑对于示例4：
- 输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5  网格如下：
- 图2. 网格">
+图1. 单元格划分 格内合并
+当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。 格间合并
+格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。 最终操作
+遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。 模拟 考虑对于示例4：
+输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5 网格如下：
+图2. 网格 我们从左上到右下进行遍历。
+首先第一个单元格进行格内合并：
+Step1 第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。
+Step2 第二个单元格的格内合并：
+Step3 格间合并，此时它已经没有右邻居：
+Step4 第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：
+Final AC代码 将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标(x, y)的单元格位于一维数组中的n * x &#43; y处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。
+最终，坐标(x, y)的单元格位于4 * (n * x &#43; y)到4 * (n * x &#43; y) &#43; 3的下标位置。">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -387,91 +405,90 @@
 <p>最终，坐标<code>(x, y)</code>的单元格位于<code>4 * (n * x + y)</code>到<code>4 * (n * x + y) + 3</code>的下标位置。</p>
 <p>则最终的一维数组即并查集需要开辟的大小为<code>4 * n * n</code>。</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">UnionFind</span> <span class="p">{</span>
-<span class="k">private</span><span class="o">:</span>
-    <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">UnionFind</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
-    <span class="p">}</span>
-    
-    <span class="kt">int</span> <span class="nf">getCnt</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">cnt</span><span class="p">;</span> <span class="p">}</span>
-
-    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
-        <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
-        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="kt">void</span> <span class="nf">Union</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">ra</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
-        <span class="kt">int</span> <span class="n">rb</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">ra</span> <span class="o">==</span> <span class="n">rb</span><span class="p">)</span>
-            <span class="k">return</span> <span class="p">;</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ra</span> <span class="o">&lt;</span> <span class="n">rb</span><span class="p">)</span>
-            <span class="n">f</span><span class="p">[</span><span class="n">rb</span><span class="p">]</span> <span class="o">=</span> <span class="n">ra</span><span class="p">;</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ra</span> <span class="o">&gt;</span> <span class="n">rb</span><span class="p">)</span>
-            <span class="n">f</span><span class="p">[</span><span class="n">ra</span><span class="p">]</span> <span class="o">=</span> <span class="n">rb</span><span class="p">;</span>
-
-        <span class="c1">// cout &lt;&lt; &#34;Union &#34; &lt;&lt; a &lt;&lt; &#34; with &#34; &lt;&lt; b &lt;&lt; endl;
-</span><span class="c1"></span>        <span class="n">cnt</span><span class="o">--</span><span class="p">;</span>
-
-        <span class="k">return</span> <span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-
-<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">int</span> <span class="n">regionsBySlashes</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">grid</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-        <span class="n">UnionFind</span> <span class="nf">uf</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="kt">int</span> <span class="n">base</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="n">y</span><span class="p">);</span>  <span class="c1">// 0,4,8,...
-</span><span class="c1"></span>                <span class="cm">/* 格内合并 */</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39; &#39;</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
-                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;/&#39;</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
-                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\\&#39;</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="cm">/* 格间合并 */</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// 还有右邻居
-</span><span class="c1"></span>                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">7</span><span class="p">);</span>  <span class="c1">// 己方1，右邻居3
-</span><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// 还有下邻居
-</span><span class="c1"></span>                <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span><span class="p">);</span>  <span class="c1">// 己方2，下邻居0
-</span><span class="c1"></span>            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">uf</span><span class="p">.</span><span class="n">getCnt</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-</code></pre></div><p>表现还不错，叉会儿腰。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">UnionFind</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">UnionFind</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">getCnt</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">cnt</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Union</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ra</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">rb</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">ra</span> <span class="o">==</span> <span class="n">rb</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ra</span> <span class="o">&lt;</span> <span class="n">rb</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="p">[</span><span class="n">rb</span><span class="p">]</span> <span class="o">=</span> <span class="n">ra</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ra</span> <span class="o">&gt;</span> <span class="n">rb</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="p">[</span><span class="n">ra</span><span class="p">]</span> <span class="o">=</span> <span class="n">rb</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// cout &lt;&lt; &#34;Union &#34; &lt;&lt; a &lt;&lt; &#34; with &#34; &lt;&lt; b &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">cnt</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">regionsBySlashes</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">grid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">UnionFind</span> <span class="nf">uf</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">base</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="n">y</span><span class="p">);</span>  <span class="c1">// 0,4,8,...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="cm">/* 格内合并 */</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39; &#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\\&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="cm">/* 格间合并 */</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// 还有右邻居
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">7</span><span class="p">);</span>  <span class="c1">// 己方1，右邻居3
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">// 还有下邻居
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">uf</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span><span class="p">);</span>  <span class="c1">// 己方2，下邻居0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">uf</span><span class="p">.</span><span class="n">getCnt</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>表现还不错，叉会儿腰。</p>
 <p><figure 
 	
 		class="gallery-image" 

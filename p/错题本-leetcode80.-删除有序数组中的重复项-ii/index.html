@@ -2,12 +2,13 @@
 <html lang="en-us">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/
-题目  给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+题目 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
 示例1
- 输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。  示例2
- 输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3]  数据范围
- 1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列   分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ'><title>错题本 | LeetCode80. 删除有序数组中的重复项 II</title>
+输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。 示例2
+输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3] 数据范围
+1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列 分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ
+一道乍看简单，细想麻烦的题目，放在 错题本 这个分类里，主要是由于朴素的暴力做法是能通过的。当然，题解里面的想法更为强大，当然，并不是特别难想，但是细节是较多的，也是本次错得最多的地方。'><title>错题本 | LeetCode80. 删除有序数组中的重复项 II</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/'>
 
@@ -32,23 +33,25 @@
 
 <meta property='og:title' content='错题本 | LeetCode80. 删除有序数组中的重复项 II'>
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/
-题目  给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+题目 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
 示例1
- 输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。  示例2
- 输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3]  数据范围
- 1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列   分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ'>
+输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。 示例2
+输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3] 数据范围
+1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列 分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ
+一道乍看简单，细想麻烦的题目，放在 错题本 这个分类里，主要是由于朴素的暴力做法是能通过的。当然，题解里面的想法更为强大，当然，并不是特别难想，但是细节是较多的，也是本次错得最多的地方。'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='错题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-04-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-06T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="错题本 | LeetCode80. 删除有序数组中的重复项 II">
 <meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/
-题目  给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+题目 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
 示例1
- 输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。  示例2
- 输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3]  数据范围
- 1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列   分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ">
+输入： nums = [1,1,1,2,2,3] 输出： 5, nums = [1,1,2,2,3] 解释： 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。 示例2
+输入： nums = [0,0,1,1,1,1,2,3,3] 输出： 7, nums = [0,0,1,1,2,3,3] 数据范围
+1 &amp;lt;= nums.length &amp;lt;= 3 * 104 -104 &amp;lt;= nums[i] &amp;lt;= 104 nums 已按升序排列 分析 更新博客主题第一篇~ 分析部分不用 &amp;gt; 包起来了 ヽ(￣▽￣)ﾉ
+一道乍看简单，细想麻烦的题目，放在 错题本 这个分类里，主要是由于朴素的暴力做法是能通过的。当然，题解里面的想法更为强大，当然，并不是特别难想，但是细节是较多的，也是本次错得最多的地方。">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -236,69 +239,69 @@
 </ul>
 <p>不得不说，我最开始、最朴素的想法反而特别的复杂，根据上面的内容能写出如下的代码：</p>
 <h4 id="ac代码1">AC代码1</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">int</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">p_now</span><span class="p">;</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">p_next</span><span class="p">;</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">p_tmp</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="n">num_now</span><span class="p">;</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="n">p_now</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">p_now</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">p_now</span> <span class="o">==</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">p_now</span><span class="o">++</span><span class="p">;</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">p_now</span> <span class="o">==</span> <span class="o">*</span><span class="p">(</span><span class="n">p_now</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="p">{</span>
-                <span class="n">num_now</span> <span class="o">=</span> <span class="o">*</span><span class="n">p_now</span><span class="p">;</span>
-                <span class="n">p_now</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
-                <span class="n">p_next</span> <span class="o">=</span> <span class="n">p_now</span><span class="p">;</span>
-                <span class="c1">// get next num different from now
-</span><span class="c1"></span>                <span class="k">while</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">p_next</span> <span class="o">==</span> <span class="n">num_now</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">p_next</span><span class="o">++</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="c1">// next position is valid
-</span><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">p_next</span> <span class="o">!=</span> <span class="n">p_now</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">p_tmp</span> <span class="o">=</span> <span class="n">p_now</span><span class="p">;</span>
-                    <span class="kt">int</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">p_next</span> <span class="o">-</span> <span class="n">p_now</span><span class="p">;</span>
-                    <span class="k">while</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
-                    <span class="p">{</span>
-                        <span class="o">*</span><span class="n">p_tmp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p_next</span><span class="p">;</span>
-                        <span class="n">p_next</span><span class="o">++</span><span class="p">;</span>
-                        <span class="n">p_tmp</span><span class="o">++</span><span class="p">;</span>
-                    <span class="p">}</span>
-                    <span class="k">while</span> <span class="p">(</span><span class="n">diff</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="n">nums</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-                <span class="c1">// next position is invalid
-</span><span class="c1"></span>                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">==</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
-                <span class="p">{</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">p_now</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="c1">// cout &lt;&lt; *p_now &lt;&lt; endl;
-</span><span class="c1"></span>        <span class="n">res</span> <span class="o">=</span> <span class="n">p_now</span> <span class="o">-</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">res</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">nums</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p>大几十行的代码，没什么好说的了 -_-||</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">p_now</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">p_next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">p_tmp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="n">num_now</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">p_now</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">p_now</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">p_now</span> <span class="o">==</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">p_now</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">p_now</span> <span class="o">==</span> <span class="o">*</span><span class="p">(</span><span class="n">p_now</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">num_now</span> <span class="o">=</span> <span class="o">*</span><span class="n">p_now</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">p_now</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">p_next</span> <span class="o">=</span> <span class="n">p_now</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// get next num different from now
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">while</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">p_next</span> <span class="o">==</span> <span class="n">num_now</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">p_next</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// next position is valid
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">p_next</span> <span class="o">!=</span> <span class="n">p_now</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">p_tmp</span> <span class="o">=</span> <span class="n">p_now</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="kt">int</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">p_next</span> <span class="o">-</span> <span class="n">p_now</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">while</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="o">*</span><span class="n">p_tmp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p_next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">p_next</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">p_tmp</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">while</span> <span class="p">(</span><span class="n">diff</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">nums</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// next position is invalid
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">p_next</span> <span class="o">==</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">p_now</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// cout &lt;&lt; *p_now &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">res</span> <span class="o">=</span> <span class="n">p_now</span> <span class="o">-</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nums</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>大几十行的代码，没什么好说的了 -_-||</p>
 <p>对于原地修改来说，我的 <code>pop_back()</code> 操作实际上显得多余，表现是很一般的：</p>
 <p><figure 
 	
@@ -346,49 +349,49 @@
 <p>注意当 <code>slow</code> 指向了第三个 <code>2</code> 的时候，<code>*slow == *(slow - 2)</code> ，则 <code>slow</code> 不再继续前移，只移动 <code>fast</code> ，且只当 <code>*fast ！= *slow</code> 的时候才会继续移动 <code>slow</code> 。在本例中，将 <code>*slow</code> 更新为 <code>3</code> 之后， <code>fast</code> 和 <code>slow</code> 都要继续移动，然而 <code>fast</code> 已经走完了整个数组，故循环结束了。</p>
 <p>由此写出AC代码2.</p>
 <h4 id="ac代码2">AC代码2</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">int</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">slow</span><span class="p">;</span>
-        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">fast</span><span class="p">;</span>
-        
-        <span class="n">slow</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">fast</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">fast</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">fast</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="o">*</span><span class="n">slow</span> <span class="o">=</span> <span class="o">*</span><span class="n">fast</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">slow</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">slow</span><span class="o">++</span><span class="p">;</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">slow</span> <span class="o">==</span> <span class="o">*</span><span class="p">(</span><span class="n">slow</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">slow</span> <span class="o">==</span> <span class="o">*</span><span class="n">fast</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="c1">// do not add slow
-</span><span class="c1"></span>                <span class="c1">// cout &lt;&lt; *slow &lt;&lt; &#34; == &#34; &lt;&lt; *fast &lt;&lt; endl;
-</span><span class="c1"></span>                <span class="c1">// cout &lt;&lt; slow - nums.begin() &lt;&lt; endl;
-</span><span class="c1"></span>                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">slow</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="cm">/*
-</span><span class="cm">        for (vector&lt;int&gt;::iterator tmp = nums.begin(); tmp != slow; tmp++)
-</span><span class="cm">        {
-</span><span class="cm">            cout &lt;&lt; *tmp &lt;&lt; &#34; &#34;;
-</span><span class="cm">        }
-</span><span class="cm">        cout &lt;&lt; endl;
-</span><span class="cm">        cout &lt;&lt; &#34;Ret: &#34; &lt;&lt; slow - nums.begin() &lt;&lt; endl;
-</span><span class="cm">        */</span>
-        <span class="k">return</span> <span class="n">slow</span> <span class="o">-</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">slow</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">fast</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">slow</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">fast</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">fast</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">fast</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="o">*</span><span class="n">slow</span> <span class="o">=</span> <span class="o">*</span><span class="n">fast</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">slow</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">slow</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">slow</span> <span class="o">==</span> <span class="o">*</span><span class="p">(</span><span class="n">slow</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">slow</span> <span class="o">==</span> <span class="o">*</span><span class="n">fast</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// do not add slow
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="c1">// cout &lt;&lt; *slow &lt;&lt; &#34; == &#34; &lt;&lt; *fast &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="c1">// cout &lt;&lt; slow - nums.begin() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">slow</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        for (vector&lt;int&gt;::iterator tmp = nums.begin(); tmp != slow; tmp++)
+</span></span></span><span class="line"><span class="cl"><span class="cm">        {
+</span></span></span><span class="line"><span class="cl"><span class="cm">            cout &lt;&lt; *tmp &lt;&lt; &#34; &#34;;
+</span></span></span><span class="line"><span class="cl"><span class="cm">        }
+</span></span></span><span class="line"><span class="cl"><span class="cm">        cout &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="cm">        cout &lt;&lt; &#34;Ret: &#34; &lt;&lt; slow - nums.begin() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="cm">        */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">slow</span> <span class="o">-</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><blockquote>
 <p>我将调试代码都留在了此处，这是因为AC代码中有一步细节需要注意：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">fast</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">fast</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">fast</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="o">*</span><span class="n">slow</span> <span class="o">=</span> <span class="o">*</span><span class="n">fast</span><span class="p">;</span>
-    <span class="c1">// --- snip ---
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p><code>fast</code> 的每一步移动都要伴随着 <code>slow</code> 的更新，并不需要关注 <code>slow</code> 满足什么条件。仅当 <code>slow</code> 与它的上上位不同的时候才会继续移动，因此不必担心赋值出现什么问题。<strong>这一步可是我WA了三次才得到的惨痛教训！</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">fast</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">fast</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">fast</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="n">slow</span> <span class="o">=</span> <span class="o">*</span><span class="n">fast</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// --- snip ---
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p><code>fast</code> 的每一步移动都要伴随着 <code>slow</code> 的更新，并不需要关注 <code>slow</code> 满足什么条件。仅当 <code>slow</code> 与它的上上位不同的时候才会继续移动，因此不必担心赋值出现什么问题。<strong>这一步可是我WA了三次才得到的惨痛教训！</strong></p>
 </blockquote>
 <p><figure 
 	

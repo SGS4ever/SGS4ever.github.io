@@ -6,7 +6,47 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RapidJson使用小记</title>
+      <link>https://xrg.fj.cn/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</guid>
+      <description>近期有个需求需要对 JSON 数据进行解析，上周五搞了一点点之后就去忙其他的事情了，正好用周末时间搞一搞，输出点东西。
+RapidJson 是一个C++的JSON解析器及生成器，特点详见官网，此处仅作使用记录。
+环境：
+Windows 11 64bit
+WSL2 Ubuntu 22.04
+cmake version 3.22.1
+gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1)
+读者需要具备的一些前置知识：
+cmake基本使用、c++、Linux基本使用
+Step 1 安装 RapidJson 项目是一个纯头文件库，直接把仓库中的 include/rapidjson 拷贝到我们CPP项目的头文件包含路径内即可。
+Step 1.1 cmake install 对于cmake项目来说，只需要创建一个合适的地方来存放头文件：
+albusguo@AlbusGuo-PC:/mnt/d/Scripts/CPPScripts/RapidJson$ tree . ├── CMakeLists.txt ├── build ├── include │ └── rapidjson │ ├── allocators.h │ ├── cursorstreamwrapper.h │ ├── document.h │ ├── encodedstream.h │ ├── encodings.h │ ├── error │ │ ├── en.h │ │ └── error.</description>
+    </item>
+    
+    <item>
+      <title>Windows Terminal美化小记</title>
+      <link>https://xrg.fj.cn/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Sat, 17 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/</guid>
+      <description>背景 近来发现工作 &amp;amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
+Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&amp;rsquo;◡&amp;rsquo;●)
+Step 1 background 对于一个又大又黑的终端来说，一个非常显著的提升颜值的办法就是换上一张自己满意的背景图片。
+点击Windows Terminal顶栏的小倒三角，进入【设置】——【Windows Powershell】——【外观】——【背景图片】，选择图片路径即可。
+再微调一下透明度，整个质感会马上提高：
+background image 审美各异，勿杠。
+Step 2 安装oh-my-posh oh-my-posh 是一个终端美化程序，类似MacOS终端美化常用的zsh。
+建议 不要使用 官网介绍的下载办法：
+# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&amp;#39;https://ohmyposh.dev/install.ps1&amp;#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
+可以手动下载上述命令中提到的安装脚本 https://ohmyposh.dev/install.ps1 ，看一眼就知道实际上它就是到 Github release 上把安装程序下载下来而已，不是很理解为什么要用户用一个反人类的命令安装。
+因此，我们直接把对应的 installer 下到本地（访问GitHub的时候可以科学上网，或使用gitee镜像），运行，即可完成 oh-my-posh 的安装。
+Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之前我们要先安装字体，以便正确显示特殊字符。</description>
+    </item>
+    
     <item>
       <title>PyQt5初探——与scapy的美妙结合</title>
       <link>https://xrg.fj.cn/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/</link>
@@ -16,25 +56,25 @@
       <description>PyQt5初探 自读书摘抄站点构建完成以来，一直没有进行什么有趣的实践，这回由于毕设的需要，首次尝试进行GUI编程；此外同样由于毕设需要，使用了scapy进行流量嗅探，因此就有了这一篇四不像的记录性质的文章。
 Qt（音 cute ）是一套被广泛使用的GUI组件库，而 PyQt 则是这套框架与Python语言的结合，是Python中最强大的GUI库之一。
 本次选用这个框架其实经过了一定的曲折，因为Python的GUI库有太多了🤣
-  TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
-  PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
-  Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
-  PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
-  安装PyQt非常简单：
+TkInter ：python标准Tk GUI工具包的接口，我对这个库倒没什么成见，以前的项目使用过（虽然是队友做的），这次想换个别的库。
+PySimpleGUI ：框架主打一个简单易用，也是我最初选用的方案；接触了半个多小时之后放弃，文档属实写得像💩。
+Kivy ：这个库自己还开发了一套设计语言，界面文件和程序文件分离，但只有英文文档且框架本身对中文支持不好，接触了半个多小时后放弃。
+PyQt ：以上所有库放的都是官方链接，唯独这里放的是一篇中文教程，个人觉得这位大佬翻译得不错，文档学起来是比较舒服的，遂采用。
+安装PyQt非常简单：
 pip install PyQt5 pip install pyqt5-tools 还有简单易用的 Qt Designer ，可以直接通过拖拽的方式来放置控件、设计页面，牛逼格拉斯，但我准备手撸代码，因此没有尝试对它进行配置。
 环境安装完成之后，可以照着 教程 实现一些功能。
 经过一系列的探索，我的程序初具雏形：
- 
 界面有如下几个组件：
-  在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
-  结束在线分析：顾名思义。
-  打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
-  大大的文本框：用于输出实时流量捕捉的内容。
-  运行起来的效果如下：
- 在线分析（初步） 
-总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
+在线分析：启动在线流量分析。目前还没有加入“分析”的功能，仅能对流量进行实时捕捉。
+结束在线分析：顾名思义。
+打开文件：打开一个 pcap 文件，留待后续使用，主要希望将离线分析的功能也整合进来。
+大大的文本框：用于输出实时流量捕捉的内容。
+运行起来的效果如下：
+在线分析（初步） 总体实现的内容比较简单，因此后文仅对我开发过程中遇到的一些疑难杂症进行叙述。
 不过，还是需要先对本文的另一个主角 scapy 进行一些介绍。
-scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。</description>
+scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓包、解包、构造和发送数据包等功能。
+这次将 scapy 和 PyQt5 结合，实际上只需要用到抓包的功能：
+def StartSniff(self): self.stopSniff = False sniff(prn=self.SniffCallBack, count=0, stop_filter=self.isStop) def SniffCallBack(self, pkt: scapy.packet.Packet) -&amp;gt; None: &amp;#39;&amp;#39;&amp;#39; Do Something &amp;#39;&amp;#39;&amp;#39; def isStop(self, pkt): return self.</description>
     </item>
     
     <item>
@@ -47,17 +87,17 @@ scapy初探 Scapy 是一套完整的网络报文操作工具，可以实现抓�
 目前站点已经上线 https://119.45.233.104/ ，直接访问会显示证书不安全，忽略安全警告即可（证书完全合法，产生警告是因为证书是跟域名绑定的）。其实域名也已经搞定了，但是解析到国内IP的域名需要备案，过一阵子再说吧～
 本篇主要是进行一个收尾总结工作，除非之后有较大改动，否则对于读书摘抄站点的叙述就到此为止了，总共三篇，事不过三嘛！
 0x00 后端开发环境转移 后端开发环境已由上一篇所述的 Windows+VisualStudio 改换到 CentOS 7+VSCode远程开发 ，引发这个决定的因素主要有几点：
-  VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
-  VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
-  导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
-  还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
+VisualStudio 对 CMake 项目不太友好，自动添加若干编译选项，还有各种Cache，每次编译都要面临各种依赖问题，很烦；
+VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变量，我意识到根本没必要在这方面继续浪费时间了；
+导火索：根页面的控制器 IndexCtrl 都已经写完了，在尝试联通MySQL的时候报错找不到数据库，直接炸裂，怒而弃坑。
+还是依照 Drogon WiKi 在 CentOS 7 上配好了环境，没出现任何问题，不得不服气。
 在 Windows/MacOS 上都可以安装VSCode，下载 RemoteDevelopment 插件即可配置远程开发，网上教程很多，此处不表。
 0x01 前端引入VUE 在前后端结合的时候，出现了一个超级难受的情况：Drogon自带的页面渲染机制CSP出现了中文乱码的问题。这个问题不是Drogon的问题，而应该是我在配置编码上存在一些纰漏，但是 我不想承认我的问题 我不想花时间去调试这一非主流的技术，而且我一直担心我的小破服务器吃不消后端渲染，因此决定尝试一下此前从未搞过的前端渲染。
 前后端渲染的区别主要在于最终页面是在哪里生成的。后端渲染是在服务端生成我们最终看到的页面，而前端渲染主要是由浏览器生成我们最终看到的页面。前端渲染的好处是前后端连通的时候只需要传输一些简单的数据即可，而且由于“在前端渲染”这一特性，实现一些异步功能的时候更加简单（如分段加载）。
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetchData(vueThis) { axios .</description>
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .</description>
     </item>
     
     <item>
@@ -68,9 +108,9 @@ const app = Vue.createApp({ // ==== 略 ====  methods: { // ==== 略 ====  fetch
       <guid>https://xrg.fj.cn/p/hackintosh%E5%B0%8F%E8%AE%B0/</guid>
       <description>最近太闲，时常想着把老电脑重装一下，不过Windows的C盘总是莫名其妙地渐渐跑满，非常烦人；加之一直以来对Mac OS的好奇，决定在老电脑上搞个黑苹果（Hackintosh）玩一玩。
 黑苹果指的是在 非Apple设备上运行Mac OS ，可以理解为在自己的机器上运行一个盗版系统，一般来说会导致几个问题：
- 硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。  本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
-Step0 Video教程  From YouTube。请科学上网 😊
-   这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
+硬件摆烂。因为Mac不可能针对非自家产品进行完美的适配；装上黑苹果之后，运气不好的话可能网卡、USB口、蓝牙等等都失效； 无法启动。这个原因就很多了，庆幸自己没有遇到。 本篇主要记录自己的Hackintosh之旅，由于笔者仍是初学且并不追求完美，本文仅供日后自行翻阅，对外人并无参考价值，留意留意。
+Step0 Video教程 From YouTube。请科学上网 😊
+这篇教程是极具指导意义的教程，按照教程的指示，基本没有出现太多错误。放在首位，并不是说只需照着教程去做而已，而是可以先看看教程里面的内容，后面再进行详细定制。
 Step 1 EFI 教程里面有用到EFI文件。这是黑苹果启动时需要的文件，每个机型的引导文件不尽相同。如果EFI不合适的话，自然就不能启动啦！
 我的电脑是 ASUS FL8000UQ ，使用了 https://github.com/alexanderkin/ASUS-FL8000UQ-Hackintosh 开源的EFI文件。
 各机型和其对应的EFI可以从 https://gitee.com/softxing/Hackintosh 找到。
@@ -79,10 +119,10 @@ Step 2 解锁CFG Lock CFG Lock用于保护MSR 0xE2单元，开启CFG锁之后，
 Step 3 修改config.plist 这一步就在 Video教程 里面而已，主要就是改一下 三码 ，照着做即可！
 Step 4 禁用各种BIOS选项 重要！我刚开始做的时候就是因为漏掉某些选项没有禁，搞得系统一直装不上！
 教程里面有清单的，或者按照下图的选项逐一禁用：
- Img 
-Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
+Img Step 5 改Mindate 重要！OpenCore在引导的时候，居然对系统版本进行了限制。要参考 这篇文章 来把限制关闭掉。
 Step 6 安装 直接U盘启动啊！So Easy！
-安装过程中有一些小插曲：</description>
+安装过程中有一些小插曲：
+磁盘识别不到。因为原本的Win10系统用的是MBR分区，而Mac只能识别GPT分区，搞得我特别难受。后面重新制作了个Windows的启动盘，在安装界面用了命令行操作把磁盘重新格式化了，然后才重新开始Mac的安装。详见 此篇 ，只能说CSDN偶尔还是有点好东西 😏 安装完毕之后进不了系统，重启的时候还是只能从U盘进入恢复模式。这个问题非常烦人，使我重装了N遍系统（为我的硬盘感到忧伤），一度使我想要放弃，最后按照上一步的指示把Mindate改掉即可。 Step 7 更新Wi-Fi驱动 我的网卡是原装的AR9565，按照 这篇文章 完美搞定Wi-Fi驱动。</description>
     </item>
     
     <item>
@@ -96,8 +136,7 @@ Step 6 安装 直接U盘启动啊！So Easy！
 Step0 环境配置 VCPKG安装+集成 第一步是安装VCPKG，这是微软开发的一款C++软件包管理工具，Drogon就通过这款工具下载。
 去到 microsoft/vcpkg: C++ Library Manager for Windows, Linux, and MacOS (github.com) 下载代码或克隆仓库，运行 bootstrap-vcpkg.bat 完成安装。会生成一个 vcpkg.exe ，可以添加环境变量以便全局使用。
 使用 vcpkg search drogon 既可以初步观察到Drogon库的情况；同时，这条命令的顺利运行也就表示我们的安装已经成功。
- vcpkg安装成功 
-使用命令 vcpkg integrate install 可以将vcpkg进行全局集成，此后从VCPKG下载的库都能在Visual Studio里面直接使用。全局集成可以通过 vcpkg integrate remove 来移除。
+vcpkg安装成功 使用命令 vcpkg integrate install 可以将vcpkg进行全局集成，此后从VCPKG下载的库都能在Visual Studio里面直接使用。全局集成可以通过 vcpkg integrate remove 来移除。
 对于工程项目的集成，应该通过 vcpkg integrate project 来完成，这样在单一项目中下载的库不会影响到其他项目，较为理想。具体做法参见参考资料 [1] ，我选择直接使用全局集成。
 Drogon安装 使用命令 vcpkg install drogon 或命令 vcpkg install drogon:x64-windows 来安装Drogon，前者安装的是X86的包，后者安装的是X64的包。
 安装完成之后，应该从 [VCPKG PATH]\installed\x86-windows\tools\drogon 文件夹中找到 drogon_ctl 工具，该工具可以帮助我们生成Drogon项目及一系列组件，很有意义；我在初次安装的时候并没有找到这个工具，通过 vcpkg install drogon[ctl] 实现手动安装。
@@ -115,9 +154,9 @@ Drogon安装 使用命令 vcpkg install drogon 或命令 vcpkg install drogon:x6
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
 开工大吉！ ☀️
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
- 前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载+加载时的页面动画  已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载+加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
- 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。  正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
+摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
 &amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long+Cang&amp;amp;family=Ma+Shan+Zheng&amp;amp;family=Noto+Sans+SC:wght@300&amp;amp;family=Noto+Serif+SC:wght@300&amp;amp;family=Zhi+Mang+Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.</description>
@@ -132,11 +171,10 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
       <description>前情提要 在 上一篇PCPP使用记录 中，我记录了PcapPlusPlus这个库的环境安装和简单使用，紧接着，就准备基于这个库来实现一些具体的、有用的功能了。
 数据包解析 PCPP这个库将一个原始数据包解析为若干层，每一层的协议信息由一个变量来保存，我们可以自由读写这些解析后的数据。
 一个 RawPacket 表示原始的字节流，也就是我们最开始从 pcap 文件中读进来的一个数据包，经过解析，可以将这个数据包拆分成我们熟悉的若干层数据！PCPP的一个特性是它不保存多个副本，而只是在同一个数据包上标记各层协议的起点，这些起点可以由上一层解析结果访问到。
- 示例 
-例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
+示例 例如这个图中的解析结果，首先是数据链路层的 Ethernet Layer ，它可以看到所有原始数据；由 Ethernet Layer 层扣除它的头部数据，就是整个 IPv4 层的数据；而由 IPv4 层再继续解析，就是 UDP 层啦！这样层层递推，实际上跟学习计算机网络的时候对数据包的解析顺序差不多。
 PCPP提供的数据包解析方法有两种，我们分别来看。
 首先还是需要先创建一个 reader ，如果你还记得第一章的内容，那就很简单了：
-#include &amp;lt;iostream&amp;gt;#include &amp;lt;IPv4Layer.h&amp;gt;#include &amp;lt;Packet.h&amp;gt;#include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 	// open a pcap file for reading 	pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!</description>
+#include &amp;lt;iostream&amp;gt; #include &amp;lt;IPv4Layer.h&amp;gt; #include &amp;lt;Packet.h&amp;gt; #include &amp;lt;PcapFileDevice.h&amp;gt; int main(int argc, char* argv[]) { // Part 1 // open a pcap file for reading pcpp::IFileReaderDevice* reader = pcpp::IFileReaderDevice::getReader(&amp;#34;test_file_1.pcap&amp;#34;); if (!reader) { std::cerr &amp;lt;&amp;lt; &amp;#34;Cannot determine reader for file type&amp;#34; &amp;lt;&amp;lt; std::endl; return 1; } if (!</description>
     </item>
     
     <item>
@@ -150,11 +188,12 @@ PCPP提供的数据包解析方法有两种，我们分别来看。
 预装依赖 从这里开始，我想将 PcapPlusPlus 简称为 PCPP ，方便文章的撰写之用 。
 本文使用的环境是：Win10 + VisualStudio2019 。
 要使用这个库，我们需要先安装一些依赖。
- 个人建议将这些依赖下载到同一个地方，方便管理！
-  安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C++ Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！  下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
+个人建议将这些依赖下载到同一个地方，方便管理！
+安装 WinPcap开发者工具 或 Npcap SDK 。下载解压而已，很简单！我这边使用的是WinPcap 。 安装 pthread-win32工具 ，注意这里的链接跟PCPP文档里面的链接是不一样的！文档里面的URL协议是 ftp ，我下载的时候好像打不开的样子，就改为使用 https 了！ 可能还需要一个 Microsoft Visual C++ Redistributable 工具，从这里下下来的是个 exe 文件，我在后面的过程中 暂时没有用到 ！也就是说我还没运行过这个EXE，先下载下来而已！ 下载PcapPlusPlus 直接从 PcapPlusPlus v21.11 页面上把示例代码下载下来！我这边选用的是 windows-vs2019 这个压缩包！
 到这一步，算上我们之前下载 并解压 的依赖，文件夹里面应该有这么多东西：
- 现有的文件 
-All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：</description>
+现有的文件 All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject ，打开之：
+ExampleProject文件结构 没问题的话，就准备运行示例程序了！
+运行示例程序 熟悉VS的朋友可能要迫不及待地把那个 .</description>
     </item>
     
     <item>
@@ -168,9 +207,8 @@ All right？进入刚才下载的VS2019文件夹里面，有个 ExampleProject �
 嗯？等等，好像要破费？！
 虽然APP Store有充值赠送机制，但当我需要的目标数额多起来时，怎么获取最优化的充值方案呢？似乎是个有趣的问题 😼
 所谓 最优化的充值方案 ，即是指两种情况：
- 花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。  这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
- APP Store充值方案 
-场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
+花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。 这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
+APP Store充值方案 场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
 既然文章标题都已经点明了我的用意，那就直接从DP的角度开始思考了 😏
 令 dp[i] 表示 购买 i 点券的最少花销 ，那么对于目标点券 i ，它可以由上图中所有可能的方案组成。例如我们需要购买 1430 点券，那么我们可以花费若干个 1￥ 购买若干份 10点券 ，也可以花费两个 68￥ 购买两份 715(680+35)点券 。唯一的限制是，不能使用比 i 更大的购买方案，例如我们需要 1430 点券，那就不能花费 648￥ 去买到六千多点券，不然就很浪费！
 既然要使用DP，那么我们得到的状态转移方程应该是什么呢？
@@ -225,15 +263,12 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
 启动之后，可以使用DHCP获取IP，或者手动配置IP；虚拟机会要求你设置口令，你可以使用用户名 perc 和你设置的口令来远程登录到系统上。
 成功启动之后，会出现 WANemControl@PERC&amp;gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
 一般来说，你现在就可以在另一台机器的浏览器上使用 http://&amp;lt;WANem IP&amp;gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
- 成功访问WANem 
-配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
+成功访问WANem 配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
 点击导航栏中的 Advanced Mode 进入高级配置，我们看到如下的界面：
- Advanced Mode 
-界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
+Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
 可以指定我们的规则的适用范围，如果你只希望你配置的规则在两台特定主机之间生效，那么就填写下图红框框出的一行，否则保留原样即可。
- 规则 
-使用 保存我们设置好的规则，即刻开始使用它吧。
-我们的两台实验机器分别是 CentOS7 192.</description>
+规则 使用 保存我们设置好的规则，即刻开始使用它吧。
+我们的两台实验机器分别是 CentOS7 192.168.213.128 和 Ubuntu 192.168.213.129 ，WANem是 192.168.213.130 。</description>
     </item>
     
     <item>
@@ -243,16 +278,18 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
       
       <guid>https://xrg.fj.cn/p/owasp-top102021/</guid>
       <description>2021版本的OWASP Top10已经出炉，目前处于同行评审阶段。本博客上已有2017版本的归纳总结，考虑到后面几年时间内，该版本（2021版）的Top10将可能对行业产生较大的影响，现单列一篇，总结其内容。
- 截至本文发布，该版本已经定稿
- 0 总览 新版本相较于2017版，引入了3个新类别（Insecure Design、Software and Data Integrity Failures、SSRF），修改了原有4个类的名称，以及进行了一些类别的整合。
- 变化 
-这一版Top10综合考虑了大数据和行业调查的结果；由于安全人员需要对大数据分析得到的漏洞进行验证和测试，为了保证结论的与时俱进，该机构对一线安全人员进行了问卷调查，由他们来对大数据分析的结果进行补充。
+截至本文发布，该版本已经定稿
+0 总览 新版本相较于2017版，引入了3个新类别（Insecure Design、Software and Data Integrity Failures、SSRF），修改了原有4个类的名称，以及进行了一些类别的整合。
+变化 这一版Top10综合考虑了大数据和行业调查的结果；由于安全人员需要对大数据分析得到的漏洞进行验证和测试，为了保证结论的与时俱进，该机构对一线安全人员进行了问卷调查，由他们来对大数据分析的结果进行补充。
 1 Broken Access Control 失效的访问控制 是原榜单的 No. 5 ，现在来到了第一位。在 秋招 | 一些知识点 (gitee.io) 这篇文章中已经对这一安全问题进行了解释，在此不妨再重复一遍。
 访问控制策略使得所有用户都只能在其对应的权限之下行动，而失效的访问控制将导致未授权信息的读取、修改、销毁，或导致用户执行其权限之外的功能函数。一般的访问控制漏洞包括以下几点：
- 攻击者可以通过修改URL、应用内部状态、HTML页面或使用API攻击工具来绕过访问控制检查； 允许攻击者将数据库主键设置为其他用户，从而导致查看或修改其他用户的信息； 提权。未登录时能够执行已登录用户的操作，或已登录用户执行管理员操作； 修改元数据，例如JSON Web Token（JWT）的重放或伪造，cookie或隐藏元数据字段的伪造，从而进行提权； CORS（跨域资源共享）配置不当，从而导致未授权的API调用； 在未登录状态下通过目录遍历找到了需要登录才能访问的界面，或同理找到了管理员界面。  防护措施 ：
- 只开放公共资源，其余资源默认禁止访问； 只实现一种访问控制机制，贯彻落实到整个应用中； 访问控制模型要明确每一条记录的拥有者，不允许用户随便创建、读取、更新、删除记录； 记录失败的访问控制，并及时告警。  2 Cryptographic Failures 密码算法失效 旧称 敏感数据泄露 ，是原榜单的 No. 3 ，现在来到了第二位。敏感数据泄露是现象而非本质，新版本将其表达修改为更加接近问题根源的形式。
+攻击者可以通过修改URL、应用内部状态、HTML页面或使用API攻击工具来绕过访问控制检查； 允许攻击者将数据库主键设置为其他用户，从而导致查看或修改其他用户的信息； 提权。未登录时能够执行已登录用户的操作，或已登录用户执行管理员操作； 修改元数据，例如JSON Web Token（JWT）的重放或伪造，cookie或隐藏元数据字段的伪造，从而进行提权； CORS（跨域资源共享）配置不当，从而导致未授权的API调用； 在未登录状态下通过目录遍历找到了需要登录才能访问的界面，或同理找到了管理员界面。 防护措施 ：
+只开放公共资源，其余资源默认禁止访问； 只实现一种访问控制机制，贯彻落实到整个应用中； 访问控制模型要明确每一条记录的拥有者，不允许用户随便创建、读取、更新、删除记录； 记录失败的访问控制，并及时告警。 2 Cryptographic Failures 密码算法失效 旧称 敏感数据泄露 ，是原榜单的 No. 3 ，现在来到了第二位。敏感数据泄露是现象而非本质，新版本将其表达修改为更加接近问题根源的形式。
 人们总是需要考虑数据传输、存储、处理过程中的保护需求，诸如口令、信用卡号、个人信息等数据需要提供额外的保护；一般来说，只要是法律规定的敏感数据都需要进行严密的保护。参照欧盟的GDPR、金融业的PCI DSS等文件，数据保护要考虑如下的问题：
- 数据明文明文传输问题； 在默认配置或较老的代码中使用了脆弱的密码算法； 使用了默认的/脆弱的/重复使用的密钥，或密钥没有得到妥善的保管； 没有强制进行加密； 客户端没有对服务端证书进行验证。  防护措施 ：</description>
+数据明文明文传输问题； 在默认配置或较老的代码中使用了脆弱的密码算法； 使用了默认的/脆弱的/重复使用的密钥，或密钥没有得到妥善的保管； 没有强制进行加密； 客户端没有对服务端证书进行验证。 防护措施 ：
+对没必要存储的敏感数据予以及时销毁，存储的敏感数据确保加密。 使用最新的、强大的算法、协议、密钥，且密钥妥善管理。 确保数据传输过程中受到加密保护，如使用HSTS。 3 Injection 2017版本的OWASP Top10将注入漏洞排在第一位，因此相信很多人都对此有所了解。
+以下的情况可能导致注入漏洞的出现：
+用户提供的数据没有经过应用程序的验证、过滤； 未经过转义就将动态请求或非参数化的API调用放入解释器执行； 恶意数据被直接使用或拼接使用。 防护措施 ：</description>
     </item>
     
     <item>
@@ -264,18 +301,17 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
       <description>什么是audit Linux下的audit框架提供可靠的搜集系统信息的服务，任何与安全相关（或无关）的事件都可被此框架搜集和审计。通过audit，人们可以更加详细地了解系统上发生的事情，然而，该框架并不提供额外的安全措施，在安全事件中，它仅仅是帮助人们更加清晰地认识整个事件的始末，此后亡羊补牢，为时未晚。
 简单地说，audit审计框架的工作就是监听来自内核的事件报告，并将它们写入日志文件中。
 而较为系统地说，audit框架的组件结构如图所示：
- img 
-安装 内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 CONFIG_AUDIT 。
+img 安装 内核层的audit服务在Linux（4.18及以后）、Linux-lts（4.19及以后）、Linux-zen（4.18及以后）和Linux-hardened等版本中默认可用。如用户使用自行编译的内核，需要在编译中设置参数 CONFIG_AUDIT 。
 我们通过查看内核编译参数，可以看到系统对audit内核审计的支持情况，以CentOS 7为例：
- img 
-用户层的audit服务可以通过普通的软件安装方式获取，可以使用 systemctl 或 service 命令来控制服务的启停。
+img 用户层的audit服务可以通过普通的软件安装方式获取，可以使用 systemctl 或 service 命令来控制服务的启停。
 audit内核审计的消息可以由应用或系统活动来触发，而 audit daemon（audit守护进程） 是audit框架中的重要组成部分，它负责处理内核生成的消息，例如将这些消息写入日志中或选择性地忽略。
 我们可以通过若干命令和文件来控制 audit daemon ：
- auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。  添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
+auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。 添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
 对文件和目录访问的审计
-监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：</description>
+监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：
+# auditctl -w /etc/passwd -p rwxa 也可以监控对某一路径的访问：</description>
     </item>
     
     <item>
@@ -291,16 +327,14 @@ syslog工作流程简述 不管是什么应用，日志机制永是最重要的�
 大部分Linux发行版默认的日志守护进程为syslog（或较新版本的rsyslog），位于 /etc/syslog 或 /etc/syslogd 或 /etc/rsyslog.d ，默认配置文件为 /etc/syslog.conf 或 rsyslog.conf ，任何希望生成日志的程序都可以向syslog发送信息。
 syslog应该对接收的信息进行某种处理。我们可以从直觉出发，考虑一下syslog收到一条信息后应该做哪些事情：首先，系统中有那么多的信息源，我们会考虑对这些信息源进行分类；之后，每个信息源给出的信息都具有不同的情境，正常运行产生的信息跟报错信息肯定不能一视同仁的，我们会考虑根据信息的严重性对这些信息进行分类；最后，符合筛选条件的信息就触发某种动作，比如把它写进某个日志文件里。
 流程图是个好东西。我们假设系统中有若干类信息源，每类信息源产生不同等级的信息，那么syslog应该对这些信息进行分类分级处理，如下图所示：
- syslog处理分类分级处理信息 
-当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
+syslog处理分类分级处理信息 当然，这一流程图只是为了较为直观地呈现syslog分类分级的机制，以使读者有个初步的印象，接下来，我们将从配置文件出发，介绍syslog（rsyslog）的日志记录细节。
 过滤规则 如果你的系统是CentOS，可以打开 /etc/rsyslog.conf ，这是syslog的配置文件，Ubuntu下的配置文件位于 /etc/rsyslog.d/50-default.conf ；在这里，你可以看到不少类似下方的语句：
 authpriv.* /var/log/secure
 这是syslog日志记录的一条规则，我们将规则拆开来看，实际上只有三个部分：
- 规则的组成 
-第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
+规则的组成 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
-#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages!</description>
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages! *.</description>
     </item>
     
     <item>
@@ -312,14 +346,15 @@ authpriv.* /var/log/secure
       <description>如果你单纯地想体验一下以“简洁高效“闻名的Mac OS，那么我会强烈推荐你为自己创建一台Mac OS的虚拟机，使用这种方法，你不需要花费大几千元去购入一台Mac Book，就能得到最完整的系统体验。当然，假若你在体验之后爱上了这款系统，之后努力工作为自己的情怀买个单也是有所必要的。
 解锁VMWare 我们诸多步骤中最困难的一步就是解锁VMWare了。为什么叫解锁呢？因为我们使用的程序被作者命名为 unlocker ，就这么简单······ 我假定阅读本文的读者已经知道什么是VMWare，并且创建过自己的虚拟机，对于VMWare的安装等流程不再赘述。本文使用的是VMWare Workstation Pro 16 。
 正常的VMWare在创建虚拟机的时候，需要选择虚拟机操作系统，而且只有简单的几个选项（Windows/Linux/···）。我们在选项列表中看不到 apple MacOS 这类的字眼，因此我们要做的第一件事就是让VMWare能够创建 Mac OS 类型的虚拟机。 这一步真是非常的简单啊。总体而言，我们只需要进行三个步骤：
- 下载 unlocker 软件 软件运行之前做一些前期的准备 运行！  Amazing，看起来一点都不难吧？
+下载 unlocker 软件 软件运行之前做一些前期的准备 运行！ Amazing，看起来一点都不难吧？
 Step1 我们去 这个网址 下载所需要的软件。
 对应于本文所使用的VMWare 16，你可以有两种选择：
- Auto-Unlocker v1.1.3 以一个 exe 的形式封装好了所有的流程，在我的测试中，这个软件总是不能成功解锁VMWare，令人生气。 根据某个 issue 中的办法，去 这里 下载另一个版本的 unlocker ，兄弟，这个办法真的管用！  使用第二个办法，下载的文件解压之后大概是这样的：  unlocker files  相信你能自己找到 win-install.cmd 这个文件，对吧？
+Auto-Unlocker v1.1.3 以一个 exe 的形式封装好了所有的流程，在我的测试中，这个软件总是不能成功解锁VMWare，令人生气。 根据某个 issue 中的办法，去 这里 下载另一个版本的 unlocker ，兄弟，这个办法真的管用！ 使用第二个办法，下载的文件解压之后大概是这样的： unlocker files 相信你能自己找到 win-install.cmd 这个文件，对吧？
 Step2 现在先不要急着运行，我们需要做一些运行之前的准备。
 打开任务管理器，首先杀掉跟VMWare有关的进程，它们一般都以 VM- 这样的格式开头。
 然后进入到任务管理器的【服务】面板，停止跟VMWare有关的服务，如 VMNetDHCP 等，它们的格式也都以 VM- 开头。
-不用担心服务没有关干净，或者进程杀不掉的问题。理论上我们的 unlocker 能够自动关掉这些服务，等到解锁完毕之后再启动它们。我在这里啰嗦这些，主要是忠实地记录我的实践结果，如果你运气好的话，跳过这一步最终也是可能成功的。</description>
+不用担心服务没有关干净，或者进程杀不掉的问题。理论上我们的 unlocker 能够自动关掉这些服务，等到解锁完毕之后再启动它们。我在这里啰嗦这些，主要是忠实地记录我的实践结果，如果你运气好的话，跳过这一步最终也是可能成功的。
+Step3 万事俱备，我们右键那个 win-install.cmd ，以管理员身份运行，等它运行完毕了，你的VMWare应该就支持 Mac OS 了！ New option Q：VMWare 16，按照上面的流程走，没有效果怎么办？ A：首先可以尝试使用 VMWare installer 进行一个 repair 的操作，也就是修复VMWare的安装了。如果这一步还不行的话，可以试试其他版本的 unlocker 。 下载Mac OS镜像 这一步可就厉害了！我不会向你分享镜像的链接（网上多的很），但是我要告诉你怎么突破百度网盘的限速！ 总的来说，还是分成3个步骤：</description>
     </item>
     
     <item>
@@ -330,25 +365,30 @@ Step2 现在先不要急着运行，我们需要做一些运行之前的准备�
       <guid>https://xrg.fj.cn/p/%E6%A1%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%E6%96%B9%E6%A1%88-rainmeter/</guid>
       <description>谁能想到我在考试前一天还在写桌面美化的博客呢？
 电脑桌面是每天开机后进入工作之前第一眼看到的东西，一个美观的桌面能从心情上给人以振奋。我在整机重装之后学习了一下如何美化桌面，现在我的Window10系统桌面长成这样：
- 桌面效果 
-1. rainmeter  rainmeter实际上是一个系统状态监视软件，由于其强大的可定制性及扩展性，诸多使用者在原来的基础上开发了成百上千的插件程序和皮肤样式，使得现在的rainmeter几乎成为一款完美的系统美化工具。你可以从官网上下载它：
- Rainmeter, desktop customization tool
- 下载安装完成之后，打开这个程序，自带一个简单的样式，使得你可以在桌面上看到CPU使用率、磁盘使用情况等等。
+桌面效果 1. rainmeter rainmeter实际上是一个系统状态监视软件，由于其强大的可定制性及扩展性，诸多使用者在原来的基础上开发了成百上千的插件程序和皮肤样式，使得现在的rainmeter几乎成为一款完美的系统美化工具。你可以从官网上下载它：
+Rainmeter, desktop customization tool
+下载安装完成之后，打开这个程序，自带一个简单的样式，使得你可以在桌面上看到CPU使用率、磁盘使用情况等等。
 要达到美化的效果，仅仅使用自带的组件样式是不够的。我们需要从网络上寻找好看的rainmeter皮肤资源，这里首先给出官方的社区，本次桌面的效果就是使用社区中michaelpuerses大佬做的Sonder皮肤：
- Sonder - Rainmeter skin by michaelpurses on DeviantArt
- 需要注意的是，访问此网站需要科学上网，且最好选择漂亮国的节点，并开启全局模式。如果你不会，我也不打算教你，你可以从很多其他地方找到皮肤资源（如GitHub、国内各论坛等等）。此外，下载皮肤时要求进行注册，亲测gamil有效。
+Sonder - Rainmeter skin by michaelpurses on DeviantArt
+需要注意的是，访问此网站需要科学上网，且最好选择漂亮国的节点，并开启全局模式。如果你不会，我也不打算教你，你可以从很多其他地方找到皮肤资源（如GitHub、国内各论坛等等）。此外，下载皮肤时要求进行注册，亲测gamil有效。
 rainmeter的皮肤有两种形式：
- .rmskin文件格式。这类文件直接双击打开，自动安装皮肤。 文件夹格式。这类皮肤需要手动放入你的rainmeter皮肤路径下，具体做法为：右键右下角的rainmeter小图标 &amp;ndash;&amp;gt; 皮肤 &amp;ndash;&amp;gt; 打开皮肤目录，将你下好（并解压）的文件夹放进去。  我在寻找皮肤的过程中，发现国内网站的相关内容真是少的可怜，找到一个论坛，下载皮肤的时候居然还要交钱买邀请码进行登录，属实有点离谱；百度rainmeter贴吧上面有些大佬的作品看着还可以，我没有试用过。
+.rmskin文件格式。这类文件直接双击打开，自动安装皮肤。 文件夹格式。这类皮肤需要手动放入你的rainmeter皮肤路径下，具体做法为：右键右下角的rainmeter小图标 &amp;ndash;&amp;gt; 皮肤 &amp;ndash;&amp;gt; 打开皮肤目录，将你下好（并解压）的文件夹放进去。 我在寻找皮肤的过程中，发现国内网站的相关内容真是少的可怜，找到一个论坛，下载皮肤的时候居然还要交钱买邀请码进行登录，属实有点离谱；百度rainmeter贴吧上面有些大佬的作品看着还可以，我没有试用过。
 你还可以从知乎或者一些外文评测贴中找到很多好看的主题推荐，这里给出两个外文帖子，我的主题就是在第二篇文章的推荐下找到的：
- 43 Best Rainmeter Skins For Windows in 2020
+43 Best Rainmeter Skins For Windows in 2020
 35 Spectacular Rainmeter Skins For Windows
- 放张效果图吧，除了我现在使用的桌面外，rainmeter还能这样玩：
- Enigma主题效果图 
-看完是不是很想开启自己的皮肤邂逅之旅了？
- 2. TaskbarX  实际上，我的桌面还有处地方值得注意：任务栏图标居中。看似细小处，实则是整个和谐的视觉体系中不可或缺的一部分。在很多Windows的美化教程中，都使用各式各样的软件来制作出类似MacOS的dock效果，而且实际上rainmeter也能制作dock效果，不过michaelpuerses大佬没有在我这款皮肤中实现dock。
+放张效果图吧，除了我现在使用的桌面外，rainmeter还能这样玩：
+Enigma主题效果图 看完是不是很想开启自己的皮肤邂逅之旅了？
+2. TaskbarX 实际上，我的桌面还有处地方值得注意：任务栏图标居中。看似细小处，实则是整个和谐的视觉体系中不可或缺的一部分。在很多Windows的美化教程中，都使用各式各样的软件来制作出类似MacOS的dock效果，而且实际上rainmeter也能制作dock效果，不过michaelpuerses大佬没有在我这款皮肤中实现dock。
 就我个人而言，完全仿照MacOS进行美化实在是有点过头了。很多好看的主题，只需要将任务栏透明化、图标居中之后就会产生画龙点睛的效果。
 于是引出我们要下载的第二款软件：TaskbarX。这款软件能使你的任务栏图标始终保持居中状态，其原理大概是每隔固定的时间进行检查与调整（我猜的）。链接如下：
- TaskbarX | Center taskbar icons (chrisandriessen.</description>
+TaskbarX | Center taskbar icons (chrisandriessen.nl)
+我下载的是Zip包，因为微软商店的UWP版本要交钱，我没有钱。
+安装完成之后，你可以在安装路径中找到TaskbarX.exe和TaskbarX Configurator.exe，运行前者，实现对任务栏进行修改；运行后者，对任务栏样式进行设置。
+运行后者弹出一个设置界面，Style一栏控制任务栏背景样式，在我们的主题中，将其设置为透明且有些许模糊的效果：
+任务栏style 第二栏的Animation设置任务栏图标数量发生变化之后的动画效果，随自己喜好去设置即可。
+3. 一些细节 如果你要使用我的主题，你可能还需要注意到一个方面：我的桌面是没有图标的。
+桌面效果 这种蛋疼的做法实际上使得你的桌面除了美观，没有其他的优点，毕竟你无法使用快捷方式了。
+但是我已经习惯从资源管理器里面找程序或文件了，所以可以接受这种布局；实在特别常用的程序，固定到任务栏即可。</description>
     </item>
     
     <item>
@@ -358,25 +398,29 @@ rainmeter的皮肤有两种形式：
       
       <guid>https://xrg.fj.cn/p/oauth2.0%E6%B5%85%E6%9E%90/</guid>
       <description>本文将介绍开放授权协议的概念，OAuth协议解决的问题以及OAuth协议的设计方案与应用情况。
-1. 背景  在生活中，我们接触的各种网络服务通常需要使用我们的个人资源。例如，我们使用网易云音乐，但是选择QQ登录，这时网易云需要获取我们的QQ账号信息，如果双方之间没有一个有效的授权机制，就会对我们的隐私安全造成威胁。试想：网易云音乐如何获取我们的QQ账号信息呢？无非是让我们给出我们的账号密码吧。但是这样做有如下严重的缺点：
- 我们需要把QQ账号密码告诉网易云音乐，增加了泄露的风险； 网易云音乐拥有了对你的QQ账号的操作权限——想想都头皮发麻； 需要收回网易云音乐对QQ的访问权限时，只能通过修改密码的方式，但是这样做会使其他使用同样方式访问QQ的应用全部失效。  基于此，开放授权（Open Authorization）希望能够使得第三方无需知道用户的账号及密码，就可以获取用户的授权信息。
+1. 背景 在生活中，我们接触的各种网络服务通常需要使用我们的个人资源。例如，我们使用网易云音乐，但是选择QQ登录，这时网易云需要获取我们的QQ账号信息，如果双方之间没有一个有效的授权机制，就会对我们的隐私安全造成威胁。试想：网易云音乐如何获取我们的QQ账号信息呢？无非是让我们给出我们的账号密码吧。但是这样做有如下严重的缺点：
+我们需要把QQ账号密码告诉网易云音乐，增加了泄露的风险； 网易云音乐拥有了对你的QQ账号的操作权限——想想都头皮发麻； 需要收回网易云音乐对QQ的访问权限时，只能通过修改密码的方式，但是这样做会使其他使用同样方式访问QQ的应用全部失效。 基于此，开放授权（Open Authorization）希望能够使得第三方无需知道用户的账号及密码，就可以获取用户的授权信息。
 如果是你，你会怎么实现它？
- 2. 设计方案  OAuth2.0主要涉及四种角色，分别是：
- 用户，即资源所有者。 资源服务器，即服务提供商。用来存放受保护的用户资源。在上面的例子中，资源服务器就是QQ服务器。 客户端，向资源服务器进行资源请求的第三方应用程序。在上面的例子中，客户端就是网易云音乐服务器。 认证服务器，在验证资源所有者并取得所有者的授权后，将访问令牌发给客户端。当我们想使用QQ登录网易云音乐，首先就是要证明我们的号主身份，这就是认证服务器的工作——证明身份、取得授权、允许第三方访问。  显然，资源服务和认证服务的提供者都是QQ，因此它们可以运行在同一台服务器上。
+2. 设计方案 OAuth2.0主要涉及四种角色，分别是：
+用户，即资源所有者。 资源服务器，即服务提供商。用来存放受保护的用户资源。在上面的例子中，资源服务器就是QQ服务器。 客户端，向资源服务器进行资源请求的第三方应用程序。在上面的例子中，客户端就是网易云音乐服务器。 认证服务器，在验证资源所有者并取得所有者的授权后，将访问令牌发给客户端。当我们想使用QQ登录网易云音乐，首先就是要证明我们的号主身份，这就是认证服务器的工作——证明身份、取得授权、允许第三方访问。 显然，资源服务和认证服务的提供者都是QQ，因此它们可以运行在同一台服务器上。
 OAuth2.0 就是在这四个角色的基础上，设计了四种授权模式：授权码（Authorization Code）模式、简化模式、密码模式和客户端模式。下面就重点一起看一下授权码模式的工作流程。
- 3. 授权码模式  授权码是认证服务器提供的一串序列，客户端可以凭借授权码向认证服务器索要访问令牌（Access Token），进而实现相应资源的访问。没看懂？举个例子——
- 还是使用QQ授权登录网易云音乐，我们需要经历如下的流程：
- 打开网易云音乐，点击“使用QQ登录”； 网易云音乐跟我们说：想使用QQ登录？行，但是我现在没有访问QQ账号的权限，给你张纸条，上面写了我要访问你账号哪些信息，你去找QQ让他同意我访问； 于是我们来到QQ认证界面。QQ首先要我们登录账号，然后跟我们说：网易云音乐想要你的昵称信息、头像信息等等等等，你同意不？ 我们选择同意。于是QQ给了我们一张纸条，跟我们说：这个纸条上写了访问你昵称头像信息的授权码，你拿去给网易云音乐，他拿着这个条子来找我，我就让他访问； 于是我们把写着授权码的条子给了网易云音乐，他拿着这个条子去找QQ了，QQ的认证服务器根据这张条子给网易云音乐开出了一个访问令牌（Access Token），网易云拿到了这张令牌，并凭借它成功访问了我们的QQ账号信息。 网易云音乐拿到这个账号信息，在自己数据库里面一查，发现这个QQ账号已经跟某个网易云音乐账号绑定了，于是我们成功使用自己的QQ账号登录了网易云音乐。   这就是非常具象的授权码模式，是不是非常简单？
+3. 授权码模式 授权码是认证服务器提供的一串序列，客户端可以凭借授权码向认证服务器索要访问令牌（Access Token），进而实现相应资源的访问。没看懂？举个例子——
+还是使用QQ授权登录网易云音乐，我们需要经历如下的流程：
+打开网易云音乐，点击“使用QQ登录”； 网易云音乐跟我们说：想使用QQ登录？行，但是我现在没有访问QQ账号的权限，给你张纸条，上面写了我要访问你账号哪些信息，你去找QQ让他同意我访问； 于是我们来到QQ认证界面。QQ首先要我们登录账号，然后跟我们说：网易云音乐想要你的昵称信息、头像信息等等等等，你同意不？ 我们选择同意。于是QQ给了我们一张纸条，跟我们说：这个纸条上写了访问你昵称头像信息的授权码，你拿去给网易云音乐，他拿着这个条子来找我，我就让他访问； 于是我们把写着授权码的条子给了网易云音乐，他拿着这个条子去找QQ了，QQ的认证服务器根据这张条子给网易云音乐开出了一个访问令牌（Access Token），网易云拿到了这张令牌，并凭借它成功访问了我们的QQ账号信息。 网易云音乐拿到这个账号信息，在自己数据库里面一查，发现这个QQ账号已经跟某个网易云音乐账号绑定了，于是我们成功使用自己的QQ账号登录了网易云音乐。 这就是非常具象的授权码模式，是不是非常简单？
 但是，这里还有一些细节需要思考：
- QQ会说，我这么没牌面的吗？谁想从我这请求资源我就给他？ 在上面的例子中，我们从网易云音乐去找QQ，拿到授权码之后回去找网易云音乐。但是，在真实的浏览器和Web服务器交互的过程中，我们的浏览器可没这么聪明，我们要给它规划好路线才行。  针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。
+QQ会说，我这么没牌面的吗？谁想从我这请求资源我就给他？ 在上面的例子中，我们从网易云音乐去找QQ，拿到授权码之后回去找网易云音乐。但是，在真实的浏览器和Web服务器交互的过程中，我们的浏览器可没这么聪明，我们要给它规划好路线才行。 针对第一个问题，OAuth2.0给足了资源服务器面子，它要求：所有的客户端都要在资源服务器那边进行事先的注册，否则直接不给予访问的权限。也就是说，网易云音乐事先已经跟QQ说好了，每次要访问QQ账号信息的时候都会带上身份证明，以表明这是网易云音乐要来访问QQ的资源了。客户端在资源提供方注册的时候，会拿到资源提供方给出的一个client_id和client_secret，之后就用这两个东西表明身份。
 而针对第二个问题，我们在向QQ请求授权码的时候，需要提供redirect_uri（或callback_uri）字段，表明浏览器拿到授权码之后要交给谁。于是，授权码模式的完整交互流程如下：
- 授权码工作模式 
- 4. 简化模式  看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：
- 简化模式 
-在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。
+授权码工作模式 4. 简化模式 看完授权码模式，如果你觉得这个流程有点繁琐，那么简化模式可能会让你快乐一些：
+简化模式 在这个模式中，少掉了授权码的传递，直接传递访问令牌，所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。
 这样的模式对一些纯前端的网络服务比较友好，因为它不需要资源请求者与资源提供者进行认证交互，直接拿着访问令牌找上门就好了。
 但是它叫简化模式，就是因为它存在安全问题。试想：重要的访问令牌就这样在浏览器和资源提供方之间传递，假设攻击者截获了访问令牌，就能够获取到你的资源。
- 5. 密码模式  在密码模式中，用户向客户端提供自己的用户名和密码。客户端使用这些信息向资源服务器索要授权。这就是我们开头讲过的模式，它要求用户提供自己的用户名和密码，但是客户端不得存储这些信息。显然该模式建立在用户对客户端的高度信任上，通常这里的客户端属于操作系统的一部分，或者由著名的公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才考虑使用这种模式。</description>
+5. 密码模式 在密码模式中，用户向客户端提供自己的用户名和密码。客户端使用这些信息向资源服务器索要授权。这就是我们开头讲过的模式，它要求用户提供自己的用户名和密码，但是客户端不得存储这些信息。显然该模式建立在用户对客户端的高度信任上，通常这里的客户端属于操作系统的一部分，或者由著名的公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才考虑使用这种模式。
+6. 客户端模式 客户端以自己的名义，而不是用户的名义，向服务提供商进行认证。严格地说，这种模式并不属于OAuth框架所要解决的问题。在这种模式中，用户直接向客户端注册，客户端以自己的名义要求服务提供商提供服务，其实不存在授权问题。
+小结 OAuth2.0 协议率先被谷歌、雅虎、微软、FaceBook等公司使用，且目前得到较广泛的普及。之所以标注为2.0，是因为最初有一个1.0协议，但是这个1.0协议太复杂，易用性差，所以没有得到普及。2.0是一个新的设计，但它并不兼容1.0，可以说与1.0没什么关系。
+本文简要介绍了OAuth2.0的四种工作方式，通过网易云音乐和QQ的认证交互，希望能使读者对此有初步的认识。关于具体的交互URL，本文没有给出，可以参考文末的一些博客。关于针对OAuth2.0的一些攻击手段，请见下回分解。
+参考资料： [1] 石瑞生，吴旭. 大数据安全与隐私保护[M]. 北京：北京邮电大学出版社，2019
+[2] 十八岁的夏天. OAuth2.0的简介. [EB/OL]. [2019-08-19]. https://www.cnblogs.com/xiaofengwang/p/11376881.html
+[3] 阮一峰. 理解OAuth2.</description>
     </item>
     
   </channel>

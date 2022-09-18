@@ -5,20 +5,21 @@
 最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
 由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
 答案就是文件锁。
- 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
+锁 互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
 显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
 于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
 本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
 这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
- 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
+创建文件 初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
 首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
 既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
 在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
 该API详见此文档。
 我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
 const char* logPath = &amp;#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&amp;#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
- 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
-该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+文件上锁 文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档
+我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
 OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;amp;overlapped)) { DWORD err = GetLastError(); printf(&amp;#34;Error %i\n&amp;#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。'><title>进程间文件同步写</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/'>
@@ -47,20 +48,21 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
 由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
 答案就是文件锁。
- 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
+锁 互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
 显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
 于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
 本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
 这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
- 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
+创建文件 初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
 首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
 既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
 在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
 该API详见此文档。
 我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
 const char* logPath = &amp;#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&amp;#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
- 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
-该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+文件上锁 文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档
+我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
 OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;amp;overlapped)) { DWORD err = GetLastError(); printf(&amp;#34;Error %i\n&amp;#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%86%99/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
@@ -70,20 +72,21 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 最近在捣鼓Windows下应用程序调用API的情况统计，思路是向指定的进程中注入DLL，钩取系统API，这样每次进程调用API的时候先执行我们的语句，向统计文件中写入一条调用信息。
 由此，引出了一个问题：如果我们注入了多个进程，这些进程同时调用一个API的时候，都要往统计文件中写一条信息，如何保持它们的同步呢？
 答案就是文件锁。
- 锁   互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
+锁 互斥锁是操作系统用来保持进程间同步的一个关键工具，多个进程同时对一个对象执行操作的时候，要分清楚先后顺序，否则可能产生混乱。比如，一个进程1要向一个文件里面写入1 ~ 100的数，而进程2要向这个文件里面写入101 ~ 200的数，我们希望进程1写完之后再让进程2写，但是系统在执行进程调度的时候，是可能在进程1写到一半的时候将其挂起，转而去执行其他进程的。想一想有没有可能出现这种情况：进程1写到了50，系统将其挂起，去执行其他进程，其他进程执行完之后，系统不执行进程1，而是执行进程2，于是我们的文件中的数字就变成了1,2&amp;hellip;50,101,102&amp;hellip;
 显然，这样的情况是可能出现但是绝对不符合需求的，我们要想办法避免它。
 于是操作系统为我们提供了互斥锁，即一个进程对某个对象执行操作的时候，将这个对象锁定，这时其他的进程就无法对这个对象执行操作了。
 本篇中的文件锁其实就是作用在文件上的互斥锁。还是刚才的例子，如果进程1在一开始就为文件上了锁，当它执行到一半被挂起的时候，即使系统转为执行进程2，此时进程2也会因为无法获得文件锁而被阻塞；仅当进程1完成了写入，释放了文件锁，进程2才会被唤醒执行。
 这样的工作模式可不止用来保持文件的读写同步，还可以解决一系列的同步问题。锁的思想在操作系统领域是非常重要的，这里的介绍不够全面，主要也是由于笔者目前的水平不够，有兴趣的朋友可以自行深入了解。
- 创建文件   初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
+创建文件 初步了解了文件锁的含义之后，就要进入编码实践了。本篇后续编码是以C&#43;&#43;为主体，但是核心部分完全兼容C语言。
 首先要明确一点，C&#43;&#43;的文件流操作无法实现文件锁。这个是笔者目前的水平下得出的结论，欢迎见多识广的读者在评论区批评指正。
 既然无法使用fstream实现文件锁，就必须老老实实使用C语言的文件操作了。
 在这里，由于WindowsAPI提供的文件锁函数需要一个HANDLE类型作为参数，我们只能使用CreateFile函数去创建文件了。
 该API详见此文档。
 我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。
 const char* logPath = &amp;#34;C:\\Users\\Administrator\\Desktop\\recLog.txt&amp;#34;; HANDLE hFile = ::CreateFileA( logPath, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_ALWAYS, 0, 0 ); 值得注意的是CreateFileA的参数OPEN_ALWAYS，该参数指定了文件的打开方式：当文件不存在时，创建它；当文件存在时，打开它。
- 文件上锁   文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
-该API详见此文档我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
+文件上锁 文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁。这里使用Windows提供的一个关键函数LockFileEx()。
+该API详见此文档
+我们使用以下几句话为文件上了个锁，这里的overlapped变量是API要求我们传入的，没有很大的用处，将其置零即可。
 OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const int lockSize = 10000;	// 上锁的字节数，没有很大的意义，非零即可。 if (!LockFileEx(hFile, LOCKFILE_EXCLUSIVE_LOCK, 0, lockSize, 0, &amp;amp;overlapped)) { DWORD err = GetLastError(); printf(&amp;#34;Error %i\n&amp;#34;, err); } 当文件上锁失败，if判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被阻塞而非直接报错。在我的试验中，进入这个分支的情况是第一步CreateFile的时候得到了一个无效的句柄，而非无法获取当前文件的锁。">
     <link rel="shortcut icon" href="/favicon.ico" />
 
@@ -369,17 +372,17 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 <p>该API详见<a class="link" href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea"  target="_blank" rel="noopener"
     >此文档</a>。</p>
 <p>我们使用以下两句话创建了一个文件，这里文件路径可以自由定义。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
-<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span>
-    <span class="n">logPath</span><span class="p">,</span>
-    <span class="n">GENERIC_WRITE</span><span class="p">,</span>
-    <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">,</span>
-    <span class="n">OPEN_ALWAYS</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">,</span>
-    <span class="mi">0</span>
-<span class="p">);</span>
-</code></pre></div><p>值得注意的是CreateFileA的参数<code>OPEN_ALWAYS</code>，该参数指定了文件的打开方式：<strong>当文件不存在时，创建它；当文件存在时，打开它。</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">logPath</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GENERIC_WRITE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OPEN_ALWAYS</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
+</span></span></code></pre></div><p>值得注意的是CreateFileA的参数<code>OPEN_ALWAYS</code>，该参数指定了文件的打开方式：<strong>当文件不存在时，创建它；当文件存在时，打开它。</strong></p>
 </blockquote>
 <ol start="3">
 <li>文件上锁</li>
@@ -388,96 +391,94 @@ OVERLAPPED overlapped; memset(&amp;amp;overlapped, 0, sizeof(overlapped)); const
 <p>文件创建完成之后，正常的下一步操作应该是写入了。但是谨记，<strong>为了不发生开头提到的进程同步问题，我们要在写入文件之前先拿到文件的锁</strong>。这里使用Windows提供的一个关键函数<code>LockFileEx()</code>。</p>
 <p>该API详见<!-- raw HTML omitted -->此文档<!-- raw HTML omitted --></p>
 <p>我们使用以下几句话为文件上了个锁，这里的<code>overlapped</code>变量是API要求我们传入的，没有很大的用处，将其置零即可。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
-<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>	<span class="c1">// 上锁的字节数，没有很大的意义，非零即可。
-</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
-<span class="p">{</span>
-	<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
-	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>当文件上锁失败，<code>if</code>判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被<strong>阻塞</strong>而非直接报错。在我的试验中，进入这个分支的情况是<strong>第一步CreateFile的时候得到了一个无效的句柄</strong>，而非无法获取当前文件的锁。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>	<span class="c1">// 上锁的字节数，没有很大的意义，非零即可。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>当文件上锁失败，<code>if</code>判断会成立，进入错误处理环节。记住开头提到的锁的机制，当一个进程无法获取当前的文件锁的时候，它应该是会被<strong>阻塞</strong>而非直接报错。在我的试验中，进入这个分支的情况是<strong>第一步CreateFile的时候得到了一个无效的句柄</strong>，而非无法获取当前文件的锁。</p>
 <p><code>LickFileEx()</code>函数的第二个参数比较关键，当它被指定为<code>LOCKFILE_FAIL_IMMEDIATELY</code> 的时候会直接返回失败，而不是阻塞当前进程。在这里，我们当然不选这个参数。</p>
 <p>文件上锁成功之后，就可以进行文件的写入了。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">else</span>
-<span class="p">{</span>
-	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
-	<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 1 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-    <span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
-</span><span class="c1"></span>	<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>
-	<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-	<span class="n">getchar</span><span class="p">();</span>	<span class="c1">// 在此处停止，先不释放文件锁
-</span><span class="c1"></span>	<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
-	<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
-	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>将以上的三个部分结合起来，就是第一个进程的代码：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
-	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
-		<span class="n">OPEN_ALWAYS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-	<span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
-	<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
-	<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
-	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
-	<span class="p">{</span>
-		<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
-		<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">else</span>
-	<span class="p">{</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
-		<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 1 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
-</span><span class="c1"></span>		<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>
-		<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-		<span class="n">getchar</span><span class="p">();</span>	<span class="c1">// 在此处停止，先不释放文件锁
-</span><span class="c1"></span>		<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
-		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-	<span class="p">}</span>
-	<span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
-
-	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 1 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">getchar</span><span class="p">();</span>	<span class="c1">// 在此处停止，先不释放文件锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>将以上的三个部分结合起来，就是第一个进程的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OPEN_ALWAYS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 1 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">getchar</span><span class="p">();</span>	<span class="c1">// 在此处停止，先不释放文件锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></blockquote>
 <ol start="4">
 <li>第二个进程</li>
 </ol>
 <blockquote>
 <p>第二个进程被我们用来验证这个锁的可行性，即当第一个进程为文件上了锁，且还没释放的时候，第二个进程究竟能否对文件进行写入。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
-	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
-		<span class="n">OPEN_ALWAYS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-	<span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
-	<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
-	<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
-	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
-	<span class="p">{</span>
-		<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
-		<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">else</span>
-	<span class="p">{</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Get lock.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
-		<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 2 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-		<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>		<span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
-</span><span class="c1"></span>		<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-		<span class="c1">// getchar();	// 在此处停止，先不释放文件锁
-</span><span class="c1"></span>		<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
-		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-	<span class="p">}</span>
-	<span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
-	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-
-</code></pre></div></blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">logPath</span> <span class="o">=</span> <span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">Administrator</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">recLog.txt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">HANDLE</span> <span class="n">hFile</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">logPath</span><span class="p">,</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="n">FILE_SHARE_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OPEN_ALWAYS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">OVERLAPPED</span> <span class="n">overlapped</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">overlapped</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">overlapped</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">int</span> <span class="n">lockSize</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">LockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">LOCKFILE_EXCLUSIVE_LOCK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">DWORD</span> <span class="n">err</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Error %i</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Get lock.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">str</span> <span class="o">+=</span> <span class="s">&#34;[+] Process 2 locked the file. [+]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">FILE_END</span><span class="p">);</span>		<span class="c1">// 将文件指针移动到文件末尾，实现以追加方式写入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="o">::</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// getchar();	// 在此处停止，先不释放文件锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">UnlockFileEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lockSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">overlapped</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Unlock file.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="n">system</span><span class="p">(</span><span class="s">&#34;pause&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></blockquote>
 <ol start="5">
 <li>验证</li>
 </ol>

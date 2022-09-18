@@ -4,7 +4,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
 这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
 分析：
- 题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
+题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
 最开始想到的是暴力。假设数组长度为n，我们分别求出长度为1、2、&amp;hellip;、n的子数组的最大和，将他们按顺序和K比较，第一个比K大的长度就是答案。这样的做法时间复杂度是O(n2)，有点复杂。
 之后就没有想法了。跟泓泓挣扎了半天，还是只能去看题解。
 不得不说，官方题解真是不讲人话[2]，不到40行代码的思路，硬是能被说成鬼都看不懂的样子。
@@ -12,11 +12,10 @@
 我们知道，求得了前缀和数组之后，对于两个下标x、y（设y&amp;gt;x），prefix_sum[y] - prefix_sum[x]表示的就是从A[x &#43; 1]到A[y]这段子数组的和。那么，问题就转化为了针对prefix_sum数组，求一对x和y，满足prefix_sum[y] - prefix_sum[x] &amp;gt;= K，且y - x最小。
 朴素的思想是遍历每一对y和x，这样的复杂度还是O(n2)，显然需要用某种更巧妙的办法让我们摆脱两重循环。
 于是引出官方题解中的第一条性质：
- 对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。  如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
- 本条性质的模拟 
-我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
+对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。 如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
+本条性质的模拟 我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
 使用下面的代码来进行实现，注意deque的初始元素0。
-// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.'><title>难题本 | LeetCode862. 和至少为 K 的最短子数组</title>
+// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.push_back(0); // 放入一个0 for (i = 1; i &amp;lt;= A.'><title>难题本 | LeetCode862. 和至少为 K 的最短子数组</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/'>
 
@@ -43,7 +42,7 @@
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
 这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
 分析：
- 题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
+题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
 最开始想到的是暴力。假设数组长度为n，我们分别求出长度为1、2、&amp;hellip;、n的子数组的最大和，将他们按顺序和K比较，第一个比K大的长度就是答案。这样的做法时间复杂度是O(n2)，有点复杂。
 之后就没有想法了。跟泓泓挣扎了半天，还是只能去看题解。
 不得不说，官方题解真是不讲人话[2]，不到40行代码的思路，硬是能被说成鬼都看不懂的样子。
@@ -51,11 +50,10 @@
 我们知道，求得了前缀和数组之后，对于两个下标x、y（设y&amp;gt;x），prefix_sum[y] - prefix_sum[x]表示的就是从A[x &#43; 1]到A[y]这段子数组的和。那么，问题就转化为了针对prefix_sum数组，求一对x和y，满足prefix_sum[y] - prefix_sum[x] &amp;gt;= K，且y - x最小。
 朴素的思想是遍历每一对y和x，这样的复杂度还是O(n2)，显然需要用某种更巧妙的办法让我们摆脱两重循环。
 于是引出官方题解中的第一条性质：
- 对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。  如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
- 本条性质的模拟 
-我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
+对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。 如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
+本条性质的模拟 我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
 使用下面的代码来进行实现，注意deque的初始元素0。
-// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.'>
+// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.push_back(0); // 放入一个0 for (i = 1; i &amp;lt;= A.'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode862.-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BA-k-%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-13T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-13T00:00:00&#43;00:00'/>
@@ -63,7 +61,7 @@
 <meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/shortest-subarray-with-sum-at-least-k/
 这题的思路真是弯弯绕绕，看了很多份题解，最后还是我BUPT学长的一通模拟让我悟道了[1]。
 分析：
- 题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
+题目要求返回数组A的最短的非空连续子数组的长度，该子数组的和至少为K。
 最开始想到的是暴力。假设数组长度为n，我们分别求出长度为1、2、&amp;hellip;、n的子数组的最大和，将他们按顺序和K比较，第一个比K大的长度就是答案。这样的做法时间复杂度是O(n2)，有点复杂。
 之后就没有想法了。跟泓泓挣扎了半天，还是只能去看题解。
 不得不说，官方题解真是不讲人话[2]，不到40行代码的思路，硬是能被说成鬼都看不懂的样子。
@@ -71,11 +69,10 @@
 我们知道，求得了前缀和数组之后，对于两个下标x、y（设y&amp;gt;x），prefix_sum[y] - prefix_sum[x]表示的就是从A[x &#43; 1]到A[y]这段子数组的和。那么，问题就转化为了针对prefix_sum数组，求一对x和y，满足prefix_sum[y] - prefix_sum[x] &amp;gt;= K，且y - x最小。
 朴素的思想是遍历每一对y和x，这样的复杂度还是O(n2)，显然需要用某种更巧妙的办法让我们摆脱两重循环。
 于是引出官方题解中的第一条性质：
- 对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。  如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
- 本条性质的模拟 
-我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
+对于prefix_sum数组，假设有下标**a &amp;gt; b**，且prefix_sum[a] &amp;lt;= prefix_sum[b]，那么对于它们后面的某个下标y来说，只需要考虑a ~ y这一段是否满足条件，而不再需要考虑b ~ y这一段了。这是因为，prefix_sum[y] - prefix_sum[a] &amp;gt;= prefix_sum[y] - prefix_sum[b]，而且y - a &amp;lt; y - b，如果b ~ y这一段能满足条件，那么a ~ y这一段也一定能满足条件，而且这段子数组的长度更小。 如果我没有讲清楚，不妨看看参考[1]中的模拟大法：
+本条性质的模拟 我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&amp;hellip;始终满足prefix_sum[x0] &amp;lt; prefix_sum[x1] &amp;lt; ...；注意，由于下标是从前往后走的，当出现了某个prefix_sum[x_m] &amp;lt; prefix_sum[deque.back()]的时候，说明对于之后的下标y来说，x_m是更为合适的选择，也因此可以直接将队尾的元素剔除。
 使用下面的代码来进行实现，注意deque的初始元素0。
-// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.">
+// deque&amp;lt;int&amp;gt; monoq;	// 变量名与官方题解保持一致 monoq.push_back(0); // 放入一个0 for (i = 1; i &amp;lt;= A.">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -373,83 +370,83 @@
 </figure></p>
 <p>我们使用一个双端队列deque来利用这个性质。让下标从前往后走，保持deque中保存的下标x0、x1、&hellip;始终满足<code>prefix_sum[x0] &lt; prefix_sum[x1] &lt; ...</code>；注意，由于下标是从前往后走的，当出现了某个<code>prefix_sum[x_m] &lt; prefix_sum[deque.back()]</code>的时候，说明对于<strong>之后</strong>的下标<code>y</code>来说，<code>x_m</code>是更为合适的选择，也因此可以直接将队尾的元素剔除。</p>
 <p>使用下面的代码来进行实现，注意deque的初始元素0。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="c1">// deque&lt;int&gt; monoq;			// 变量名与官方题解保持一致
-</span><span class="c1"></span><span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>    		 	<span class="c1">// 放入一个0
-</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  <span class="c1">// 下标从前往后走 
-</span><span class="c1"></span><span class="p">{</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="p">{</span>
-        <span class="n">monoq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>  <span class="c1">// 当前这个i满足性质一，使得后续的y只需要考虑下标i
-</span><span class="c1"></span>    <span class="p">}</span>
-    <span class="p">...</span>
-<span class="p">}</span>
-</code></pre></div><p>实现了性质一，需要引出性质二：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// deque&lt;int&gt; monoq;			// 变量名与官方题解保持一致
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>    		 	<span class="c1">// 放入一个0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  <span class="c1">// 下标从前往后走 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">monoq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>  <span class="c1">// 当前这个i满足性质一，使得后续的y只需要考虑下标i
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>实现了性质一，需要引出性质二：</p>
 <ul>
 <li>对于一个固定的下标<code>x</code>来说，第一次遇见某个<code>y</code>满足<code>prefix_sum[y] - prefix_sum[x] &gt;= K</code>之后，其后更大的下标<code>y_bigger</code>就不必再考虑<code>x</code>了。这很合乎直觉，因为我们要求的是最小的<code>y - x</code>。</li>
 </ul>
 <p>我们的下标从前往后走的时候，<strong>当前下标既是<code>x</code>，也是<code>y</code></strong>。更确切地说，设当前下标为<code>i</code>，它<strong>向前</strong>需要看能否满足<code>prefix_sum[i] - prefix_sum[x] &gt;= K</code>；<strong>向后</strong>需要考虑自己作为区间起点的情况，也就是作为一个<code>x</code>，淘汰掉队列中现有的满足性质一的那些元素。</p>
 <p>上面的代码已经成功利用了性质一，现在只需要再从队首去找满足性质二的元素即可：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="cm">/* 性质一、当前下标作为区间起点的情况 */</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="p">{</span>
-        <span class="n">monoq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="cm">/* 性质二、当前下标作为区间终点的情况 */</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">K</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
-        <span class="n">monoq</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="cm">/* 当前下标放入队列中，作为区间起点 */</span>
-    <span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* 性质一、当前下标作为区间起点的情况 */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">monoq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* 性质二、当前下标作为区间终点的情况 */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">K</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">monoq</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* 当前下标放入队列中，作为区间起点 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></blockquote>
 <p><strong>AC代码：</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">int</span> <span class="n">shortestSubarray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="mi">50010</span><span class="p">];</span>  <span class="c1">// 前缀和数组
-</span><span class="c1"></span>        <span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">monoq</span><span class="p">;</span>       <span class="c1">// 单调队列
-</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>                  <span class="c1">// 循环变量
-</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 最终答案，初始值大于数组长度，是个违法数值
-</span><span class="c1"></span>
-        <span class="cm">/* 循环一遍求得前缀和 */</span>
-        <span class="n">prefix_sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>      <span class="c1">// !IMPORTANT
-</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  <span class="c1">// prefix_sum[i]为A[0]到A[i - 1]的前缀和
-</span><span class="c1"></span>        <span class="p">{</span>
-            <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-        <span class="p">}</span>
-
-        <span class="cm">/* 再循环一遍求得最短子数组的长度 */</span>
-        <span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>     <span class="c1">// 放入一个0
-</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="cm">/* 性质一、当前下标作为区间起点的情况 */</span>
-            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="p">{</span>
-                <span class="n">monoq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="cm">/* 性质二、当前下标作为区间终点的情况 */</span>
-            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">K</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
-                <span class="n">monoq</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="cm">/* 当前下标放入队列中，作为区间起点 */</span>
-            <span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">ans</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p><strong>一些细节</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">shortestSubarray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="mi">50010</span><span class="p">];</span>  <span class="c1">// 前缀和数组
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">monoq</span><span class="p">;</span>       <span class="c1">// 单调队列
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>                  <span class="c1">// 循环变量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 最终答案，初始值大于数组长度，是个违法数值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* 循环一遍求得前缀和 */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">prefix_sum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>      <span class="c1">// !IMPORTANT
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>  <span class="c1">// prefix_sum[i]为A[0]到A[i - 1]的前缀和
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* 再循环一遍求得最短子数组的长度 */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>     <span class="c1">// 放入一个0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="cm">/* 性质一、当前下标作为区间起点的情况 */</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">back</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">monoq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="cm">/* 性质二、当前下标作为区间终点的情况 */</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">monoq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">prefix_sum</span><span class="p">[</span><span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">()]</span> <span class="o">&gt;=</span> <span class="n">K</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">monoq</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">                <span class="n">monoq</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="cm">/* 当前下标放入队列中，作为区间起点 */</span>
+</span></span><span class="line"><span class="cl">            <span class="n">monoq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span> <span class="o">==</span> <span class="n">A</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p><strong>一些细节</strong></p>
 <blockquote>
 <p>在之前的分析中我们提到过，在这个题目中，<code>prefix_sum[i]</code>表示的是<strong>从A[0]到A[i - 1]的前缀和</strong>。这里的前缀和数组的表示方法主要是为了满足区间长度为<code>A.size()</code>时的情况。我们的<code>monoq</code>需要有个初始元素0，这使得<code>prefix_sum[0]</code>也受到考虑。当答案区间长度为<code>A.size()</code>的时候，如样例3：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="err">输入：</span><span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">K</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="err">输出：</span><span class="mi">3</span>
-</code></pre></div><p>如果没有一个<code>prefix_sum[monoq.front()] == 0</code>，前缀和<code>prefix_sum[3]</code>会直接减掉<code>prefix_sum[1]</code>，造成输出为-1。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="err">输入：</span><span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">K</span> <span class="o">=</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl"><span class="err">输出：</span><span class="mi">3</span>
+</span></span></code></pre></div><p>如果没有一个<code>prefix_sum[monoq.front()] == 0</code>，前缀和<code>prefix_sum[3]</code>会直接减掉<code>prefix_sum[1]</code>，造成输出为-1。</p>
 </blockquote>
 <p><strong>参考文章</strong></p>
 <p>[1] 王琛.Leetcode 862 Shortest Subarray with Sum at Least K[EB/OL].2018-07-02</p>

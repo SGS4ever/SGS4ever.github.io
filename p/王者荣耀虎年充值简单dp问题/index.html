@@ -6,9 +6,8 @@
 嗯？等等，好像要破费？！
 虽然APP Store有充值赠送机制，但当我需要的目标数额多起来时，怎么获取最优化的充值方案呢？似乎是个有趣的问题 😼
 所谓 最优化的充值方案 ，即是指两种情况：
- 花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。  这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
- APP Store充值方案 
-场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
+花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。 这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
+APP Store充值方案 场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
 既然文章标题都已经点明了我的用意，那就直接从DP的角度开始思考了 😏
 令 dp[i] 表示 购买 i 点券的最少花销 ，那么对于目标点券 i ，它可以由上图中所有可能的方案组成。例如我们需要购买 1430 点券，那么我们可以花费若干个 1￥ 购买若干份 10点券 ，也可以花费两个 68￥ 购买两份 715(680&#43;35)点券 。唯一的限制是，不能使用比 i 更大的购买方案，例如我们需要 1430 点券，那就不能花费 648￥ 去买到六千多点券，不然就很浪费！
 既然要使用DP，那么我们得到的状态转移方程应该是什么呢？
@@ -41,9 +40,8 @@
 嗯？等等，好像要破费？！
 虽然APP Store有充值赠送机制，但当我需要的目标数额多起来时，怎么获取最优化的充值方案呢？似乎是个有趣的问题 😼
 所谓 最优化的充值方案 ，即是指两种情况：
- 花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。  这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
- APP Store充值方案 
-场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
+花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。 这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
+APP Store充值方案 场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
 既然文章标题都已经点明了我的用意，那就直接从DP的角度开始思考了 😏
 令 dp[i] 表示 购买 i 点券的最少花销 ，那么对于目标点券 i ，它可以由上图中所有可能的方案组成。例如我们需要购买 1430 点券，那么我们可以花费若干个 1￥ 购买若干份 10点券 ，也可以花费两个 68￥ 购买两份 715(680&#43;35)点券 。唯一的限制是，不能使用比 i 更大的购买方案，例如我们需要 1430 点券，那就不能花费 648￥ 去买到六千多点券，不然就很浪费！
 既然要使用DP，那么我们得到的状态转移方程应该是什么呢？
@@ -57,9 +55,8 @@
 嗯？等等，好像要破费？！
 虽然APP Store有充值赠送机制，但当我需要的目标数额多起来时，怎么获取最优化的充值方案呢？似乎是个有趣的问题 😼
 所谓 最优化的充值方案 ，即是指两种情况：
- 花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。  这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
- APP Store充值方案 
-场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
+花费最少的钱，获取目标数额的点券； 在一定量的花销下，获取最多的点券。 这两种情景不一样哈！第一个是在满足购买需求的情况下尽可能少地花钱！第二个是在预算有限的情况下尽可能多地买到点券！
+APP Store充值方案 场景一、购买一定点券，计算最少花销 场景一就是当我们需要一定数量的点券时，计算最少的花销是多少！这个场景很有意义！因为在充钱的时候，大多数情况就是这个场景！我们不会去考虑这次要冲多少钱，而是首先考虑这次要买的是什么东西。
 既然文章标题都已经点明了我的用意，那就直接从DP的角度开始思考了 😏
 令 dp[i] 表示 购买 i 点券的最少花销 ，那么对于目标点券 i ，它可以由上图中所有可能的方案组成。例如我们需要购买 1430 点券，那么我们可以花费若干个 1￥ 购买若干份 10点券 ，也可以花费两个 68￥ 购买两份 715(680&#43;35)点券 。唯一的限制是，不能使用比 i 更大的购买方案，例如我们需要 1430 点券，那就不能花费 648￥ 去买到六千多点券，不然就很浪费！
 既然要使用DP，那么我们得到的状态转移方程应该是什么呢？
@@ -237,184 +234,184 @@ $$
 <li>可以看到APP Store里面所有的购买方案中，即便考虑了赠送的点券，获取到的点券也都是 <code>5</code> 的倍数。</li>
 <li>目标点券有可能无法恰好获取，此时必须容许一定程度的 <em>上溢</em> ，例如我只希望购买 <code>888</code> 点券，但这个数额不是 <code>5</code> 的倍数，因此我可能需要购买 <code>890</code> 的点券。</li>
 </ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">void</span> <span class="nf">minCostToGetTargetPoints</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
-    <span class="n">dp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 10 Points 1 RMB
-</span><span class="c1"></span>    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">60</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]);</span>
-            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">printResultByTargetPoints</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">targetPoints</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">targetPoints</span><span class="p">;</span>
-    <span class="c1">// 首先要找到第一个可用的方案
-</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
-    <span class="c1">// 之后开始打印上溢 60 点券之内的方案
-</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cost &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan to get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>在上面这部分代码中，有几个细节：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">minCostToGetTargetPoints</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 10 Points 1 RMB
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">60</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printResultByTargetPoints</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">targetPoints</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">targetPoints</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 首先要找到第一个可用的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 之后开始打印上溢 60 点券之内的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cost &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan to get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>在上面这部分代码中，有几个细节：</p>
 <ul>
 <li>允许上溢 <code>60</code> 点券，即我本来可能需要买 <code>220</code> 点券，但可以计算到购买 <code>280</code> 点券的最优解；</li>
 <li>因为能买到的点券额度一定是 <code>5</code> 的倍数，因此DP时直接将 <code>i += 5</code> ；</li>
 <li>对于 <em>无解</em> 的情况，例如购买 <code>13</code> 个点券这种情况， <code>dp[13]</code> 一定等于原始的 <code>DP_MAX</code> ，这种情况正如此前所说，要发生 <em>上溢</em> ，也就是在输出答案的时候先把 <code>i</code> 一直往上增加，直到 <code>dp[i] != DP_MAX</code> 为止！</li>
 </ul>
 <p>直接尝试执行一下！</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#define DP_MAX 0xffff
-</span><span class="cp"></span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">minCostToGetTargetPoints</span><span class="p">(</span><span class="mi">2140</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="cm">/*
-</span><span class="cm">执行完成，耗时：0 ms
-</span><span class="cm">Cost 202 yuan to get 2140 points.
-</span><span class="cm">Cost 204 yuan to get 2145 points.
-</span><span class="cm">Cost 203 yuan to get 2150 points.
-</span><span class="cm">Cost 205 yuan to get 2155 points.
-</span><span class="cm">Cost 204 yuan to get 2160 points.
-</span><span class="cm">Cost 206 yuan to get 2165 points.
-</span><span class="cm">Cost 205 yuan to get 2170 points.
-</span><span class="cm">Cost 207 yuan to get 2175 points.
-</span><span class="cm">Cost 206 yuan to get 2180 points.
-</span><span class="cm">Cost 208 yuan to get 2185 points.
-</span><span class="cm">Cost 207 yuan to get 2190 points.
-</span><span class="cm">Cost 209 yuan to get 2195 points.
-</span><span class="cm">Cost 208 yuan to get 2200 points.
-</span><span class="cm">*/</span>
-</code></pre></div><p>难受了！这是什么输出啊？？我只知道要获得目标点券最少需要多少元，但是程序没告诉我具体的充值方案！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#define DP_MAX 0xffff
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">minCostToGetTargetPoints</span><span class="p">(</span><span class="mi">2140</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">执行完成，耗时：0 ms
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 202 yuan to get 2140 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 204 yuan to get 2145 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 203 yuan to get 2150 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 205 yuan to get 2155 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 204 yuan to get 2160 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 206 yuan to get 2165 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 205 yuan to get 2170 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 207 yuan to get 2175 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 206 yuan to get 2180 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 208 yuan to get 2185 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 207 yuan to get 2190 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 209 yuan to get 2195 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 208 yuan to get 2200 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>难受了！这是什么输出啊？？我只知道要获得目标点券最少需要多少元，但是程序没告诉我具体的充值方案！</p>
 <p>看来需要一个额外的变量来告诉我最近的一次充值是多少数额，然后我逐渐往回递推，获得总的充值方案。</p>
 <p>新增一个小功能，要额外花费不少代码行：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">void</span> <span class="nf">minCostToGetTargetPoints</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastTopup</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
-    <span class="n">dp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 10 Points 1 RMB
-</span><span class="c1"></span>    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">60</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
-            <span class="p">{</span>
-                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-                <span class="c1">// 新增：保存一下最后一次充值购买的方案
-</span><span class="c1"></span>                <span class="n">lastTopup</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">printResultByTargetPoints</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="n">targetPoints</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">targetPoints</span><span class="p">;</span>
-    <span class="c1">// 首先要找到第一个可用的方案
-</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
-    <span class="c1">// 之后开始打印上溢 60 点券之内的方案
-</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cost &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan to get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is : </span><span class="se">\n\t</span><span class="s">cost(￥)</span><span class="se">\t</span><span class="s">points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastTopup</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-            <span class="n">tmp</span> <span class="o">-=</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-        <span class="p">}</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>执行一下！</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#define DP_MAX 0xffff
-</span><span class="cp"></span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">minCostToGetTargetPoints</span><span class="p">(</span><span class="mi">2140</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="cm">/*
-</span><span class="cm">执行完成，耗时：0 ms
-</span><span class="cm">Cost 202 yuan to get 2140 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    198        2100
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">Cost 204 yuan to get 2145 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    68        715
-</span><span class="cm">    68        715
-</span><span class="cm">    68        715
-</span><span class="cm">Cost 203 yuan to get 2150 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    198        2100
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">Cost 205 yuan to get 2155 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    68        715
-</span><span class="cm">    68        715
-</span><span class="cm">    68        715
-</span><span class="cm">    1        10
-</span><span class="cm">Cost 204 yuan to get 2160 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    198        2100
-</span><span class="cm">    6        60
-</span><span class="cm">======= 此处省略若干行 =======
-</span><span class="cm">*/</span>
-</code></pre></div><p>从上面这个例子的输出可以看到：同样的 <code>204￥</code> ，有的方案可以买到 <code>2145</code> 点券，而有的能买到 <code>2160</code> 点券！差了一块多！因此我们不能只打印目标点券的最优解，往上多打印几个，可能发现用相同的钱可以买到更多点券，何乐不为呢 😹</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">minCostToGetTargetPoints</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastTopup</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 10 Points 1 RMB
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">60</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 新增：保存一下最后一次充值购买的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">lastTopup</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printResultByTargetPoints</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="n">targetPoints</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">targetPoints</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 首先要找到第一个可用的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 之后开始打印上溢 60 点券之内的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cost &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan to get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is : </span><span class="se">\n\t</span><span class="s">cost(￥)</span><span class="se">\t</span><span class="s">points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastTopup</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tmp</span> <span class="o">-=</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>执行一下！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#define DP_MAX 0xffff
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">minCostToGetTargetPoints</span><span class="p">(</span><span class="mi">2140</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">执行完成，耗时：0 ms
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 202 yuan to get 2140 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198        2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 204 yuan to get 2145 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    68        715
+</span></span></span><span class="line"><span class="cl"><span class="cm">    68        715
+</span></span></span><span class="line"><span class="cl"><span class="cm">    68        715
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 203 yuan to get 2150 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198        2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 205 yuan to get 2155 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    68        715
+</span></span></span><span class="line"><span class="cl"><span class="cm">    68        715
+</span></span></span><span class="line"><span class="cl"><span class="cm">    68        715
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 204 yuan to get 2160 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198        2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">======= 此处省略若干行 =======
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>从上面这个例子的输出可以看到：同样的 <code>204￥</code> ，有的方案可以买到 <code>2145</code> 点券，而有的能买到 <code>2160</code> 点券！差了一块多！因此我们不能只打印目标点券的最优解，往上多打印几个，可能发现用相同的钱可以买到更多点券，何乐不为呢 😹</p>
 <h3 id="场景二固定一定花销购买最多点券">场景二、固定一定花销，购买最多点券</h3>
 <p>场景一是比较常见的，至于场景二，手头比较拮据的时候用吧！</p>
 <p>这个场景就是个典型的 <em>完全背包问题</em> 而已：令 <code>dp[j]</code> 表示花费 <code>j</code> 元钱能买到的最多点券，那么对于所有可行的方案 <code>m</code> ，转移方程就是：
@@ -422,277 +419,277 @@ $$
 dp[i] = max(dp[i], dp[i - cost[m]] + gain[m])
 $$
 其实两个场景思路差不多，直接上代码！</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="kt">void</span> <span class="nf">maxPointsByMaxCost</span><span class="p">(</span><span class="kt">int</span> <span class="n">maxCost</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastPurchase</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
-            <span class="p">{</span>
-                <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-                <span class="n">lastPurchase</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">printResultByMaxCost</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="n">maxCost</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">printResultByMaxCost</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">maxCost</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;You can get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">maxCost</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points using &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">maxCost</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is: </span><span class="se">\n\t</span><span class="s">Cost(￥)</span><span class="se">\t</span><span class="s">Points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastPurchase</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="n">tmp</span> <span class="o">-=</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="p">;</span> 
-<span class="p">}</span>
-</code></pre></div><p>执行一下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#define DP_MAX 0xffff
-</span><span class="cp"></span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// minCostToGetTargetPoints(2135);
-</span><span class="c1"></span>    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">499</span><span class="p">);</span>
-    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
-    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="cm">/*
-</span><span class="cm">执行完成，耗时：0 ms
-</span><span class="cm">You can get 5280 points using 499 yuan.
-</span><span class="cm">The method is: 
-</span><span class="cm">    Cost(￥)    Points
-</span><span class="cm">    198    2100
-</span><span class="cm">    198    2100
-</span><span class="cm">    45    475
-</span><span class="cm">    45    475
-</span><span class="cm">    6    60
-</span><span class="cm">    6    60
-</span><span class="cm">    1    10
-</span><span class="cm">You can get 2120 points using 200 yuan.
-</span><span class="cm">The method is: 
-</span><span class="cm">    Cost(￥)    Points
-</span><span class="cm">    198    2100
-</span><span class="cm">    1    10
-</span><span class="cm">    1    10
-</span><span class="cm">You can get 200 points using 20 yuan.
-</span><span class="cm">The method is: 
-</span><span class="cm">    Cost(￥)    Points
-</span><span class="cm">    6    60
-</span><span class="cm">    6    60
-</span><span class="cm">    6    60
-</span><span class="cm">    1    10
-</span><span class="cm">    1    10
-</span><span class="cm">*/</span>
-</code></pre></div><h3 id="总的代码">总的代码</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cp">#define DP_MAX 0xffff
-</span><span class="cp"></span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
-<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
-
-<span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">);</span>
-
-<span class="kt">void</span> <span class="nf">minCostToGetTargetPoints</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastTopup</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
-    <span class="n">dp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 10 Points 1 RMB
-</span><span class="c1"></span>    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">60</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
-            <span class="p">{</span>
-                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-                <span class="c1">// 新增：保存一下最后一次充值购买的方案
-</span><span class="c1"></span>                <span class="n">lastTopup</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">printResultByTargetPoints</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="n">targetPoints</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">targetPoints</span><span class="p">;</span>
-    <span class="c1">// 首先要找到第一个可用的方案
-</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
-    <span class="c1">// 之后开始打印上溢 60 点券之内的方案
-</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
-            <span class="k">continue</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cost &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan to get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is : </span><span class="se">\n\t</span><span class="s">cost(￥)</span><span class="se">\t</span><span class="s">points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastTopup</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-            <span class="n">tmp</span> <span class="o">-=</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-        <span class="p">}</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">printResultByMaxCost</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">maxCost</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">maxPointsByMaxCost</span><span class="p">(</span><span class="kt">int</span> <span class="n">maxCost</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastPurchase</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
-            <span class="p">{</span>
-                <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-                <span class="n">lastPurchase</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">printResultByMaxCost</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="n">maxCost</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">printResultByMaxCost</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">maxCost</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;You can get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">maxCost</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points using &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">maxCost</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is: </span><span class="se">\n\t</span><span class="s">Cost(￥)</span><span class="se">\t</span><span class="s">Points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastPurchase</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
-        <span class="n">tmp</span> <span class="o">-=</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="p">;</span> 
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">minCostToGetTargetPoints</span><span class="p">(</span><span class="mi">2135</span><span class="p">);</span>
-    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">499</span><span class="p">);</span>
-    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
-    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>我用了LeetCode的 <a class="link" href="https://leetcode-cn.com/playground/ApdtsCQb/"  target="_blank" rel="noopener"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">maxPointsByMaxCost</span><span class="p">(</span><span class="kt">int</span> <span class="n">maxCost</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastPurchase</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="n">lastPurchase</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printResultByMaxCost</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="n">maxCost</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printResultByMaxCost</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">maxCost</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;You can get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">maxCost</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points using &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">maxCost</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is: </span><span class="se">\n\t</span><span class="s">Cost(￥)</span><span class="se">\t</span><span class="s">Points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastPurchase</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tmp</span> <span class="o">-=</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>执行一下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#define DP_MAX 0xffff
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// minCostToGetTargetPoints(2135);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">499</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">执行完成，耗时：0 ms
+</span></span></span><span class="line"><span class="cl"><span class="cm">You can get 5280 points using 499 yuan.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is: 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Cost(￥)    Points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198    2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198    2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45    475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45    475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6    60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6    60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1    10
+</span></span></span><span class="line"><span class="cl"><span class="cm">You can get 2120 points using 200 yuan.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is: 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Cost(￥)    Points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198    2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1    10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1    10
+</span></span></span><span class="line"><span class="cl"><span class="cm">You can get 200 points using 20 yuan.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is: 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Cost(￥)    Points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6    60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6    60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6    60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1    10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1    10
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><h3 id="总的代码">总的代码</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#define DP_MAX 0xffff
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">648</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">gain</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">475</span><span class="p">,</span> <span class="mi">715</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">3690</span><span class="p">,</span> <span class="mi">6868</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">minCostToGetTargetPoints</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastTopup</span><span class="p">(</span><span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">61</span><span class="p">,</span> <span class="n">DP_MAX</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// 10 Points 1 RMB
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">targetPoints</span> <span class="o">+</span> <span class="mi">60</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 新增：保存一下最后一次充值购买的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">lastTopup</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printResultByTargetPoints</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="n">targetPoints</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printResultByTargetPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastTopup</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetPoints</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">targetPoints</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 首先要找到第一个可用的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 之后开始打印上溢 60 点券之内的方案
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">dp</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">DP_MAX</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cost &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan to get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is : </span><span class="se">\n\t</span><span class="s">cost(￥)</span><span class="se">\t</span><span class="s">points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastTopup</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tmp</span> <span class="o">-=</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">i</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printResultByMaxCost</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">maxCost</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">maxPointsByMaxCost</span><span class="p">(</span><span class="kt">int</span> <span class="n">maxCost</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lastPurchase</span><span class="p">(</span><span class="n">maxCost</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="o">+</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="n">lastPurchase</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printResultByMaxCost</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="n">maxCost</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printResultByMaxCost</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dp</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">lastPurchase</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">maxCost</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;You can get &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">[</span><span class="n">maxCost</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; points using &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">maxCost</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; yuan.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;The method is: </span><span class="se">\n\t</span><span class="s">Cost(￥)</span><span class="se">\t</span><span class="s">Points</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">maxCost</span><span class="p">;</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lastPurchase</span><span class="p">[</span><span class="n">tmp</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\t</span><span class="s">&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">gain</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tmp</span> <span class="o">-=</span> <span class="n">cost</span><span class="p">[</span><span class="n">m</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">minCostToGetTargetPoints</span><span class="p">(</span><span class="mi">2135</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">499</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">maxPointsByMaxCost</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>我用了LeetCode的 <a class="link" href="https://leetcode-cn.com/playground/ApdtsCQb/"  target="_blank" rel="noopener"
     >playground</a> 功能，因此这个代码就没有头函数之类了~</p>
 <p>在最后，今年我希望购买鲁班和孙膑的皮肤，可能还需要进阶一下战令！总共需要 <code>1430+710+388 = 2528</code> 点券。我的程序告诉我：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="cm">/*
-</span><span class="cm">执行完成，耗时：0 ms
-</span><span class="cm">Cost 241 yuan to get 2530 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    198        2100
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    1        10
-</span><span class="cm">Cost 241 yuan to get 2535 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">Cost 242 yuan to get 2540 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    198        2100
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">Cost 242 yuan to get 2545 points.
-</span><span class="cm">The method is : 
-</span><span class="cm">    cost(￥)    points
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">===== 省略若干行 =====
-</span><span class="cm">*/</span>
-</code></pre></div><p>看来我得花掉 <code>241￥</code> ，真是一笔大数目 😿</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">执行完成，耗时：0 ms
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 241 yuan to get 2530 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198        2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 241 yuan to get 2535 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 242 yuan to get 2540 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198        2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">Cost 242 yuan to get 2545 points.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is : 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    cost(￥)    points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">===== 省略若干行 =====
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>看来我得花掉 <code>241￥</code> ，真是一笔大数目 😿</p>
 <p>同时，我的程序还告诉我，241元最多可以获取到：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/*
-</span><span class="cm">执行完成，耗时：0 ms
-</span><span class="cm">You can get 2535 points using 241 yuan.
-</span><span class="cm">The method is: 
-</span><span class="cm">    Cost(￥)    Points
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    45        475
-</span><span class="cm">    6        60
-</span><span class="cm">    6        60
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">    1        10
-</span><span class="cm">You can get 2575 points using 243 yuan.
-</span><span class="cm">The method is: 
-</span><span class="cm">    Cost(￥)    Points
-</span><span class="cm">    198        2100
-</span><span class="cm">    45        475
-</span><span class="cm">*/</span>
-</code></pre></div><p>诶？多花2块钱，即243元，能够多获取 <code>40</code> 点券？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">执行完成，耗时：0 ms
+</span></span></span><span class="line"><span class="cl"><span class="cm">You can get 2535 points using 241 yuan.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is: 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Cost(￥)    Points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    6        60
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">    1        10
+</span></span></span><span class="line"><span class="cl"><span class="cm">You can get 2575 points using 243 yuan.
+</span></span></span><span class="line"><span class="cl"><span class="cm">The method is: 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Cost(￥)    Points
+</span></span></span><span class="line"><span class="cl"><span class="cm">    198        2100
+</span></span></span><span class="line"><span class="cl"><span class="cm">    45        475
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>诶？多花2块钱，即243元，能够多获取 <code>40</code> 点券？</p>
 <p>我先去充钱了朋友们~</p>
 
 </section>
@@ -748,6 +745,48 @@ $$
         <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">RapidJson使用小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Windows Terminal美化小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
                 
                     
 <article class="">
@@ -807,48 +846,6 @@ $$
             <h2 class="article-title">Hackintosh小记</h2>
             <footer class="article-time">
                 <time datetime=''>Feb 22, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%90%8E%E7%AB%AF%E7%AF%87%E4%B9%8B%E4%B8%80/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（后端篇|之一）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 16, 2022</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">读书摘抄站点构建（页面篇|之一）</h2>
-            <footer class="article-time">
-                <time datetime=''>Feb 12, 2022</time>
             </footer>
         </div>
     </a>
