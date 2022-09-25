@@ -6,7 +6,34 @@
     <description>Recent content in Posts on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 25 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Graylogn使用小记</title>
+      <link>https://xrg.fj.cn/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</link>
+      <pubDate>Sun, 25 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</guid>
+      <description>背景 最近在工作中发现我们基本采取一种DevOps的工作方式，开发即运维，有时一个问题要定位很久，维测能力非常差。
+造成维护困难的原因有很多，我认为有几点比较重要：
+代码稳定性差。这个问题对于一个发展初期的业务来说比较常见，只能说尽力避免。
+日志太多。开发人员写代码的时候总是毫不吝惜日志打印操作，这些信息对于某一个功能来说可能很全面，但在一个完整的模块里面，这会带来超级多的噪声。
+原始的分析方式。
+因此我希望找一个能够方便地分析庞杂的日志数据的工具，试图减轻运维的压力。经过简单的选型，决定试一试 Graylog ，本文小作记录。
+Step 0 环境配置 预装：WSL2 + Ubuntu22.04 + Windows Terminal
+docker on WSL2 下载 Docker Desktop for Winodws ，傻瓜式安装。
+首先设置启用WSL支持：
+接着进入 阿里云镜像加速 搞一个加速器，然后在Docker Desktop【Docker Engine】一栏里面配置加速器地址：
+aliyun加速 点击右下角 Apply &amp;amp; Resatrt 即可。
+另一种在WSL2上安装docker的方法：
+按照 参考资料[2] 所说的，我们也可以在WSL上直接执行以下命令：
+$ curl -fsSL https://get.docker.com -o get-docker.sh $ sudo sh get-docker.sh $ sudo service docker start 这里我并未实践，仅供读者参考。不过，作者的提醒很有参考价值：
+注意：不同于完全linux虚拟机方式，WLS2下通过apt install docker-ce命令安装的docker无法启动，因为WSL2方式的ubuntu里面没有systemd。上述官方get-docker.sh安装的docker，dockerd进程是用ubuntu传统的init方式而非systemd启动的。
+这个坑我是踩过的，在WSL2上按照Linux方式安装docker会失败，服务起不来的。
+docker compose Graylog运行需要三个镜像：
+Graylog: graylog/graylog
+MongoDB: mongo</description>
+    </item>
+    
     <item>
       <title>RapidJson使用小记</title>
       <link>https://xrg.fj.cn/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</link>

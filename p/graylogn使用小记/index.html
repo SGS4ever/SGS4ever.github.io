@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='背景 最近在工作中发现我们基本采取一种DevOps的工作方式，开发即运维，有时一个问题要定位很久，维测能力非常差。
+造成维护困难的原因有很多，我认为有几点比较重要：
+代码稳定性差。这个问题对于一个发展初期的业务来说比较常见，只能说尽力避免。
+日志太多。开发人员写代码的时候总是毫不吝惜日志打印操作，这些信息对于某一个功能来说可能很全面，但在一个完整的模块里面，这会带来超级多的噪声。
+原始的分析方式。
+因此我希望找一个能够方便地分析庞杂的日志数据的工具，试图减轻运维的压力。经过简单的选型，决定试一试 Graylog ，本文小作记录。
+Step 0 环境配置 预装：WSL2 &#43; Ubuntu22.04 &#43; Windows Terminal
+docker on WSL2 下载 Docker Desktop for Winodws ，傻瓜式安装。
+首先设置启用WSL支持：
+接着进入 阿里云镜像加速 搞一个加速器，然后在Docker Desktop【Docker Engine】一栏里面配置加速器地址：
+aliyun加速 点击右下角 Apply &amp;amp; Resatrt 即可。
+另一种在WSL2上安装docker的方法：
+按照 参考资料[2] 所说的，我们也可以在WSL上直接执行以下命令：
+$ curl -fsSL https://get.docker.com -o get-docker.sh $ sudo sh get-docker.sh $ sudo service docker start 这里我并未实践，仅供读者参考。不过，作者的提醒很有参考价值：
+注意：不同于完全linux虚拟机方式，WLS2下通过apt install docker-ce命令安装的docker无法启动，因为WSL2方式的ubuntu里面没有systemd。上述官方get-docker.sh安装的docker，dockerd进程是用ubuntu传统的init方式而非systemd启动的。
+这个坑我是踩过的，在WSL2上按照Linux方式安装docker会失败，服务起不来的。
+docker compose Graylog运行需要三个镜像：
+Graylog: graylog/graylog
+MongoDB: mongo'><title>Graylogn使用小记</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='Graylogn使用小记'>
+<meta property='og:description' content='背景 最近在工作中发现我们基本采取一种DevOps的工作方式，开发即运维，有时一个问题要定位很久，维测能力非常差。
+造成维护困难的原因有很多，我认为有几点比较重要：
+代码稳定性差。这个问题对于一个发展初期的业务来说比较常见，只能说尽力避免。
+日志太多。开发人员写代码的时候总是毫不吝惜日志打印操作，这些信息对于某一个功能来说可能很全面，但在一个完整的模块里面，这会带来超级多的噪声。
+原始的分析方式。
+因此我希望找一个能够方便地分析庞杂的日志数据的工具，试图减轻运维的压力。经过简单的选型，决定试一试 Graylog ，本文小作记录。
+Step 0 环境配置 预装：WSL2 &#43; Ubuntu22.04 &#43; Windows Terminal
+docker on WSL2 下载 Docker Desktop for Winodws ，傻瓜式安装。
+首先设置启用WSL支持：
+接着进入 阿里云镜像加速 搞一个加速器，然后在Docker Desktop【Docker Engine】一栏里面配置加速器地址：
+aliyun加速 点击右下角 Apply &amp;amp; Resatrt 即可。
+另一种在WSL2上安装docker的方法：
+按照 参考资料[2] 所说的，我们也可以在WSL上直接执行以下命令：
+$ curl -fsSL https://get.docker.com -o get-docker.sh $ sudo sh get-docker.sh $ sudo service docker start 这里我并未实践，仅供读者参考。不过，作者的提醒很有参考价值：
+注意：不同于完全linux虚拟机方式，WLS2下通过apt install docker-ce命令安装的docker无法启动，因为WSL2方式的ubuntu里面没有systemd。上述官方get-docker.sh安装的docker，dockerd进程是用ubuntu传统的init方式而非systemd启动的。
+这个坑我是踩过的，在WSL2上按照Linux方式安装docker会失败，服务起不来的。
+docker compose Graylog运行需要三个镜像：
+Graylog: graylog/graylog
+MongoDB: mongo'>
+<meta property='og:url' content='https://xrg.fj.cn/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-09-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-09-25T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Graylogn使用小记">
+<meta name="twitter:description" content="背景 最近在工作中发现我们基本采取一种DevOps的工作方式，开发即运维，有时一个问题要定位很久，维测能力非常差。
+造成维护困难的原因有很多，我认为有几点比较重要：
+代码稳定性差。这个问题对于一个发展初期的业务来说比较常见，只能说尽力避免。
+日志太多。开发人员写代码的时候总是毫不吝惜日志打印操作，这些信息对于某一个功能来说可能很全面，但在一个完整的模块里面，这会带来超级多的噪声。
+原始的分析方式。
+因此我希望找一个能够方便地分析庞杂的日志数据的工具，试图减轻运维的压力。经过简单的选型，决定试一试 Graylog ，本文小作记录。
+Step 0 环境配置 预装：WSL2 &#43; Ubuntu22.04 &#43; Windows Terminal
+docker on WSL2 下载 Docker Desktop for Winodws ，傻瓜式安装。
+首先设置启用WSL支持：
+接着进入 阿里云镜像加速 搞一个加速器，然后在Docker Desktop【Docker Engine】一栏里面配置加速器地址：
+aliyun加速 点击右下角 Apply &amp;amp; Resatrt 即可。
+另一种在WSL2上安装docker的方法：
+按照 参考资料[2] 所说的，我们也可以在WSL上直接执行以下命令：
+$ curl -fsSL https://get.docker.com -o get-docker.sh $ sudo sh get-docker.sh $ sudo service docker start 这里我并未实践，仅供读者参考。不过，作者的提醒很有参考价值：
+注意：不同于完全linux虚拟机方式，WLS2下通过apt install docker-ce命令安装的docker无法启动，因为WSL2方式的ubuntu里面没有systemd。上述官方get-docker.sh安装的docker，dockerd进程是用ubuntu传统的init方式而非systemd启动的。
+这个坑我是踩过的，在WSL2上按照Linux方式安装docker会失败，服务起不来的。
+docker compose Graylog运行需要三个镜像：
+Graylog: graylog/graylog
+MongoDB: mongo">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%9E%E8%B7%B5/" style="background-color: #2a9d8f; color: #fff;">
+                实践
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">Graylogn使用小记</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 25, 2022</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h3 id="背景">背景</h3>
+<p>最近在工作中发现我们基本采取一种DevOps的工作方式，开发即运维，有时一个问题要定位很久，维测能力非常差。</p>
+<p>造成维护困难的原因有很多，我认为有几点比较重要：</p>
+<ul>
+<li>
+<p>代码稳定性差。这个问题对于一个发展初期的业务来说比较常见，只能说尽力避免。</p>
+</li>
+<li>
+<p>日志太多。开发人员写代码的时候总是毫不吝惜日志打印操作，这些信息对于某一个功能来说可能很全面，但在一个完整的模块里面，这会带来超级多的噪声。</p>
+</li>
+<li>
+<p>原始的分析方式。</p>
+</li>
+</ul>
+<p>因此我希望找一个能够方便地分析庞杂的日志数据的工具，试图减轻运维的压力。经过简单的选型，决定试一试 <a class="link" href="https://www.graylog.org/"  target="_blank" rel="noopener"
+    >Graylog</a> ，本文小作记录。</p>
+<h3 id="step-0-环境配置">Step 0 环境配置</h3>
+<blockquote>
+<p>预装：WSL2 + Ubuntu22.04 + Windows Terminal</p>
+</blockquote>
+<h4 id="docker-on-wsl2">docker on WSL2</h4>
+<p>下载 <a class="link" href="https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe"  target="_blank" rel="noopener"
+    >Docker Desktop for Winodws</a> ，傻瓜式安装。</p>
+<p>首先设置启用WSL支持：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 176; 
+			flex-basis: 423px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1.png" data-size="2223x1260">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1.png"
+			width="2223"
+			height="1260"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1_hu261b1861a33b6e517179de0fef45c25b_226717_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/1_hu261b1861a33b6e517179de0fef45c25b_226717_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>接着进入 <a class="link" href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors"  target="_blank" rel="noopener"
+    >阿里云镜像加速</a> 搞一个加速器，然后在Docker Desktop【Docker Engine】一栏里面配置加速器地址：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 176; 
+			flex-basis: 423px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2.png" data-size="2223x1260">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2.png"
+			width="2223"
+			height="1260"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2_hu675ac39f331a03eca6e8af386fb0dbf1_126273_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/2_hu675ac39f331a03eca6e8af386fb0dbf1_126273_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="aliyun加速">
+	</a>
+	
+	<figcaption>aliyun加速</figcaption>
+	
+</figure></p>
+<p>点击右下角 <code>Apply &amp; Resatrt</code> 即可。</p>
+<blockquote>
+<p><strong>另一种在WSL2上安装docker的方法：</strong></p>
+<p>按照 <a class="link" href="https://blog.csdn.net/weixin_39786155/article/details/110363154"  target="_blank" rel="noopener"
+    >参考资料[2]</a> 所说的，我们也可以在WSL上直接执行以下命令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ curl -fsSL https://get.docker.com -o get-docker.sh
+</span></span><span class="line"><span class="cl">$ sudo sh get-docker.sh
+</span></span><span class="line"><span class="cl">$ sudo service docker start
+</span></span></code></pre></div><p>这里我并未实践，仅供读者参考。不过，作者的提醒很有参考价值：</p>
+<p><em>注意：不同于完全linux虚拟机方式，WLS2下通过apt install docker-ce命令安装的docker无法启动，因为WSL2方式的ubuntu里面没有systemd。上述官方get-docker.sh安装的docker，dockerd进程是用ubuntu传统的init方式而非systemd启动的。</em></p>
+<p>这个坑我是踩过的，在WSL2上按照Linux方式安装docker会失败，服务起不来的。</p>
+</blockquote>
+<h4 id="docker-compose">docker compose</h4>
+<p>Graylog运行需要三个镜像：</p>
+<ul>
+<li>
+<p>Graylog: <a class="link" href="https://hub.docker.com/u/graylog"  target="_blank" rel="noopener"
+    >graylog/graylog</a></p>
+</li>
+<li>
+<p>MongoDB: <a class="link" href="https://hub.docker.com/_/mongo"  target="_blank" rel="noopener"
+    >mongo</a></p>
+</li>
+<li>
+<p>Elasticsearch: <a class="link" href="https://www.docker.elastic.co/r/elasticsearch"  target="_blank" rel="noopener"
+    >Elasticsearch</a></p>
+</li>
+</ul>
+<p>这意味着我们需要拉取三个镜像，分别启动对应的容器，其间还涉及路径映射、端口映射等操作，烦死人。</p>
+<p>还好我们有 <a class="link" href="https://docs.docker.com/compose/"  target="_blank" rel="noopener"
+    >docker compose</a> ，它是一个用于定义和运行多个容器的工具，我们可以通过 <code>yaml</code> 来配置容器服务，使用一条命令拉起所有容器。</p>
+<p>具体技术细节在这里就不多讨论，我主要记录如何配置一个有效的Graylog的 <code>docker-compose.yaml</code> 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;2&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># MongoDB: https://hub.docker.com/_/mongo/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">mongodb</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">mongo:4.2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/home/albusguo/graylog/volumes/mongo_data:/data/db</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="c"># Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docker.html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/home/albusguo/graylog/volumes/es_data:/usr/share/elasticsearch/data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">http.host=0.0.0.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">transport.host=localhost</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">network.host=0.0.0.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ulimits</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">memlock</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">soft</span><span class="p">:</span><span class="w"> </span>-<span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">hard</span><span class="p">:</span><span class="w"> </span>-<span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">mem_limit</span><span class="p">:</span><span class="w"> </span><span class="l">1g</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># Graylog: https://hub.docker.com/r/graylog/graylog/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">graylog</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">graylog/graylog:4.3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/home/albusguo/graylog/volumes/graylog_data:/usr/share/graylog/data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">entrypoint</span><span class="p">:</span><span class="w"> </span><span class="l">/usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">links</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">mongodb:mongo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">elasticsearch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">mongodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">elasticsearch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Graylog web interface and REST API</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">9000</span><span class="p">:</span><span class="m">9000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Syslog TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1514</span><span class="p">:</span><span class="m">1514</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Syslog UDP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1514</span><span class="p">:</span><span class="m">1514</span><span class="l">/udp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># GELF TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">12201</span><span class="p">:</span><span class="m">12201</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># GELF UDP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">12201</span><span class="p">:</span><span class="m">12201</span><span class="l">/udp</span><span class="w">
+</span></span></span></code></pre></div><p>这个文件的内容和 <a class="link" href="https://docs.graylog.org/docs/docker"  target="_blank" rel="noopener"
+    >官方文档</a> 提供的Demo不太一样，我主要做了几点修改：</p>
+<ul>
+<li>
+<p>直接把路径映射写死在文件里面，比如 <code>/home/albusguo/graylog/volumes/graylog_data:/usr/share/graylog/data</code> 表示我主机上的 <code>/home/albusguo/graylog/volumes/graylog_data</code> 和Graylog容器内的 <code>/usr/share/graylog/data</code> 同步；</p>
+</li>
+<li>
+<p>删除了Graylog容器的环境变量。例如官方Demo里面配置了 <code>GRAYLOG_PASSWORD_SECRET</code> 用于设置登录密码等，我们要采用配置文件的方式，因此这里没必要再写。</p>
+</li>
+</ul>
+<h3 id="step-1-运行">Step 1 运行</h3>
+<p>有了 <code>docker-compose.yaml</code> 之后，还需要做一些工作才可以成功把容器运行起来。</p>
+<h4 id="graylog配置">Graylog配置</h4>
+<p>在写 <code>docker-compose.yaml</code> 的时候提到，我在文件中删除了Graylog容器的环境变量，因为我们要通过配置文件的方式来传递这些参数。</p>
+<p>Graylog的配置文件存储在 <strong>容器内</strong> 的 <code>/usr/share/graylog/data/config/</code> 路径下，而这个路径的父路径 <code>/usr/share/graylog/data</code> 跟我们宿主上的 <code>/home/albusguo/graylog/volumes/graylog_data</code> 关联在一起，因此我们要预先在宿主上设置好配置文件，否则Graylog无法获取到正确的参数。</p>
+<p>官方推荐的配置文件下载办法是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mkdir -p ./graylog/config
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ./graylog/config
+</span></span><span class="line"><span class="cl">wget https://raw.githubusercontent.com/Graylog2/graylog-docker/4.3/config/graylog.conf
+</span></span><span class="line"><span class="cl">wget https://raw.githubusercontent.com/Graylog2/graylog-docker/4.3/config/log4j2.xml
+</span></span></code></pre></div><p>可以直接科学上网拿到这两份文件的内容，写到正确的位置上即可。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@AlbusGuo-PC:/home/albusguo/graylog# ll /home/albusguo/graylog/volumes/graylog_data/config/
+</span></span><span class="line"><span class="cl">total <span class="m">52</span>
+</span></span><span class="line"><span class="cl">drwxrwxrwx <span class="m">2</span> <span class="m">1100</span> <span class="m">1100</span>  <span class="m">4096</span> Sep <span class="m">25</span> 12:14 ./
+</span></span><span class="line"><span class="cl">drwxrwxrwx <span class="m">8</span> root root  <span class="m">4096</span> Sep <span class="m">25</span> 12:14 ../
+</span></span><span class="line"><span class="cl">-rw-rw-rw- <span class="m">1</span> root root <span class="m">35822</span> Sep <span class="m">25</span> 12:24 graylog.conf
+</span></span><span class="line"><span class="cl">-rw-rw-rw- <span class="m">1</span> root root  <span class="m">1629</span> Sep <span class="m">25</span> 12:13 log4j2.xml
+</span></span><span class="line"><span class="cl">-rw-rw-rw- <span class="m">1</span> <span class="m">1100</span> <span class="m">1100</span>    <span class="m">36</span> Sep <span class="m">25</span> 12:14 node-id
+</span></span></code></pre></div><h4 id="口令设置">口令设置</h4>
+<p>Graylog需要为 <code>admin</code> 账户设置登录口令，这要求我们在配置文件里写上口令明文和口令的 <code>SHA256</code> 值。</p>
+<p>使用 <code>pwgen</code> 生成口令，位数一定要多一点，有些教程在这一步简单生成了十几位口令，而我使用的Graylog要求 <code>64</code> 位以上，在这里会翻车。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">pwgen -N <span class="m">1</span> -s <span class="m">96</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 记录这个输出，记作 pwd</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> -n<span class="s2">&#34;Enter Password: &#34;</span> <span class="o">&amp;&amp;</span> head -1 &lt;/dev/stdin <span class="p">|</span> tr -d <span class="s1">&#39;\n&#39;</span> <span class="p">|</span> sha256sum <span class="p">|</span> cut -d<span class="s2">&#34; &#34;</span> -f1
+</span></span><span class="line"><span class="cl"><span class="c1"># 输入刚才得到的 pwd，得到它的SHA256值</span>
+</span></span></code></pre></div><p>我们得到的这两个值，分别填到 <code>graylog.conf</code> 文件当中的 <code>password_secret</code> 字段和 <code>root_password_sha2</code> 字段，这样才可以使用 <code>admin</code> 登录Web服务。</p>
+<h4 id="路径权限">路径权限</h4>
+<p>由于我们做了路径映射，就要使得容器有对应宿主路径的写权限。例如把主机上的 <code>/home/albusguo/graylog/volumes/es_data</code> 映射到 <code>elastic-search</code> 容器内的 <code>/usr/share/elasticsearch/data</code> 路径，那么这个容器就要有写 <code>/home/albusguo/graylog/volumes/es_data</code> 的权限，否则会因容器内部做的修改无法同步到主机上而产生错误。</p>
+<p>一个比较简单的方法是 <code>chmod -R 777 /home/albusguo/graylog/volumes/</code> ，开这个路径下的全部权限，也可以使用 <code>a+w</code> 的选项，总之这是一个需要注意的点。</p>
+<h4 id="运行">运行</h4>
+<p>万事俱备，启动运行！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker-compose up
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ...........</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># graylog_1        | 2022-09-25 07:29:06,729 INFO : org.graylog2.bootstrap.ServerBootstrap - Graylog server up and running.</span>
+</span></span></code></pre></div><h3 id="step-2-配置输入流">Step 2 配置输入流</h3>
+<h4 id="配置">配置</h4>
+<p>成功启动容器之后，可以通过 <code>localhost:9000</code> 访问到Graylog的web界面。</p>
+<p>账号是 <code>admin</code> ，密码是 <a class="link" href="#%e5%8f%a3%e4%bb%a4%e8%ae%be%e7%bd%ae" >此前</a> 生成并写入配置文件的明文。</p>
+<p>进入Web界面，直接开始配置输入流。【System】——【Inputs】，选择一个输入流，如TCP文本数据：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 248; 
+			flex-basis: 595px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4.png" data-size="1766x712">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4.png"
+			width="1766"
+			height="712"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4_hufa76404588145f580eb030abee518bd3_67151_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/4_hufa76404588145f580eb030abee518bd3_67151_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="inputs">
+	</a>
+	
+	<figcaption>inputs</figcaption>
+	
+</figure></p>
+<p>点击【Launch new input】启动该输入流，来到配置界面，我们主要关注两点：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 107; 
+			flex-basis: 258px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/5.png" data-size="1047x971">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/5.png"
+			width="1047"
+			height="971"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/5_hu04239cf262bd7516d0b2217d3143ca38_66357_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/5_hu04239cf262bd7516d0b2217d3143ca38_66357_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="config">
+	</a>
+	
+	<figcaption>config</figcaption>
+	
+</figure></p>
+<p>一定要注意这里的端口号，由于我们的Graylog运行在docker内，外界数据要通过主机端口转发到容器端口，这里的端口要选择此前配置过端口映射的端口。</p>
+<p>还记得我们的 <code>docker-compose.yaml</code> 吗？在这个文件内为graylog容器配置了端口映射：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">===== snip =====</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Graylog web interface and REST API</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">9000</span><span class="p">:</span><span class="m">9000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Syslog TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1514</span><span class="p">:</span><span class="m">1514</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Syslog UDP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1514</span><span class="p">:</span><span class="m">1514</span><span class="l">/udp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># GELF TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">12201</span><span class="p">:</span><span class="m">12201</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># GELF UDP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">12201</span><span class="p">:</span><span class="m">12201</span><span class="l">/udp</span><span class="w">
+</span></span></span></code></pre></div><p>必须选择这里有的端口，否则我们的数据无法到达容器。</p>
+<p>以TCP端口 <code>1514</code> 为例，只要在input配置界面写上这个端口，滑到底端保存，就完成了一个输入流的配置：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 177; 
+			flex-basis: 427px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/6.png" data-size="2477x1392">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/6.png"
+			width="2477"
+			height="1392"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/6_hue5cbb112506f190935ec97fe10cba1ed_206480_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/6_hue5cbb112506f190935ec97fe10cba1ed_206480_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="port config">
+	</a>
+	
+	<figcaption>port config</figcaption>
+	
+</figure></p>
+<h4 id="检查">检查</h4>
+<p>我们来检查一下这个输入流是否生效。</p>
+<p>随便找一些数据，这里我以自己的一个小站点的日志为例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat log_example.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 13:06:36.291066 UTC <span class="m">3863</span> DEBUG <span class="o">[</span>handleError<span class="o">]</span> <span class="o">[</span>10.206.0.6:443--8.142.110.170:38452<span class="o">]</span> - <span class="nv">SO_ERROR</span> <span class="o">=</span> <span class="m">104</span> Connection reset by peer - TcpConnectionImpl.cc:930
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 13:06:41.610243 UTC <span class="m">3863</span> DEBUG <span class="o">[</span>handleError<span class="o">]</span> <span class="o">[</span>10.206.0.6:443--8.142.110.170:46002<span class="o">]</span> - <span class="nv">SO_ERROR</span> <span class="o">=</span> <span class="m">104</span> Connection reset by peer - TcpConnectionImpl.cc:930
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 13:06:43.722297 UTC <span class="m">3863</span> DEBUG <span class="o">[</span>handleError<span class="o">]</span> <span class="o">[</span>10.206.0.6:443--8.142.110.170:51386<span class="o">]</span> - <span class="nv">SO_ERROR</span> <span class="o">=</span> <span class="m">104</span> Connection reset by peer - TcpConnectionImpl.cc:930
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 13:06:46.300990 UTC <span class="m">3863</span> DEBUG <span class="o">[</span>handleError<span class="o">]</span> <span class="o">[</span>10.206.0.6:443--8.142.110.170:55796<span class="o">]</span> - <span class="nv">SO_ERROR</span> <span class="o">=</span> <span class="m">104</span> Connection reset by peer - TcpConnectionImpl.cc:930
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 14:55:20.584554 UTC <span class="m">3863</span> DEBUG <span class="o">[</span>handleError<span class="o">]</span> <span class="o">[</span>10.206.0.6:80--8.142.110.170:34386<span class="o">]</span> - <span class="nv">SO_ERROR</span> <span class="o">=</span> <span class="m">104</span> Connection reset by peer - TcpConnectionImpl.cc:930
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 14:59:44.488731 UTC <span class="m">3863</span> DEBUG <span class="o">[</span>handleError<span class="o">]</span> <span class="o">[</span>10.206.0.6:443--82.157.59.178:15274<span class="o">]</span> - <span class="nv">SO_ERROR</span> <span class="o">=</span> <span class="m">104</span> Connection reset by peer - TcpConnectionImpl.cc:930
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 15:00:31.891461 UTC <span class="m">3864</span> ERROR error - MysqlConnection.cc:536
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 15:00:31.891501 UTC <span class="m">3864</span> ERROR Error<span class="o">(</span>2006<span class="o">)</span> <span class="o">[</span>HY000<span class="o">]</span> <span class="s2">&#34;MySQL server has gone away&#34;</span> - MysqlConnection.cc:498
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 15:00:31.891508 UTC <span class="m">3864</span> ERROR sql:select * from excerpts - MysqlConnection.cc:500
+</span></span><span class="line"><span class="cl"><span class="m">20220924</span> 15:27:40.884592 UTC <span class="m">3863</span> DEBUG <span class="o">[</span>handleError<span class="o">]</span> <span class="o">[</span>10.206.0.6:443--167.248.133.119:34466<span class="o">]</span> - <span class="nv">SO_ERROR</span> <span class="o">=</span> <span class="m">104</span> Connection reset by peer - TcpConnectionImpl.cc:930
+</span></span></code></pre></div><p>我们使用 <code>netcat</code> 来把这些数据发送到graylog的端口上， <strong>注意刚才配置的输入流端口是容器端口，而数据发送的端口是主机端口</strong> ，如果你在端口映射阶段把两者的端口设置为不同，在这里就要花点时间理清它们的关系。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat log_example.log <span class="p">|</span> nc 127.0.0.1 <span class="m">1514</span>
+</span></span></code></pre></div><p>来到graylog的【Search】界面，看到刚才发送的日志数据，即说明输入流工作正常。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 428px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/7.png" data-size="2476x1388">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/7.png"
+			width="2476"
+			height="1388"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/7_hu8e1e032d52c3b79772f35886cf1eff45_257276_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/7_hu8e1e032d52c3b79772f35886cf1eff45_257276_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Search">
+	</a>
+	
+	<figcaption>Search</figcaption>
+	
+</figure></p>
+<h3 id="step-3-配置提取器">Step 3 配置提取器</h3>
+<p><em>extractor</em> 提取器是从输入流当中提取字段的工具，这常见于需要对日志数据进行分析的场景，如网络连接日志，我们需要从日志当中提取访客IP。</p>
+<p>不过这里还是以刚才的日志为例，注意到日志当中有一些日志形如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="m">20220924</span> 15:00:31.891508 UTC <span class="m">3864</span> ERROR sql:select * from excerpts - MysqlConnection.cc:500
+</span></span></code></pre></div><p>似乎是执行SQL语句的记录，那么，我们的焦点就是被执行的SQL语句是什么，接下来配置提取器来把它从日志当中提取出来。</p>
+<p>还是在配置输入流的界面，选择配置提取器：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 259; 
+			flex-basis: 622px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/8.png" data-size="2420x933">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/8.png"
+			width="2420"
+			height="933"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/8_hu6fdd9c7c603f61b7a6910a65d96843a0_145848_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/8_hu6fdd9c7c603f61b7a6910a65d96843a0_145848_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="extractors">
+	</a>
+	
+	<figcaption>extractors</figcaption>
+	
+</figure></p>
+<p>添加提取器，选中一条示例数据（Message ID可以从【Search】界面获取）：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 246; 
+			flex-basis: 591px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/9.png" data-size="2384x968">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/9.png"
+			width="2384"
+			height="968"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/9_hu2e9004ed70264d567ea05bc29880e1c0_152048_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/9_hu2e9004ed70264d567ea05bc29880e1c0_152048_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="add extractor">
+	</a>
+	
+	<figcaption>add extractor</figcaption>
+	
+</figure></p>
+<p>在示例数据上选择提取类型，最常见的是正则：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 225; 
+			flex-basis: 541px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/10.png" data-size="2404x1066">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/10.png"
+			width="2404"
+			height="1066"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/10_hu27c28b70a562ba7ee01eb27898b37e99_179916_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/10_hu27c28b70a562ba7ee01eb27898b37e99_179916_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="reg extractor">
+	</a>
+	
+	<figcaption>reg extractor</figcaption>
+	
+</figure></p>
+<p>撰写适合于此类数据的正则，要提取的 <strong>目标字段用小括号括起来</strong> ，并且要注意正则的普适性：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 224; 
+			flex-basis: 538px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/11.png" data-size="2285x1018">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/11.png"
+			width="2285"
+			height="1018"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/11_hu02f9cb4eab96bc4685321ed13ac16194_135791_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/11_hu02f9cb4eab96bc4685321ed13ac16194_135791_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="reg">
+	</a>
+	
+	<figcaption>reg</figcaption>
+	
+</figure></p>
+<p>如果没有问题，就可以为提取出的字段命名，保存即可。</p>
+<p>重新打入数据，再来到【Search】界面，点开一条日志，可以看到已经提取出了 <code>SQL_COMMAND</code> 字段（字段名是自己写的）：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 351; 
+			flex-basis: 843px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/12.png" data-size="2298x654">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/12.png"
+			width="2298"
+			height="654"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/12_hu7565d924af93ac189c2daf2f64d4a187_114103_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/12_hu7565d924af93ac189c2daf2f64d4a187_114103_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="e.g.">
+	</a>
+	
+	<figcaption>e.g.</figcaption>
+	
+</figure></p>
+<p>而其他的日志内容不符合我们刚才写的正则，那么它就不存在这个字段：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 332; 
+			flex-basis: 797px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/13.png" data-size="2297x691">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/13.png"
+			width="2297"
+			height="691"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/13_hu9583e48185e31c9b662b3da644a580fb_137181_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/13_hu9583e48185e31c9b662b3da644a580fb_137181_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="e.g.">
+	</a>
+	
+	<figcaption>e.g.</figcaption>
+	
+</figure></p>
+<p>这个字段的有无，也可以作为我们对日志进行筛选的一个规则：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 180; 
+			flex-basis: 432px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/14.png" data-size="2478x1376">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/14.png"
+			width="2478"
+			height="1376"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/14_hub2445d0627fa4a306801f209dcba35d7_224100_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/14_hub2445d0627fa4a306801f209dcba35d7_224100_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="search">
+	</a>
+	
+	<figcaption>search</figcaption>
+	
+</figure></p>
+<p>更多的筛选写法可以参考 <a class="link" href="https://docs.graylog.org/docs/query-language"  target="_blank" rel="noopener"
+    >官方文档</a> 。</p>
+<h3 id="step-4-事件和告警">Step 4 事件和告警</h3>
+<p>除了筛选之外，Graylog还支持事件和告警的配置。</p>
+<p>【Alerts】——【Event Definitions】，新增事件：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 429px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/15.png" data-size="2474x1381">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/15.png"
+			width="2474"
+			height="1381"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/15_hu99b96a31b99aa564eb1e84d6261e0b4a_150802_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/15_hu99b96a31b99aa564eb1e84d6261e0b4a_150802_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="event">
+	</a>
+	
+	<figcaption>event</figcaption>
+	
+</figure></p>
+<p>事件的核心是过滤器，我们要从日志中过滤出我们关注的事件，可以使用刚才使用过的 <a class="link" href="https://docs.graylog.org/docs/query-language"  target="_blank" rel="noopener"
+    >筛选语法</a> ：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 427px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/16.png" data-size="2476x1389">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/16.png"
+			width="2476"
+			height="1389"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/16_hu1f998b6c9c45195c545bd1df412b29ff_263214_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/16_hu1f998b6c9c45195c545bd1df412b29ff_263214_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="filter">
+	</a>
+	
+	<figcaption>filter</figcaption>
+	
+</figure></p>
+<p>还可以从日志当中提取关键字段，以便我们对事件进行分析：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 195; 
+			flex-basis: 468px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/17.png" data-size="2455x1258">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/17.png"
+			width="2455"
+			height="1258"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/17_huae8868866b7e9598098f61b7ebe5f5ec_166442_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/17_huae8868866b7e9598098f61b7ebe5f5ec_166442_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="fields">
+	</a>
+	
+	<figcaption>fields</figcaption>
+	
+</figure></p>
+<p>事件发生时，Graylog执行提醒动作，例如向指定邮箱发送邮件，在这里就不配置了。</p>
+<p>整个事件的配置如下：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 184; 
+			flex-basis: 442px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/18.png" data-size="2475x1341">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/18.png"
+			width="2475"
+			height="1341"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/18_hue7243a457c0718fecb182988b2fee74d_170209_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/18_hue7243a457c0718fecb182988b2fee74d_170209_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="event summary">
+	</a>
+	
+	<figcaption>event summary</figcaption>
+	
+</figure></p>
+<p>至此，可以从一大堆日志当中分析出我们想要的事件，并且事件当中包含了我们配置的额外字段：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 189; 
+			flex-basis: 454px"
+	>
+	<a href="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/19.png" data-size="2463x1301">
+		<img src="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/19.png"
+			width="2463"
+			height="1301"
+			srcset="/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/19_hu7a80dd481f0f9d125741c5ab38ff787a_229155_480x0_resize_box_3.png 480w, /p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/19_hu7a80dd481f0f9d125741c5ab38ff787a_229155_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="events">
+	</a>
+	
+	<figcaption>events</figcaption>
+	
+</figure></p>
+<h3 id="final-分析小结">Final 分析&amp;小结</h3>
+<h4 id="分析">分析</h4>
+<p>简单使用过Graylog之后，我想对它的功能和意义做一点分析。</p>
+<p>首先，乍一看很容易把提取器、筛选、事件混为一谈，尤其是三者都支持正则；但是，它们的定位是明确的：</p>
+<ul>
+<li>
+<p>提取器：从原始消息里面提取出可用字段，如果我们需要使用日志当中的某些内容，那么一定需要提取器；甚至，提取器得到的字段可以被筛选语句和事件所使用，因此它可以看成是日志分析的一个基础。</p>
+</li>
+<li>
+<p>筛选：筛选和事件基本是一样的，但筛选的能力比较弱，我们可以从一大堆日志里面筛选出我们需要的日志，但筛选的结果并不能说明什么内容，甚至于我们拿个文本编辑器来筛都可以得到差不多的效果。</p>
+</li>
+<li>
+<p>事件：事件是日志处理的结果，它不仅支持筛选，还支持聚合。我们在分析问题的时候通常关注事件而不是日志，我们要知道发生了什么，而不是所有的细节。</p>
+</li>
+</ul>
+<p>以一个场景来引发读者与我一起进行综合性思考：如何使用Graylog对常见的 <a class="link" href="https://info.support.huawei.com/info-finder/encyclopedia/zh/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3.html"  target="_blank" rel="noopener"
+    >暴力破解</a> 进行告警？</p>
+<p>自上往下看，我们关注的是 <em>暴力破解</em> 事件，因此这个事件是必然要定义的。事件的筛选比较简单，可以直接使用正则来匹配 <em>登录失败</em> 的日志，但并不是每条登录失败日志都应该触发这个事件，因此要设置聚合，比如匹配 <code>20</code> 条失败日志就触发暴力破解事件。</p>
+<p>事件触发之后，我们最关心的问题应该是攻击者是谁，这个信息必须要从日志当中提取。因此，我们要对 <em>登录失败</em> 日志再配置一个提取器，来把日志当中的源IP提取出来。</p>
+<p>至此，我们就把提取器、筛选和事件综合起来了。</p>
+<p>不过还是有个小bug，事件聚合的时候只能考虑具有 <strong>相同源IP</strong> 的登录失败日志，不过这一点可能是Graylog的进阶用法，今天还没探索到这个地步。</p>
+<h4 id="小结">小结</h4>
+<p>月末周日是非常短暂的，简单玩了玩Graylog，写了篇记录，就结束了短暂而愉快的一天。本文从docker安装开始，介绍了Graylog的配置、运行、输入流、提取器和事件，初心是把这些东西运用到我的工作中，提升问题定位的效率。目前来看，具备一定的实用性，至少界面会比notepad++友好许多，有机会投入实战检验一下效果。</p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1]&ldquo;Get started with Docker remote containers on WSL 2,&rdquo;   Learn, Sep. 22, 2022. <a class="link" href="https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-containers"  target="_blank" rel="noopener"
+    >https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-containers</a></p>
+<p>[12]&ldquo;docker wsl2启动不了_win10利用WSL2安装docker的2种方式_weixin_39786155的博客-CSDN博客,&rdquo;   Blog, <a class="link" href="https://blog.csdn.net/weixin_39786155/article/details/110363154"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/weixin_39786155/article/details/110363154</a></p>
+<p>[3]&ldquo;Search query language,&rdquo;   Docs, <a class="link" href="https://docs.graylog.org/docs/query-language"  target="_blank" rel="noopener"
+    >https://docs.graylog.org/docs/query-language</a></p>
+<p>[4]&ldquo;Docker,&rdquo;   Docs, <a class="link" href="https://docs.graylog.org/docs/docker"  target="_blank" rel="noopener"
+    >https://docs.graylog.org/docs/docker</a></p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/rapidjson%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">RapidJson使用小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 18, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Windows Terminal美化小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/pyqt5%E5%88%9D%E6%8E%A2%E4%B8%8Escapy%E7%9A%84%E7%BE%8E%E5%A6%99%E7%BB%93%E5%90%88/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">PyQt5初探——与scapy的美妙结合</h2>
+            <footer class="article-time">
+                <time datetime=''>Apr 10, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">读书摘抄站点构建（前后端结合）</h2>
+            <footer class="article-time">
+                <time datetime=''>Mar 07, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/hackintosh%E5%B0%8F%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Hackintosh小记</h2>
+            <footer class="article-time">
+                <time datetime=''>Feb 22, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#背景">背景</a></li>
+    <li><a href="#step-0-环境配置">Step 0 环境配置</a>
+      <ul>
+        <li><a href="#docker-on-wsl2">docker on WSL2</a></li>
+        <li><a href="#docker-compose">docker compose</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-1-运行">Step 1 运行</a>
+      <ul>
+        <li><a href="#graylog配置">Graylog配置</a></li>
+        <li><a href="#口令设置">口令设置</a></li>
+        <li><a href="#路径权限">路径权限</a></li>
+        <li><a href="#运行">运行</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-2-配置输入流">Step 2 配置输入流</a>
+      <ul>
+        <li><a href="#配置">配置</a></li>
+        <li><a href="#检查">检查</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-3-配置提取器">Step 3 配置提取器</a></li>
+    <li><a href="#step-4-事件和告警">Step 4 事件和告警</a></li>
+    <li><a href="#final-分析小结">Final 分析&amp;小结</a>
+      <ul>
+        <li><a href="#分析">分析</a></li>
+        <li><a href="#小结">小结</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
