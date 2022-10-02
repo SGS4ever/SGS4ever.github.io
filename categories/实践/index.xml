@@ -6,13 +6,32 @@
     <description>Recent content in 实践 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 25 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 02 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Graylogn使用小记</title>
-      <link>https://xrg.fj.cn/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</link>
+      <title>Graylog使用小记——2</title>
+      <link>https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/</link>
+      <pubDate>Sun, 02 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/</guid>
+      <description>在 前一篇使用小记 中，我记录了如何利用Docker安装运行 Graylog 、如何设置配置文件、如何使用Graylog的输入流、提取器、事件和告警，并在最后记录了我个人对提取器、筛选和事件的理解。
+我对这个产品还有一些地方比较好奇：
+第一个问题是我在上一篇的分析当中遗留的： ⌈ 不过还是有个小bug，事件聚合的时候只能考虑具有 相同源IP 的登录失败日志，不过这一点可能是Graylog的进阶用法，今天还没探索到这个地步 ⌋
+第二个问题，如何把事件串联起来。例如在对 暴力破解成功 进行告警时，我们首先要产生一个 暴力破解 的事件，这个事件当中可能包含比如说 10 条的登录失败日志，紧接着要产生一个 登录成功 事件，这个事件只需要由一条登录成功日志来触发；这两个事件先后发生时，就代表了 暴力破解成功 的情况。
+0 预设环境 今天，我打算以真正的Linux上的SSH日志为例，来研究一下Graylog要如何处理以上两个问题。
+日志样例：
+Jul 12 06:09:43 combo sshd(pam_unix)[4048]: authentication failure; logname= uid=0 euid=0 tty=NODEVssh ruser= rhost=68.143.156.89.nw.nuvox.net user=root Jun 30 22:16:32 combo sshd(pam_unix)[19434]: session opened for user test by (uid=509) 对应配置了一系列提取器：
+extractors 其中只有 SSH_PAM_SESSION_OPEN 是用于匹配登录成功的日志，其余提取器均用于登录失败日志。
+这里有一个我比较不满意的点，就是配置正则提取器的时候只能提取出 第一个 匹配组（match group）；当我希望从登录失败日志当中提取较多信息的时候，就要配置很多个提取器（比如上图当中配置了提取远程主机、用户名、时间、进程ID等信息的提取器），这些提取器用的其实都是同一个正则，完全没必要进行这么多冗余配置。
+上图中有两个提取器值得展开说明，它们是 SSH_PAM_AUTH_FAILURE 和 SSH_PAM_SESSION_OPEN ：
+SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实就是把整个消息体都匹配出来，放到了对应的自定义字段里。这样做的意义是便于使用我们在 前一篇使用小记 当中提到的筛选方式 _exists_: [xxx] 来筛选出所有满足正则的消息，相当于绕了个弯来实现 正则筛选 ，这么做的原因是按照官方Demo来写正则筛选语句根本筛不到对应的日志，我觉得没必要浪费时间来研究这种不属于我的问题。</description>
+    </item>
+    
+    <item>
+      <title>Graylog使用小记</title>
+      <link>https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</link>
       <pubDate>Sun, 25 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://xrg.fj.cn/p/graylogn%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</guid>
+      <guid>https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B0/</guid>
       <description>背景 最近在工作中发现我们基本采取一种DevOps的工作方式，开发即运维，有时一个问题要定位很久，维测能力非常差。
 造成维护困难的原因有很多，我认为有几点比较重要：
 代码稳定性差。这个问题对于一个发展初期的业务来说比较常见，只能说尽力避免。
