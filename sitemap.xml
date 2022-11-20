@@ -3,18 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://xrg.fj.cn/categories/</loc>
-    <lastmod>2022-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/</loc>
-    <lastmod>2022-10-02T00:00:00+00:00</lastmod>
+    <lastmod>2022-11-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/post/</loc>
-    <lastmod>2022-10-02T00:00:00+00:00</lastmod>
+    <lastmod>2022-11-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/</loc>
-    <lastmod>2022-10-02T00:00:00+00:00</lastmod>
+    <lastmod>2022-11-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/</loc>
+    <lastmod>2022-11-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/tags/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2022-11-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/categories/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2022-11-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/%E8%BD%AC%E6%AD%A3%E7%AD%94%E8%BE%A9%E7%BB%8F%E9%AA%8C/</loc>
+    <lastmod>2022-11-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/</loc>
     <lastmod>2022-10-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
@@ -59,16 +68,10 @@
     <loc>https://xrg.fj.cn/p/pcapplusplus%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</loc>
     <lastmod>2022-02-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://xrg.fj.cn/tags/%E6%97%A5%E5%B8%B8/</loc>
-    <lastmod>2022-01-31T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://xrg.fj.cn/p/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E8%99%8E%E5%B9%B4%E5%85%85%E5%80%BC%E7%AE%80%E5%8D%95dp%E9%97%AE%E9%A2%98/</loc>
     <lastmod>2022-01-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/%E7%A6%8F%E5%B7%9E%E6%B8%B8%E8%AE%B0/</loc>
-    <lastmod>2022-01-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://xrg.fj.cn/categories/%E6%97%A5%E5%B8%B8/</loc>
     <lastmod>2022-01-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/</loc>
@@ -280,6 +283,10 @@
   </url><url>
     <loc>https://xrg.fj.cn/%E5%85%B3%E4%BA%8E%E6%88%91/</loc>
     <lastmod>2020-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/</loc>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/</loc>
   </url><url>
     <loc>https://xrg.fj.cn/search/</loc>
   </url>

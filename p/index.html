@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='转正答辩讲稿 0 开场 各位领导下午好，我叫郭洵睿，来自公共服务开发部，我的主管是xxx，导师是xxx，下面我将对我试用期的总体情况进行汇报。
+我的报告分为五个部分，报告的核心是工作汇报以及经过这段时间的工作而得到的总结和反思。
+在开始汇报之前，先进行一个简单的自我介绍。
+1 自我介绍 我于2000年出生于福建，2022年本科毕业于北京邮电大学网络空间安全学院，2022年7月4日加入华为，就职于公共服务开发部OM团队，主要负责安全模块的一些开发工作，我的PL是xxx。
+我自认为是一个热爱创造、热爱思考、热爱实践的人，我在这段时间以来所接触的工作内容，不断地加深我对这三个标签的认可，那么接下来我就对入职四个多月以来所参与的一些事情进行一个总的汇报。
+2 工作汇报 图片：时间线
+这张图是我入职至今所经历的一个时间主线，我主要完成了这四件事情。
+2.1 OM兼容安全清除传感器密钥（略） 第一件事情是我入职以来接到的第一个需求。这个需求的名字是OM兼容安全清除传感器密钥和新鲜值。我以密钥为例，简单地讲一下它的背景。
+2.1.1 背景 我们的MDC和传感器部件之间，需要进行设备认证，只有完成了这个认证，才能开展后续的自驾等等功能。那么这个设备认证是怎么完成的呢？现在的方案是通过SecOC协议，让MDC和传感器之间基于共享的SecOC对称密钥，基于挑战应答完成设备认证。
+这把SecOC密钥，通常在车厂产线完成密钥学习，那么，比如在工厂，或者售后，就会出现需要让已经学习过的传感器清除掉这把密钥，然后重新学习的场景。
+这个密钥清除，以往的方案是使用一个明文报文，那就使得攻击者很容易地得到这个报文当中承载的信息，从而可以伪造密钥清除指令，最后对我们的设备认证进行破坏。
+2.1.2 方案 对这种情况的安全加固方案，就是将密钥清除的报文改为密文，加密使用的对称密钥是双方各自安全保存的，这样就使得攻击者没办法简单地伪造密钥清除指令。
+这件事的实现非常简单，按照约定的安全报文格式，构造安全报文，在清除密钥时首先发送安全报文，对于老版本的不支持安全报文的传感器，我们的兼容方案是在发送完安全报文之后等待500ms，主动查询一次传感器的学习状态，如果它的密钥还未被清除，就向它再发送一次非安全报文。
+2.1.3 最终价值 这个需求实际上是一个安全需求，它为产品带来的价值也是安全方面的能力提升，更加巩固了我们的功能安全防线，为可信目标添砖加瓦。
+2.2 一键式密钥灌装（略） 图片：时间线
+完成了第一件事情之后，随即开展了内部的一键式密钥灌装的开发。
+2.2.1 背景 我们的单板，通常要走过我们的产线，那么在产线上，就会去灌装一些预置的密钥，通过这些密钥来完成最初的加密保障。
+我们的调测环境，通常是不会走过产线的，或者说走过了产线，但经常就会随着各种测试版本的不断刷新，出现重新进行密钥灌装的需求。通常，这个密钥灌装的需求是找到我的PL，或者是我的组内的同事，那么随着单板数量的增加总是手动灌装就显得比较繁琐。
+2.2.2 方案 其实我们是为产线提供了自动化的脚本的，只不过是分散为若干个不同功能的文件，那一键式的密钥灌装，就希望将密钥灌装的功能整合到我们OMG工具上，让大家点几个按钮就把密钥灌装完成，节约大家的时间。
+我所做的事情就是快速地将现有的脚本完成整合，输出一些易用的接口给到OMG，也就是我们OM组的其他同事负责的一个工具，让他们集成我们这个功能。
+这个事情目前来说是形成了这样的界面，OMG会自动调用我们的接口去检测环境上有哪些密钥，然后用户点击按钮就可以完成这把密钥的灌装。
+2.2.3 最终价值 无
+2.2.4 AAR 这个事情是一个内部的需求，由于依赖的复杂性，目前是还没有形成非常可靠的灌装能力。
+2.3 N50密钥学习（详） 2.3.1 背景 2.3.2 方案 2.3.3 困难和应对 2.3.4 最终价值 2.3.5 思考 2.4 DT提升（详） 2.4.1 背景 2.4.2 方案 2.4.3 困难和应对 2.4.5 继续思考 3 总结和反思 4 展望 5 致谢 '><title></title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content=''>
+<meta property='og:description' content='转正答辩讲稿 0 开场 各位领导下午好，我叫郭洵睿，来自公共服务开发部，我的主管是xxx，导师是xxx，下面我将对我试用期的总体情况进行汇报。
+我的报告分为五个部分，报告的核心是工作汇报以及经过这段时间的工作而得到的总结和反思。
+在开始汇报之前，先进行一个简单的自我介绍。
+1 自我介绍 我于2000年出生于福建，2022年本科毕业于北京邮电大学网络空间安全学院，2022年7月4日加入华为，就职于公共服务开发部OM团队，主要负责安全模块的一些开发工作，我的PL是xxx。
+我自认为是一个热爱创造、热爱思考、热爱实践的人，我在这段时间以来所接触的工作内容，不断地加深我对这三个标签的认可，那么接下来我就对入职四个多月以来所参与的一些事情进行一个总的汇报。
+2 工作汇报 图片：时间线
+这张图是我入职至今所经历的一个时间主线，我主要完成了这四件事情。
+2.1 OM兼容安全清除传感器密钥（略） 第一件事情是我入职以来接到的第一个需求。这个需求的名字是OM兼容安全清除传感器密钥和新鲜值。我以密钥为例，简单地讲一下它的背景。
+2.1.1 背景 我们的MDC和传感器部件之间，需要进行设备认证，只有完成了这个认证，才能开展后续的自驾等等功能。那么这个设备认证是怎么完成的呢？现在的方案是通过SecOC协议，让MDC和传感器之间基于共享的SecOC对称密钥，基于挑战应答完成设备认证。
+这把SecOC密钥，通常在车厂产线完成密钥学习，那么，比如在工厂，或者售后，就会出现需要让已经学习过的传感器清除掉这把密钥，然后重新学习的场景。
+这个密钥清除，以往的方案是使用一个明文报文，那就使得攻击者很容易地得到这个报文当中承载的信息，从而可以伪造密钥清除指令，最后对我们的设备认证进行破坏。
+2.1.2 方案 对这种情况的安全加固方案，就是将密钥清除的报文改为密文，加密使用的对称密钥是双方各自安全保存的，这样就使得攻击者没办法简单地伪造密钥清除指令。
+这件事的实现非常简单，按照约定的安全报文格式，构造安全报文，在清除密钥时首先发送安全报文，对于老版本的不支持安全报文的传感器，我们的兼容方案是在发送完安全报文之后等待500ms，主动查询一次传感器的学习状态，如果它的密钥还未被清除，就向它再发送一次非安全报文。
+2.1.3 最终价值 这个需求实际上是一个安全需求，它为产品带来的价值也是安全方面的能力提升，更加巩固了我们的功能安全防线，为可信目标添砖加瓦。
+2.2 一键式密钥灌装（略） 图片：时间线
+完成了第一件事情之后，随即开展了内部的一键式密钥灌装的开发。
+2.2.1 背景 我们的单板，通常要走过我们的产线，那么在产线上，就会去灌装一些预置的密钥，通过这些密钥来完成最初的加密保障。
+我们的调测环境，通常是不会走过产线的，或者说走过了产线，但经常就会随着各种测试版本的不断刷新，出现重新进行密钥灌装的需求。通常，这个密钥灌装的需求是找到我的PL，或者是我的组内的同事，那么随着单板数量的增加总是手动灌装就显得比较繁琐。
+2.2.2 方案 其实我们是为产线提供了自动化的脚本的，只不过是分散为若干个不同功能的文件，那一键式的密钥灌装，就希望将密钥灌装的功能整合到我们OMG工具上，让大家点几个按钮就把密钥灌装完成，节约大家的时间。
+我所做的事情就是快速地将现有的脚本完成整合，输出一些易用的接口给到OMG，也就是我们OM组的其他同事负责的一个工具，让他们集成我们这个功能。
+这个事情目前来说是形成了这样的界面，OMG会自动调用我们的接口去检测环境上有哪些密钥，然后用户点击按钮就可以完成这把密钥的灌装。
+2.2.3 最终价值 无
+2.2.4 AAR 这个事情是一个内部的需求，由于依赖的复杂性，目前是还没有形成非常可靠的灌装能力。
+2.3 N50密钥学习（详） 2.3.1 背景 2.3.2 方案 2.3.3 困难和应对 2.3.4 最终价值 2.3.5 思考 2.4 DT提升（详） 2.4.1 背景 2.4.2 方案 2.4.3 困难和应对 2.4.5 继续思考 3 总结和反思 4 展望 5 致谢 '>
+<meta property='og:url' content='https://xrg.fj.cn/p/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' />
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="转正答辩讲稿 0 开场 各位领导下午好，我叫郭洵睿，来自公共服务开发部，我的主管是xxx，导师是xxx，下面我将对我试用期的总体情况进行汇报。
+我的报告分为五个部分，报告的核心是工作汇报以及经过这段时间的工作而得到的总结和反思。
+在开始汇报之前，先进行一个简单的自我介绍。
+1 自我介绍 我于2000年出生于福建，2022年本科毕业于北京邮电大学网络空间安全学院，2022年7月4日加入华为，就职于公共服务开发部OM团队，主要负责安全模块的一些开发工作，我的PL是xxx。
+我自认为是一个热爱创造、热爱思考、热爱实践的人，我在这段时间以来所接触的工作内容，不断地加深我对这三个标签的认可，那么接下来我就对入职四个多月以来所参与的一些事情进行一个总的汇报。
+2 工作汇报 图片：时间线
+这张图是我入职至今所经历的一个时间主线，我主要完成了这四件事情。
+2.1 OM兼容安全清除传感器密钥（略） 第一件事情是我入职以来接到的第一个需求。这个需求的名字是OM兼容安全清除传感器密钥和新鲜值。我以密钥为例，简单地讲一下它的背景。
+2.1.1 背景 我们的MDC和传感器部件之间，需要进行设备认证，只有完成了这个认证，才能开展后续的自驾等等功能。那么这个设备认证是怎么完成的呢？现在的方案是通过SecOC协议，让MDC和传感器之间基于共享的SecOC对称密钥，基于挑战应答完成设备认证。
+这把SecOC密钥，通常在车厂产线完成密钥学习，那么，比如在工厂，或者售后，就会出现需要让已经学习过的传感器清除掉这把密钥，然后重新学习的场景。
+这个密钥清除，以往的方案是使用一个明文报文，那就使得攻击者很容易地得到这个报文当中承载的信息，从而可以伪造密钥清除指令，最后对我们的设备认证进行破坏。
+2.1.2 方案 对这种情况的安全加固方案，就是将密钥清除的报文改为密文，加密使用的对称密钥是双方各自安全保存的，这样就使得攻击者没办法简单地伪造密钥清除指令。
+这件事的实现非常简单，按照约定的安全报文格式，构造安全报文，在清除密钥时首先发送安全报文，对于老版本的不支持安全报文的传感器，我们的兼容方案是在发送完安全报文之后等待500ms，主动查询一次传感器的学习状态，如果它的密钥还未被清除，就向它再发送一次非安全报文。
+2.1.3 最终价值 这个需求实际上是一个安全需求，它为产品带来的价值也是安全方面的能力提升，更加巩固了我们的功能安全防线，为可信目标添砖加瓦。
+2.2 一键式密钥灌装（略） 图片：时间线
+完成了第一件事情之后，随即开展了内部的一键式密钥灌装的开发。
+2.2.1 背景 我们的单板，通常要走过我们的产线，那么在产线上，就会去灌装一些预置的密钥，通过这些密钥来完成最初的加密保障。
+我们的调测环境，通常是不会走过产线的，或者说走过了产线，但经常就会随着各种测试版本的不断刷新，出现重新进行密钥灌装的需求。通常，这个密钥灌装的需求是找到我的PL，或者是我的组内的同事，那么随着单板数量的增加总是手动灌装就显得比较繁琐。
+2.2.2 方案 其实我们是为产线提供了自动化的脚本的，只不过是分散为若干个不同功能的文件，那一键式的密钥灌装，就希望将密钥灌装的功能整合到我们OMG工具上，让大家点几个按钮就把密钥灌装完成，节约大家的时间。
+我所做的事情就是快速地将现有的脚本完成整合，输出一些易用的接口给到OMG，也就是我们OM组的其他同事负责的一个工具，让他们集成我们这个功能。
+这个事情目前来说是形成了这样的界面，OMG会自动调用我们的接口去检测环境上有哪些密钥，然后用户点击按钮就可以完成这把密钥的灌装。
+2.2.3 最终价值 无
+2.2.4 AAR 这个事情是一个内部的需求，由于依赖的复杂性，目前是还没有形成非常可靠的灌装能力。
+2.3 N50密钥学习（详） 2.3.1 背景 2.3.2 方案 2.3.3 困难和应对 2.3.4 最终价值 2.3.5 思考 2.4 DT提升（详） 2.4.1 背景 2.4.2 方案 2.4.3 困难和应对 2.4.5 继续思考 3 总结和反思 4 展望 5 致谢 ">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/"></a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h2 id="重构基本功">重构基本功</h2>
+<h3 id="1-extract">1 extract</h3>
+<ul>
+<li>
+<p>提炼常量</p>
+</li>
+<li>
+<p>提炼变量（重复出现的表达式）</p>
+</li>
+<li>
+<p>提炼函数</p>
+</li>
+</ul>
+<h3 id="2-move">2 move</h3>
+<h4 id="21-变量">2.1 变量</h4>
+<ul>
+<li>
+<p>移动变量，让变量去到它合适的作用域</p>
+</li>
+<li>
+<p>消除临时变量有利于提炼函数</p>
+</li>
+</ul>
+<p>三类临时变量：</p>
+<ul>
+<li>
+<p>循环变量</p>
+</li>
+<li>
+<p>累加变量</p>
+</li>
+<li>
+<p>查询变量</p>
+</li>
+</ul>
+<h4 id="22-函数">2.2 函数</h4>
+<ul>
+<li>
+<p>移动函数。e.g. 如果一个函数频繁访问一个对象/结构体，那么可以考虑把这个函数变成这个对象的成员函数。</p>
+</li>
+<li>
+<p>注意移动函数的时候不要把老函数直接删除，可以通过老函数调用新函数的方式完成替换。（比如我在工作中用 <code>HexStringToVectorEx</code> 调用了 <code>HexStringToVector</code> ，保持以前的函数对 <code>HexStringToVector</code> 的调用正常）。</p>
+</li>
+</ul>
+<h4 id="23-职责">2.3 职责</h4>
+<ul>
+<li>移动职责。一个函数可以成为多个类的成员变量，但是它应该去到关联最紧密的地方。</li>
+</ul>
+<h3 id="3-inline">3 inline</h3>
+<ul>
+<li>内联变量：提炼的反操作，对于使用次数较少的变量，直接在它出现的地方换上等式右边的表达式，消除这个变量。</li>
+</ul>
+<h3 id="4-rename">4 rename</h3>
+<ul>
+<li>变量名的长度其实和它的作用域有一定的正相关关系。</li>
+</ul>
+<blockquote>
+<p>cmake也有 <code>PUBLIC</code> 等机制。</p>
+</blockquote>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2022 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-extract">1 extract</a></li>
+    <li><a href="#2-move">2 move</a>
+      <ul>
+        <li><a href="#21-变量">2.1 变量</a></li>
+        <li><a href="#22-函数">2.2 函数</a></li>
+        <li><a href="#23-职责">2.3 职责</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-inline">3 inline</a></li>
+    <li><a href="#4-rename">4 rename</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
