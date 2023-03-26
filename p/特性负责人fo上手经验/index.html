@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='一个月前，被领导委派成为一个小特性的负责人，在我司的术语叫做 Feature Owner (FO) 的，给我平平无奇的人生又增加了一点毫不出彩的经历。
+由于是第一次做这么一个脚色，又托大并未去参考什么前辈经验，在前期实在是连滚带爬了好一阵子，很是狼狈。回顾所来，还是有一点心得体会要写的，不过我写在这里，不管对与不对，总还是会有许多如我一般丝毫不去找前人经验的新人FO在，故这些文字，大约并不为多少人所读到，多是仅供自娱而已。
+1 起手式：版本 特性负责人，其实就是除了开发工作之外，还要负责起整个特性的前期计划、进度跟踪、后期联调和最终交付的角色。不同特性要求负责人在各个环节的投入比重差异实在很大，难以有一个普适的套路。
+就我负责的特性而言，我所要做的开发工作很少，主要是整合周边组件提供的功能；然而由于周边组件很多，就要求我要投入多数的时间用于总体计划的协商对齐上。开发岗位的惯性使我一开始忽略了计划的对齐，导致前期拟定的计划不断地出现缺漏——甚至于我自己的开发工作完成后，还是没有跟周边组件定下一个稳定可行的联调计划——整个特性前中期每天都处于一个高风险的状态，我的心绪也一直无法安宁下来，深受其害。
+由此我得到的经验是，特性负责人所要确定的第一个问题就是版本问题——确定双方版本、我们负责的新特性要在哪个周边版本联调、周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。
+我们当前用的是周边的什么版本、周边当前又已演进到什么版本。这是一个首要的问题。不认识这一点，就不能明白对方的开发基础和我们现有的基础之间的差异。假如对方的版本和我方的版本一致，那就可以轻松实现对接；假如对方的版本领先于我方版本，那就需要考虑兼容的问题，即对方新开发的功能，并不一定能直接迁移到我们现有的版本上。
+图1-1 双方版本配套：舒适地演进 图1-2 双方版本不配套的情况：对方特性未必可以迁移 我们的新特性要在哪个版本联调。当我们确定了当前使用的周边版本之后，要进一步确定联调版本。最舒适的做法是让周边组件基于我们当前使用的版本拉出一个新的代码分支，并将他们新开发的功能合入这个联调分支上，提供联调版本。这样的联调版本我们基本没有适配压力，可以开箱即用，是最佳选择。
+图1-3 联调版本集成 不过，很容易由于双方版本差距过大，以至于对方提出无法将功能合入老版本的代码上；这个时候，最好表现出我们作为特性负责人的强势，要求对面克服困难提供联调版本。尽量不要随便答应使用对方的新版本联调，因为对于我方来说，将周边版本升级是一个更加复杂的过程，涉及的方面远不只限于我们的特性本身，最终还是有很大概率不断地回到起点去重新制定联调计划，反而不如一开始就让对方基于我们现有的版本去合入新特性。
+我的这个小特性，正是由于联调计划迟迟无法对齐，导致开发完成之后无法立即启动联调。周边组件为了免除将新特性及其依赖功能合入旧版本的额外工作，提出了各种基于他们最新版本的联调方案，我方也花费了很多精力去开展这种本就风险很大的联调，最终将各组件拆的七零八落，也只能勉强地调一小部分功能，一直苟延残喘到我方正式对周边的新版本进行了适配，才做出一个比较完整的联调版本来。
+图1-4 最稳妥的联调方案：周边将新特性回合老版本 周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。各方都完成功能开发后，随着版本演进，自然会有一个版本集成了全部的功能，但问题在于一个特性的交付是有DDL的，我们要确保在DDL之前能够完整集成所有功能，就要确定双方的版本计划。
+以我的这个小特性来说，原先要求在 3-30 交付，由于早期没有对好版本计划，有一个组件交付在他们的 3-25 的版本上，而我们对这个版本的集成计划已经排到了 四月份之后！
+图1-5 版本集成节奏不满足特性交付需求 这样的问题在后期一出现，基本宣告特性延期交付。合理的做法是前期对好计划之后，就要告知周边尽快将特性交付到当前的版本上，才有可能在我方发布版本时集成所有功能。
+2 进阶式：求助 打好版本这套起手式，就足够装作老师傅了，此时整体特性的交付风险就将相当可控。不过，作为一个特性负责人，自己包办一切是不现实的，有非常多的东西在我们知识及能力范围之外，这时及时求助就会非常重要。按我的经历说来，下面几个角色是不可不打交道的。
+周边特性负责人。通常在跨部门的特性中，周边组件也会有特性负责人，不管是版本计划、周边进展、合作联调，都可以找这个负责人商议，即使TA搞不定这些问题，也会帮我们找到具体能解决问题的人物。
+我方 &#43;1 &#43;2 。特性不大的情况下，找上级或上上级就基本能摆平我们遇到的多数问题，他们会用丰富的经验帮我们把控当前的风险，以及在大佬比较多、问题比较复杂的会议上帮我们稳住节奏和心态。
+我方版本角色。玩版本的人都是狠人，我们的起手式里其实有相当多环节都可以请我方版本角色帮忙搞定，例如确定我方和周边的版本配套关系、商定联调版本的计划、确定我们的正式交付计划等等。这种问题，很大概率 &#43;1 &#43;2 也并不特别了解，如果在我们的求助列表中缺失了版本角色，就容易带着他们一起在版本问题上翻车（你猜猜这个教训从何而来）。
+我做这个小特性，既没把版本玩明白，又没在前期找准求助的对象，导致积重难返，延期交付，真是悲剧。
+3 终式：厚脸皮 对我来说，这个终式不算是什么经验，而应该算是我所悟到的优秀的特性负责人必须有的品质。我至今不能二话不说就打别人的电话，而总是寄望于对方看到我的留言后帮我解决问题。实际上，办事时脸皮一厚，就会让效率提高百倍。关注的重点不能放在对方是否被我们打扰，而应该放在我们是否需要对方快速响应这个问题好让工作继续推进下去。
+在我的认知里，这个终式简直是本文所有其他经验的基石，无论是最开始找周边的一帮素不相识的人商定计划，还是遇事不决就找领导们进行求助，都非脸皮厚如城墙不可。诚然有人认为这种东西实在稀松平常，就是日常工作所必须的部分，并没有我所说的这样夸张，但我必须指出，不同个体之性格天然迥异，正是也有一些较木讷内向的人阴错阳差地成为FO，且因为较木讷内向的性格导致了所谓“日常的”工作正在艰难地推进，我的这一小节的经验，就专为这些人而写，其中自然也包括我自己。'><title>特性负责人（FO）上手经验</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='特性负责人（FO）上手经验'>
+<meta property='og:description' content='一个月前，被领导委派成为一个小特性的负责人，在我司的术语叫做 Feature Owner (FO) 的，给我平平无奇的人生又增加了一点毫不出彩的经历。
+由于是第一次做这么一个脚色，又托大并未去参考什么前辈经验，在前期实在是连滚带爬了好一阵子，很是狼狈。回顾所来，还是有一点心得体会要写的，不过我写在这里，不管对与不对，总还是会有许多如我一般丝毫不去找前人经验的新人FO在，故这些文字，大约并不为多少人所读到，多是仅供自娱而已。
+1 起手式：版本 特性负责人，其实就是除了开发工作之外，还要负责起整个特性的前期计划、进度跟踪、后期联调和最终交付的角色。不同特性要求负责人在各个环节的投入比重差异实在很大，难以有一个普适的套路。
+就我负责的特性而言，我所要做的开发工作很少，主要是整合周边组件提供的功能；然而由于周边组件很多，就要求我要投入多数的时间用于总体计划的协商对齐上。开发岗位的惯性使我一开始忽略了计划的对齐，导致前期拟定的计划不断地出现缺漏——甚至于我自己的开发工作完成后，还是没有跟周边组件定下一个稳定可行的联调计划——整个特性前中期每天都处于一个高风险的状态，我的心绪也一直无法安宁下来，深受其害。
+由此我得到的经验是，特性负责人所要确定的第一个问题就是版本问题——确定双方版本、我们负责的新特性要在哪个周边版本联调、周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。
+我们当前用的是周边的什么版本、周边当前又已演进到什么版本。这是一个首要的问题。不认识这一点，就不能明白对方的开发基础和我们现有的基础之间的差异。假如对方的版本和我方的版本一致，那就可以轻松实现对接；假如对方的版本领先于我方版本，那就需要考虑兼容的问题，即对方新开发的功能，并不一定能直接迁移到我们现有的版本上。
+图1-1 双方版本配套：舒适地演进 图1-2 双方版本不配套的情况：对方特性未必可以迁移 我们的新特性要在哪个版本联调。当我们确定了当前使用的周边版本之后，要进一步确定联调版本。最舒适的做法是让周边组件基于我们当前使用的版本拉出一个新的代码分支，并将他们新开发的功能合入这个联调分支上，提供联调版本。这样的联调版本我们基本没有适配压力，可以开箱即用，是最佳选择。
+图1-3 联调版本集成 不过，很容易由于双方版本差距过大，以至于对方提出无法将功能合入老版本的代码上；这个时候，最好表现出我们作为特性负责人的强势，要求对面克服困难提供联调版本。尽量不要随便答应使用对方的新版本联调，因为对于我方来说，将周边版本升级是一个更加复杂的过程，涉及的方面远不只限于我们的特性本身，最终还是有很大概率不断地回到起点去重新制定联调计划，反而不如一开始就让对方基于我们现有的版本去合入新特性。
+我的这个小特性，正是由于联调计划迟迟无法对齐，导致开发完成之后无法立即启动联调。周边组件为了免除将新特性及其依赖功能合入旧版本的额外工作，提出了各种基于他们最新版本的联调方案，我方也花费了很多精力去开展这种本就风险很大的联调，最终将各组件拆的七零八落，也只能勉强地调一小部分功能，一直苟延残喘到我方正式对周边的新版本进行了适配，才做出一个比较完整的联调版本来。
+图1-4 最稳妥的联调方案：周边将新特性回合老版本 周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。各方都完成功能开发后，随着版本演进，自然会有一个版本集成了全部的功能，但问题在于一个特性的交付是有DDL的，我们要确保在DDL之前能够完整集成所有功能，就要确定双方的版本计划。
+以我的这个小特性来说，原先要求在 3-30 交付，由于早期没有对好版本计划，有一个组件交付在他们的 3-25 的版本上，而我们对这个版本的集成计划已经排到了 四月份之后！
+图1-5 版本集成节奏不满足特性交付需求 这样的问题在后期一出现，基本宣告特性延期交付。合理的做法是前期对好计划之后，就要告知周边尽快将特性交付到当前的版本上，才有可能在我方发布版本时集成所有功能。
+2 进阶式：求助 打好版本这套起手式，就足够装作老师傅了，此时整体特性的交付风险就将相当可控。不过，作为一个特性负责人，自己包办一切是不现实的，有非常多的东西在我们知识及能力范围之外，这时及时求助就会非常重要。按我的经历说来，下面几个角色是不可不打交道的。
+周边特性负责人。通常在跨部门的特性中，周边组件也会有特性负责人，不管是版本计划、周边进展、合作联调，都可以找这个负责人商议，即使TA搞不定这些问题，也会帮我们找到具体能解决问题的人物。
+我方 &#43;1 &#43;2 。特性不大的情况下，找上级或上上级就基本能摆平我们遇到的多数问题，他们会用丰富的经验帮我们把控当前的风险，以及在大佬比较多、问题比较复杂的会议上帮我们稳住节奏和心态。
+我方版本角色。玩版本的人都是狠人，我们的起手式里其实有相当多环节都可以请我方版本角色帮忙搞定，例如确定我方和周边的版本配套关系、商定联调版本的计划、确定我们的正式交付计划等等。这种问题，很大概率 &#43;1 &#43;2 也并不特别了解，如果在我们的求助列表中缺失了版本角色，就容易带着他们一起在版本问题上翻车（你猜猜这个教训从何而来）。
+我做这个小特性，既没把版本玩明白，又没在前期找准求助的对象，导致积重难返，延期交付，真是悲剧。
+3 终式：厚脸皮 对我来说，这个终式不算是什么经验，而应该算是我所悟到的优秀的特性负责人必须有的品质。我至今不能二话不说就打别人的电话，而总是寄望于对方看到我的留言后帮我解决问题。实际上，办事时脸皮一厚，就会让效率提高百倍。关注的重点不能放在对方是否被我们打扰，而应该放在我们是否需要对方快速响应这个问题好让工作继续推进下去。
+在我的认知里，这个终式简直是本文所有其他经验的基石，无论是最开始找周边的一帮素不相识的人商定计划，还是遇事不决就找领导们进行求助，都非脸皮厚如城墙不可。诚然有人认为这种东西实在稀松平常，就是日常工作所必须的部分，并没有我所说的这样夸张，但我必须指出，不同个体之性格天然迥异，正是也有一些较木讷内向的人阴错阳差地成为FO，且因为较木讷内向的性格导致了所谓“日常的”工作正在艰难地推进，我的这一小节的经验，就专为这些人而写，其中自然也包括我自己。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='日常' /><meta property='article:published_time' content='2023-03-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-03-26T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="特性负责人（FO）上手经验">
+<meta name="twitter:description" content="一个月前，被领导委派成为一个小特性的负责人，在我司的术语叫做 Feature Owner (FO) 的，给我平平无奇的人生又增加了一点毫不出彩的经历。
+由于是第一次做这么一个脚色，又托大并未去参考什么前辈经验，在前期实在是连滚带爬了好一阵子，很是狼狈。回顾所来，还是有一点心得体会要写的，不过我写在这里，不管对与不对，总还是会有许多如我一般丝毫不去找前人经验的新人FO在，故这些文字，大约并不为多少人所读到，多是仅供自娱而已。
+1 起手式：版本 特性负责人，其实就是除了开发工作之外，还要负责起整个特性的前期计划、进度跟踪、后期联调和最终交付的角色。不同特性要求负责人在各个环节的投入比重差异实在很大，难以有一个普适的套路。
+就我负责的特性而言，我所要做的开发工作很少，主要是整合周边组件提供的功能；然而由于周边组件很多，就要求我要投入多数的时间用于总体计划的协商对齐上。开发岗位的惯性使我一开始忽略了计划的对齐，导致前期拟定的计划不断地出现缺漏——甚至于我自己的开发工作完成后，还是没有跟周边组件定下一个稳定可行的联调计划——整个特性前中期每天都处于一个高风险的状态，我的心绪也一直无法安宁下来，深受其害。
+由此我得到的经验是，特性负责人所要确定的第一个问题就是版本问题——确定双方版本、我们负责的新特性要在哪个周边版本联调、周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。
+我们当前用的是周边的什么版本、周边当前又已演进到什么版本。这是一个首要的问题。不认识这一点，就不能明白对方的开发基础和我们现有的基础之间的差异。假如对方的版本和我方的版本一致，那就可以轻松实现对接；假如对方的版本领先于我方版本，那就需要考虑兼容的问题，即对方新开发的功能，并不一定能直接迁移到我们现有的版本上。
+图1-1 双方版本配套：舒适地演进 图1-2 双方版本不配套的情况：对方特性未必可以迁移 我们的新特性要在哪个版本联调。当我们确定了当前使用的周边版本之后，要进一步确定联调版本。最舒适的做法是让周边组件基于我们当前使用的版本拉出一个新的代码分支，并将他们新开发的功能合入这个联调分支上，提供联调版本。这样的联调版本我们基本没有适配压力，可以开箱即用，是最佳选择。
+图1-3 联调版本集成 不过，很容易由于双方版本差距过大，以至于对方提出无法将功能合入老版本的代码上；这个时候，最好表现出我们作为特性负责人的强势，要求对面克服困难提供联调版本。尽量不要随便答应使用对方的新版本联调，因为对于我方来说，将周边版本升级是一个更加复杂的过程，涉及的方面远不只限于我们的特性本身，最终还是有很大概率不断地回到起点去重新制定联调计划，反而不如一开始就让对方基于我们现有的版本去合入新特性。
+我的这个小特性，正是由于联调计划迟迟无法对齐，导致开发完成之后无法立即启动联调。周边组件为了免除将新特性及其依赖功能合入旧版本的额外工作，提出了各种基于他们最新版本的联调方案，我方也花费了很多精力去开展这种本就风险很大的联调，最终将各组件拆的七零八落，也只能勉强地调一小部分功能，一直苟延残喘到我方正式对周边的新版本进行了适配，才做出一个比较完整的联调版本来。
+图1-4 最稳妥的联调方案：周边将新特性回合老版本 周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。各方都完成功能开发后，随着版本演进，自然会有一个版本集成了全部的功能，但问题在于一个特性的交付是有DDL的，我们要确保在DDL之前能够完整集成所有功能，就要确定双方的版本计划。
+以我的这个小特性来说，原先要求在 3-30 交付，由于早期没有对好版本计划，有一个组件交付在他们的 3-25 的版本上，而我们对这个版本的集成计划已经排到了 四月份之后！
+图1-5 版本集成节奏不满足特性交付需求 这样的问题在后期一出现，基本宣告特性延期交付。合理的做法是前期对好计划之后，就要告知周边尽快将特性交付到当前的版本上，才有可能在我方发布版本时集成所有功能。
+2 进阶式：求助 打好版本这套起手式，就足够装作老师傅了，此时整体特性的交付风险就将相当可控。不过，作为一个特性负责人，自己包办一切是不现实的，有非常多的东西在我们知识及能力范围之外，这时及时求助就会非常重要。按我的经历说来，下面几个角色是不可不打交道的。
+周边特性负责人。通常在跨部门的特性中，周边组件也会有特性负责人，不管是版本计划、周边进展、合作联调，都可以找这个负责人商议，即使TA搞不定这些问题，也会帮我们找到具体能解决问题的人物。
+我方 &#43;1 &#43;2 。特性不大的情况下，找上级或上上级就基本能摆平我们遇到的多数问题，他们会用丰富的经验帮我们把控当前的风险，以及在大佬比较多、问题比较复杂的会议上帮我们稳住节奏和心态。
+我方版本角色。玩版本的人都是狠人，我们的起手式里其实有相当多环节都可以请我方版本角色帮忙搞定，例如确定我方和周边的版本配套关系、商定联调版本的计划、确定我们的正式交付计划等等。这种问题，很大概率 &#43;1 &#43;2 也并不特别了解，如果在我们的求助列表中缺失了版本角色，就容易带着他们一起在版本问题上翻车（你猜猜这个教训从何而来）。
+我做这个小特性，既没把版本玩明白，又没在前期找准求助的对象，导致积重难返，延期交付，真是悲剧。
+3 终式：厚脸皮 对我来说，这个终式不算是什么经验，而应该算是我所悟到的优秀的特性负责人必须有的品质。我至今不能二话不说就打别人的电话，而总是寄望于对方看到我的留言后帮我解决问题。实际上，办事时脸皮一厚，就会让效率提高百倍。关注的重点不能放在对方是否被我们打扰，而应该放在我们是否需要对方快速响应这个问题好让工作继续推进下去。
+在我的认知里，这个终式简直是本文所有其他经验的基石，无论是最开始找周边的一帮素不相识的人商定计划，还是遇事不决就找领导们进行求助，都非脸皮厚如城墙不可。诚然有人认为这种东西实在稀松平常，就是日常工作所必须的部分，并没有我所说的这样夸张，但我必须指出，不同个体之性格天然迥异，正是也有一些较木讷内向的人阴错阳差地成为FO，且因为较木讷内向的性格导致了所谓“日常的”工作正在艰难地推进，我的这一小节的经验，就专为这些人而写，其中自然也包括我自己。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E6%97%A5%E5%B8%B8/" style="background-color: #2a9d8f; color: #fff;">
+                日常
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/">特性负责人（FO）上手经验</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 26, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>一个月前，被领导委派成为一个小特性的负责人，在我司的术语叫做 <code>Feature Owner (FO)</code> 的，给我平平无奇的人生又增加了一点毫不出彩的经历。</p>
+<p>由于是第一次做这么一个脚色，又托大并未去参考什么前辈经验，在前期实在是连滚带爬了好一阵子，很是狼狈。回顾所来，还是有一点心得体会要写的，不过我写在这里，不管对与不对，总还是会有许多如我一般丝毫不去找前人经验的新人FO在，故这些文字，大约并不为多少人所读到，多是仅供自娱而已。</p>
+<h4 id="1-起手式版本">1 起手式：版本</h4>
+<p>特性负责人，其实就是除了开发工作之外，还要负责起整个特性的前期计划、进度跟踪、后期联调和最终交付的角色。不同特性要求负责人在各个环节的投入比重差异实在很大，难以有一个普适的套路。</p>
+<p>就我负责的特性而言，我所要做的开发工作很少，主要是整合周边组件提供的功能；然而由于周边组件很多，就要求我要投入多数的时间用于总体计划的协商对齐上。开发岗位的惯性使我一开始忽略了计划的对齐，导致前期拟定的计划不断地出现缺漏——甚至于我自己的开发工作完成后，还是没有跟周边组件定下一个稳定可行的联调计划——整个特性前中期每天都处于一个高风险的状态，我的心绪也一直无法安宁下来，深受其害。</p>
+<p>由此我得到的经验是，特性负责人所要确定的第一个问题就是版本问题——确定双方版本、我们负责的新特性要在哪个周边版本联调、周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。</p>
+<ul>
+<li>
+<p>我们当前用的是周边的什么版本、周边当前又已演进到什么版本。这是一个首要的问题。不认识这一点，就不能明白对方的开发基础和我们现有的基础之间的差异。假如对方的版本和我方的版本一致，那就可以轻松实现对接；假如对方的版本领先于我方版本，那就需要考虑兼容的问题，即对方新开发的功能，并不一定能直接迁移到我们现有的版本上。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 267; 
+			flex-basis: 641px"
+	>
+	<a href="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1.png" data-size="818x306">
+		<img src="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1.png"
+			width="818"
+			height="306"
+			srcset="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1_hu515941b4819eecac103b4516b473d67f_49394_480x0_resize_box_3.png 480w, /p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1_hu515941b4819eecac103b4516b473d67f_49394_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图1-1 双方版本配套：舒适地演进">
+	</a>
+	
+	<figcaption>图1-1 双方版本配套：舒适地演进</figcaption>
+	
+</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 406; 
+			flex-basis: 976px"
+	>
+	<a href="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2.png" data-size="1644x404">
+		<img src="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2.png"
+			width="1644"
+			height="404"
+			srcset="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2_hu610e4c7457c1471217dacdb2f8bc83bc_74113_480x0_resize_box_3.png 480w, /p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2_hu610e4c7457c1471217dacdb2f8bc83bc_74113_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图1-2 双方版本不配套的情况：对方特性未必可以迁移">
+	</a>
+	
+	<figcaption>图1-2 双方版本不配套的情况：对方特性未必可以迁移</figcaption>
+	
+</figure></p>
+</li>
+<li>
+<p>我们的新特性要在哪个版本联调。当我们确定了当前使用的周边版本之后，要进一步确定联调版本。最舒适的做法是让周边组件基于我们当前使用的版本拉出一个新的代码分支，并将他们新开发的功能合入这个联调分支上，提供联调版本。这样的联调版本我们基本没有适配压力，可以开箱即用，是最佳选择。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 367; 
+			flex-basis: 880px"
+	>
+	<a href="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3.png" data-size="1090x297">
+		<img src="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3.png"
+			width="1090"
+			height="297"
+			srcset="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3_hu025da62701f2104888c86ae6e2ab116d_66622_480x0_resize_box_3.png 480w, /p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3_hu025da62701f2104888c86ae6e2ab116d_66622_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图1-3 联调版本集成">
+	</a>
+	
+	<figcaption>图1-3 联调版本集成</figcaption>
+	
+</figure></p>
+<p>不过，很容易由于双方版本差距过大，以至于对方提出无法将功能合入老版本的代码上；这个时候，最好表现出我们作为特性负责人的强势，要求对面克服困难提供联调版本。尽量不要随便答应使用对方的新版本联调，因为对于我方来说，将周边版本升级是一个更加复杂的过程，涉及的方面远不只限于我们的特性本身，最终还是有很大概率不断地回到起点去重新制定联调计划，反而不如一开始就让对方基于我们现有的版本去合入新特性。</p>
+<p>我的这个小特性，正是由于联调计划迟迟无法对齐，导致开发完成之后无法立即启动联调。周边组件为了免除将新特性及其依赖功能合入旧版本的额外工作，提出了各种基于他们最新版本的联调方案，我方也花费了很多精力去开展这种本就风险很大的联调，最终将各组件拆的七零八落，也只能勉强地调一小部分功能，一直苟延残喘到我方正式对周边的新版本进行了适配，才做出一个比较完整的联调版本来。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 320; 
+			flex-basis: 769px"
+	>
+	<a href="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4.png" data-size="1333x416">
+		<img src="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4.png"
+			width="1333"
+			height="416"
+			srcset="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4_hu72908c2d9b22f52fa6343d8bfb69320c_84316_480x0_resize_box_3.png 480w, /p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4_hu72908c2d9b22f52fa6343d8bfb69320c_84316_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图1-4 最稳妥的联调方案：周边将新特性回合老版本">
+	</a>
+	
+	<figcaption>图1-4 最稳妥的联调方案：周边将新特性回合老版本</figcaption>
+	
+</figure></p>
+</li>
+<li>
+<p>周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。各方都完成功能开发后，随着版本演进，自然会有一个版本集成了全部的功能，但问题在于一个特性的交付是有DDL的，我们要确保在DDL之前能够完整集成所有功能，就要确定双方的版本计划。</p>
+<p>以我的这个小特性来说，原先要求在 <code>3-30</code> 交付，由于早期没有对好版本计划，有一个组件交付在他们的 <code>3-25</code> 的版本上，而我们对这个版本的集成计划已经排到了 <strong>四月份之后！</strong></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 310; 
+			flex-basis: 744px"
+	>
+	<a href="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5.png" data-size="1346x434">
+		<img src="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5.png"
+			width="1346"
+			height="434"
+			srcset="/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5_hue30f7b494634fbf8af258f28c6ca988a_92929_480x0_resize_box_3.png 480w, /p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5_hue30f7b494634fbf8af258f28c6ca988a_92929_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图1-5 版本集成节奏不满足特性交付需求">
+	</a>
+	
+	<figcaption>图1-5 版本集成节奏不满足特性交付需求</figcaption>
+	
+</figure></p>
+<p>这样的问题在后期一出现，基本宣告特性延期交付。合理的做法是前期对好计划之后，就要告知周边尽快将特性交付到当前的版本上，才有可能在我方发布版本时集成所有功能。</p>
+</li>
+</ul>
+<h4 id="2-进阶式求助">2 进阶式：求助</h4>
+<p>打好版本这套起手式，就足够装作老师傅了，此时整体特性的交付风险就将相当可控。不过，作为一个特性负责人，自己包办一切是不现实的，有非常多的东西在我们知识及能力范围之外，这时及时求助就会非常重要。按我的经历说来，下面几个角色是不可不打交道的。</p>
+<ul>
+<li>
+<p>周边特性负责人。通常在跨部门的特性中，周边组件也会有特性负责人，不管是版本计划、周边进展、合作联调，都可以找这个负责人商议，即使TA搞不定这些问题，也会帮我们找到具体能解决问题的人物。</p>
+</li>
+<li>
+<p>我方 <code>+1</code> <code>+2</code> 。特性不大的情况下，找上级或上上级就基本能摆平我们遇到的多数问题，他们会用丰富的经验帮我们把控当前的风险，以及在大佬比较多、问题比较复杂的会议上帮我们稳住节奏和心态。</p>
+</li>
+<li>
+<p>我方版本角色。玩版本的人都是狠人，我们的起手式里其实有相当多环节都可以请我方版本角色帮忙搞定，例如确定我方和周边的版本配套关系、商定联调版本的计划、确定我们的正式交付计划等等。这种问题，很大概率 <code>+1</code> <code>+2</code> 也并不特别了解，如果在我们的求助列表中缺失了版本角色，就容易带着他们一起在版本问题上翻车（你猜猜这个教训从何而来）。</p>
+</li>
+</ul>
+<p>我做这个小特性，既没把版本玩明白，又没在前期找准求助的对象，导致积重难返，延期交付，真是悲剧。</p>
+<h4 id="3-终式厚脸皮">3 终式：厚脸皮</h4>
+<p>对我来说，这个终式不算是什么经验，而应该算是我所悟到的优秀的特性负责人必须有的品质。我至今不能二话不说就打别人的电话，而总是寄望于对方看到我的留言后帮我解决问题。实际上，办事时脸皮一厚，就会让效率提高百倍。关注的重点不能放在对方是否被我们打扰，而应该放在我们是否需要对方快速响应这个问题好让工作继续推进下去。</p>
+<p>在我的认知里，这个终式简直是本文所有其他经验的基石，无论是最开始找周边的一帮素不相识的人商定计划，还是遇事不决就找领导们进行求助，都非脸皮厚如城墙不可。诚然有人认为这种东西实在稀松平常，就是日常工作所必须的部分，并没有我所说的这样夸张，但我必须指出，不同个体之性格天然迥异，正是也有一些较木讷内向的人阴错阳差地成为FO，且因为较木讷内向的性格导致了所谓“日常的”工作正在艰难地推进，我的这一小节的经验，就专为这些人而写，其中自然也包括我自己。</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%97%A5%E5%B8%B8/">日常</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E8%BD%AC%E6%AD%A3%E7%AD%94%E8%BE%A9%E7%BB%8F%E9%AA%8C/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">转正答辩经验</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 20, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E7%A6%8F%E5%B7%9E%E6%B8%B8%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">福州游记</h2>
+            <footer class="article-time">
+                <time datetime=''>Jan 20, 2022</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E8%A7%82%E6%89%AC%E5%90%8D%E7%AB%8B%E4%B8%87/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">观《扬名立万》</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 26, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%86%8D%E8%AF%BB%E8%BF%9E%E5%9F%8E%E8%AF%80/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">再读《连城诀》</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 22, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%86%8D%E8%AF%BB%E5%80%9A%E5%A4%A9%E5%B1%A0%E9%BE%99%E8%AE%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">再读《倚天屠龙记》</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 10, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-起手式版本">1 起手式：版本</a></li>
+        <li><a href="#2-进阶式求助">2 进阶式：求助</a></li>
+        <li><a href="#3-终式厚脸皮">3 终式：厚脸皮</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

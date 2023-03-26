@@ -6,7 +6,148 @@
         <description>Recent content on XR_G&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 20 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 26 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>特性负责人（FO）上手经验</title>
+        <link>https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/</link>
+        <pubDate>Sun, 26 Mar 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/</guid>
+        <description>&lt;p&gt;一个月前，被领导委派成为一个小特性的负责人，在我司的术语叫做 &lt;code&gt;Feature Owner (FO)&lt;/code&gt; 的，给我平平无奇的人生又增加了一点毫不出彩的经历。&lt;/p&gt;
+&lt;p&gt;由于是第一次做这么一个脚色，又托大并未去参考什么前辈经验，在前期实在是连滚带爬了好一阵子，很是狼狈。回顾所来，还是有一点心得体会要写的，不过我写在这里，不管对与不对，总还是会有许多如我一般丝毫不去找前人经验的新人FO在，故这些文字，大约并不为多少人所读到，多是仅供自娱而已。&lt;/p&gt;
+&lt;h4 id=&#34;1-起手式版本&#34;&gt;1 起手式：版本&lt;/h4&gt;
+&lt;p&gt;特性负责人，其实就是除了开发工作之外，还要负责起整个特性的前期计划、进度跟踪、后期联调和最终交付的角色。不同特性要求负责人在各个环节的投入比重差异实在很大，难以有一个普适的套路。&lt;/p&gt;
+&lt;p&gt;就我负责的特性而言，我所要做的开发工作很少，主要是整合周边组件提供的功能；然而由于周边组件很多，就要求我要投入多数的时间用于总体计划的协商对齐上。开发岗位的惯性使我一开始忽略了计划的对齐，导致前期拟定的计划不断地出现缺漏——甚至于我自己的开发工作完成后，还是没有跟周边组件定下一个稳定可行的联调计划——整个特性前中期每天都处于一个高风险的状态，我的心绪也一直无法安宁下来，深受其害。&lt;/p&gt;
+&lt;p&gt;由此我得到的经验是，特性负责人所要确定的第一个问题就是版本问题——确定双方版本、我们负责的新特性要在哪个周边版本联调、周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;我们当前用的是周边的什么版本、周边当前又已演进到什么版本。这是一个首要的问题。不认识这一点，就不能明白对方的开发基础和我们现有的基础之间的差异。假如对方的版本和我方的版本一致，那就可以轻松实现对接；假如对方的版本领先于我方版本，那就需要考虑兼容的问题，即对方新开发的功能，并不一定能直接迁移到我们现有的版本上。&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 267; 
+			flex-basis: 641px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1.png&#34; data-size=&#34;818x306&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1.png&#34;
+			width=&#34;818&#34;
+			height=&#34;306&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1_hu515941b4819eecac103b4516b473d67f_49394_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/1_hu515941b4819eecac103b4516b473d67f_49394_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;图1-1 双方版本配套：舒适地演进&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;图1-1 双方版本配套：舒适地演进&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 406; 
+			flex-basis: 976px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2.png&#34; data-size=&#34;1644x404&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2.png&#34;
+			width=&#34;1644&#34;
+			height=&#34;404&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2_hu610e4c7457c1471217dacdb2f8bc83bc_74113_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/2_hu610e4c7457c1471217dacdb2f8bc83bc_74113_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;图1-2 双方版本不配套的情况：对方特性未必可以迁移&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;图1-2 双方版本不配套的情况：对方特性未必可以迁移&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们的新特性要在哪个版本联调。当我们确定了当前使用的周边版本之后，要进一步确定联调版本。最舒适的做法是让周边组件基于我们当前使用的版本拉出一个新的代码分支，并将他们新开发的功能合入这个联调分支上，提供联调版本。这样的联调版本我们基本没有适配压力，可以开箱即用，是最佳选择。&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 367; 
+			flex-basis: 880px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3.png&#34; data-size=&#34;1090x297&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3.png&#34;
+			width=&#34;1090&#34;
+			height=&#34;297&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3_hu025da62701f2104888c86ae6e2ab116d_66622_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/3_hu025da62701f2104888c86ae6e2ab116d_66622_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;图1-3 联调版本集成&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;图1-3 联调版本集成&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;不过，很容易由于双方版本差距过大，以至于对方提出无法将功能合入老版本的代码上；这个时候，最好表现出我们作为特性负责人的强势，要求对面克服困难提供联调版本。尽量不要随便答应使用对方的新版本联调，因为对于我方来说，将周边版本升级是一个更加复杂的过程，涉及的方面远不只限于我们的特性本身，最终还是有很大概率不断地回到起点去重新制定联调计划，反而不如一开始就让对方基于我们现有的版本去合入新特性。&lt;/p&gt;
+&lt;p&gt;我的这个小特性，正是由于联调计划迟迟无法对齐，导致开发完成之后无法立即启动联调。周边组件为了免除将新特性及其依赖功能合入旧版本的额外工作，提出了各种基于他们最新版本的联调方案，我方也花费了很多精力去开展这种本就风险很大的联调，最终将各组件拆的七零八落，也只能勉强地调一小部分功能，一直苟延残喘到我方正式对周边的新版本进行了适配，才做出一个比较完整的联调版本来。&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 320; 
+			flex-basis: 769px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4.png&#34; data-size=&#34;1333x416&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4.png&#34;
+			width=&#34;1333&#34;
+			height=&#34;416&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4_hu72908c2d9b22f52fa6343d8bfb69320c_84316_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/4_hu72908c2d9b22f52fa6343d8bfb69320c_84316_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;图1-4 最稳妥的联调方案：周边将新特性回合老版本&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;图1-4 最稳妥的联调方案：周边将新特性回合老版本&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;周边特性打算在哪个版本交付、最终要在我们的哪个版本集成。各方都完成功能开发后，随着版本演进，自然会有一个版本集成了全部的功能，但问题在于一个特性的交付是有DDL的，我们要确保在DDL之前能够完整集成所有功能，就要确定双方的版本计划。&lt;/p&gt;
+&lt;p&gt;以我的这个小特性来说，原先要求在 &lt;code&gt;3-30&lt;/code&gt; 交付，由于早期没有对好版本计划，有一个组件交付在他们的 &lt;code&gt;3-25&lt;/code&gt; 的版本上，而我们对这个版本的集成计划已经排到了 &lt;strong&gt;四月份之后！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 310; 
+			flex-basis: 744px&#34;
+	&gt;
+	&lt;a href=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5.png&#34; data-size=&#34;1346x434&#34;&gt;
+		&lt;img src=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5.png&#34;
+			width=&#34;1346&#34;
+			height=&#34;434&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5_hue30f7b494634fbf8af258f28c6ca988a_92929_480x0_resize_box_3.png 480w, https://xrg.fj.cn/p/%E7%89%B9%E6%80%A7%E8%B4%9F%E8%B4%A3%E4%BA%BAfo%E4%B8%8A%E6%89%8B%E7%BB%8F%E9%AA%8C/5_hue30f7b494634fbf8af258f28c6ca988a_92929_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;图1-5 版本集成节奏不满足特性交付需求&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;图1-5 版本集成节奏不满足特性交付需求&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;这样的问题在后期一出现，基本宣告特性延期交付。合理的做法是前期对好计划之后，就要告知周边尽快将特性交付到当前的版本上，才有可能在我方发布版本时集成所有功能。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;2-进阶式求助&#34;&gt;2 进阶式：求助&lt;/h4&gt;
+&lt;p&gt;打好版本这套起手式，就足够装作老师傅了，此时整体特性的交付风险就将相当可控。不过，作为一个特性负责人，自己包办一切是不现实的，有非常多的东西在我们知识及能力范围之外，这时及时求助就会非常重要。按我的经历说来，下面几个角色是不可不打交道的。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;周边特性负责人。通常在跨部门的特性中，周边组件也会有特性负责人，不管是版本计划、周边进展、合作联调，都可以找这个负责人商议，即使TA搞不定这些问题，也会帮我们找到具体能解决问题的人物。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我方 &lt;code&gt;+1&lt;/code&gt; &lt;code&gt;+2&lt;/code&gt; 。特性不大的情况下，找上级或上上级就基本能摆平我们遇到的多数问题，他们会用丰富的经验帮我们把控当前的风险，以及在大佬比较多、问题比较复杂的会议上帮我们稳住节奏和心态。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我方版本角色。玩版本的人都是狠人，我们的起手式里其实有相当多环节都可以请我方版本角色帮忙搞定，例如确定我方和周边的版本配套关系、商定联调版本的计划、确定我们的正式交付计划等等。这种问题，很大概率 &lt;code&gt;+1&lt;/code&gt; &lt;code&gt;+2&lt;/code&gt; 也并不特别了解，如果在我们的求助列表中缺失了版本角色，就容易带着他们一起在版本问题上翻车（你猜猜这个教训从何而来）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我做这个小特性，既没把版本玩明白，又没在前期找准求助的对象，导致积重难返，延期交付，真是悲剧。&lt;/p&gt;
+&lt;h4 id=&#34;3-终式厚脸皮&#34;&gt;3 终式：厚脸皮&lt;/h4&gt;
+&lt;p&gt;对我来说，这个终式不算是什么经验，而应该算是我所悟到的优秀的特性负责人必须有的品质。我至今不能二话不说就打别人的电话，而总是寄望于对方看到我的留言后帮我解决问题。实际上，办事时脸皮一厚，就会让效率提高百倍。关注的重点不能放在对方是否被我们打扰，而应该放在我们是否需要对方快速响应这个问题好让工作继续推进下去。&lt;/p&gt;
+&lt;p&gt;在我的认知里，这个终式简直是本文所有其他经验的基石，无论是最开始找周边的一帮素不相识的人商定计划，还是遇事不决就找领导们进行求助，都非脸皮厚如城墙不可。诚然有人认为这种东西实在稀松平常，就是日常工作所必须的部分，并没有我所说的这样夸张，但我必须指出，不同个体之性格天然迥异，正是也有一些较木讷内向的人阴错阳差地成为FO，且因为较木讷内向的性格导致了所谓“日常的”工作正在艰难地推进，我的这一小节的经验，就专为这些人而写，其中自然也包括我自己。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>转正答辩经验</title>
         <link>https://xrg.fj.cn/p/%E8%BD%AC%E6%AD%A3%E7%AD%94%E8%BE%A9%E7%BB%8F%E9%AA%8C/</link>
         <pubDate>Sun, 20 Nov 2022 00:00:00 +0000</pubDate>
@@ -49,7 +190,7 @@
 &lt;p&gt;自我介绍部分，花一至二页的篇幅，让评委们知道你是从哪儿毕业的，啥时候入职的，在什么团队里负责什么事情等等……之前看过一些经验贴（找不到了，不做reference了 😆），会在自我介绍部分贴上自己的实习经历啥的，我认为 &lt;strong&gt;完全没必要&lt;/strong&gt; ，因为这不是转正答辩的重点，且会占用一定的篇幅和时长，除非这段实习经历确实很酷炫，否则不要加。此外，我认为 &lt;strong&gt;在什么团队负责什么事情&lt;/strong&gt; 是一定要写的，因为这可以算是这篇“文章”的总起句，我们的核心——工作总结——是围绕这个展开的。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;工作总结部分，主要就是讲讲使用期间做了哪些事情。我认为这部分可以是一个小总—分结构，先对整体的时间分配、整体的工作输出情况做个总结，然后分开讲不同的事情。在陈述某一件具体的工作的时候，不需要总分，只要把背景——实施——结果——收获讲清楚就行，或者也可以参考STAR法则 &lt;!-- raw HTML omitted --&gt;[2]&lt;!-- raw HTML omitted --&gt; ，即背景 &lt;em&gt;Situation&lt;/em&gt; 、任务 &lt;em&gt;Task&lt;/em&gt; 、行动 &lt;em&gt;Action&lt;/em&gt; 和结果 &lt;em&gt;Result&lt;/em&gt; 来陈述这件事。我自己的想法是，没必要把具体做的事情展开的非常详细，重点还是围绕 &lt;strong&gt;难点和如何克服难点&lt;/strong&gt; 来展开。此前还看过一些经验贴，认为需要把自己对这件事情的思考体现出来，我觉得这个可以放在收获部分来写，浅提一笔没有问题，展开太多则会显得言之无物。&lt;/p&gt;
+&lt;p&gt;工作总结部分，主要就是讲讲试用期间做了哪些事情。我认为这部分可以是一个小总—分结构，先对整体的时间分配、整体的工作输出情况做个总结，然后分开讲不同的事情。在陈述某一件具体的工作的时候，不需要总分，只要把背景——实施——结果——收获讲清楚就行，或者也可以参考STAR法则 &lt;!-- raw HTML omitted --&gt;[2]&lt;!-- raw HTML omitted --&gt; ，即背景 &lt;em&gt;Situation&lt;/em&gt; 、任务 &lt;em&gt;Task&lt;/em&gt; 、行动 &lt;em&gt;Action&lt;/em&gt; 和结果 &lt;em&gt;Result&lt;/em&gt; 来陈述这件事。我自己的想法是，没必要把具体做的事情展开的非常详细，重点还是围绕 &lt;strong&gt;难点和如何克服难点&lt;/strong&gt; 来展开。此前还看过一些经验贴，认为需要把自己对这件事情的思考体现出来，我觉得这个可以放在收获部分来写，浅提一笔没有问题，展开太多则会显得言之无物。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;不足与展望，很常规，很多答辩都是有这个部分的，主要简单讲讲试用期间发现的自己的不足，以及下阶段的工作计划。讲不足的时候要提一嘴之后打算怎么改正，发现问题谁都会，更重要的是解决问题的方案；讲计划的时候可以分为短期、中期和长期计划，我自己只写了短期和中期计划，毕竟长期计划写了也没啥用，而且尺度不好拿捏。&lt;/p&gt;
@@ -1753,11 +1894,11 @@
 &lt;p&gt;建议 &lt;strong&gt;不要使用&lt;/strong&gt; 官网介绍的下载办法：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# 错误案例：&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# winget&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;winget&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;install&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JanDeDobbeleer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;OhMyPosh&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-s&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;winget&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;winget&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;install&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JanDeDobbeleer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;OhMyPosh&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-s&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;winget&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;#scoop&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scoop&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;install&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;https&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;github&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;JanDeDobbeleer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;oh-my&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-posh&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;releases&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;latest&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;download&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;oh-my&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-posh&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;json&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scoop&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;install&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;https&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;github&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;JanDeDobbeleer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;oh-my&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-posh&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;releases&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;latest&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;download&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;oh-my&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-posh&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;json&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# manual&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;Set-ExecutionPolicy&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Bypass&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Scope&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;Process&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Force&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Invoke-Expression&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;New-Object&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Net&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WebClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DownloadString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;https://ohmyposh.dev/install.ps1&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;Set-ExecutionPolicy&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Bypass&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Scope&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;Process&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;-Force&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Invoke-Expression&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;New-Object&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;Net&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WebClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;DownloadString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;https://ohmyposh.dev/install.ps1&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。&lt;/p&gt;
 &lt;p&gt;可以手动下载上述命令中提到的安装脚本 &lt;a class=&#34;link&#34; href=&#34;https://ohmyposh.dev/install.ps1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://ohmyposh.dev/install.ps1&lt;/a&gt; ，看一眼就知道实际上它就是到 &lt;a class=&#34;link&#34; href=&#34;https://github.com/JanDeDobbeleer/oh-my-posh/releases&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -1773,13 +1914,13 @@
 &lt;p&gt;万事俱备，接下来配置 &lt;code&gt;powershell&lt;/code&gt; 的启动项，来使每次打开它的时候都自动运行 &lt;code&gt;oh-my-posh&lt;/code&gt; 。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;首先&lt;/strong&gt; 使用命令 &lt;code&gt;Set-ExecutionPolicy Unrestricted&lt;/code&gt; 解除脚本运行限制，否则无法在启动时执行 &lt;code&gt;oh-my-posh&lt;/code&gt; 。&lt;/p&gt;
 &lt;p&gt;接着使用命令 &lt;code&gt;echo $PROFILE&lt;/code&gt; 看一下自己系统上 &lt;code&gt;powershell&lt;/code&gt; 启动项文件的路径，如果系统上不存在这个文件的话可以新建一个。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;PS &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;C:&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Users&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;10924&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo &lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$PROFILE&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;C:&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Users&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;10924&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Documents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WindowsPowerShell&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Microsoft&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PowerShell_profile&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ps1&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;PS &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;C:&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Users&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;10924&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo &lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$PROFILE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;C:&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Users&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;10924&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Documents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WindowsPowerShell&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;\&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Microsoft&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;PowerShell_profile&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;py&#34;&gt;ps1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# 如果文件管理器找不到这个路径可以新建&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# New-Item -Path $PROFILE -Type File -Force&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用 &lt;code&gt;notepad&lt;/code&gt; 或其他任何编辑器在这个文件里写上：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;oh-my&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-posh&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;init&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pwsh&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;主题路径&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Invoke-Expression&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;oh-my&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-posh&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;init&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pwsh&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;-config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;主题路径&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Invoke-Expression&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;保存，重启 &lt;code&gt;powershell&lt;/code&gt; 即可。&lt;/p&gt;
 &lt;p&gt;&lt;figure 
 	
@@ -3032,26 +3173,26 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;opacity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;-webkit-scrollbar&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;width&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;px&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;-webkit-scrollbar-track&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;background-color&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;transparent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;-webkit-scrollbar-thumb&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;background-color&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;#d6dee1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;border-radius&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;px&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;border&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;px&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;solid&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;transparent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;background-clip&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;content-box&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;-webkit-scrollbar-thumb&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;hover&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;background-color&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;#a8bbbf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;style&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;script&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;script&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
@@ -3062,7 +3203,7 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;card_offset_scrolltop&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;card&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;offset&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;top&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;scrollTop&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;card&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;css&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;--data-offset-top&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;card_offset_scrolltop&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;px&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;card&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toggleClass&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;active&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;height&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
@@ -3247,7 +3388,7 @@ $$&lt;/p&gt;
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1.gif&#34;
 			width=&#34;1765&#34;
 			height=&#34;940&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;目前的效果（动图）&#34;&gt;
 	&lt;/a&gt;
@@ -3349,7 +3490,7 @@ $$&lt;/p&gt;
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5.gif&#34;
 			width=&#34;1764&#34;
 			height=&#34;940&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;最终缩放效果&#34;&gt;
 	&lt;/a&gt;
@@ -3372,7 +3513,7 @@ $$&lt;/p&gt;
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6.gif&#34;
 			width=&#34;1760&#34;
 			height=&#34;936&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;点击事件意外触发&#34;&gt;
 	&lt;/a&gt;
@@ -3401,7 +3542,7 @@ $$&lt;/p&gt;
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7.gif&#34;
 			width=&#34;1758&#34;
 			height=&#34;939&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;修复后的点击事件&#34;&gt;
 	&lt;/a&gt;
@@ -3422,7 +3563,7 @@ $$&lt;/p&gt;
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8.gif&#34;
 			width=&#34;1771&#34;
 			height=&#34;939&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;缩放细节不到位&#34;&gt;
 	&lt;/a&gt;
@@ -3455,7 +3596,7 @@ $$&lt;/p&gt;
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9.gif&#34;
 			width=&#34;1920&#34;
 			height=&#34;1080&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;最终效果&#34;&gt;
 	&lt;/a&gt;
@@ -3483,7 +3624,7 @@ $$&lt;/p&gt;
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10.gif&#34;
 			width=&#34;317&#34;
 			height=&#34;417&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;未登录链接&#34;&gt;
 	&lt;/a&gt;
@@ -6112,7 +6253,7 @@ $$
 		&lt;img src=&#34;https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading.gif&#34;
 			width=&#34;1436&#34;
 			height=&#34;805&#34;
-			srcset=&#34;https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading_hu86d2a74fb92551c2b6b068bb08714db9_235832_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading_hu86d2a74fb92551c2b6b068bb08714db9_235832_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading_hu86d2a74fb92551c2b6b068bb08714db9_235832_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/hugo-stack%E4%B8%BB%E9%A2%98%E6%9B%B4%E6%96%B0%E5%B0%8F%E8%AE%B0/loading_hu86d2a74fb92551c2b6b068bb08714db9_235832_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;动画效果展示&#34;&gt;
 	&lt;/a&gt;
@@ -10045,7 +10186,7 @@ $$
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9.gif&#34;
 			width=&#34;1209&#34;
 			height=&#34;947&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu26c844b4ce06d9e09888e5bcdb1738be_1203441_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu26c844b4ce06d9e09888e5bcdb1738be_1203441_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu26c844b4ce06d9e09888e5bcdb1738be_1203441_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E5%B0%9D%E5%B0%9D%E9%B2%9C%E4%B8%BA%E8%87%AA%E5%B7%B1%E8%A3%85%E4%B8%80%E5%8F%B0mac-os%E8%99%9A%E6%8B%9F%E6%9C%BA/9_hu26c844b4ce06d9e09888e5bcdb1738be_1203441_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;MacOS animation&#34;&gt;
 	&lt;/a&gt;
@@ -10572,7 +10713,7 @@ $$
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5.gif&#34;
 			width=&#34;1124&#34;
 			height=&#34;659&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode208.-%E5%AE%9E%E7%8E%B0-trie-%E5%89%8D%E7%BC%80%E6%A0%91/5_hu07f04639758101bec7ef9508e66c5117_68740_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;Trie.insert(&amp;ldquo;bye&amp;rdquo;)&#34;&gt;
 	&lt;/a&gt;
@@ -11007,7 +11148,7 @@ $$
 		&lt;img src=&#34;https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/3.gif&#34;
 			width=&#34;1189&#34;
 			height=&#34;536&#34;
-			srcset=&#34;https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/3_huf3a5b14ebbdd188bb605e8c6d833652d_136613_480x0_resize_box.gif 480w, https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/3_huf3a5b14ebbdd188bb605e8c6d833652d_136613_1024x0_resize_box.gif 1024w&#34;
+			srcset=&#34;https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/3_huf3a5b14ebbdd188bb605e8c6d833652d_136613_480x0_resize_box_1.gif 480w, https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode80.-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9-ii/3_huf3a5b14ebbdd188bb605e8c6d833652d_136613_1024x0_resize_box_1.gif 1024w&#34;
 			loading=&#34;lazy&#34;
 			alt=&#34;Tets&#34;&gt;
 	&lt;/a&gt;
@@ -17597,131 +17738,6 @@ $$
 &lt;blockquote&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;em&gt;2022-03-16注：岁月不居，时节如流，Gitee Page的易用性已经得到了很大的提升，且我的博客主题早已不是keepit了；&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://xrg.fj.cn/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://xrg.fj.cn/p/</guid>
-        <description>&lt;h1 id=&#34;转正答辩讲稿&#34;&gt;转正答辩讲稿&lt;/h1&gt;
-&lt;h2 id=&#34;0-开场&#34;&gt;0 开场&lt;/h2&gt;
-&lt;p&gt;各位领导下午好，我叫郭洵睿，来自公共服务开发部，我的主管是xxx，导师是xxx，下面我将对我试用期的总体情况进行汇报。&lt;/p&gt;
-&lt;p&gt;我的报告分为五个部分，报告的核心是工作汇报以及经过这段时间的工作而得到的总结和反思。&lt;/p&gt;
-&lt;p&gt;在开始汇报之前，先进行一个简单的自我介绍。&lt;/p&gt;
-&lt;h2 id=&#34;1-自我介绍&#34;&gt;1 自我介绍&lt;/h2&gt;
-&lt;p&gt;我于2000年出生于福建，2022年本科毕业于北京邮电大学网络空间安全学院，2022年7月4日加入华为，就职于公共服务开发部OM团队，主要负责安全模块的一些开发工作，我的PL是xxx。&lt;/p&gt;
-&lt;p&gt;我自认为是一个热爱创造、热爱思考、热爱实践的人，我在这段时间以来所接触的工作内容，不断地加深我对这三个标签的认可，那么接下来我就对入职四个多月以来所参与的一些事情进行一个总的汇报。&lt;/p&gt;
-&lt;h2 id=&#34;2-工作汇报&#34;&gt;2 工作汇报&lt;/h2&gt;
-&lt;p&gt;&lt;em&gt;图片：时间线&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;这张图是我入职至今所经历的一个时间主线，我主要完成了这四件事情。&lt;/p&gt;
-&lt;h3 id=&#34;21-om兼容安全清除传感器密钥略&#34;&gt;2.1 OM兼容安全清除传感器密钥（略）&lt;/h3&gt;
-&lt;p&gt;第一件事情是我入职以来接到的第一个需求。这个需求的名字是OM兼容安全清除传感器密钥和新鲜值。我以密钥为例，简单地讲一下它的背景。&lt;/p&gt;
-&lt;h4 id=&#34;211-背景&#34;&gt;2.1.1 背景&lt;/h4&gt;
-&lt;p&gt;我们的MDC和传感器部件之间，需要进行设备认证，只有完成了这个认证，才能开展后续的自驾等等功能。那么这个设备认证是怎么完成的呢？现在的方案是通过SecOC协议，让MDC和传感器之间基于共享的SecOC对称密钥，基于挑战应答完成设备认证。&lt;/p&gt;
-&lt;p&gt;这把SecOC密钥，通常在车厂产线完成密钥学习，那么，比如在工厂，或者售后，就会出现需要让已经学习过的传感器清除掉这把密钥，然后重新学习的场景。&lt;/p&gt;
-&lt;p&gt;这个密钥清除，以往的方案是使用一个明文报文，那就使得攻击者很容易地得到这个报文当中承载的信息，从而可以伪造密钥清除指令，最后对我们的设备认证进行破坏。&lt;/p&gt;
-&lt;h4 id=&#34;212-方案&#34;&gt;2.1.2 方案&lt;/h4&gt;
-&lt;p&gt;对这种情况的安全加固方案，就是将密钥清除的报文改为密文，加密使用的对称密钥是双方各自安全保存的，这样就使得攻击者没办法简单地伪造密钥清除指令。&lt;/p&gt;
-&lt;p&gt;这件事的实现非常简单，按照约定的安全报文格式，构造安全报文，在清除密钥时首先发送安全报文，对于老版本的不支持安全报文的传感器，我们的兼容方案是在发送完安全报文之后等待500ms，主动查询一次传感器的学习状态，如果它的密钥还未被清除，就向它再发送一次非安全报文。&lt;/p&gt;
-&lt;h4 id=&#34;213-最终价值&#34;&gt;2.1.3 最终价值&lt;/h4&gt;
-&lt;p&gt;这个需求实际上是一个安全需求，它为产品带来的价值也是安全方面的能力提升，更加巩固了我们的功能安全防线，为可信目标添砖加瓦。&lt;/p&gt;
-&lt;h3 id=&#34;22-一键式密钥灌装略&#34;&gt;2.2 一键式密钥灌装（略）&lt;/h3&gt;
-&lt;p&gt;&lt;em&gt;图片：时间线&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;完成了第一件事情之后，随即开展了内部的一键式密钥灌装的开发。&lt;/p&gt;
-&lt;h4 id=&#34;221-背景&#34;&gt;2.2.1 背景&lt;/h4&gt;
-&lt;p&gt;我们的单板，通常要走过我们的产线，那么在产线上，就会去灌装一些预置的密钥，通过这些密钥来完成最初的加密保障。&lt;/p&gt;
-&lt;p&gt;我们的调测环境，通常是不会走过产线的，或者说走过了产线，但经常就会随着各种测试版本的不断刷新，出现重新进行密钥灌装的需求。通常，这个密钥灌装的需求是找到我的PL，或者是我的组内的同事，那么随着单板数量的增加总是手动灌装就显得比较繁琐。&lt;/p&gt;
-&lt;h4 id=&#34;222-方案&#34;&gt;2.2.2 方案&lt;/h4&gt;
-&lt;p&gt;其实我们是为产线提供了自动化的脚本的，只不过是分散为若干个不同功能的文件，那一键式的密钥灌装，就希望将密钥灌装的功能整合到我们OMG工具上，让大家点几个按钮就把密钥灌装完成，节约大家的时间。&lt;/p&gt;
-&lt;p&gt;我所做的事情就是快速地将现有的脚本完成整合，输出一些易用的接口给到OMG，也就是我们OM组的其他同事负责的一个工具，让他们集成我们这个功能。&lt;/p&gt;
-&lt;p&gt;这个事情目前来说是形成了这样的界面，OMG会自动调用我们的接口去检测环境上有哪些密钥，然后用户点击按钮就可以完成这把密钥的灌装。&lt;/p&gt;
-&lt;h4 id=&#34;223-最终价值&#34;&gt;2.2.3 最终价值&lt;/h4&gt;
-&lt;p&gt;无&lt;/p&gt;
-&lt;h4 id=&#34;224-aar&#34;&gt;2.2.4 AAR&lt;/h4&gt;
-&lt;p&gt;这个事情是一个内部的需求，由于依赖的复杂性，目前是还没有形成非常可靠的灌装能力。&lt;/p&gt;
-&lt;h3 id=&#34;23-n50密钥学习详&#34;&gt;2.3 N50密钥学习（详）&lt;/h3&gt;
-&lt;h4 id=&#34;231-背景&#34;&gt;2.3.1 背景&lt;/h4&gt;
-&lt;h4 id=&#34;232-方案&#34;&gt;2.3.2 方案&lt;/h4&gt;
-&lt;h4 id=&#34;233-困难和应对&#34;&gt;2.3.3 困难和应对&lt;/h4&gt;
-&lt;h4 id=&#34;234-最终价值&#34;&gt;2.3.4 最终价值&lt;/h4&gt;
-&lt;h4 id=&#34;235-思考&#34;&gt;2.3.5 思考&lt;/h4&gt;
-&lt;h3 id=&#34;24-dt提升详&#34;&gt;2.4 DT提升（详）&lt;/h3&gt;
-&lt;h4 id=&#34;241-背景&#34;&gt;2.4.1 背景&lt;/h4&gt;
-&lt;h4 id=&#34;242-方案&#34;&gt;2.4.2 方案&lt;/h4&gt;
-&lt;h4 id=&#34;243-困难和应对&#34;&gt;2.4.3 困难和应对&lt;/h4&gt;
-&lt;h4 id=&#34;245-继续思考&#34;&gt;2.4.5 继续思考&lt;/h4&gt;
-&lt;h2 id=&#34;3-总结和反思&#34;&gt;3 总结和反思&lt;/h2&gt;
-&lt;h2 id=&#34;4-展望&#34;&gt;4 展望&lt;/h2&gt;
-&lt;h2 id=&#34;5-致谢&#34;&gt;5 致谢&lt;/h2&gt;
-</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://xrg.fj.cn/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://xrg.fj.cn/p/</guid>
-        <description>&lt;h2 id=&#34;重构基本功&#34;&gt;重构基本功&lt;/h2&gt;
-&lt;h3 id=&#34;1-extract&#34;&gt;1 extract&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;提炼常量&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;提炼变量（重复出现的表达式）&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;提炼函数&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;2-move&#34;&gt;2 move&lt;/h3&gt;
-&lt;h4 id=&#34;21-变量&#34;&gt;2.1 变量&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;移动变量，让变量去到它合适的作用域&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;消除临时变量有利于提炼函数&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;三类临时变量：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;循环变量&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;累加变量&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;查询变量&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;22-函数&#34;&gt;2.2 函数&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;移动函数。e.g. 如果一个函数频繁访问一个对象/结构体，那么可以考虑把这个函数变成这个对象的成员函数。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;注意移动函数的时候不要把老函数直接删除，可以通过老函数调用新函数的方式完成替换。（比如我在工作中用 &lt;code&gt;HexStringToVectorEx&lt;/code&gt; 调用了 &lt;code&gt;HexStringToVector&lt;/code&gt; ，保持以前的函数对 &lt;code&gt;HexStringToVector&lt;/code&gt; 的调用正常）。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;23-职责&#34;&gt;2.3 职责&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;移动职责。一个函数可以成为多个类的成员变量，但是它应该去到关联最紧密的地方。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;3-inline&#34;&gt;3 inline&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;内联变量：提炼的反操作，对于使用次数较少的变量，直接在它出现的地方换上等式右边的表达式，消除这个变量。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;4-rename&#34;&gt;4 rename&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;变量名的长度其实和它的作用域有一定的正相关关系。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;cmake也有 &lt;code&gt;PUBLIC&lt;/code&gt; 等机制。&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
         </item>

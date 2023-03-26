@@ -316,26 +316,26 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 </span></span><span class="line"><span class="cl">                <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="k">width</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar-track</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="kc">transparent</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#d6dee1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="k">border-radius</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="k">border</span><span class="p">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="k">background-clip</span><span class="p">:</span> <span class="kc">content-box</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="p">::</span><span class="nd">-webkit-scrollbar-thumb</span><span class="p">:</span><span class="nd">hover</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="k">background-color</span><span class="p">:</span> <span class="mh">#a8bbbf</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
@@ -346,7 +346,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 </span></span><span class="line"><span class="cl">                    <span class="kd">let</span> <span class="nx">card_offset_scrolltop</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">scrollTop</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;--data-offset-top&#39;</span><span class="p">,</span> <span class="nx">card_offset_scrolltop</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                    
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">                    <span class="nx">$</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">toggleClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">                    <span class="kd">let</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
@@ -531,7 +531,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1.gif"
 			width="1765"
 			height="940"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_480x0_resize_box.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_1024x0_resize_box.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_1024x0_resize_box_1.gif 1024w"
 			loading="lazy"
 			alt="目前的效果（动图）">
 	</a>
@@ -633,7 +633,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5.gif"
 			width="1764"
 			height="940"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_480x0_resize_box.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_1024x0_resize_box.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_1024x0_resize_box_1.gif 1024w"
 			loading="lazy"
 			alt="最终缩放效果">
 	</a>
@@ -656,7 +656,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6.gif"
 			width="1760"
 			height="936"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_480x0_resize_box.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_1024x0_resize_box.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_1024x0_resize_box_1.gif 1024w"
 			loading="lazy"
 			alt="点击事件意外触发">
 	</a>
@@ -685,7 +685,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7.gif"
 			width="1758"
 			height="939"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_480x0_resize_box.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_1024x0_resize_box.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_1024x0_resize_box_1.gif 1024w"
 			loading="lazy"
 			alt="修复后的点击事件">
 	</a>
@@ -706,7 +706,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8.gif"
 			width="1771"
 			height="939"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_480x0_resize_box.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_1024x0_resize_box.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_1024x0_resize_box_1.gif 1024w"
 			loading="lazy"
 			alt="缩放细节不到位">
 	</a>
@@ -739,7 +739,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9.gif"
 			width="1920"
 			height="1080"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_480x0_resize_box.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_1024x0_resize_box.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_1024x0_resize_box_1.gif 1024w"
 			loading="lazy"
 			alt="最终效果">
 	</a>
@@ -767,7 +767,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10.gif"
 			width="317"
 			height="417"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_480x0_resize_box.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_1024x0_resize_box.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_1024x0_resize_box_1.gif 1024w"
 			loading="lazy"
 			alt="未登录链接">
 	</a>
@@ -991,7 +991,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
         
             2020 - 
         
-        2022 XR_G&#39;s Blog
+        2023 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
