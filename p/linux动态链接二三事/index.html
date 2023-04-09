@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='0 动态链接概要 相信点开本文的读者朋友们知道， 模块化编程 是开发过程中的一个重要概念，其思想大致是将程序中的 功能上独立且可复用 的代码块封装为一个个模块，基于这些功能模块构建出一个完整的可执行程序。
+库（libraries） 是实现模块化编程的重要基础。一个库就相当于是一个独立的模块，库的开发者将一系列功能封装成一个单元，开发人员可以在不同的库中找到不同的功能实现，以此简化代码并避免重复造轮子。
+在Linux中，库分为 静态库（static libraries） 和 动态库（dynamic libraries） ，前者是在 编译时 将库整合进可执行程序中，后者是在 运行时 才找到对应的库并加载执行。
+Linux库层次（图源参考资料[1]） 静态库对应的静态链接发生在编译期间，这意味着在可执行程序中包含了主程序依赖的所有静态库。这样做的好处是对于一些小的功能模块可以省去动态链接所需的时间开销；坏处是静态库不可共用，假如有多个可执行程序使用了同一个静态库，那么磁盘和内存中就会有多个静态库副本。
+动态库在我看来是更加优雅的模块化方式。其对应的 动态链接 发生在程序运行期间，当需要某一个功能函数时，系统自动查找提供这个功能的动态库并将其加载到内存中。其好处是不同的可执行程序依赖同一个动态库提供的功能时，只要内存中已经有了这个动态库就不需要重新加载，完美诠释了模块化&#43;可复用的理念；坏处是动态链接一定程度上增加了运行耗时，且动态链接机制本身会使得错误的发现延后——编译时零告警零报错，等到运行时才发现跑挂了——这是很可能的事。
+静态库和动态库的对比（图源参考资料[1]） 既然动态链接是程序在运行期间才发生的事情，那么系统将回答如下的问题：
+要怎么知道这个程序需要哪些库？
+怎么找到对应的库？
+1 动态链接库的指定 对于第一个问题——要怎么知道这个程序需要哪些库——答案很简单：在编译的时候告诉系统。因此动态链接也不完全是在运行时才发生的事～至少在编译期间，我们会告诉编译器这个程序要链接哪些库，编译器在发现某些主程序没有实现的函数（符号）的时候，会到这些动态库里去找，假如在某个库里找到了这个函数，会在最终的可执行程序里标记出来，告诉系统在调用这个函数的时候动态加载一下所需的库。
+文字描述过于抽象，举个例子。
+假设我们实现了一个库，用来获取一个 [-100, 100] 之间的随机数，我们提供一个头文件供别人调用：
+// get_random.h #ifndef GET_RANDOM_H #define GET_RANDOM_H int GetRandom(); #endif 然后实现它：
+#include &amp;lt;random&amp;gt; #include &amp;#34;get_random.h&amp;#34; int GetRandom() { std::random_device rd; std::mt19937 mt(rd()); std::uniform_real_distribution&amp;lt;double&amp;gt; dist(-100, 100); return static_cast&amp;lt;int&amp;gt;(dist(mt)); } 并编译出一个动态库：
+$ g&#43;&#43; get_random.cpp -fPIC -shared -o libgetrd.'><title>Linux动态链接二三事</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='Linux动态链接二三事'>
+<meta property='og:description' content='0 动态链接概要 相信点开本文的读者朋友们知道， 模块化编程 是开发过程中的一个重要概念，其思想大致是将程序中的 功能上独立且可复用 的代码块封装为一个个模块，基于这些功能模块构建出一个完整的可执行程序。
+库（libraries） 是实现模块化编程的重要基础。一个库就相当于是一个独立的模块，库的开发者将一系列功能封装成一个单元，开发人员可以在不同的库中找到不同的功能实现，以此简化代码并避免重复造轮子。
+在Linux中，库分为 静态库（static libraries） 和 动态库（dynamic libraries） ，前者是在 编译时 将库整合进可执行程序中，后者是在 运行时 才找到对应的库并加载执行。
+Linux库层次（图源参考资料[1]） 静态库对应的静态链接发生在编译期间，这意味着在可执行程序中包含了主程序依赖的所有静态库。这样做的好处是对于一些小的功能模块可以省去动态链接所需的时间开销；坏处是静态库不可共用，假如有多个可执行程序使用了同一个静态库，那么磁盘和内存中就会有多个静态库副本。
+动态库在我看来是更加优雅的模块化方式。其对应的 动态链接 发生在程序运行期间，当需要某一个功能函数时，系统自动查找提供这个功能的动态库并将其加载到内存中。其好处是不同的可执行程序依赖同一个动态库提供的功能时，只要内存中已经有了这个动态库就不需要重新加载，完美诠释了模块化&#43;可复用的理念；坏处是动态链接一定程度上增加了运行耗时，且动态链接机制本身会使得错误的发现延后——编译时零告警零报错，等到运行时才发现跑挂了——这是很可能的事。
+静态库和动态库的对比（图源参考资料[1]） 既然动态链接是程序在运行期间才发生的事情，那么系统将回答如下的问题：
+要怎么知道这个程序需要哪些库？
+怎么找到对应的库？
+1 动态链接库的指定 对于第一个问题——要怎么知道这个程序需要哪些库——答案很简单：在编译的时候告诉系统。因此动态链接也不完全是在运行时才发生的事～至少在编译期间，我们会告诉编译器这个程序要链接哪些库，编译器在发现某些主程序没有实现的函数（符号）的时候，会到这些动态库里去找，假如在某个库里找到了这个函数，会在最终的可执行程序里标记出来，告诉系统在调用这个函数的时候动态加载一下所需的库。
+文字描述过于抽象，举个例子。
+假设我们实现了一个库，用来获取一个 [-100, 100] 之间的随机数，我们提供一个头文件供别人调用：
+// get_random.h #ifndef GET_RANDOM_H #define GET_RANDOM_H int GetRandom(); #endif 然后实现它：
+#include &amp;lt;random&amp;gt; #include &amp;#34;get_random.h&amp;#34; int GetRandom() { std::random_device rd; std::mt19937 mt(rd()); std::uniform_real_distribution&amp;lt;double&amp;gt; dist(-100, 100); return static_cast&amp;lt;int&amp;gt;(dist(mt)); } 并编译出一个动态库：
+$ g&#43;&#43; get_random.cpp -fPIC -shared -o libgetrd.'>
+<meta property='og:url' content='https://xrg.fj.cn/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-04-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-04-09T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Linux动态链接二三事">
+<meta name="twitter:description" content="0 动态链接概要 相信点开本文的读者朋友们知道， 模块化编程 是开发过程中的一个重要概念，其思想大致是将程序中的 功能上独立且可复用 的代码块封装为一个个模块，基于这些功能模块构建出一个完整的可执行程序。
+库（libraries） 是实现模块化编程的重要基础。一个库就相当于是一个独立的模块，库的开发者将一系列功能封装成一个单元，开发人员可以在不同的库中找到不同的功能实现，以此简化代码并避免重复造轮子。
+在Linux中，库分为 静态库（static libraries） 和 动态库（dynamic libraries） ，前者是在 编译时 将库整合进可执行程序中，后者是在 运行时 才找到对应的库并加载执行。
+Linux库层次（图源参考资料[1]） 静态库对应的静态链接发生在编译期间，这意味着在可执行程序中包含了主程序依赖的所有静态库。这样做的好处是对于一些小的功能模块可以省去动态链接所需的时间开销；坏处是静态库不可共用，假如有多个可执行程序使用了同一个静态库，那么磁盘和内存中就会有多个静态库副本。
+动态库在我看来是更加优雅的模块化方式。其对应的 动态链接 发生在程序运行期间，当需要某一个功能函数时，系统自动查找提供这个功能的动态库并将其加载到内存中。其好处是不同的可执行程序依赖同一个动态库提供的功能时，只要内存中已经有了这个动态库就不需要重新加载，完美诠释了模块化&#43;可复用的理念；坏处是动态链接一定程度上增加了运行耗时，且动态链接机制本身会使得错误的发现延后——编译时零告警零报错，等到运行时才发现跑挂了——这是很可能的事。
+静态库和动态库的对比（图源参考资料[1]） 既然动态链接是程序在运行期间才发生的事情，那么系统将回答如下的问题：
+要怎么知道这个程序需要哪些库？
+怎么找到对应的库？
+1 动态链接库的指定 对于第一个问题——要怎么知道这个程序需要哪些库——答案很简单：在编译的时候告诉系统。因此动态链接也不完全是在运行时才发生的事～至少在编译期间，我们会告诉编译器这个程序要链接哪些库，编译器在发现某些主程序没有实现的函数（符号）的时候，会到这些动态库里去找，假如在某个库里找到了这个函数，会在最终的可执行程序里标记出来，告诉系统在调用这个函数的时候动态加载一下所需的库。
+文字描述过于抽象，举个例子。
+假设我们实现了一个库，用来获取一个 [-100, 100] 之间的随机数，我们提供一个头文件供别人调用：
+// get_random.h #ifndef GET_RANDOM_H #define GET_RANDOM_H int GetRandom(); #endif 然后实现它：
+#include &amp;lt;random&amp;gt; #include &amp;#34;get_random.h&amp;#34; int GetRandom() { std::random_device rd; std::mt19937 mt(rd()); std::uniform_real_distribution&amp;lt;double&amp;gt; dist(-100, 100); return static_cast&amp;lt;int&amp;gt;(dist(mt)); } 并编译出一个动态库：
+$ g&#43;&#43; get_random.cpp -fPIC -shared -o libgetrd.">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/">Linux动态链接二三事</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 09, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 11 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h3 id="0-动态链接概要">0 动态链接概要</h3>
+<p>相信点开本文的读者朋友们知道， <em>模块化编程</em> 是开发过程中的一个重要概念，其思想大致是将程序中的 <strong>功能上独立且可复用</strong> 的代码块封装为一个个模块，基于这些功能模块构建出一个完整的可执行程序。</p>
+<p><em>库（libraries）</em> 是实现模块化编程的重要基础。一个库就相当于是一个独立的模块，库的开发者将一系列功能封装成一个单元，开发人员可以在不同的库中找到不同的功能实现，以此简化代码并避免重复造轮子。</p>
+<p>在Linux中，库分为 <em>静态库（static libraries）</em> 和 <em>动态库（dynamic libraries）</em> ，前者是在 <strong>编译时</strong> 将库整合进可执行程序中，后者是在 <strong>运行时</strong> 才找到对应的库并加载执行。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 222; 
+			flex-basis: 533px"
+	>
+	<a href="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/1.png" data-size="389x175">
+		<img src="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/1.png"
+			width="389"
+			height="175"
+			srcset="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/1_hu17a2eec29f3aa17d55b3879ff03db502_8241_480x0_resize_box_3.png 480w, /p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/1_hu17a2eec29f3aa17d55b3879ff03db502_8241_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Linux库层次（图源参考资料[1]）">
+	</a>
+	
+	<figcaption>Linux库层次（图源参考资料[1]）</figcaption>
+	
+</figure></p>
+<p>静态库对应的静态链接发生在编译期间，这意味着在可执行程序中包含了主程序依赖的所有静态库。这样做的好处是对于一些小的功能模块可以省去动态链接所需的时间开销；坏处是静态库不可共用，假如有多个可执行程序使用了同一个静态库，那么磁盘和内存中就会有多个静态库副本。</p>
+<p>动态库在我看来是更加优雅的模块化方式。其对应的 <strong>动态链接</strong> 发生在程序运行期间，当需要某一个功能函数时，系统自动查找提供这个功能的动态库并将其加载到内存中。其好处是不同的可执行程序依赖同一个动态库提供的功能时，只要内存中已经有了这个动态库就不需要重新加载，完美诠释了模块化+可复用的理念；坏处是动态链接一定程度上增加了运行耗时，且动态链接机制本身会使得错误的发现延后——编译时零告警零报错，等到运行时才发现跑挂了——这是很可能的事。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 113; 
+			flex-basis: 271px"
+	>
+	<a href="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/2.png" data-size="452x400">
+		<img src="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/2.png"
+			width="452"
+			height="400"
+			srcset="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/2_hufaef648ba320cfb41dbfbda96fdb3b09_45766_480x0_resize_box_3.png 480w, /p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/2_hufaef648ba320cfb41dbfbda96fdb3b09_45766_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="静态库和动态库的对比（图源参考资料[1]）">
+	</a>
+	
+	<figcaption>静态库和动态库的对比（图源参考资料[1]）</figcaption>
+	
+</figure></p>
+<p>既然动态链接是程序在运行期间才发生的事情，那么系统将回答如下的问题：</p>
+<ul>
+<li>
+<p>要怎么知道这个程序需要哪些库？</p>
+</li>
+<li>
+<p>怎么找到对应的库？</p>
+</li>
+</ul>
+<h3 id="1-动态链接库的指定">1 动态链接库的指定</h3>
+<p>对于第一个问题——要怎么知道这个程序需要哪些库——答案很简单：在编译的时候告诉系统。因此动态链接也不完全是在运行时才发生的事～至少在编译期间，我们会告诉编译器这个程序要链接哪些库，编译器在发现某些主程序没有实现的函数（符号）的时候，会到这些动态库里去找，假如在某个库里找到了这个函数，会在最终的可执行程序里标记出来，告诉系统在调用这个函数的时候动态加载一下所需的库。</p>
+<p>文字描述过于抽象，举个例子。</p>
+<p>假设我们实现了一个库，用来获取一个 <code>[-100, 100]</code> 之间的随机数，我们提供一个头文件供别人调用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// get_random.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#ifndef GET_RANDOM_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define GET_RANDOM_H
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">GetRandom</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><p>然后实现它：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;random&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;get_random.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">GetRandom</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">mt19937</span> <span class="n">mt</span><span class="p">(</span><span class="n">rd</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">uniform_real_distribution</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dist</span><span class="p">(</span><span class="n">mt</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>并编译出一个动态库：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ get_random.cpp -fPIC -shared -o libgetrd.so
+</span></span><span class="line"><span class="cl"><span class="c1"># -fPIC     生成与位置无关的代码，全部使用相对地址，才能进行动态加载</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -shared   生成共享库</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -o        编译产生的目标文件</span>
+</span></span></code></pre></div><p>我们得到了 <code>libgetrd.so</code> 文件，它是一个共享对象（ <code>.so</code> ，shared object），所有程序都可以链接它。现在有个主程序要打印一个随机数，它打算借助 <code>GetRandom()</code> 来获取随机数：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// main.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;get_random.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Random: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">GetRandom</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>如果我们在编译的时候不告诉编译器 <code>GetRandom()</code> 来自于一个动态库，那么编译器就由于找不到这个函数的定义而报错：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ main.cpp -o main
+</span></span><span class="line"><span class="cl">/tmp/ccVJh4oD.o: In <span class="k">function</span> <span class="sb">`</span>main<span class="s1">&#39;:
+</span></span></span><span class="line"><span class="cl"><span class="s1">main.cpp:(.text+0x1c): undefined reference to `GetRandom()&#39;</span>
+</span></span><span class="line"><span class="cl">collect2: error: ld returned <span class="m">1</span> <span class="nb">exit</span> status
+</span></span></code></pre></div><p>而只要把动态库的信息告诉编译器，情况就大为好转：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -o main
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译通过</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -L        动态库的搜索路径</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -l        依赖的动态库，动态库的标准命名是 libxxx.so ，编译时指定 xxx 即可</span>
+</span></span></code></pre></div><p>编译出可执行程序 <code>main</code> 的历程如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">编译源文件 main.cpp
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">发现一个函数 GetRandom<span class="o">()</span>
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">main.cpp 当中没有定义这个函数
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">看看依赖的动态库 libgetrd.so 里有没有定义这个函数
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">｜
+</span></span><span class="line"><span class="cl">找到函数定义，标记到可执行程序中，告诉系统运行到 GetRandom<span class="o">()</span> 时加载 libgetrd.so
+</span></span></code></pre></div><p>假如说 <code>main.cpp</code> 自己定义了 <code>GetRandom()</code> ，又想去链接 <code>libgetrd.so</code> ，情况会变成什么样子呢？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// main.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;get_random.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">GetRandom</span><span class="p">()</span> <span class="c1">// fake GetRandom()
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Random: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">GetRandom</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -o main
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译通过</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 搞一些小手段让 main 可以运行（详见第2章）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ ./main 
+</span></span><span class="line"><span class="cl">Random: <span class="m">1</span>
+</span></span><span class="line"><span class="cl">$ ./main 
+</span></span><span class="line"><span class="cl">Random: <span class="m">1</span>
+</span></span><span class="line"><span class="cl">$ ./main 
+</span></span><span class="line"><span class="cl">Random: <span class="m">1</span>
+</span></span></code></pre></div><p>可以看到，主程序自己定义的 <code>GetRandom()</code> 把动态库里的 <code>GetRandom()</code> 隐藏掉了，真正运行的时候使用的是主程序里的 <code>GetRandom()</code> 。</p>
+<p>有些富有经验的小伙伴就惊呆了，怎么好像以前编译项目的时候不是这个情况呀？或许你想到的是这个错误：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ main.cpp get_random.cpp -o main
+</span></span><span class="line"><span class="cl">/tmp/ccq8KOON.o: In <span class="k">function</span> <span class="sb">`</span>GetRandom<span class="o">()</span><span class="s1">&#39;:
+</span></span></span><span class="line"><span class="cl"><span class="s1">get_random.cpp:(.text+0x0): multiple definition of `GetRandom()&#39;</span>
+</span></span><span class="line"><span class="cl">/tmp/ccHVl0yK.o:main.cpp:<span class="o">(</span>.text+0x0<span class="o">)</span>: first defined here
+</span></span><span class="line"><span class="cl">collect2: error: ld returned <span class="m">1</span> <span class="nb">exit</span> status
+</span></span></code></pre></div><p>显然：动态链接时查找符号的机制比较宽松，出现同名函数时不会报重复定义的错误，只是在运行时会出现函数被隐藏的情况；但如果想把多个源文件编在一个二进制程序中，就不能出现函数的重复定义。</p>
+<p>多个动态库分别实现了同名的函数时，情况也差不多，最先被链接的那个动态库里的函数会得到执行，这里就不做演示了。</p>
+<h3 id="2-动态链接库的找到">2 动态链接库的找到</h3>
+<p>程序运行过程中，系统怎么知道要去哪里找这个程序依赖的动态库呢？我们编译时通过 <code>-L</code> 和 <code>-l</code> 参数告诉编译器的信息，有被记录到可执行程序中吗？</p>
+<h4 id="21-编译时动态库路径">2.1 编译时动态库路径</h4>
+<p>答案是没有。编译时通过 <code>-l</code> 告诉编译器我们需要什么库，通过 <code>-L</code> 告诉编译器去哪里找这个库，当编译器完成编译之后，会将 <code>-l</code> 提供的库信息写到可执行程序里，但会立刻将 <code>-L</code> 提供的路径信息抛诸脑后。</p>
+<p>我们重新编译一下 <code>main</code> ，并尝试运行它：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -o main
+</span></span><span class="line"><span class="cl">$ ./main
+</span></span><span class="line"><span class="cl">./main: error <span class="k">while</span> loading shared libraries: libgetrd.so: cannot open shared object file: No such file or directory
+</span></span></code></pre></div><p>这次，编译通过之后直接运行 <code>main</code> ，但得到了一个错误信息，告诉我们找不到 <code>libgetrd.so</code> 。</p>
+<p>显然，编译时通过 <code>-L</code> 指定的搜索路径在运行时就失效了，这个信息并没有被写入可执行程序中。</p>
+<p>Linux为我们提供了一个很不错的工具： <code>ldd</code>  ，它可以查看一个可执行程序依赖的所有动态库，并按照动态库的搜索规则来尝试找到这些动态库的位置。我们尝试通过这个工具查看 <code>main</code> 依赖的动态库：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ ldd main
+</span></span><span class="line"><span class="cl">        linux-vdso.so.1 <span class="o">=</span>&gt;  <span class="o">(</span>0x00007ffee10d1000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libgetrd.so <span class="o">=</span>&gt; not found
+</span></span><span class="line"><span class="cl">        libstdc++.so.6 <span class="o">=</span>&gt; /lib64/libstdc++.so.6 <span class="o">(</span>0x00007fdf4bf46000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libm.so.6 <span class="o">=</span>&gt; /lib64/libm.so.6 <span class="o">(</span>0x00007fdf4bc44000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libgcc_s.so.1 <span class="o">=</span>&gt; /lib64/libgcc_s.so.1 <span class="o">(</span>0x00007fdf4ba2e000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libc.so.6 <span class="o">=</span>&gt; /lib64/libc.so.6 <span class="o">(</span>0x00007fdf4b660000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        /lib64/ld-linux-x86-64.so.2 <span class="o">(</span>0x00007fdf4c24e000<span class="o">)</span>
+</span></span></code></pre></div><p>可见，按照默认的规则来看，我们编译出的 <code>main</code> 所依赖的 <code>libgetrd.so</code> 确实无法被正确加载。</p>
+<h4 id="22-ld_library_path">2.2 LD_LIBRARY_PATH</h4>
+<p>大部分小伙伴对 <code>LD_LIBRARY_PATH</code> 还是比较熟悉的，这个环境变量通常用于指定 <em>系统默认路径之外</em> 的动态库搜索路径。</p>
+<p>以我们的 <code>libgetrd.so</code> 为例，我们可以通过在 <code>LD_LIBRARY_PATH</code> 当中加上这个库所在的路径，来让我们的主程序在运行过程中能找到这个库。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="nv">$LD_LIBRARY_PATH</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib:/opt/rh/devtoolset-8/root/usr/lib64/dyninst:/opt/rh/devtoolset-8/root/usr/lib/dyninst:/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 把当前路径加到动态库搜索路径</span>
+</span></span><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 注意最后一项</span>
+</span></span><span class="line"><span class="cl">$ <span class="nb">echo</span> <span class="nv">$LD_LIBRARY_PATH</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib:/opt/rh/devtoolset-8/root/usr/lib64/dyninst:/opt/rh/devtoolset-8/root/usr/lib/dyninst:/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib:/home/dg/exp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 注意 libgetrd.so 的路径</span>
+</span></span><span class="line"><span class="cl">$ ldd main
+</span></span><span class="line"><span class="cl">        linux-vdso.so.1 <span class="o">=</span>&gt;  <span class="o">(</span>0x00007ffc90d28000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libgetrd.so <span class="o">=</span>&gt; /home/dg/exp/libgetrd.so <span class="o">(</span>0x00007f51448ce000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libstdc++.so.6 <span class="o">=</span>&gt; /lib64/libstdc++.so.6 <span class="o">(</span>0x00007f51445c6000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libm.so.6 <span class="o">=</span>&gt; /lib64/libm.so.6 <span class="o">(</span>0x00007f51442c4000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libgcc_s.so.1 <span class="o">=</span>&gt; /lib64/libgcc_s.so.1 <span class="o">(</span>0x00007f51440ae000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libc.so.6 <span class="o">=</span>&gt; /lib64/libc.so.6 <span class="o">(</span>0x00007f5143ce0000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        /lib64/ld-linux-x86-64.so.2 <span class="o">(</span>0x00007f5144ad2000<span class="o">)</span>
+</span></span></code></pre></div><h4 id="23-rpath和runpath">2.3 rpath和runpath</h4>
+<p>除了 <code>LD_LIBRARY_PATH</code> 之外，是否还有其他指定动态库查找路径的方法呢？试想，我们需要发布一个程序，并将程序所需的所有动态库都放在我们指定的某个特定路径下，由于我们指定的路径不属于系统默认的动态库路径，难道只能委屈用户在使用我们的程序之前自己去指定 <code>LD_LIBRARY_PATH</code> 吗？这也太不友好了～</p>
+<h5 id="231-rpath">2.3.1 rpath</h5>
+<p>事实上，就像我们可以指定编译时的动态库路径那样，我们也可以指定运行时的动态库路径，这个路径信息会被写入到编译出来的可执行文件中。通过编译参数 <code>-Wl</code> 表示将后面的信息传递给 <strong>链接器</strong> ，通过 <code>-rpath,[path]</code> 来告诉链接器将动态库的搜索路径写入到可执行文件中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -Wl,-rpath,./ -o main
+</span></span></code></pre></div><p>动态库的信息记录在可执行文件的动态段里，我们可以通过 <code>readelf</code> 工具，并指定 <code>-d</code> 选项来查看 <code>main</code> 程序的动态段。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ readelf -d main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Dynamic section at offset 0xdd8 contains <span class="m">29</span> entries:
+</span></span><span class="line"><span class="cl">  Tag        Type                         Name/Value
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libgetrd.so<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libstdc++.so.6<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libm.so.6<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libgcc_s.so.1<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libc.so.6<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x000000000000000f <span class="o">(</span>RPATH<span class="o">)</span>              Library rpath: <span class="o">[</span>./<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ====== 以下省略若干行 ======</span>
+</span></span></code></pre></div><p>可以看到，动态段首先记录了这个程序运行所需要的所有动态库，这和我们前文提及的一致；在上面列出的最后一行中，还记录了一个 <code>RPATH</code> 字段，这个字段提供了程序运行时可以查找的动态库路径。</p>
+<p><code>ldd</code> 也是没有问题的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ ldd main
+</span></span><span class="line"><span class="cl">        linux-vdso.so.1 <span class="o">=</span>&gt;  <span class="o">(</span>0x00007ffc90d28000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libgetrd.so <span class="o">=</span>&gt; /home/dg/exp/libgetrd.so <span class="o">(</span>0x00007f51448ce000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libstdc++.so.6 <span class="o">=</span>&gt; /lib64/libstdc++.so.6 <span class="o">(</span>0x00007f51445c6000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libm.so.6 <span class="o">=</span>&gt; /lib64/libm.so.6 <span class="o">(</span>0x00007f51442c4000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libgcc_s.so.1 <span class="o">=</span>&gt; /lib64/libgcc_s.so.1 <span class="o">(</span>0x00007f51440ae000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        libc.so.6 <span class="o">=</span>&gt; /lib64/libc.so.6 <span class="o">(</span>0x00007f5143ce0000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        /lib64/ld-linux-x86-64.so.2 <span class="o">(</span>0x00007f5144ad2000<span class="o">)</span>
+</span></span></code></pre></div><h5 id="232-runpath">2.3.2 runpath</h5>
+<p>使用与 <code>RPATH</code> 类似的编译命令，但额外添加一个标记 <code>--enable-new-dtags</code> 来指定使用 <code>runpath</code> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -Wl,-rpath,./,--enable-new-dtags -o main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ readelf -d main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Dynamic section at offset 0xdd8 contains <span class="m">29</span> entries:
+</span></span><span class="line"><span class="cl">  Tag        Type                         Name/Value
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libgetrd.so<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libstdc++.so.6<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libm.so.6<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libgcc_s.so.1<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x0000000000000001 <span class="o">(</span>NEEDED<span class="o">)</span>             Shared library: <span class="o">[</span>libc.so.6<span class="o">]</span>
+</span></span><span class="line"><span class="cl"> 0x000000000000001d <span class="o">(</span>RUNPATH<span class="o">)</span>            Library runpath: <span class="o">[</span>./<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ====== 以下省略若干行 ======</span>
+</span></span></code></pre></div><p><code>readelf</code> 的输出跟前面看到的基本一致，但得益于 <code>--enable-new-dtags</code> 标记，最后一行的 <code>rpath</code> 标记变为了 <code>runpath</code> 。</p>
+<p>至此，我们产生了很大的疑问： <code>LD_LIBRARY_PATH</code> 、 <code>rpath</code> 和 <code>runpath</code> 都用于指定动态链接库的搜索路径，为什么需要有这么多的机制呢？尤其是 <code>rpath</code> 和 <code>runpath</code> ，同作为可执行文件动态段的一个成员，它们的区别在什么地方呢？</p>
+<h4 id="24-动态链接库查找规则">2.4 动态链接库查找规则</h4>
+<h5 id="241-查找规则">2.4.1 查找规则</h5>
+<p>不必多言，直接摘录 <a class="link" href="https://www.man7.org/linux/man-pages/man8/ld.so.8.html"  target="_blank" rel="noopener"
+    >ld.so官方文档</a> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">If a shared object dependency does not contain a slash, then it
+</span></span><span class="line"><span class="cl">is searched for in the following order:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">o  Using the directories specified in the DT_RPATH dynamic
+</span></span><span class="line"><span class="cl">    section attribute of the binary if present and DT_RUNPATH
+</span></span><span class="line"><span class="cl">    attribute does not exist.  Use of DT_RPATH is deprecated.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">o  Using the environment variable LD_LIBRARY_PATH, unless the
+</span></span><span class="line"><span class="cl">    executable is being run in secure-execution mode (see below),
+</span></span><span class="line"><span class="cl">    in which case this variable is ignored.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">o  Using the directories specified in the DT_RUNPATH dynamic
+</span></span><span class="line"><span class="cl">    section attribute of the binary if present.  Such directories
+</span></span><span class="line"><span class="cl">    are searched only to find those objects required by DT_NEEDED
+</span></span><span class="line"><span class="cl">    (direct dependencies) entries and do not apply to those
+</span></span><span class="line"><span class="cl">    objects&#39; children, which must themselves have their own
+</span></span><span class="line"><span class="cl">    DT_RUNPATH entries.  This is unlike DT_RPATH, which is applied
+</span></span><span class="line"><span class="cl">    to searches for all children in the dependency tree.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">o  From the cache file /etc/ld.so.cache, which contains a
+</span></span><span class="line"><span class="cl">    compiled list of candidate shared objects previously found in
+</span></span><span class="line"><span class="cl">    the augmented library path.  If, however, the binary was
+</span></span><span class="line"><span class="cl">    linked with the -z nodeflib linker option, shared objects in
+</span></span><span class="line"><span class="cl">    the default paths are skipped.  Shared objects installed in
+</span></span><span class="line"><span class="cl">    hardware capability directories (see below) are preferred to
+</span></span><span class="line"><span class="cl">    other shared objects.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">o  In the default path /lib, and then /usr/lib.  (On some 64-bit
+</span></span><span class="line"><span class="cl">    architectures, the default paths for 64-bit shared objects are
+</span></span><span class="line"><span class="cl">    /lib64, and then /usr/lib64.)  If the binary was linked with
+</span></span><span class="line"><span class="cl">    the -z nodeflib linker option, this step is skipped.
+</span></span></code></pre></div><p>简言之，链接器在查找程序依赖的动态库时，搜索的顺序是：</p>
+<ul>
+<li>
+<p><code>RPATH</code></p>
+</li>
+<li>
+<p><code>LD_LIBRARY_PATH</code></p>
+</li>
+<li>
+<p><code>RUN_PATH</code></p>
+</li>
+<li>
+<p><code>/etc/ld.so.cache</code> 文件中记载的动态链接库路径缓存</p>
+</li>
+<li>
+<p>系统默认搜索路径 <code>/lib</code> 和 <code>/use/lib</code> （ <code>64</code> 位的动态库默认是 <code>/lib64</code> 和 <code>/usr/lib64</code> ）</p>
+</li>
+</ul>
+<p>这个查找规则，也解释了为什么既需要 <code>RPATH</code> 又需要 <code>RUNPATH</code> 。实际上，在历史中早先只有 <code>RPATH</code> ，但由于 <code>RPATH</code> 设置的路径优先级高于 <code>LD_LIBRARY_PATH</code> ，会导致调试过程中无法轻松加载不同路径下的动态库（只能固定取到 <code>RPATH</code> 路径下的那个库），后续才引入了 <code>RUNPATH</code> ，以允许在程序运行期间通过 <code>LD_LIBRARY_PATH</code> 覆盖编译时设定的动态库路径。</p>
+<p>这两个东东的新旧顺序，也从我们的编译选项中可以看出来——默认情况下使用的是 <code>rpath</code> ，而通过使用新版标签 <code>--enable-new-dtags</code> 来启用 <code>runpath</code> 。假如说编译器是比较新的，则默认情况下使用的是 <code>runpath</code> ，用编译选项 <code>--disable-new-dtags</code> 禁用掉新版标签来回退到 <code>rpath</code> 。</p>
+<h5 id="242-ld_debug">2.4.2 LD_DEBUG</h5>
+<p>我们可以通过 <code>LD_DEBUG</code> 环境变量来控制链接器输出动态链接过程中的相关信息。通过将它的值设为 <code>help</code> 并运行任意程序来查看它的使用说明：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ <span class="nv">LD_DEBUG</span><span class="o">=</span><span class="nb">help</span> ls
+</span></span><span class="line"><span class="cl">Valid options <span class="k">for</span> the LD_DEBUG environment variable are:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  libs        display library search paths
+</span></span><span class="line"><span class="cl">  reloc       display relocation processing
+</span></span><span class="line"><span class="cl">  files       display progress <span class="k">for</span> input file
+</span></span><span class="line"><span class="cl">  symbols     display symbol table processing
+</span></span><span class="line"><span class="cl">  bindings    display information about symbol binding
+</span></span><span class="line"><span class="cl">  versions    display version dependencies
+</span></span><span class="line"><span class="cl">  scopes      display scope information
+</span></span><span class="line"><span class="cl">  all         all previous options combined
+</span></span><span class="line"><span class="cl">  statistics  display relocation statistics
+</span></span><span class="line"><span class="cl">  unused      determined unused DSOs
+</span></span><span class="line"><span class="cl">  <span class="nb">help</span>        display this <span class="nb">help</span> message and <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">To direct the debugging output into a file instead of standard output
+</span></span><span class="line"><span class="cl">a filename can be specified using the LD_DEBUG_OUTPUT environment variable.
+</span></span></code></pre></div><p>将该变量设置为说明中给出的不同值，就能得到不同的输出。例如，值 <code>libs</code> 会打印动态链接库的搜索路径，则我们尝试通过指定 <code>LD_DEBUG=libs</code> 并运行 <code>main</code> 来观察我们的随机数库是怎么被找到的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 首先观察 RPATH 版本</span>
+</span></span><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -Wl,-rpath,./ -o main
+</span></span><span class="line"><span class="cl">$ <span class="nv">LD_DEBUG</span><span class="o">=</span>libs ./main
+</span></span><span class="line"><span class="cl">     17058:     find <span class="nv">library</span><span class="o">=</span>libgetrd.so <span class="o">[</span>0<span class="o">]</span><span class="p">;</span> searching
+</span></span><span class="line"><span class="cl">     17058:      search <span class="nv">path</span><span class="o">=</span>./tls/x86_64:./tls:./x86_64:.              <span class="o">(</span>RPATH from file ./main<span class="o">)</span>
+</span></span><span class="line"><span class="cl">     17058:       trying <span class="nv">file</span><span class="o">=</span>./tls/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     17058:       trying <span class="nv">file</span><span class="o">=</span>./tls/libgetrd.so
+</span></span><span class="line"><span class="cl">     17058:       trying <span class="nv">file</span><span class="o">=</span>./x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     17058:       trying <span class="nv">file</span><span class="o">=</span>./libgetrd.so
+</span></span><span class="line"><span class="cl">     17058:
+</span></span><span class="line"><span class="cl">     17058:     find <span class="nv">library</span><span class="o">=</span>libstdc++.so.6 <span class="o">[</span>0<span class="o">]</span><span class="p">;</span> searching
+</span></span><span class="line"><span class="cl"><span class="c1"># ====== 以下省略若干行 ======</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 再观察 RUNPATH 版本</span>
+</span></span><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -Wl,-rpath,./,--enable-new-dtags -o main
+</span></span><span class="line"><span class="cl">$ <span class="nv">LD_DEBUG</span><span class="o">=</span>libs ./main     20474:     find <span class="nv">library</span><span class="o">=</span>libgetrd.so <span class="o">[</span>0<span class="o">]</span><span class="p">;</span> searching
+</span></span><span class="line"><span class="cl">     20474:      search <span class="nv">path</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/tls/x86_64:/opt/rh/devtoolset-8/root/usr/lib64/tls:/opt/rh/devtoolset-8/root/usr/lib64/x86_64:/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib/tls/x86_64:/opt/rh/devtoolset-8/root/usr/lib/tls:/opt/rh/devtoolset-8/root/usr/lib/x86_64:/opt/rh/devtoolset-8/root/usr/lib:/opt/rh/devtoolset-8/root/usr/lib64/dyninst/tls/x86_64:/opt/rh/devtoolset-8/root/usr/lib64/dyninst/tls:/opt/rh/devtoolset-8/root/usr/lib64/dyninst/x86_64:/opt/rh/devtoolset-8/root/usr/lib64/dyninst:/opt/rh/devtoolset-8/root/usr/lib/dyninst/tls/x86_64:/opt/rh/devtoolset-8/root/usr/lib/dyninst/tls:/opt/rh/devtoolset-8/root/usr/lib/dyninst/x86_64:/opt/rh/devtoolset-8/root/usr/lib/dyninst            <span class="o">(</span>LD_LIBRARY_PATH<span class="o">)</span>
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/tls/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/tls/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/tls/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/tls/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/dyninst/tls/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/dyninst/tls/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/dyninst/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib64/dyninst/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/dyninst/tls/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/dyninst/tls/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/dyninst/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>/opt/rh/devtoolset-8/root/usr/lib/dyninst/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:      search <span class="nv">path</span><span class="o">=</span>./tls/x86_64:./tls:./x86_64:.              <span class="o">(</span>RUNPATH from file ./main<span class="o">)</span>
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>./tls/x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>./tls/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>./x86_64/libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:       trying <span class="nv">file</span><span class="o">=</span>./libgetrd.so
+</span></span><span class="line"><span class="cl">     20474:
+</span></span><span class="line"><span class="cl">     20474:     find <span class="nv">library</span><span class="o">=</span>libstdc++.so.6 <span class="o">[</span>0<span class="o">]</span><span class="p">;</span> searching
+</span></span><span class="line"><span class="cl"><span class="c1"># ====== 以下省略若干行 ======</span>
+</span></span></code></pre></div><p>两次不同的输出充分反映了 <code>RPATH</code> 、 <code>LD_LIBRARY_PATH</code> 和 <code>RUN_PATH</code> 的搜索顺序。</p>
+<h3 id="3-cmake与动态链接库">3 CMake与动态链接库</h3>
+<p>由于我所在的项目中已经不使用原始的编译命令，前文提及的 <code>-L</code> 也好、<code>-rpath</code> 也好，在日常工作中都无法感知了。当前使用较多的构建工具是 <code>CMake</code> ，因此想探寻一下前文内容在 <code>CMake</code> 中的体现。如果读者朋友平时不用 <code>CMake</code> ，可直接略过本节。</p>
+<h4 id="31-制作动态库">3.1 制作动态库</h4>
+<p>通过 <a class="link" href="https://cmake.org/cmake/help/latest/command/add_library.html"  target="_blank" rel="noopener"
+    >cmake官方文档</a> 我们知道，可以通过下面这句简单的命令来生成一个库：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">add_library<span class="o">(</span>&lt;name&gt; <span class="o">[</span>STATIC <span class="p">|</span> SHARED <span class="p">|</span> MODULE<span class="o">]</span>
+</span></span><span class="line"><span class="cl">            <span class="o">[</span>EXCLUDE_FROM_ALL<span class="o">]</span>
+</span></span><span class="line"><span class="cl">            <span class="o">[</span>&lt;source&gt;...<span class="o">])</span>
+</span></span></code></pre></div><p>这里指定的 <code>&lt;name&gt;</code> 会被自动纳入编译对象中，在Linux环境下会编译得到 <code>lib&lt;name&gt;.a</code> 或 <code>lib&lt;name&gt;.so</code> ；将标记设置为 <code>SHARED</code> ，就可以使我们编译得到的对象是一个动态库；将标记设置为 <code>STATIC</code> ，就可以使我们编译得到的对象是一个静态库，二者的区别已在 <a class="link" href="#0x00-%e5%8a%a8%e6%80%81%e9%93%be%e6%8e%a5%e6%a6%82%e8%a6%81" >第0节</a> 进行了简单介绍。 <code>MODULE</code> 标记用于编译模块化库，这种库一般由程序本身主动通过 <code>dlopen</code> 等方式来加载，本文不予探究。</p>
+<p>现在对我们的demo进行一些小的改动，在源文件之外再添加一份 <code>CMakeLists.txt</code> ，然后创建一个 <code>build</code> 目录用于容纳后续的编译产物。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ tree /home/dg/exp/
+</span></span><span class="line"><span class="cl">/home/dg/exp/
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- build
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- CMakeLists.txt
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random.cpp
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random.h
+</span></span><span class="line"><span class="cl"><span class="sb">`</span>-- main.cpp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="m">1</span> directory, <span class="m">4</span> files
+</span></span></code></pre></div><p>在 <code>CMakeLists.txt</code> 中，我们准备把 <code>get_random.cpp</code> 编译成 <code>libgetrd.so</code> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">PROJECT</span><span class="p">(</span><span class="s">DEMO</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 设置c++编译器为g++
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s">/opt/rh/devtoolset-8/root/usr/bin/g++</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 开启编译时的详细输出，好让我们知道一会儿发生了什么
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_VERBOSE_MAKEFILE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 动态库的源码路径，跟 CMakeLists.txt 在同级目录
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">SRC_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译对象 getrd
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_LIBRARY</span><span class="p">(</span><span class="s">getrd</span> <span class="s">SHARED</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/get_random.cpp</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>直接准备编译：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ <span class="nb">pwd</span>
+</span></span><span class="line"><span class="cl">/home/dg/exp/build
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ cmake ..
+</span></span><span class="line"><span class="cl"><span class="o">======</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl">-- Configuring <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Generating <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Build files have been written to: /home/dg/exp/build
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ make getrd
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -S/home/dg/exp -B/home/dg/exp/build --check-build-system CMakeFiles/Makefile.cmake <span class="m">0</span>
+</span></span><span class="line"><span class="cl">make  -f CMakeFiles/Makefile2 getrd
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Entering directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -S/home/dg/exp -B/home/dg/exp/build --check-build-system CMakeFiles/Makefile.cmake <span class="m">0</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_progress_start /home/dg/exp/build/CMakeFiles <span class="m">2</span>
+</span></span><span class="line"><span class="cl">make  -f CMakeFiles/Makefile2 CMakeFiles/getrd.dir/all
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Entering directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">make  -f CMakeFiles/getrd.dir/build.make CMakeFiles/getrd.dir/depend
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Entering directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /home/dg/exp/build <span class="o">&amp;&amp;</span> /usr/local/bin/cmake -E cmake_depends <span class="s2">&#34;Unix Makefiles&#34;</span> /home/dg/exp /home/dg/exp /home/dg/exp/build /home/dg/exp/build /home/dg/exp/build/CMakeFiles/getrd.dir/DependInfo.cmake --color<span class="o">=</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">make  -f CMakeFiles/getrd.dir/build.make CMakeFiles/getrd.dir/build
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Entering directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 50%<span class="o">]</span> Building CXX object CMakeFiles/getrd.dir/get_random.o
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -Dgetrd_EXPORTS  -fPIC -MD -MT CMakeFiles/getrd.dir/get_random.o -MF CMakeFiles/getrd.dir/get_random.o.d -o CMakeFiles/getrd.dir/get_random.o -c /home/dg/exp/get_random.cpp
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX shared library libgetrd.so
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/getrd.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -fPIC -shared -Wl,-soname,libgetrd.so -o libgetrd.so CMakeFiles/getrd.dir/get_random.o 
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target getrd
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_progress_start /home/dg/exp/build/CMakeFiles <span class="m">0</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span></code></pre></div><p>由于在 <code>CMakeLists.txt</code> 中开启了编译时的详细输出，我们完全可以知道我们的一句 <code>ADD_LIBRARY</code> 最后自动演变成了怎样的编译命令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">[</span> 50%<span class="o">]</span> Building CXX object CMakeFiles/getrd.dir/get_random.o
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -Dgetrd_EXPORTS  -fPIC -MD -MT CMakeFiles/getrd.dir/get_random.o -MF CMakeFiles/getrd.dir/get_random.o.d -o CMakeFiles/getrd.dir/get_random.o -c /home/dg/exp/get_random.cpp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX shared library libgetrd.so
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/getrd.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -fPIC -shared -Wl,-soname,libgetrd.so -o libgetrd.so CMakeFiles/getrd.dir/get_random.o 
+</span></span></code></pre></div><p>这里发生的事情，跟此前我们一句 <code>g++ get_random.cpp -fPIC -shared -o libgetrd.so</code> 所做的基本一致，无非是将编译过程展开并增加了一些中间产物。源文件首先被编译成 <code>.o</code> 文件，然后再将所有依赖（在我们的例子中并没有其他依赖）链接得到 <code>.so</code> 文件。</p>
+<h4 id="32-使用动态库">3.2 使用动态库</h4>
+<p>仍然根据 <a class="link" href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"  target="_blank" rel="noopener"
+    >CMake官方文档</a> 得知如何在编译过程中链接动态库：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">target_link_libraries<span class="o">(</span>&lt;target&gt; ... &lt;item&gt;... ...<span class="o">)</span>
+</span></span></code></pre></div><p>我们在主程序的编译过程中链接 <code>libgetrd.so</code> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">PROJECT</span><span class="p">(</span><span class="s">DEMO</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 设置c++编译器为g++
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s">/opt/rh/devtoolset-8/root/usr/bin/g++</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 开启编译时的详细输出，好让我们知道一会儿发生了什么
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_VERBOSE_MAKEFILE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 动态库和主程序的源码路径，跟 CMakeLists.txt 在同级目录
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">SRC_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译对象 getrd
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_LIBRARY</span><span class="p">(</span><span class="s">getrd</span> <span class="s">SHARED</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/get_random.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译主程序
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_EXECUTABLE</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序要链接getrd
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span><span class="s">main</span> <span class="s">getrd</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cmake ..
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 输出省略 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl">$ make <span class="nv">main</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 50%<span class="o">]</span> Built target <span class="nv">getrd</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 75%<span class="o">]</span> Building CXX object CMakeFiles/main.dir/main.o
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++    -MD -MT CMakeFiles/main.dir/main.o -MF CMakeFiles/main.dir/main.o.d -o CMakeFiles/main.dir/main.o -c /home/dg/exp/main.cpp
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX executable main
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -rdynamic CMakeFiles/main.dir/main.o -o main  -Wl,-rpath,/home/dg/exp/build libgetrd.so 
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target main
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_progress_start /home/dg/exp/build/CMakeFiles <span class="m">0</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span></code></pre></div><p>可以看到，生成 <code>main</code> 的编译命令跟前几节里手动编译的命令基本一致：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 2.3.1小节里使用的编译命令</span>
+</span></span><span class="line"><span class="cl">$ g++ main.cpp -L. -lgetrd -Wl,-rpath,./ -o main
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 通过 CMake TARGET_LINK_LIBRARIES 自动生成的编译命令</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -rdynamic CMakeFiles/main.dir/main.o -o main  -Wl,-rpath,/home/dg/exp/build libgetrd.so 
+</span></span></code></pre></div><p>值得注意的是，由于我们在同一个CMake项目中通过 <code>ADD_LIBRARY</code> 制作了一个动态库，又通过 <code>TARGET_LINK_LIBRARIES</code> 使主程序链接了这个动态库，每次编译时会自动重新生成这个动态库以保证库是最新的，体现在 <code>make main</code> 的输出当中： <code>[ 50%] Built target getrd</code> 。</p>
+<p>考虑另一种场景，假如我们使用的不是自己生成的动态库，而是周边预先提供的动态库，又如何呢？</p>
+<p>我们先稍稍更改目录结构，把 <code>libgetrd.so</code> 放到源文件同级目录下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ tree /home/dg/exp/
+</span></span><span class="line"><span class="cl">/home/dg/exp/
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- build
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- CMakeLists.txt
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random.cpp
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random.h
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- libgetrd.so
+</span></span><span class="line"><span class="cl"><span class="sb">`</span>-- main.cpp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="m">1</span> directory, <span class="m">5</span> files
+</span></span></code></pre></div><p>然后在 <code>CMakeLists.txt</code> 里删除 <code>ADD_LIBRARY</code> ，表明这个库现在不由我们提供：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">PROJECT</span><span class="p">(</span><span class="s">DEMO</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 设置c++编译器为g++
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s">/opt/rh/devtoolset-8/root/usr/bin/g++</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 开启编译时的详细输出，好让我们知道一会儿发生了什么
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_VERBOSE_MAKEFILE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序的源码路径，跟 CMakeLists.txt 在同级目录
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">SRC_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译主程序
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_EXECUTABLE</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序要链接getrd
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span><span class="s">main</span> <span class="s">getrd</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>愉快地编译运行！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cmake ..
+</span></span><span class="line"><span class="cl">$ make <span class="nv">main</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX executable main
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -rdynamic CMakeFiles/main.dir/main.cpp.o -o main  -lgetrd 
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/libexec/gcc/x86_64-redhat-linux/8/ld: cannot find -lgetrd
+</span></span><span class="line"><span class="cl">collect2: error: ld returned <span class="m">1</span> <span class="nb">exit</span> status
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: *** <span class="o">[</span>CMakeFiles/main.dir/build.make💯 main<span class="o">]</span> Error <span class="m">1</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: *** <span class="o">[</span>CMakeFiles/Makefile2:86: CMakeFiles/main.dir/all<span class="o">]</span> Error <span class="m">2</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: *** <span class="o">[</span>CMakeFiles/Makefile2:93: CMakeFiles/main.dir/rule<span class="o">]</span> Error <span class="m">2</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">make: *** <span class="o">[</span>Makefile:127: main<span class="o">]</span> Error <span class="m">2</span>
+</span></span></code></pre></div><p>oho，似乎缺少了一点东西。</p>
+<p>实际上，正如我们在 <a class="link" href="#0x01-%e5%8a%a8%e6%80%81%e9%93%be%e6%8e%a5%e5%ba%93%e7%9a%84%e6%8c%87%e5%ae%9a" >第一节</a> 当中所说的，我们需要在编译时告诉编译器应该去哪里找动态库，在CMake中，承担这个任务的是 <a class="link" href="https://cmake.org/cmake/help/latest/command/target_link_directories.html"  target="_blank" rel="noopener"
+    >target_link_directories</a> 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 设置c++编译器为g++
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s">/opt/rh/devtoolset-8/root/usr/bin/g++</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 开启编译时的详细输出，好让我们知道一会儿发生了什么
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_VERBOSE_MAKEFILE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序的源码路径，跟 CMakeLists.txt 在同级目录
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">SRC_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译主程序
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_EXECUTABLE</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 指定动态库的路径，跟 CMakeLists.txt 在同级目录
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">TARGET_LINK_DIRECTORIES</span><span class="p">(</span><span class="s">main</span> <span class="s">PUBLIC</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序要链接getrd
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span><span class="s">main</span> <span class="s">getrd</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cmake ..
+</span></span><span class="line"><span class="cl">$ make <span class="nv">main</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 50%<span class="o">]</span> Linking CXX executable main
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -rdynamic CMakeFiles/main.dir/main.o -o main   -L/home/dg/exp  -Wl,-rpath,/home/dg/exp -lgetrd 
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target main
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_progress_start /home/dg/exp/build/CMakeFiles <span class="m">0</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span></code></pre></div><p><code>TARGET_LINK_DIRECTORIES</code> 在我们的编译命令当中增加了 <code>-L</code> 参数，指定了动态库的搜索路径，帮助我们顺利找到了 <code>libgetrd.so</code> 。</p>
+<h4 id="33-动态库依赖传递">3.3 动态库依赖传递</h4>
+<p>主程序依赖动态库——动态库的实现又依赖另一个动态库，这是很常见的事。在一个复杂的系统中，我们的业务程序已经不知道位于多么高的层次了，下层的动态库总是搭建在很多更下层的基础库上的。</p>
+<p>对我们的demo进行一些小小的改造，现在我们的主程序不再使用 <code>GetRandom</code> 来获取单个随机数了，而通过 <code>libgetrdlist.so</code> 当中定义的 <code>GetRandomListOfSize(size_t)</code> 来获取一个随机数的 <code>vector</code> ，而这个库的实现就只是通过多次调用 <code>libgetrd.so</code> 当中定义的 <code>GetRandom</code> 来生成随机数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// get_random_list.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;get_random_list.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;get_random.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">GetRandomListOfSize</span><span class="p">(</span><span class="n">size_t</span> <span class="n">size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="n">size_t</span> <span class="n">MAX_LIST_SIZE</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// 规定随机数列表的最大长度不超过10
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">((</span><span class="n">size</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">MAX_LIST_SIZE</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">GetRandom</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// main.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;get_random_list.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">randomList</span> <span class="o">=</span> <span class="n">GetRandomListOfSize</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Random list: &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="nl">r</span> <span class="p">:</span> <span class="n">randomList</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">r</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>源码列表当中增加了两个文件，一个 <code>libs</code> 目录用来放置我们的动态库：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ tree /home/dg/exp/
+</span></span><span class="line"><span class="cl">/home/dg/exp/
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- build
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- CMakeLists.txt
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random.cpp
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random.h
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random_list.cpp
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- get_random_list.h
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-- libs
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="sb">`</span>-- libgetrd.so
+</span></span><span class="line"><span class="cl"><span class="sb">`</span>-- main.cpp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="m">2</span> directories, <span class="m">7</span> files
+</span></span></code></pre></div><p>生成 <code>libgetrdlist.so</code> 的 <code>CMakeLists.txt</code> 用的均是本节介绍过的东西：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">PROJECT</span><span class="p">(</span><span class="s">DEMO</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 设置c++编译器为g++
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s">/opt/rh/devtoolset-8/root/usr/bin/g++</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 开启编译时的详细输出，好让我们知道一会儿发生了什么
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_VERBOSE_MAKEFILE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序的源码路径，跟 CMakeLists.txt 在同级目录
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">SRC_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 动态库的路径，在 CMakeLists.txt 同级目录的 libs 目录下
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">LIB_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/libs</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译 getrdlist
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_LIBRARY</span><span class="p">(</span><span class="s">getrdlist</span> <span class="s">SHARED</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/get_random_list.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">TARGET_LINK_DIRECTORIES</span><span class="p">(</span><span class="s">getrdlist</span> <span class="s">PUBLIC</span> <span class="o">${</span><span class="nv">LIB_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span><span class="s">getrdlist</span> <span class="s">getrd</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cmake ..
+</span></span><span class="line"><span class="cl">$ make <span class="nv">getrdlist</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX shared library libgetrdlist.so
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/getrdlist.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -fPIC -shared -Wl,-soname,libgetrdlist.so -o libgetrdlist.so CMakeFiles/getrdlist.dir/get_random_list.o   -L/home/dg/exp/libs  -Wl,-rpath,/home/dg/exp/libs -lgetrd 
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target getrdlist
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_progress_start /home/dg/exp/build/CMakeFiles <span class="m">0</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span></code></pre></div><p>我们把编译得到的 <code>libgetrdlist.so</code> 也挪到动态库的路径下，然后在 <code>CMakeLists.txt</code> 里把相关的编译指令删掉，还是只保留编译主程序的内容。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">PROJECT</span><span class="p">(</span><span class="s">DEMO</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 设置c++编译器为g++
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s">/opt/rh/devtoolset-8/root/usr/bin/g++</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 开启编译时的详细输出，好让我们知道一会儿发生了什么
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_VERBOSE_MAKEFILE</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序的源码路径，跟 CMakeLists.txt 在同级目录
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">SRC_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 动态库的路径，在 CMakeLists.txt 同级目录的 libs 目录下
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">SET</span><span class="p">(</span><span class="s">LIB_DIR</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/libs</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译主程序
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_EXECUTABLE</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 指定动态库的路径
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">TARGET_LINK_DIRECTORIES</span><span class="p">(</span><span class="s">main</span> <span class="s">PUBLIC</span> <span class="o">${</span><span class="nv">LIB_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 主程序要链接getrdlist
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span><span class="s">main</span> <span class="s">getrdlist</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cmake ..
+</span></span><span class="line"><span class="cl">$ make <span class="nv">main</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX executable main
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -rdynamic CMakeFiles/main.dir/main.o -o main   -L/home/dg/exp/libs  -Wl,-rpath,/home/dg/exp/libs -lgetrdlist -lgetrd 
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target main
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_progress_start /home/dg/exp/build/CMakeFiles <span class="m">0</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span></code></pre></div><p>我们发现了一个怪异的现象：在编译 <code>main</code> 的命令中，把 <code>libgetrd.so</code> 这个最底层的库也带上了。</p>
+<p>由此引出了 <em>动态库依赖传递</em> 的概念。在 <a class="link" href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html#libraries-for-a-target-and-or-its-dependents"  target="_blank" rel="noopener"
+    >target_link_libraries</a> 中，可以通过 <code>PUBLIC</code> 、 <code>PRIVATE</code> 和 <code>INTERFACE</code> 来指定动态库是否将自己的依赖传递给使用者，我们编译 <code>libgetrdlist.so</code> 时并没有指定这些关键字，默认地将 <code>libgetrd.so</code> 这个依赖传递给了 <code>main</code> 。</p>
+<p>尝试将 <code>libgetrd.so</code> 的依赖改为 <code>PRIVATE</code> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="err">====</span> <span class="err">省略若干行</span> <span class="err">====
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 编译 getrdlist
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">ADD_LIBRARY</span><span class="p">(</span><span class="s">getrdlist</span> <span class="s">SHARED</span> <span class="o">${</span><span class="nv">SRC_DIR</span><span class="o">}</span><span class="s">/get_random_list.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">TARGET_LINK_DIRECTORIES</span><span class="p">(</span><span class="s">getrdlist</span> <span class="s">PRIVATE</span> <span class="o">${</span><span class="nv">LIB_DIR</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">TARGET_LINK_LIBRARIES</span><span class="p">(</span><span class="s">getrdlist</span> <span class="s">PRIVATE</span> <span class="s">getrd</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>拿着编译出来的 <code>libgetrdlist.so</code> 来编译 <code>main</code> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ make <span class="nv">main</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====</span> 省略若干行 <span class="o">=====</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX executable main
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">/opt/rh/devtoolset-8/root/usr/bin/g++ -rdynamic CMakeFiles/main.dir/main.o -o main   -L/home/dg/exp/libs  -Wl,-rpath,/home/dg/exp/libs -lgetrdlist 
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target main
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span><span class="line"><span class="cl">/usr/local/bin/cmake -E cmake_progress_start /home/dg/exp/build/CMakeFiles <span class="m">0</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: Leaving directory <span class="s1">&#39;/home/dg/exp/build&#39;</span>
+</span></span></code></pre></div><p>在编译命令中已经看不到 <code>libgetrd.so</code> 的字样，说明这次修改成功将底层的依赖隐藏了。实际上，CMake文档中给出的建议是，假如一个依赖库只用于上层库的实现，那么就在 <code>target_link_libraries</code> 当中设置 <code>PRIVATE</code> 关键字；假如一个依赖库不仅用于上层库的实现，还用于上层库的头文件中，那么就应该将关键字设置为 <code>PUBLIC</code> ；最后假如一个依赖库不用于上层库的实现，而只用于头文件中，那么就将关键字设置为 <code>INTERFACE</code> 。</p>
+<h3 id="4-小结">4 小结</h3>
+<p>这篇小文本质上是基于工作中与动态库所打的交道，选取了一些自觉得有价值的知识点进行的记录。文中的言语并不太流畅，实验设计并不太精巧，不过总的还是对 <code>rpath</code> 、 <code>runpath</code> 以及动态库相关的CMake知识进行了描述和测试，比文档搬运要来得直观一些。</p>
+<p>由于篇幅、精力和个人能力的限制，还有很多复杂的内容没有展开，有遗漏之处、错误之处、没能满足读者的期望之处，均是欢迎指出的。</p>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] &ldquo;Anatomy of Linux dynamic libraries - IBM Developer,&rdquo; , <a class="link" href="https://developer.ibm.com/tutorials/l-dynamic-libraries/"  target="_blank" rel="noopener"
+    >https://developer.ibm.com/tutorials/l-dynamic-libraries/</a></p>
+<p>[2]  &ldquo;ld.so(8) - Linux manual page&rdquo;, <a class="link" href="https://www.man7.org/linux/man-pages/man8/ld.so.8.html"  target="_blank" rel="noopener"
+    >https://www.man7.org/linux/man-pages/man8/ld.so.8.html</a></p>
+<p>[3] 福豹, Runtime：RPATH/LD_LIBRARY_PATH/RUNPATH, <a class="link" href="https://zhuanlan.zhihu.com/p/534778561"  target="_blank" rel="noopener"
+    >https://zhuanlan.zhihu.com/p/534778561</a></p>
+<p>[4] &ldquo;The LD_DEBUG environment variable | B. Nikolic Software and Computing Blog,&rdquo;   Bnikolic, <a class="link" href="https://bnikolic.co.uk/blog/linux-ld-debug.html"  target="_blank" rel="noopener"
+    >https://bnikolic.co.uk/blog/linux-ld-debug.html</a></p>
+<p>[5] &ldquo;add_library — CMake 3.26.3 Documentation,&rdquo;   Cmake, <a class="link" href="https://cmake.org/cmake/help/latest/command/add_library.html"  target="_blank" rel="noopener"
+    >https://cmake.org/cmake/help/latest/command/add_library.html</a></p>
+<p>[6] &ldquo;target_link_libraries — CMake 3.26.3 Documentation,&rdquo;   Cmake, <a class="link" href="https://cmake.org/cmake/help/latest/command/target_link_libraries.html"  target="_blank" rel="noopener"
+    >https://cmake.org/cmake/help/latest/command/target_link_libraries.html</a></p>
+<p>[7] &ldquo;target_link_directories — CMake 3.26.3 Documentation,&rdquo;   Cmake, <a class="link" href="https://cmake.org/cmake/help/latest/command/target_link_directories.html#command:target_link_directories"  target="_blank" rel="noopener"
+    >https://cmake.org/cmake/help/latest/command/target_link_directories.html#command:target_link_directories</a></p>
+<p>[8] &ldquo;cmake-buildsystem(7) — CMake 3.26.3 Documentation,&rdquo;   Cmake, <a class="link" href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements"  target="_blank" rel="noopener"
+    >https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements</a></p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">TCP加速技术简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 25, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Jul 03, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/oauth2.0%E6%B5%85%E6%9E%90/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">OAuth2.0浅析</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 12, 2020</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1610.-%E5%8F%AF%E8%A7%81%E7%82%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">错题本 | LeetCode1610. 可见点的最大数目</h2>
+            <footer class="article-time">
+                <time datetime=''>Dec 16, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E7%A7%8B%E6%8B%9B-%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">秋招 | 一些知识点</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 29, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-动态链接概要">0 动态链接概要</a></li>
+    <li><a href="#1-动态链接库的指定">1 动态链接库的指定</a></li>
+    <li><a href="#2-动态链接库的找到">2 动态链接库的找到</a>
+      <ul>
+        <li><a href="#21-编译时动态库路径">2.1 编译时动态库路径</a></li>
+        <li><a href="#22-ld_library_path">2.2 LD_LIBRARY_PATH</a></li>
+        <li><a href="#23-rpath和runpath">2.3 rpath和runpath</a></li>
+        <li><a href="#24-动态链接库查找规则">2.4 动态链接库查找规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-cmake与动态链接库">3 CMake与动态链接库</a>
+      <ul>
+        <li><a href="#31-制作动态库">3.1 制作动态库</a></li>
+        <li><a href="#32-使用动态库">3.2 使用动态库</a></li>
+        <li><a href="#33-动态库依赖传递">3.3 动态库依赖传递</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-小结">4 小结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

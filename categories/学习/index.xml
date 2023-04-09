@@ -6,7 +6,29 @@
     <description>Recent content in 学习 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 09 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux动态链接二三事</title>
+      <link>https://xrg.fj.cn/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/</link>
+      <pubDate>Sun, 09 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/</guid>
+      <description>0 动态链接概要 相信点开本文的读者朋友们知道， 模块化编程 是开发过程中的一个重要概念，其思想大致是将程序中的 功能上独立且可复用 的代码块封装为一个个模块，基于这些功能模块构建出一个完整的可执行程序。
+库（libraries） 是实现模块化编程的重要基础。一个库就相当于是一个独立的模块，库的开发者将一系列功能封装成一个单元，开发人员可以在不同的库中找到不同的功能实现，以此简化代码并避免重复造轮子。
+在Linux中，库分为 静态库（static libraries） 和 动态库（dynamic libraries） ，前者是在 编译时 将库整合进可执行程序中，后者是在 运行时 才找到对应的库并加载执行。
+Linux库层次（图源参考资料[1]） 静态库对应的静态链接发生在编译期间，这意味着在可执行程序中包含了主程序依赖的所有静态库。这样做的好处是对于一些小的功能模块可以省去动态链接所需的时间开销；坏处是静态库不可共用，假如有多个可执行程序使用了同一个静态库，那么磁盘和内存中就会有多个静态库副本。
+动态库在我看来是更加优雅的模块化方式。其对应的 动态链接 发生在程序运行期间，当需要某一个功能函数时，系统自动查找提供这个功能的动态库并将其加载到内存中。其好处是不同的可执行程序依赖同一个动态库提供的功能时，只要内存中已经有了这个动态库就不需要重新加载，完美诠释了模块化+可复用的理念；坏处是动态链接一定程度上增加了运行耗时，且动态链接机制本身会使得错误的发现延后——编译时零告警零报错，等到运行时才发现跑挂了——这是很可能的事。
+静态库和动态库的对比（图源参考资料[1]） 既然动态链接是程序在运行期间才发生的事情，那么系统将回答如下的问题：
+要怎么知道这个程序需要哪些库？
+怎么找到对应的库？
+1 动态链接库的指定 对于第一个问题——要怎么知道这个程序需要哪些库——答案很简单：在编译的时候告诉系统。因此动态链接也不完全是在运行时才发生的事～至少在编译期间，我们会告诉编译器这个程序要链接哪些库，编译器在发现某些主程序没有实现的函数（符号）的时候，会到这些动态库里去找，假如在某个库里找到了这个函数，会在最终的可执行程序里标记出来，告诉系统在调用这个函数的时候动态加载一下所需的库。
+文字描述过于抽象，举个例子。
+假设我们实现了一个库，用来获取一个 [-100, 100] 之间的随机数，我们提供一个头文件供别人调用：
+// get_random.h #ifndef GET_RANDOM_H #define GET_RANDOM_H int GetRandom(); #endif 然后实现它：
+#include &amp;lt;random&amp;gt; #include &amp;#34;get_random.h&amp;#34; int GetRandom() { std::random_device rd; std::mt19937 mt(rd()); std::uniform_real_distribution&amp;lt;double&amp;gt; dist(-100, 100); return static_cast&amp;lt;int&amp;gt;(dist(mt)); } 并编译出一个动态库：
+$ g++ get_random.cpp -fPIC -shared -o libgetrd.</description>
+    </item>
+    
     <item>
       <title>错题本 | LeetCode1610. 可见点的最大数目</title>
       <link>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1610.-%E5%8F%AF%E8%A7%81%E7%82%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/</link>

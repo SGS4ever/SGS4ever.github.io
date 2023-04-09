@@ -3,16 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://xrg.fj.cn/categories/</loc>
-    <lastmod>2023-03-26T00:00:00+00:00</lastmod>
+    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/</loc>
+    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/post/</loc>
-    <lastmod>2023-03-26T00:00:00+00:00</lastmod>
+    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/</loc>
-    <lastmod>2023-03-26T00:00:00+00:00</lastmod>
+    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/</loc>
-    <lastmod>2023-03-26T00:00:00+00:00</lastmod>
+    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/%E6%97%A5%E5%B8%B8/</loc>
     <lastmod>2023-03-26T00:00:00+00:00</lastmod>
@@ -27,9 +36,6 @@
     <lastmod>2022-11-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/</loc>
-    <lastmod>2022-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2022-10-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/categories/%E5%AE%9E%E8%B7%B5/</loc>
@@ -90,9 +96,6 @@
     <lastmod>2021-12-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode1610.-%E5%8F%AF%E8%A7%81%E7%82%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/</loc>
-    <lastmod>2021-12-16T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2021-12-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/%E8%A7%82%E6%89%AC%E5%90%8D%E7%AB%8B%E4%B8%87/</loc>
