@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 位域 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。
+0 何为位域 位域（ bit-field ，后文均用 bit-field ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 比特位 ，临近的 bit-field 成员因此有可能在内存上共用或横跨字节 1 。
+struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &amp;lt;&amp;lt; &amp;#34;sizeof Foo: &amp;#34; &amp;lt;&amp;lt; sizeof(Foo) &amp;lt;&amp;lt; std::endl &amp;lt;&amp;lt; &amp;#34;sizeof Bar: &amp;#34; &amp;lt;&amp;lt; sizeof(Bar) &amp;lt;&amp;lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：'><title>C&#43;&#43;位域（bit-field）简介</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='C&#43;&#43;位域（bit-field）简介'>
+<meta property='og:description' content='近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 位域 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。
+0 何为位域 位域（ bit-field ，后文均用 bit-field ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 比特位 ，临近的 bit-field 成员因此有可能在内存上共用或横跨字节 1 。
+struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &amp;lt;&amp;lt; &amp;#34;sizeof Foo: &amp;#34; &amp;lt;&amp;lt; sizeof(Foo) &amp;lt;&amp;lt; std::endl &amp;lt;&amp;lt; &amp;#34;sizeof Bar: &amp;#34; &amp;lt;&amp;lt; sizeof(Bar) &amp;lt;&amp;lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：'>
+<meta property='og:url' content='https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-08-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-08-27T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="C&#43;&#43;位域（bit-field）简介">
+<meta name="twitter:description" content="近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 位域 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。
+0 何为位域 位域（ bit-field ，后文均用 bit-field ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 比特位 ，临近的 bit-field 成员因此有可能在内存上共用或横跨字节 1 。
+struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &amp;lt;&amp;lt; &amp;#34;sizeof Foo: &amp;#34; &amp;lt;&amp;lt; sizeof(Foo) &amp;lt;&amp;lt; std::endl &amp;lt;&amp;lt; &amp;#34;sizeof Bar: &amp;#34; &amp;lt;&amp;lt; sizeof(Bar) &amp;lt;&amp;lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/">C&#43;&#43;位域（bit-field）简介</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 27, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 6 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 <em>位域</em> 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。</p>
+<h3 id="0-何为位域">0 何为位域</h3>
+<p>位域（ <code>bit-field</code> ，后文均用 <code>bit-field</code> ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 <strong>比特位</strong> ，临近的 <code>bit-field</code> 成员因此有可能在内存上共用或横跨字节 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Foo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Bar</span> <span class="p">{</span> <span class="c1">// using bit field
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">x</span> <span class="p">:</span> <span class="mi">23</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">y</span> <span class="p">:</span> <span class="mi">9</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;sizeof Foo: &#34;</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Foo</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span> <span class="o">&lt;&lt;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;sizeof Bar: &#34;</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Bar</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/** output:
+</span></span></span><span class="line"><span class="cl"><span class="cm">sizeof Foo: 8
+</span></span></span><span class="line"><span class="cl"><span class="cm">sizeof Bar: 4
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>我们已知 <code>unsigned int</code> 大小是 <code>4</code> 字节，则 <code>Foo</code> 所占用的内存结构如下：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 393; 
+			flex-basis: 943px"
+	>
+	<a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1.png" data-size="857x218">
+		<img src="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1.png"
+			width="857"
+			height="218"
+			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1_hu57632a3e7723a7580dbb016eef280929_18766_480x0_resize_box_3.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1_hu57632a3e7723a7580dbb016eef280929_18766_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Foo">
+	</a>
+	
+	<figcaption>Foo</figcaption>
+	
+</figure></p>
+<p><code>bit-field</code> 写法下的 <code>Bar</code> 所占用的内存结构如下：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 518; 
+			flex-basis: 1245px"
+	>
+	<a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2.png" data-size="1489x287">
+		<img src="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2.png"
+			width="1489"
+			height="287"
+			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2_hu3ceb512fb850b2dca412218b54bf9eff_29003_480x0_resize_box_3.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2_hu3ceb512fb850b2dca412218b54bf9eff_29003_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Bar">
+	</a>
+	
+	<figcaption>Bar</figcaption>
+	
+</figure></p>
+<p>可以看到，这里的 <code>Bar::x</code> 和 <code>Bar::y</code> 共用了 <strong>字节</strong>  <code>2</code> ，其中 <code>Bar::x</code> 用了这个字节的 <code>7</code> 个比特位，<code>Bar::y</code> 用了这个字节的 <code>1</code> 个比特位。</p>
+<h3 id="1-场景">1 场景</h3>
+<p>大佬让我使用 <code>bit-field</code> 是因为有这么个场景，需要使用 <code>uint64_t</code> 来表示一个特殊的数据结构，其中高 <code>8</code> 位是一个计数器，用于防止数据重放；原本获取这个数值的代码是这么写的（已脱敏、简化）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">uint64_t</span> <span class="n">val</span> <span class="o">=</span> <span class="n">GetVal</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kt">uint8_t</span> <span class="n">e2e</span> <span class="o">=</span> <span class="n">GetE2e</span><span class="p">();</span> <span class="c1">// counter
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">val</span> <span class="o">|=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">e2e</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">56U</span><span class="p">;</span>
+</span></span></code></pre></div><p>这里的操作其实也没什么毛病，检出的Codecheck本身是个误报，不过，大佬看了这么段代码，觉得这个移位赋值太丑了，于是建议我改用 <code>bit-field</code> 来实现，我最终是这么写的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Bar</span> <span class="p">{</span> <span class="c1">// using bit field
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint64_t</span> <span class="nl">val</span> <span class="p">:</span> <span class="mi">56</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="nl">e2e</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Bar</span> <span class="n">bar</span> <span class="p">{.</span><span class="n">val</span> <span class="o">=</span> <span class="n">GetVal</span><span class="p">(),</span> <span class="p">.</span><span class="n">e2e</span> <span class="o">=</span> <span class="n">GetE2e</span><span class="p">()};</span>
+</span></span></code></pre></div><p>看似一切都好，实则有很多东西需要考虑，且看下文分解。</p>
+<h3 id="2-转换">2 转换</h3>
+<p>原本使用 <code>uint64_t</code> 来表示这么个数据结构，目的是最终把它转为一个 <code>vector&lt;uint8_t&gt;</code> 提供出去；本地用整型维护，是因为这个数据需要频繁地加加减减，如果一开始就维护 <code>vector</code> ，就太难运算了。</p>
+<p>因此，改写为 <code>bit-field</code> 之后，仍然必须考虑如何将它转换为 <code>vector&lt;uint8_t&gt;</code> 。</p>
+<p><a class="link" href="https://en.cppreference.com/w/cpp/language/bit_field"  target="_blank" rel="noopener"
+    >cppreference</a> 提供的Demo里，有个很粗暴的动作是 <code>std::bit_cast</code> <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> ，这个接口会直接把变量所在的地址的一段内存转义为模板指定的那个类型，用在 <code>bit-field</code> 身上大致是这样的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Bar</span> <span class="p">{</span> <span class="c1">// using bit field
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint64_t</span> <span class="nl">val</span> <span class="p">:</span> <span class="mi">56</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="nl">e2e</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">localVal</span> <span class="o">=</span> <span class="mh">0x00123456789ABCDEU</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="n">localE2e</span> <span class="o">=</span> <span class="mh">0xF0U</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Bar</span> <span class="n">bar</span> <span class="p">{.</span><span class="n">val</span> <span class="o">=</span> <span class="n">localVal</span><span class="p">,</span> <span class="p">.</span><span class="n">e2e</span> <span class="o">=</span> <span class="n">localE2e</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bit_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">bar</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/** output
+</span></span></span><span class="line"><span class="cl"><span class="cm">f0123456789abcde
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>可以看到，这里的输出值实际上是符合我们的预期的，因为这个 <code>bit-field</code> 结构的定义就来自于业务中使用 <strong>高 <code>8</code> 位</strong> 代表计数器的需求，这里转化出来的 <code>uint64_t</code> 值中，也的确把 <code>0xF0</code> 的部分放到了高位字节。</p>
+<p>不过很可惜的是， <a class="link" href="https://en.cppreference.com/w/cpp/numeric/bit_cast"  target="_blank" rel="noopener"
+    >bit_cast</a> 是C++20以后的特性了，在当前的业务代码中无法使用，穷则思变，大不了自己做类型转换：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Bar</span> <span class="p">{</span> <span class="c1">// using bit field
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint64_t</span> <span class="nl">val</span> <span class="p">:</span> <span class="mi">56</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="nl">e2e</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">localVal</span> <span class="o">=</span> <span class="mh">0x00123456789ABCDEU</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="n">localE2e</span> <span class="o">=</span> <span class="mh">0xF0U</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Bar</span> <span class="n">bar</span> <span class="p">{.</span><span class="n">val</span> <span class="o">=</span> <span class="n">localVal</span><span class="p">,</span> <span class="p">.</span><span class="n">e2e</span> <span class="o">=</span> <span class="n">localE2e</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Using bit_cast: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bit_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">bar</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Using reinterpret_cast: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bar</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**output
+</span></span></span><span class="line"><span class="cl"><span class="cm">Using bit_cast: f0123456789abcde
+</span></span></span><span class="line"><span class="cl"><span class="cm">Using reinterpret_cast: f0123456789abcde
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>这基本就解决了一切问题，只要把 <code>bit-field</code> 结构转为 <code>uint64_t</code> 传入原有的接口即可。</p>
+<p>问题的确是这样解决了的，然而这个特性只这么简单么？</p>
+<h3 id="3-内存结构">3 内存结构</h3>
+<h4 id="31-早出现的成员在低地址">3.1 早出现的成员在低地址</h4>
+<p>我们将 <code>Bar</code> 的成员定义换一个顺序，看看输出还是否符合我们的预期：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Bar</span> <span class="p">{</span> <span class="c1">// using bit field
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">uint8_t</span> <span class="nl">e2e</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="nl">val</span> <span class="p">:</span> <span class="mi">56</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">localVal</span> <span class="o">=</span> <span class="mh">0x00123456789ABCDEU</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span> <span class="n">localE2e</span> <span class="o">=</span> <span class="mh">0xF0U</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Bar</span> <span class="n">bar</span> <span class="p">{.</span><span class="n">e2e</span> <span class="o">=</span> <span class="n">localE2e</span><span class="p">,</span> <span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">localVal</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Using bit_cast: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">bit_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">bar</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Using reinterpret_cast: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bar</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**output
+</span></span></span><span class="line"><span class="cl"><span class="cm">Using bit_cast: 123456789abcdef0
+</span></span></span><span class="line"><span class="cl"><span class="cm">Using reinterpret_cast: 123456789abcdef0
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p>我们发现，结构体中的计数器部分，转为 <code>uint64_t</code> 之后所在的位置，实际上是不符合预期的。这就表明：我们在定义 <code>bit-field</code> 的时候，越先出现的成员，实际上是在最终转出来的值的 <strong>低位</strong> 上。</p>
+<p>观察我们执行机的字节序 <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">[</span>drogon@VM-4-4-centos build<span class="o">]</span>$ lscpu <span class="p">|</span> grep -i byte
+</span></span><span class="line"><span class="cl">Byte Order:            Little Endian
+</span></span></code></pre></div><p>结合 <em>小端序</em> 的定义，最终可以判断， <code>bit-field</code> 中先定义的成员，就位于 <strong>低地址</strong> ，后面的成员，就位于 <strong>高地址</strong> ；那么，一个 <code>bit-field</code> 会被转成什么样的数值，就是不确定的了，在小端序机器中，我们最终希望出现在高位的值，就必须放在 <code>bit-field</code> 的后面部分去定义，而大端序机器上，定义则必须相反。</p>
+<p>举另一成员较多的结构来佐证我们的发现：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Foo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">a</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">b</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">c</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">d</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localA</span> <span class="p">{</span><span class="mh">0x1234U</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localB</span> <span class="p">{</span><span class="mh">0x5678U</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localC</span> <span class="p">{</span><span class="mh">0x90ABU</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localD</span> <span class="p">{</span><span class="mh">0xCDEFU</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Foo</span> <span class="n">foo</span> <span class="p">{.</span><span class="n">a</span> <span class="o">=</span> <span class="n">localA</span><span class="p">,</span> <span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">localB</span><span class="p">,</span> <span class="p">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">localC</span><span class="p">,</span> <span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">localD</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Using reinterpret_cast: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**output
+</span></span></span><span class="line"><span class="cl"><span class="cm">Using reinterpret_cast: cdef90ab56781234
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><h4 id="32-每个成员都遵循字节序">3.2 每个成员都遵循字节序</h4>
+<p>我们考虑直接把 <code>Foo</code> 结构所在的内存，按照从低到高的顺序，一个字节一个字节地打出来。这时早前提到的 <code>std::vector&lt;uint8_t&gt;</code> 和 <code>memcpy</code> 就是一个很好的帮手了：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Foo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">a</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">b</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">c</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">d</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localA</span> <span class="p">{</span><span class="mh">0x1234U</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localB</span> <span class="p">{</span><span class="mh">0x5678U</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localC</span> <span class="p">{</span><span class="mh">0x90ABU</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">localD</span> <span class="p">{</span><span class="mh">0xCDEFU</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Foo</span> <span class="n">foo</span> <span class="p">{.</span><span class="n">a</span> <span class="o">=</span> <span class="n">localA</span><span class="p">,</span> <span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">localB</span><span class="p">,</span> <span class="p">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">localC</span><span class="p">,</span> <span class="p">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">localD</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Using reinterpret_cast: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Foo</span><span class="p">),</span> <span class="mh">0x0U</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">memcpy</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">foo</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">foo</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Using memcpy: &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ele</span> <span class="p">:</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ele</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**output
+</span></span></span><span class="line"><span class="cl"><span class="cm">Using reinterpret_cast: cdef90ab56781234
+</span></span></span><span class="line"><span class="cl"><span class="cm">Using memcpy: 34127856ab90efcd
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><p><code>memcpy</code> 将 <code>bit-field</code> 结构体的内存直接拷到 <code>vector</code> 中，然后我们逐字节地输出；可以看到， <code>Foo</code> 结构的内存首先遵循 <a class="link" href="#31-%e6%97%a9%e5%87%ba%e7%8e%b0%e7%9a%84%e6%88%90%e5%91%98%e5%9c%a8%e4%bd%8e%e5%9c%b0%e5%9d%80" >3.1小节</a> 的规则， <code>Foo::a</code> 在低地址，其次，每个成员被赋的值也按照小端序在存储。</p>
+<p>不妨再用GDB验证我们的发现：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 448px"
+	>
+	<a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3.png" data-size="1139x610">
+		<img src="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3.png"
+			width="1139"
+			height="610"
+			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3_hu1fe22cbcc4dcd4a6ca436ef7eb414729_129755_480x0_resize_box_3.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3_hu1fe22cbcc4dcd4a6ca436ef7eb414729_129755_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="gdb print &foo">
+	</a>
+	
+	<figcaption>gdb print &amp;foo</figcaption>
+	
+</figure></p>
+<h4 id="33-再看demo">3.3 再看Demo</h4>
+<p>我们搞清了 <code>bit-field</code> 内存结构的两个原则，再来看看 <a class="link" href="https://en.cppreference.com/w/cpp/language/bit_field"  target="_blank" rel="noopener"
+    >cppreference</a> 提供的Demo：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bit&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">S</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// will usually occupy 2 bytes:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="nl">b1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">;</span>  <span class="c1">// 1st 3 bits (in 1st byte) are b1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span>    <span class="o">:</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1">// next 2 bits (in 1st byte) are blocked out as unused
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="nl">b2</span> <span class="p">:</span> <span class="mi">6</span><span class="p">;</span>  <span class="c1">// 6 bits for b2 - doesn&#39;t fit into the 1st byte =&gt; starts a 2nd
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="nl">b3</span> <span class="p">:</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1">// 2 bits for b3 - next (and final) bits in the 2nd byte
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span> <span class="c1">// usually prints 2
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">S</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// set distinguishable field values
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">s</span><span class="p">.</span><span class="n">b1</span> <span class="o">=</span> <span class="mb">0b111</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="p">.</span><span class="n">b2</span> <span class="o">=</span> <span class="mb">0b101111</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="p">.</span><span class="n">b3</span> <span class="o">=</span> <span class="mb">0b11</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// show layout of fields in S
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">bit_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// usually prints 1110000011110111
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// breakdown is:  \_/\/\_/\____/\/
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//                 b1 u a   b2  b3
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// where &#34;u&#34; marks the unused :2 specified in the struct, and
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// &#34;a&#34; marks compiler-added padding to byte-align the next field.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Byte-alignment is happening because b2&#39;s type is declared unsigned char;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// if b2 were declared uint16_t there would be no &#34;a&#34;, b2 would abut &#34;u&#34;.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">b</span><span class="o">=</span><span class="n">i</span><span class="p">;</span> <span class="n">b</span><span class="p">;</span> <span class="n">b</span><span class="o">&gt;&gt;=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">// print LSB-first
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><blockquote>
+<p>2</p>
+<p>1110000011110111</p>
+</blockquote>
+<p>这个例子在我最初和同事一块研究的时候，搞得我们云里雾里的，完全不知道这里的输出是怎么回事，实际上万变不离其宗，只消考虑：</p>
+<ul>
+<li>
+<p>先定义的成员在低地址，因此变量 <code>s</code> 的内存结构就是 <code>s.b1</code> ~ <code>s.b2</code> ~ <code>s.b3</code></p>
+</li>
+<li>
+<p>成员的值也遵循小端序，因此对于 <code>s.b2 = 0b101111</code> ，它的内存从低到高的比特位其实是反过来的 <code>111101</code></p>
+</li>
+<li>
+<p><code>bit-field</code> 有 <em>匿名成员</em> 和 <em>内存对齐</em> 等机制，由于比较易懂不在本文介绍的重点里，简单理解为使用 <code>0</code> 来填充一些比特位，使整个结构的大小符合内存分配的规律（如 <code>4</code> 字节的倍数这样的）</p>
+</li>
+</ul>
+<p>这三点结合起来，可以解释Demo里的 <strong>注释</strong> 。</p>
+<p>对Demo的输出的理解则又要多绕一个弯：这里的 <code>for</code> 循环实际上是 <strong>从低位到高位</strong> 打印 <code>i</code> 这个变量，这个变量又是 <code>std::bit_cast&lt;uint16_t&gt;(s)</code> 得到的，因此，虽然 <code>i</code> 的内存结构跟 <code>s</code> 是一样的，但它的数值，已经按照小端序的规则转化过了。现在， <code>i</code> 的 <strong>低位</strong> 实际上是内存的 <strong>低地址</strong> ，循环从 <strong>低位到高位</strong> 打出来的就是内存的 <strong>低地址到高地址</strong> ，也就是我们看到的，注释里面的 <code>s</code> 的内存结构。</p>
+<h3 id="4-番外">4 番外</h3>
+<p>本章摘录一些 <code>bit-field</code> 的其他特性 <sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> ：</p>
+<ul>
+<li>
+<p>匿名成员，只定义长度但不提供名字，通常用于把比特位拉齐到 <code>8</code> 到整数倍，在 <a class="link" href="#33-%e5%86%8d%e7%9c%8bdemo" >3.3节</a> 中的Demo里有；</p>
+</li>
+<li>
+<p><strong>不能</strong> 对 <code>bit-field</code> 成员取地址，编译会失败，原因很容易理解：成员在内存中可能是 <strong>跨字节</strong> 的，因此指针没办法定位到这样的成员身上；</p>
+</li>
+<li>
+<p>对 <code>bit-field</code> 成员赋超出表示范围的值，最终的结果要看编译器的实现（一般是类似整数截断的行为）；</p>
+</li>
+<li>
+<p><code>bit-field</code> 也可以放到类里，也可以定义 <code>public</code> 接口对 <code>bit-field</code> 成员进行操作：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Foo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Foo</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">rhsa</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">rhsb</span><span class="p">)</span> <span class="o">:</span> <span class="n">a</span><span class="p">(</span><span class="n">rhsa</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">rhsb</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nf">GetA</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nf">GetB</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="nf">GetC</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">c</span><span class="p">;}</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">a</span> <span class="p">:</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="nl">b</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">c</span><span class="p">{</span><span class="mh">0xDEADBEEF</span><span class="p">};</span> <span class="c1">// common member
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">is_unsigned_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nb">true</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">LOGX</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">LOGX</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="n">T</span> <span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">desc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">LOGX</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">val</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;sizeof Foo: &#34;</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Foo</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// 内存对齐
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">Foo</span> <span class="n">foo</span><span class="p">(</span><span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xAB</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">LOGX</span><span class="p">(</span><span class="s">&#34;foo.a: &#34;</span><span class="p">,</span> <span class="n">foo</span><span class="p">.</span><span class="n">GetA</span><span class="p">());</span> <span class="c1">// 截断
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOGX</span><span class="p">(</span><span class="s">&#34;foo.b: &#34;</span><span class="p">,</span> <span class="n">foo</span><span class="p">.</span><span class="n">GetB</span><span class="p">());</span> <span class="c1">// 正常
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOGX</span><span class="p">(</span><span class="s">&#34;foo.c: &#34;</span><span class="p">,</span> <span class="n">foo</span><span class="p">.</span><span class="n">GetC</span><span class="p">());</span> <span class="c1">// 默认构造
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**output
+</span></span></span><span class="line"><span class="cl"><span class="cm">sizeof Foo: 8
+</span></span></span><span class="line"><span class="cl"><span class="cm">foo.a: 1f
+</span></span></span><span class="line"><span class="cl"><span class="cm">foo.b: ab
+</span></span></span><span class="line"><span class="cl"><span class="cm">foo.c: deadbeef
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></div><h3 id="感悟">感悟</h3>
+<p>写完本文不禁感叹，由于字节序的存在，使得要想在实际生产中快速地引入 <code>bit-field</code> 是很难的，对于两三个成员的结构来说尚可以把握，成员一多，每个成员的字节序、每个成员的值的字节序，就成为了令人头痛却又不得不考虑的一个东西了。无怪乎我虽浅看过一些C/C++编程的材料，却直到大佬亲自指点方知有此特性的存在。</p>
+<p>假如只是为了缩减结构体所占的内存，且结构体本身又没有特殊的转为数值的诉求，那么使用 <code>bit-field</code> 这样的底层特性是合适的；而假如像本文所说的，总是希望对 <code>bit-field</code> 所在的那块内存进行一些转换，则这个机制的底层原理实在很容易把人绕进去，倒不如乖乖使用虽丑却香的整数位运算去也。</p>
+<h3 id="参考资料">参考资料</h3>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Bit-field, cppreference, <a class="link" href="https://en.cppreference.com/w/cpp/language/bit_field"  target="_blank" rel="noopener"
+    >https://en.cppreference.com/w/cpp/language/bit_field</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>std::bit_cast, cppreference, <a class="link" href="https://en.cppreference.com/w/cpp/numeric/bit_cast"  target="_blank" rel="noopener"
+    >https://en.cppreference.com/w/cpp/numeric/bit_cast</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>理解字节序, 阮一峰, <a class="link" href="https://www.ruanyifeng.com/blog/2016/11/byte-order.html"  target="_blank" rel="noopener"
+    >https://www.ruanyifeng.com/blog/2016/11/byte-order.html</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>Bit Fields in C, GeeksforGeeks, <a class="link" href="https://www.geeksforgeeks.org/bit-fields-c/"  target="_blank" rel="noopener"
+    >https://www.geeksforgeeks.org/bit-fields-c/</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/vscode-tasks%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">VSCode tasks简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Linux动态链接二三事</h2>
+            <footer class="article-time">
+                <time datetime=''>Apr 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">TCP加速技术简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 25, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Jul 03, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/oauth2.0%E6%B5%85%E6%9E%90/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">OAuth2.0浅析</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 12, 2020</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-何为位域">0 何为位域</a></li>
+    <li><a href="#1-场景">1 场景</a></li>
+    <li><a href="#2-转换">2 转换</a></li>
+    <li><a href="#3-内存结构">3 内存结构</a>
+      <ul>
+        <li><a href="#31-早出现的成员在低地址">3.1 早出现的成员在低地址</a></li>
+        <li><a href="#32-每个成员都遵循字节序">3.2 每个成员都遵循字节序</a></li>
+        <li><a href="#33-再看demo">3.3 再看Demo</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-番外">4 番外</a></li>
+    <li><a href="#感悟">感悟</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

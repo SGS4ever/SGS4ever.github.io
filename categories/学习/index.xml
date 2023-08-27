@@ -6,7 +6,33 @@
     <description>Recent content in 学习 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 09 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 27 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43;位域（bit-field）简介</title>
+      <link>https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Sun, 27 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/</guid>
+      <description>近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 位域 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。
+0 何为位域 位域（ bit-field ，后文均用 bit-field ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 比特位 ，临近的 bit-field 成员因此有可能在内存上共用或横跨字节 1 。
+struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &amp;lt;&amp;lt; &amp;#34;sizeof Foo: &amp;#34; &amp;lt;&amp;lt; sizeof(Foo) &amp;lt;&amp;lt; std::endl &amp;lt;&amp;lt; &amp;#34;sizeof Bar: &amp;#34; &amp;lt;&amp;lt; sizeof(Bar) &amp;lt;&amp;lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：</description>
+    </item>
+    
+    <item>
+      <title>VSCode tasks简介</title>
+      <link>https://xrg.fj.cn/p/vscode-tasks%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Sun, 27 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/vscode-tasks%E7%AE%80%E4%BB%8B/</guid>
+      <description>近来与VSCode打交道颇多，偶然认识了其 Tasks 特性，很觉得对效率提升大有裨益，浅做一记，以备后用。
+所谓 Tasks ，实际上就是一组快捷命令的组合，将我们常用的操作整理为一个集合，一键式执行，可以极大地减少手动的命令输入和记忆成本。
+在VSCode工作区根目录 .vscode 文件夹下创建 tasks.json 文件，写入第一个快捷指令：
+tasks.json file location { // See https://go.microsoft.com/fwlink/?LinkId=733558 // for the documentation about the tasks.json format &amp;#34;version&amp;#34;: &amp;#34;2.0.0&amp;#34;, &amp;#34;tasks&amp;#34;: [ { &amp;#34;label&amp;#34;: &amp;#34;Run tests&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;shell&amp;#34;, &amp;#34;command&amp;#34;: &amp;#34;echo &amp;#39;Hello world&amp;#39;&amp;#34;, &amp;#34;group&amp;#34;: &amp;#34;test&amp;#34;, &amp;#34;presentation&amp;#34;: { &amp;#34;reveal&amp;#34;: &amp;#34;always&amp;#34;, &amp;#34;panel&amp;#34;: &amp;#34;new&amp;#34; } } ] } 从菜单栏【Terminal】&amp;ndash;【Run task】手动打开任务栏（或自己绑定快捷键）：
+run task 运行！
+task result 实际场景：一键编译 见到了SHELL语句的自动执行后，很容易就能在实际生产中用上这个特性，毕竟，SHELL语句本身是支持分隔符的（ ; ），即使对 Tasks 的高端用法没什么了解，直接把一堆命令拼到一起，把 task 当快捷键用，也足以覆盖很多的生产场景了。
+例如，我打开了一个小项目，其中只有一份源文件和一份CMake文件，希望在这个项目根目录下创建一个 build 目录，并且自动完成 cmake 和 make ，那么我会写一个这样的 task ：</description>
+    </item>
+    
     <item>
       <title>Linux动态链接二三事</title>
       <link>https://xrg.fj.cn/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/</link>
