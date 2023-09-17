@@ -6,7 +6,19 @@
     <description>Recent content in Posts on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 27 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43;「emplace」的些许细节</title>
+      <link>https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/</link>
+      <pubDate>Sun, 17 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/</guid>
+      <description>较新版本的cpp容器支持一些 emplace 操作，比如 vector::empalce 和 map::emplace ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。
+不过 emplace 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 emplace 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。
+1 emplace左值——退化为拷贝 为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：
+class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } ~Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;dtor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj &amp;amp;operator=(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } Obj &amp;amp;operator=(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } void Echo() { std::cout &amp;lt;&amp;lt; &amp;#34;Hello world&amp;#34; &amp;lt;&amp;lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。</description>
+    </item>
+    
     <item>
       <title>C&#43;&#43;位域（bit-field）简介</title>
       <link>https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/</link>

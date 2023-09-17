@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='较新版本的cpp容器支持一些 emplace 操作，比如 vector::empalce 和 map::emplace ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。
+不过 emplace 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 emplace 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。
+1 emplace左值——退化为拷贝 为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：
+class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } ~Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;dtor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj &amp;amp;operator=(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } Obj &amp;amp;operator=(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } void Echo() { std::cout &amp;lt;&amp;lt; &amp;#34;Hello world&amp;#34; &amp;lt;&amp;lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。'><title>C&#43;&#43;「emplace」的些许细节</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='C&#43;&#43;「emplace」的些许细节'>
+<meta property='og:description' content='较新版本的cpp容器支持一些 emplace 操作，比如 vector::empalce 和 map::emplace ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。
+不过 emplace 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 emplace 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。
+1 emplace左值——退化为拷贝 为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：
+class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } ~Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;dtor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj &amp;amp;operator=(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } Obj &amp;amp;operator=(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } void Echo() { std::cout &amp;lt;&amp;lt; &amp;#34;Hello world&amp;#34; &amp;lt;&amp;lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-09-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-09-17T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="C&#43;&#43;「emplace」的些许细节">
+<meta name="twitter:description" content="较新版本的cpp容器支持一些 emplace 操作，比如 vector::empalce 和 map::emplace ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。
+不过 emplace 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 emplace 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。
+1 emplace左值——退化为拷贝 为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：
+class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } ~Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;dtor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj &amp;amp;operator=(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } Obj &amp;amp;operator=(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } void Echo() { std::cout &amp;lt;&amp;lt; &amp;#34;Hello world&amp;#34; &amp;lt;&amp;lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/">C&#43;&#43;「emplace」的些许细节</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 17, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>较新版本的cpp容器支持一些 <code>emplace</code> 操作，比如 <a class="link" href="https://en.cppreference.com/w/cpp/container/vector/emplace"  target="_blank" rel="noopener"
+    >vector::empalce</a> 和 <a class="link" href="https://en.cppreference.com/w/cpp/container/map/emplace"  target="_blank" rel="noopener"
+    >map::emplace</a> ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。</p>
+<p>不过 <code>emplace</code> 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 <code>emplace</code> 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。</p>
+<h3 id="1-emplace左值退化为拷贝">1 emplace左值——退化为拷贝</h3>
+<p>为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Obj</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Obj</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;ctor&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">Obj</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;dtor&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Obj</span><span class="p">(</span><span class="k">const</span> <span class="n">Obj</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">)</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;copy ctor&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Obj</span><span class="p">(</span><span class="n">Obj</span> <span class="o">&amp;&amp;</span><span class="n">rhs</span><span class="p">)</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;move ctor&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Obj</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Obj</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">)</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;copy operator=&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Obj</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Obj</span> <span class="o">&amp;&amp;</span><span class="n">rhs</span><span class="p">)</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;move operator=&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Echo</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Hello world&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 <code>Shelter</code> 类，其成员是一个 <code>multimap</code> ，提供一个对外的 <code>Push</code> 接口来往 <code>multimap</code> 中添加数据，然后在 <code>Push</code> 接口里调用 <code>multimap::emplace</code> 方法。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Shelter</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">Push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Obj</span><span class="o">&gt;</span> <span class="n">item</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Dump</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">multimap</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Obj</span><span class="o">&gt;</span> <span class="n">mmp_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Shelter</span><span class="o">::</span><span class="n">Push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Obj</span><span class="o">&gt;</span> <span class="n">item</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Shelter::Push =========&gt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mmp_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Shelter</span><span class="o">::</span><span class="n">Dump</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">:</span> <span class="n">mmp_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">v</span><span class="p">.</span><span class="n">Echo</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h4 id="11-传值">1.1 传值</h4>
+<p>上面给出的 <code>Shelter</code> 实现中， <code>Push</code> 参数按值传递。</p>
+<p>在 <code>main</code> 函数分别向 <code>Push</code> 接口传一个右值和一个左值：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Shelter</span> <span class="n">shelter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">shelter</span><span class="p">.</span><span class="n">Push</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="n">Obj</span><span class="p">()});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">input</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">Obj</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">shelter</span><span class="p">.</span><span class="n">Push</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">shelter</span><span class="p">.</span><span class="n">Dump</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>观察输出：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ctor
+</span></span><span class="line"><span class="cl">move ctor
+</span></span><span class="line"><span class="cl">Shelter::Push <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">copy ctor
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">ctor
+</span></span><span class="line"><span class="cl">move ctor
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">copy ctor
+</span></span><span class="line"><span class="cl">Shelter::Push <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">copy ctor
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">Hello world
+</span></span><span class="line"><span class="cl">Hello world
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">dtor
+</span></span></code></pre></div><p>分析程序分别执行了什么动作导致这些输出的产生：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># shelter.Push({1, Obj()});</span>
+</span></span><span class="line"><span class="cl">ctor						<span class="c1"># 临时对象创建</span>
+</span></span><span class="line"><span class="cl">move ctor					<span class="c1"># 临时对象移动到pair</span>
+</span></span><span class="line"><span class="cl">Shelter::Push <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">copy ctor					<span class="c1"># emplace，产生复制</span>
+</span></span><span class="line"><span class="cl">dtor						<span class="c1"># Push参数对象析构</span>
+</span></span><span class="line"><span class="cl">dtor						<span class="c1"># pair里的临时对象析构</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># auto input = std::make_pair(2, Obj());</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># shelter.Push(input);</span>
+</span></span><span class="line"><span class="cl">ctor						<span class="c1"># make_pair临时Obj创建</span>
+</span></span><span class="line"><span class="cl">move ctor					<span class="c1"># 临时Obj移动到pair</span>
+</span></span><span class="line"><span class="cl">dtor						<span class="c1"># 临时Obj销毁</span>
+</span></span><span class="line"><span class="cl">copy ctor					<span class="c1"># 值传递</span>
+</span></span><span class="line"><span class="cl">Shelter::Push <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">copy ctor					<span class="c1"># emplace，复制</span>
+</span></span><span class="line"><span class="cl">dtor						<span class="c1"># Push参数对象析构</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># shelter.Dump()</span>
+</span></span><span class="line"><span class="cl">Hello world
+</span></span><span class="line"><span class="cl">Hello world
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 本地obj对象和shelter.mmp_里面的两个对象析构</span>
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">dtor
+</span></span><span class="line"><span class="cl">dtor
+</span></span></code></pre></div><p>可见，对于一个纯粹的左值来说， <code>emplace</code> 会退化成为拷贝构造，显然不太符合实际业务中原地构造、节省开销的诉求。</p>
+<h4 id="12-传左值右值引用">1.2 传左值/右值引用</h4>
+<p>简单改写一下 <code>Push</code> 接口，使其可以区分右值和左值：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Shelter</span><span class="o">::</span><span class="n">Push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Obj</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">item</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Shelter::Push lvalue ref =========&gt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mmp_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Shelter</span><span class="o">::</span><span class="n">Push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Obj</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span><span class="n">item</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Shelter::Push rvalue ref =========&gt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mmp_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>输出却毫无变化：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp"># 以下只关注Push内部发生的事情，外部其他构造/析构输出省略
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="n">Shelter</span><span class="o">::</span><span class="n">Push</span> <span class="n">rvalue</span> <span class="n">ref</span> <span class="o">=========&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">copy</span> <span class="n">ctor</span>		<span class="err">#</span> <span class="n">emplace</span><span class="err">，还是拷贝</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Shelter</span><span class="o">::</span><span class="n">Push</span> <span class="n">lvalue</span> <span class="n">ref</span> <span class="o">=========&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">copy</span> <span class="n">ctor</span>
+</span></span></code></pre></div><p>诶？怎么传入右值和左值，都在 <code>emplace</code> 的时候拷贝？注意：右值引用本身是一个左值类型，因此本质上传给 <code>emplace</code> 的还是一个左值，为了在 <code>Push(Obj &amp;&amp;)</code> 接口内充分利用移动语义，需要再执行一回类型转换：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Shelter</span><span class="o">::</span><span class="n">Push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Obj</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span><span class="n">item</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Shelter::Push rvalue ref =========&gt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mmp_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">item</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 调用方法仍旧如前</span>
+</span></span><span class="line"><span class="cl">Shelter::Push rvalue <span class="nv">ref</span> <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">move ctor		<span class="c1"># 符合预期，入参是右值，移动</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Shelter::Push lvalue <span class="nv">ref</span> <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">copy ctor		<span class="c1"># 入参是左值，拷贝</span>
+</span></span></code></pre></div><h3 id="2-减少重复代码">2 减少重复代码</h3>
+<p>实际上分别实现了参数类型为左值引用和右值引用的 <code>Push</code> 后，我们已然能够借助移动语义来提高程序性能，不过，从代码上看，却发现这两个版本大差不差，令人很想将它们合并起来。</p>
+<p>自动区分入参是左值还是右值，并原原本本传递给 <code>multimap::emplace</code> ，这听着真是一个再熟悉不过的场景了，简直是 <em>万能引用 + 完美转发</em> 的模板场景：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Push</span><span class="p">(</span><span class="n">T</span> <span class="o">&amp;&amp;</span><span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Shelter::Push =========&gt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mmp_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">val</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>坏处是由于模板参数没法自动推导 <code>{xxx}</code> 的类型，之前向接口传入右值的写法必须改写：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">shelter</span><span class="p">.</span><span class="n">Push</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="n">Obj</span><span class="p">()});</span> <span class="c1">// 编译错误
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">shelter</span><span class="p">.</span><span class="n">Push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Obj</span><span class="p">()));</span> <span class="c1">// fine
+</span></span></span></code></pre></div><p>输出则是符合预期的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Shelter::Push <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">move ctor		<span class="c1"># 入参是右值，传给emplace的就是右值</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Shelter::Push <span class="o">=========</span>&gt;
+</span></span><span class="line"><span class="cl">copy ctor		<span class="c1"># 入参是左值，传给emplace的就是左值</span>
+</span></span></code></pre></div><p>如果希望对接口的自由度进行进一步限制，也可以只允许 <code>T</code> 被推导为 <code>pair&lt;int, Obj&gt;</code> ：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">using</span> <span class="n">MapItem</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Obj</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">MapItem</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Push</span><span class="p">(</span><span class="n">T</span> <span class="o">&amp;&amp;</span><span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Shelter::Push =========&gt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mmp_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">val</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;位域（bit-field）简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/vscode-tasks%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">VSCode tasks简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Linux动态链接二三事</h2>
+            <footer class="article-time">
+                <time datetime=''>Apr 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">TCP加速技术简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 25, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">syslog机制简述</h2>
+            <footer class="article-time">
+                <time datetime=''>Jul 03, 2021</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-emplace左值退化为拷贝">1 emplace左值——退化为拷贝</a>
+      <ul>
+        <li><a href="#11-传值">1.1 传值</a></li>
+        <li><a href="#12-传左值右值引用">1.2 传左值/右值引用</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-减少重复代码">2 减少重复代码</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
