@@ -2,25 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/</loc>
-    <lastmod>2023-09-17T00:00:00+00:00</lastmod>
+    <loc>https://xrg.fj.cn/p/harmonyos-learning%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/</loc>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/categories/</loc>
-    <lastmod>2023-09-17T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/tags/harmonyos/</loc>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/post/</loc>
-    <lastmod>2023-09-17T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/</loc>
-    <lastmod>2023-09-17T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/</loc>
-    <lastmod>2023-09-17T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
-    <lastmod>2023-09-17T00:00:00+00:00</lastmod>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/</loc>
     <lastmod>2023-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/</loc>

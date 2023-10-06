@@ -6,7 +6,22 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【HarmonyOS learning】「案例：ArkTS基础知识」分析</title>
+      <link>https://xrg.fj.cn/p/harmonyos-learning%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/</link>
+      <pubDate>Fri, 06 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/harmonyos-learning%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/</guid>
+      <description>项目源码
+1 准备 1.1 新建工程 DevEcoStudio 创建空白工程，只关注 entry/src/main 路径即可，IDE默认已创建好应用入口和入口页面，不需要其他操作，准备按照项目逻辑来创建页面。
+1.2 数据类型定义 完成工程创建后，我们再来创建一些数据类型的定义。将此动作归到 『准备』 一节，只是由于在复刻这个Demo的时候没办法对这些数据类型做什么变动，从Demo源码里复制粘贴即可。
+// src/main/ets/common/bean/RankData.ets export class RankData { name: Resource; vote: string; // Number of votes id: string; constructor(id: string, name: Resource, vote: string) { this.id = id; this.name = name; this.vote = vote; } } 这里的 RankData.name 的类型是 Resource ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。
+至于另一份数据类型文件 src/main/ets/common/constants/Constants.ets ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。
+1.3 准备资源 应用程序的资源目录在 src/main/resources 路径下，这里直接把开源Demo的资源整个复制到我们的 Demo 里即可，这些资源包括字符定义、多媒体文件等。
+例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。</description>
+    </item>
+    
     <item>
       <title>C&#43;&#43;「emplace」的些许细节</title>
       <link>https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/</link>
