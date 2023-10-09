@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='项目源码
+1 准备 1.1 新建工程 DevEcoStudio 创建空白工程，只关注 entry/src/main 路径即可，IDE默认已创建好应用入口和入口页面，不需要其他操作，准备按照项目逻辑来创建页面。
+1.2 数据类型定义 完成工程创建后，我们再来创建一些数据类型的定义。将此动作归到 『准备』 一节，只是由于在复刻这个Demo的时候没办法对这些数据类型做什么变动，从Demo源码里复制粘贴即可。
+// src/main/ets/common/bean/RankData.ets export class RankData { name: Resource; vote: string; // Number of votes id: string; constructor(id: string, name: Resource, vote: string) { this.id = id; this.name = name; this.vote = vote; } } 这里的 RankData.name 的类型是 Resource ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。
+至于另一份数据类型文件 src/main/ets/common/constants/Constants.ets ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。
+1.3 准备资源 应用程序的资源目录在 src/main/resources 路径下，这里直接把开源Demo的资源整个复制到我们的 Demo 里即可，这些资源包括字符定义、多媒体文件等。
+例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。'><title>【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析'>
+<meta property='og:description' content='项目源码
+1 准备 1.1 新建工程 DevEcoStudio 创建空白工程，只关注 entry/src/main 路径即可，IDE默认已创建好应用入口和入口页面，不需要其他操作，准备按照项目逻辑来创建页面。
+1.2 数据类型定义 完成工程创建后，我们再来创建一些数据类型的定义。将此动作归到 『准备』 一节，只是由于在复刻这个Demo的时候没办法对这些数据类型做什么变动，从Demo源码里复制粘贴即可。
+// src/main/ets/common/bean/RankData.ets export class RankData { name: Resource; vote: string; // Number of votes id: string; constructor(id: string, name: Resource, vote: string) { this.id = id; this.name = name; this.vote = vote; } } 这里的 RankData.name 的类型是 Resource ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。
+至于另一份数据类型文件 src/main/ets/common/constants/Constants.ets ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。
+1.3 准备资源 应用程序的资源目录在 src/main/resources 路径下，这里直接把开源Demo的资源整个复制到我们的 Demo 里即可，这些资源包括字符定义、多媒体文件等。
+例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='HarmonyOS' /><meta property='article:published_time' content='2023-10-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-10-06T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析">
+<meta name="twitter:description" content="项目源码
+1 准备 1.1 新建工程 DevEcoStudio 创建空白工程，只关注 entry/src/main 路径即可，IDE默认已创建好应用入口和入口页面，不需要其他操作，准备按照项目逻辑来创建页面。
+1.2 数据类型定义 完成工程创建后，我们再来创建一些数据类型的定义。将此动作归到 『准备』 一节，只是由于在复刻这个Demo的时候没办法对这些数据类型做什么变动，从Demo源码里复制粘贴即可。
+// src/main/ets/common/bean/RankData.ets export class RankData { name: Resource; vote: string; // Number of votes id: string; constructor(id: string, name: Resource, vote: string) { this.id = id; this.name = name; this.vote = vote; } } 这里的 RankData.name 的类型是 Resource ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。
+至于另一份数据类型文件 src/main/ets/common/constants/Constants.ets ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。
+1.3 准备资源 应用程序的资源目录在 src/main/resources 路径下，这里直接把开源Demo的资源整个复制到我们的 Demo 里即可，这些资源包括字符定义、多媒体文件等。
+例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/">【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 06, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p><a class="link" href="https://gitee.com/harmonyos/codelabs/tree/master/RankingDemo"  target="_blank" rel="noopener"
+    >项目源码</a></p>
+<h3 id="1-准备">1 准备</h3>
+<h4 id="11-新建工程">1.1 新建工程</h4>
+<p>DevEcoStudio 创建空白工程，只关注 <code>entry/src/main</code> 路径即可，IDE默认已创建好应用入口和入口页面，不需要其他操作，准备按照项目逻辑来创建页面。</p>
+<h4 id="12-数据类型定义">1.2 数据类型定义</h4>
+<p>完成工程创建后，我们再来创建一些数据类型的定义。将此动作归到 『准备』 一节，只是由于在复刻这个Demo的时候没办法对这些数据类型做什么变动，从Demo源码里复制粘贴即可。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="c1">// src/main/ets/common/bean/RankData.ets
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">export</span> <span class="kr">class</span> <span class="nx">RankData</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">name</span>: <span class="kt">Resource</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">vote</span>: <span class="kt">string</span><span class="p">;</span> <span class="c1">// Number of votes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">id</span>: <span class="kt">string</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kr">constructor</span><span class="p">(</span><span class="nx">id</span>: <span class="kt">string</span><span class="p">,</span> <span class="nx">name</span>: <span class="kt">Resource</span><span class="p">,</span> <span class="nx">vote</span>: <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">vote</span> <span class="o">=</span> <span class="nx">vote</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这里的 <code>RankData.name</code> 的类型是 <code>Resource</code> ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。</p>
+<p>至于另一份数据类型文件 <code>src/main/ets/common/constants/Constants.ets</code> ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。</p>
+<h4 id="13-准备资源">1.3 准备资源</h4>
+<p>应用程序的资源目录在 <code>src/main/resources</code> 路径下，这里直接把开源Demo的资源整个复制到我们的 <code>Demo</code> 里即可，这些资源包括字符定义、多媒体文件等。</p>
+<blockquote>
+<p>例如 <code>src/main/resources/base/element/color.json</code> 和 <code>src/main/resources/base/element/string.json</code> ，这两个文件提供的部分配置会在 <code>Constants.ets</code> 代码中通过 <code>$r()</code> 表达式取用。</p>
+</blockquote>
+<h4 id="14-准备数据源">1.4 准备数据源</h4>
+<p>程序打桩了数据源，把数据写死在 <code>src/main/ets/model/DataModel.ts</code> 里面，并在 <code>src/main/ets/viewmodel/RankViewModel.ets</code> 提供了获取数据的接口。因此把这两个文件也拷贝到我们的工程中。</p>
+<h3 id="2-页面组件">2 页面组件</h3>
+<h4 id="21-标题">2.1 标题</h4>
+<p>首先实现标题栏组件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="nx">struct</span> <span class="nx">TitleComponent</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@Link</span> <span class="nx">isRefreshData</span>: <span class="kt">boolean</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="nx">title</span>: <span class="kt">Resource</span> <span class="o">=</span> <span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.string.title_default&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p><code>src/main/ets/view/TitleComponent.ets</code> 文件的实现，体现了ArkTs的若干知识点：</p>
+<ul>
+<li>
+<p><code>@Component</code> 装饰器，表明这个类型是用户自定义的UI组件；</p>
+</li>
+<li>
+<p><code>@State</code> 装饰器，表明这个数据是组件内部的状态数据，当这个状态数据被修改时，会调用 <strong>所在组件</strong> 的 <code>build</code> 方法进行UI刷新 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> ；</p>
+</li>
+<li>
+<p><code>@Link</code> 装饰器，表明这个变量会与父组件的一个 <code>@State</code> 变量建立双向绑定，注意 <code>@Link</code> 变量 <strong>不能</strong> 在组件内部进行初始化；</p>
+</li>
+<li>
+<p><code>$r</code> 表达式，从 <code>resource</code> 里面获取配置信息，早先也见到过了。</p>
+</li>
+</ul>
+<p>继续看：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Image</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.ic_public_back&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">.</span><span class="nx">onClick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="kd">let</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">getContext</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="kr">as</span> <span class="nx">AppContext</span><span class="p">.</span><span class="nx">UIAbilityContext</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">handler</span><span class="p">.</span><span class="nx">terminateSelf</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="nx">FontSize</span><span class="p">.</span><span class="nx">LARGE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Image</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.loading&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">.</span><span class="nx">onClick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="k">this</span><span class="p">.</span><span class="nx">isRefreshData</span> <span class="o">=</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isRefreshData</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>标题栏的 <code>build()</code> 的实现，只介绍重点，代码显示整个标题栏实际上是由两个 <code>Row</code> 组件组成的，第一个 <code>Row</code> 包含返回图标和标题文字，第二个 <code>Row</code> 包含刷新图标；</p>
+</li>
+<li>
+<p>第一个 <code>Image</code> 的 <code>onClick</code> ，实现返回动作。</p>
+</li>
+</ul>
+<h4 id="22-列表头">2.2 列表头</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="nx">struct</span> <span class="nx">ListHeaderComponent</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">paddingValue</span>: <span class="kt">Padding</span> <span class="o">|</span> <span class="nx">Length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">widthValue</span>: <span class="kt">Length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Text</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.string.page_number&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nx">Text</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.string.page_type&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nx">Text</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.string.page_vote&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这个组件其实没什么好讲，纯文本组件。</p>
+<p>这里的三份 <code>Text</code> 其实只有 <code>width</code> 的区别，可以考虑用 <code>@Styles</code> 装饰器来提取公共代码 <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> 。</p>
+<h4 id="23-列表项">2.3 列表项</h4>
+<p>首先是列表项的数据类型的定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="nx">struct</span> <span class="nx">ListItemComponent</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">index?</span>: <span class="kt">number</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">private</span> <span class="nx">name?</span>: <span class="kt">Resource</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@Prop</span> <span class="nx">vote</span>: <span class="kt">string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@Prop</span> <span class="nx">isSwitchDataSource</span>: <span class="kt">boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// The state is related to the font color of ListItemComponent.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">@State</span> <span class="nx">isChange</span>: <span class="kt">boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>这里的 <code>?</code> 用于表示 <em>可选参数</em> <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> <sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> ，个人觉得这里用上这个操作，有点逆天，增加了Demo的理解难度，并且从场景上看， <code>index</code> 和 <code>name</code> 也并不是可选的；</p>
+</li>
+<li>
+<p><code>@Prop</code> 装饰器，与 <code>@State</code> 有相同语义，但初始化方式不同。 <code>@Prop</code> 装饰的变量需使用父组件提供的 <code>@State</code> 变量进行初始化，允许组件内部修改 <code>@Prop</code> 变量，但更改不会通知父组件，即 <code>@Prop</code> 属于单向数据绑定。</p>
+<blockquote>
+<p>其实这里没太理解为啥要用 <code>@Prop</code> 而不是 <code>@State</code> ，大约这就是Demo吧（x</p>
+</blockquote>
+</li>
+</ul>
+<p>再看列表项的 <code>build()</code> 实现：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Column() {</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isRenderCircleText</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="k">this</span><span class="p">.</span><span class="nx">CircleText</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="o">?</span><span class="p">.</span><span class="nx">toString</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">          <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">Text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">vote</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">.</span><span class="nx">onClick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">isSwitchDataSource</span> <span class="o">=</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isSwitchDataSource</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">isChange</span> <span class="o">=</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isChange</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">@Builder</span> <span class="nx">CircleText</span><span class="p">(</span><span class="nx">index</span>: <span class="kt">number</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="o">?</span><span class="p">.</span><span class="nx">toString</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">fontWeight</span><span class="p">(</span><span class="nx">FontWeight</span><span class="p">.</span><span class="nx">BOLD</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="nx">FontSize</span><span class="p">.</span><span class="nx">SMALL</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">fontColor</span><span class="p">(</span><span class="nx">Color</span><span class="p">.</span><span class="nx">White</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">justifyContent</span><span class="p">(</span><span class="nx">FlexAlign</span><span class="p">.</span><span class="nx">Center</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">borderRadius</span><span class="p">(</span><span class="nx">ItemStyle</span><span class="p">.</span><span class="nx">CIRCLE_TEXT_BORDER_RADIUS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">size</span><span class="p">({</span> <span class="nx">width</span>: <span class="kt">ItemStyle.CIRCLE_TEXT_SIZE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">height</span>: <span class="kt">ItemStyle.CIRCLE_TEXT_SIZE</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">backgroundColor</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.circle_text_background&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">isRenderCircleText</span><span class="p">()</span><span class="o">:</span> <span class="kr">boolean</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Just render the element before the fourth in the list.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">===</span> <span class="mi">2</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">===</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这一段实现涉及的知识点是有点说法的：</p>
+<ul>
+<li>
+<p>条件渲染 <sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup> ，对于前三个 <code>index</code> 的元素做了特殊渲染处理。</p>
+</li>
+<li>
+<p><code>@Builder</code> 装饰器，在一个组件内快速生成多个布局内容。由于每个组件的总入口是 <code>build()</code> ，为了不让 <code>build</code> 太冗长，允许在 <code>build</code> 内调用 <code>@Builder</code> 方法，来进一步抽取出粒度更细的自定义组件；给我的感觉就是轻量 <code>@Component</code> 。</p>
+</li>
+<li>
+<p><code>isSwitchDataSource</code> 这里没啥用处，是个冗余成员。</p>
+</li>
+</ul>
+<h3 id="3-主页">3 主页</h3>
+<h4 id="31-数据加载">3.1 数据加载</h4>
+<p>完成了三个组件的定义后，打开创建工程时自动生成的 <code>src/main/ets/pages/Index.ets</code> ，编辑主页。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Entry</span>
+</span></span><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="nx">struct</span> <span class="nx">RankPage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="nx">dataSource1</span>: <span class="kt">RankData</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="nx">dataSource2</span>: <span class="kt">RankData</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// The State is used to decide whether to switch the data of RankList.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kd">@State</span> <span class="nx">isSwitchDataSource</span>: <span class="kt">boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// It will record the time of clicking back button of system navigation.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kr">private</span> <span class="nx">clickBackTimeRecord</span>: <span class="kt">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">aboutToAppear() {</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">dataSource1</span> <span class="o">=</span> <span class="nx">rankModel</span><span class="p">.</span><span class="nx">loadRankDataSource1</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">dataSource2</span> <span class="o">=</span> <span class="nx">rankModel</span><span class="p">.</span><span class="nx">loadRankDataSource2</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li><code>dataSource1/2</code> 一开始默认是空数组；在 <code>aboutToAppear</code> 方法里加载数据。页面生命周期及方法如下图：</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 97; 
+			flex-basis: 233px"
+	>
+	<a href="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1.png" data-size="2560x2636">
+		<img src="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1.png"
+			width="2560"
+			height="2636"
+			srcset="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1_hu146e4ff56a547673e09e7934fd0ade89_1220806_480x0_resize_box_3.png 480w, /p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1_hu146e4ff56a547673e09e7934fd0ade89_1220806_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="life cycle">
+	</a>
+	
+	<figcaption>life cycle</figcaption>
+	
+</figure></p>
+<ul>
+<li><code>isSwitchDataSource</code> ，这个是要跟标题栏里面的 <code>@Link</code> 成员绑定的，用于实现数据源切换；</li>
+</ul>
+<h4 id="32-返回确认">3.2 返回确认</h4>
+<p>通过实现 <code>onBackPress</code> 来支持返回确认，防止用户误触返回键时应用被关闭，这段实现参考价值极大：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">onBackPress() {</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isShowToast</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">prompt</span><span class="p">.</span><span class="nx">showToast</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">message</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.string.prompt_text&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">duration</span>: <span class="kt">TIME</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">clickBackTimeRecord</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">isShowToast</span><span class="p">()</span><span class="o">:</span> <span class="kr">boolean</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">clickBackTimeRecord</span> <span class="o">&gt;</span> <span class="nx">APP_EXIT_INTERVAL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>这里弹窗显示时间通过 <code>duration</code> 指定；</p>
+</li>
+<li>
+<p><code>onBackPress</code> 返回 <code>false</code> 的时候，系统继续执行返回动作，返回 <code>true</code> 时反之；</p>
+</li>
+<li>
+<p>通过内部一个成员来记录用户上次点击返回按钮的时间，以此实现「再按一次返回退出」的逻辑；</p>
+</li>
+<li>
+<p>返回按钮在某些应用（头条、B站等）上实际上是一次返回刷新、两次返回退出的逻辑，可以参考这段代码实现。</p>
+</li>
+</ul>
+<h4 id="33-页面构建">3.3 页面构建</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">Column() {</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Title component in the top.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">TitleComponent</span><span class="p">({</span> <span class="nx">isRefreshData</span>: <span class="kt">$isSwitchDataSource</span><span class="p">,</span> <span class="nx">title</span>: <span class="kt">TITLE</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// The head style of List component.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">ListHeaderComponent</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">paddingValue</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">left</span>: <span class="kt">Style.RANK_PADDING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">right</span>: <span class="kt">Style.RANK_PADDING</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">widthValue</span>: <span class="kt">Style.CONTENT_WIDTH</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">margin</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">top</span>: <span class="kt">Style.HEADER_MARGIN_TOP</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">bottom</span>: <span class="kt">Style.HEADER_MARGIN_BOTTOM</span>
+</span></span><span class="line"><span class="cl">      <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// The style of List component.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">this</span><span class="p">.</span><span class="nx">RankList</span><span class="p">(</span><span class="nx">Style</span><span class="p">.</span><span class="nx">CONTENT_WIDTH</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">@Builder</span> <span class="nx">RankList</span><span class="p">(</span><span class="nx">widthValue</span>: <span class="kt">Length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">Column() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">List() {</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">ForEach</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isSwitchDataSource</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">dataSource1</span> : <span class="kt">this.dataSource2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="nx">item</span>: <span class="kt">RankData</span><span class="p">,</span> <span class="nx">index?</span>: <span class="kt">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">ListItem() {</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">ListItemComponent</span><span class="p">({</span> <span class="nx">index</span><span class="o">:</span> <span class="p">(</span><span class="nb">Number</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nx">name</span>: <span class="kt">item.name</span><span class="p">,</span> <span class="nx">vote</span>: <span class="kt">item.vote</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nx">isSwitchDataSource</span>: <span class="kt">this.isSwitchDataSource</span>
+</span></span><span class="line"><span class="cl">            <span class="p">})</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span> <span class="p">(</span><span class="nx">item</span>: <span class="kt">RankData</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">item</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>页面核心通过 <code>@Builder RankList(widthValue: Length)</code> 方法来构建，这里通过循环渲染 <sup id="fnref1:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup> 来创建多个 <code>ListItemComponent</code> 。</p>
+<h3 id="4-小结">4 小结</h3>
+<p>至此，ArkTs第一个demo就逐一拆解分析完毕了。</p>
+<p>实际上Demo的页面效果这么好，除了脚本语言外，很大一部分要归功于现成的CSS样式（第一节）。</p>
+<p>这里确实只是一个入门Demo，分析下来，自觉学到不少，笔记也写出不少，算是很有些内容了。</p>
+<p><a class="link" href="https://gitee.com/harmonyos/codelabs/tree/master/RankingDemo"  target="_blank" rel="noopener"
+    >项目源码</a></p>
+<h3 id="参考资料">参考资料</h3>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a class="link" href="https://developer.huawei.com/consumer/cn/training/course/slightMooc/C101667356568959645?ha_linker=eyJ0cyI6MTY5NjU1MjEzNzA5MiwiaWQiOiJjZTA3YjQ0MWZkNjQ5ZjQ3ZTUwNDQ5MjY4ZjVmZTRlZSJ9"  target="_blank" rel="noopener"
+    >https://developer.huawei.com/consumer/cn/training/course/slightMooc/C101667356568959645?ha_linker=eyJ0cyI6MTY5NjU1MjEzNzA5MiwiaWQiOiJjZTA3YjQ0MWZkNjQ5ZjQ3ZTUwNDQ5MjY4ZjVmZTRlZSJ9</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a class="link" href="https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ets-dynamic-ui-element-building-0000001366154244#ZH-CN_TOPIC_0000001366154244__styles"  target="_blank" rel="noopener"
+    >https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ets-dynamic-ui-element-building-0000001366154244#ZH-CN_TOPIC_0000001366154244__styles</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p><a class="link" href="https://blog.51cto.com/u_15808854/5716099#"  target="_blank" rel="noopener"
+    >https://blog.51cto.com/u_15808854/5716099#</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p><a class="link" href="https://www.codecademy.com/courses/learn-typescript/lessons/typescript-advanced-object-types/exercises/optional-type-members#"  target="_blank" rel="noopener"
+    >https://www.codecademy.com/courses/learn-typescript/lessons/typescript-advanced-object-types/exercises/optional-type-members#</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p><a class="link" href="https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ets-rendering-control-0000001149698611#ZH-CN_TOPIC_0000001157228877"  target="_blank" rel="noopener"
+    >https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ets-rendering-control-0000001149698611#ZH-CN_TOPIC_0000001157228877</a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/harmonyos/">HarmonyOS</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【2】带跳转的待办列表</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;「emplace」的些许细节</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;位域（bit-field）简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/vscode-tasks%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">VSCode tasks简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Linux动态链接二三事</h2>
+            <footer class="article-time">
+                <time datetime=''>Apr 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-准备">1 准备</a>
+      <ul>
+        <li><a href="#11-新建工程">1.1 新建工程</a></li>
+        <li><a href="#12-数据类型定义">1.2 数据类型定义</a></li>
+        <li><a href="#13-准备资源">1.3 准备资源</a></li>
+        <li><a href="#14-准备数据源">1.4 准备数据源</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-页面组件">2 页面组件</a>
+      <ul>
+        <li><a href="#21-标题">2.1 标题</a></li>
+        <li><a href="#22-列表头">2.2 列表头</a></li>
+        <li><a href="#23-列表项">2.3 列表项</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-主页">3 主页</a>
+      <ul>
+        <li><a href="#31-数据加载">3.1 数据加载</a></li>
+        <li><a href="#32-返回确认">3.2 返回确认</a></li>
+        <li><a href="#33-页面构建">3.3 页面构建</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-小结">4 小结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

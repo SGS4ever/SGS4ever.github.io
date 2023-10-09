@@ -6,13 +6,29 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 09 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>【HarmonyOS learning】「案例：ArkTS基础知识」分析</title>
-      <link>https://xrg.fj.cn/p/harmonyos-learning%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/</link>
+      <title>【HarmonyOS learning】【2】带跳转的待办列表</title>
+      <link>https://xrg.fj.cn/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/</link>
+      <pubDate>Mon, 09 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/</guid>
+      <description>和 note1 一样，还是对着Demo自己敲一遍代码；不过考虑到TodoList太简单（相比于第一个Demo），决定结合后面章节的 router 相关知识点，做一点个性化的扩展。
+1 准备 有了 note1 对ArkTs的细致剖析，实际上这个 todolist 的Demo难度远小于第一个Demo。
+下载项目源码，完成若干文件的拷贝：
+src/main/ets/viewmodel ——数据源，没有改动的空间
+src/main/ets/common ——一些常量定义，没有改动的空间
+src/main/resources/base ——资源文件，重要，有改动空间但没必要改动……（比如想给自己的待办项换个图标）
+2 TodoItem 照着Demo实现待办项即可：
+import CommonConstants from &amp;#39;../common/constant/CommonConstant&amp;#39; @Component export default struct TodoItem { private content?: string @State done: boolean = false; @Builder labelIcon(icon: Resource) { Image(icon) .objectFit(ImageFit.Contain) .width($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .height($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .margin($r(&amp;#39;app.float.checkbox_margin&amp;#39;)) } build() { Row() { if (this.done) { this.labelIcon($r(&amp;#39;app.media.ic_ok&amp;#39;)) } else { this.labelIcon($r(&amp;#39;app.media.ic_default&amp;#39;)) } Text(this.content) // ===== snip ===== } // ===== snip ===== .</description>
+    </item>
+    
+    <item>
+      <title>【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</title>
+      <link>https://xrg.fj.cn/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/</link>
       <pubDate>Fri, 06 Oct 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://xrg.fj.cn/p/harmonyos-learning%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/</guid>
+      <guid>https://xrg.fj.cn/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/</guid>
       <description>项目源码
 1 准备 1.1 新建工程 DevEcoStudio 创建空白工程，只关注 entry/src/main 路径即可，IDE默认已创建好应用入口和入口页面，不需要其他操作，准备按照项目逻辑来创建页面。
 1.2 数据类型定义 完成工程创建后，我们再来创建一些数据类型的定义。将此动作归到 『准备』 一节，只是由于在复刻这个Demo的时候没办法对这些数据类型做什么变动，从Demo源码里复制粘贴即可。

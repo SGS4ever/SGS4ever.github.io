@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='和 note1 一样，还是对着Demo自己敲一遍代码；不过考虑到TodoList太简单（相比于第一个Demo），决定结合后面章节的 router 相关知识点，做一点个性化的扩展。
+1 准备 有了 note1 对ArkTs的细致剖析，实际上这个 todolist 的Demo难度远小于第一个Demo。
+下载项目源码，完成若干文件的拷贝：
+src/main/ets/viewmodel ——数据源，没有改动的空间
+src/main/ets/common ——一些常量定义，没有改动的空间
+src/main/resources/base ——资源文件，重要，有改动空间但没必要改动……（比如想给自己的待办项换个图标）
+2 TodoItem 照着Demo实现待办项即可：
+import CommonConstants from &amp;#39;../common/constant/CommonConstant&amp;#39; @Component export default struct TodoItem { private content?: string @State done: boolean = false; @Builder labelIcon(icon: Resource) { Image(icon) .objectFit(ImageFit.Contain) .width($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .height($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .margin($r(&amp;#39;app.float.checkbox_margin&amp;#39;)) } build() { Row() { if (this.done) { this.labelIcon($r(&amp;#39;app.media.ic_ok&amp;#39;)) } else { this.labelIcon($r(&amp;#39;app.media.ic_default&amp;#39;)) } Text(this.content) // ===== snip ===== } // ===== snip ===== .'><title>【HarmonyOS learning】【2】带跳转的待办列表</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【HarmonyOS learning】【2】带跳转的待办列表'>
+<meta property='og:description' content='和 note1 一样，还是对着Demo自己敲一遍代码；不过考虑到TodoList太简单（相比于第一个Demo），决定结合后面章节的 router 相关知识点，做一点个性化的扩展。
+1 准备 有了 note1 对ArkTs的细致剖析，实际上这个 todolist 的Demo难度远小于第一个Demo。
+下载项目源码，完成若干文件的拷贝：
+src/main/ets/viewmodel ——数据源，没有改动的空间
+src/main/ets/common ——一些常量定义，没有改动的空间
+src/main/resources/base ——资源文件，重要，有改动空间但没必要改动……（比如想给自己的待办项换个图标）
+2 TodoItem 照着Demo实现待办项即可：
+import CommonConstants from &amp;#39;../common/constant/CommonConstant&amp;#39; @Component export default struct TodoItem { private content?: string @State done: boolean = false; @Builder labelIcon(icon: Resource) { Image(icon) .objectFit(ImageFit.Contain) .width($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .height($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .margin($r(&amp;#39;app.float.checkbox_margin&amp;#39;)) } build() { Row() { if (this.done) { this.labelIcon($r(&amp;#39;app.media.ic_ok&amp;#39;)) } else { this.labelIcon($r(&amp;#39;app.media.ic_default&amp;#39;)) } Text(this.content) // ===== snip ===== } // ===== snip ===== .'>
+<meta property='og:url' content='https://xrg.fj.cn/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='HarmonyOS' /><meta property='article:published_time' content='2023-10-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-10-09T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【HarmonyOS learning】【2】带跳转的待办列表">
+<meta name="twitter:description" content="和 note1 一样，还是对着Demo自己敲一遍代码；不过考虑到TodoList太简单（相比于第一个Demo），决定结合后面章节的 router 相关知识点，做一点个性化的扩展。
+1 准备 有了 note1 对ArkTs的细致剖析，实际上这个 todolist 的Demo难度远小于第一个Demo。
+下载项目源码，完成若干文件的拷贝：
+src/main/ets/viewmodel ——数据源，没有改动的空间
+src/main/ets/common ——一些常量定义，没有改动的空间
+src/main/resources/base ——资源文件，重要，有改动空间但没必要改动……（比如想给自己的待办项换个图标）
+2 TodoItem 照着Demo实现待办项即可：
+import CommonConstants from &amp;#39;../common/constant/CommonConstant&amp;#39; @Component export default struct TodoItem { private content?: string @State done: boolean = false; @Builder labelIcon(icon: Resource) { Image(icon) .objectFit(ImageFit.Contain) .width($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .height($r(&amp;#39;app.float.checkbox_width&amp;#39;)) .margin($r(&amp;#39;app.float.checkbox_margin&amp;#39;)) } build() { Row() { if (this.done) { this.labelIcon($r(&amp;#39;app.media.ic_ok&amp;#39;)) } else { this.labelIcon($r(&amp;#39;app.media.ic_default&amp;#39;)) } Text(this.content) // ===== snip ===== } // ===== snip ===== .">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/">【HarmonyOS learning】【2】带跳转的待办列表</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 09, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <blockquote>
+<p>和 <a class="link" href="https://xrg.fj.cn/p/harmonyos-learning%e6%a1%88%e4%be%8barkts%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e5%88%86%e6%9e%90/"  target="_blank" rel="noopener"
+    >note1</a> 一样，还是对着Demo自己敲一遍代码；不过考虑到TodoList太简单（相比于第一个Demo），决定结合后面章节的 <code>router</code> 相关知识点，做一点个性化的扩展。</p>
+</blockquote>
+<h3 id="1-准备">1 准备</h3>
+<p>有了 <a class="link" href="https://xrg.fj.cn/p/harmonyos-learning%e6%a1%88%e4%be%8barkts%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e5%88%86%e6%9e%90/"  target="_blank" rel="noopener"
+    >note1</a> 对ArkTs的细致剖析，实际上这个 <code>todolist</code> 的Demo难度远小于第一个Demo。</p>
+<p>下载项目源码，完成若干文件的拷贝：</p>
+<ul>
+<li>
+<p><code>src/main/ets/viewmodel</code> ——数据源，没有改动的空间</p>
+</li>
+<li>
+<p><code>src/main/ets/common</code> ——一些常量定义，没有改动的空间</p>
+</li>
+<li>
+<p><code>src/main/resources/base</code> ——资源文件，重要，有改动空间但没必要改动……（比如想给自己的待办项换个图标）</p>
+</li>
+</ul>
+<h3 id="2-todoitem">2 TodoItem</h3>
+<p>照着Demo实现待办项即可：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">CommonConstants</span> <span class="kr">from</span> <span class="s1">&#39;../common/constant/CommonConstant&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="nx">struct</span> <span class="nx">TodoItem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">private</span> <span class="nx">content?</span>: <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="nx">done</span>: <span class="kt">boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">@Builder</span> <span class="nx">labelIcon</span><span class="p">(</span><span class="nx">icon</span>: <span class="kt">Resource</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Image</span><span class="p">(</span><span class="nx">icon</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">objectFit</span><span class="p">(</span><span class="nx">ImageFit</span><span class="p">.</span><span class="nx">Contain</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.checkbox_width&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.checkbox_width&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">margin</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.checkbox_margin&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">labelIcon</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.ic_ok&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">labelIcon</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.ic_default&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nx">Text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="nx">onClick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">done</span> <span class="o">=</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">done</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>关键部分只是一个条件渲染，用于在不同的完成状态选择不同的图标，这个在 <em>note 1</em> 已经接触过了。</p>
+<h3 id="3-完成所有任务时使用router">3 完成所有任务时使用Router</h3>
+<p>根据官网教程顺序，TodoList后面就是应用程序框架 <em>UIAbility</em> ，有个页面跳转的 <a class="link" href="https://developer.huawei.com/consumer/cn/training/course/slightMooc/C101667310940295021?ha_linker=eyJ0cyI6MTY5Njg1MDY4NDEwMCwiaWQiOiJjZTA3YjQ0MWZkNjQ5ZjQ3ZTUwNDQ5MjY4ZjVmZTRlZSJ9"  target="_blank" rel="noopener"
+    >Demo</a> ，令我萌生想把TodoList跟这个Demo结合起来的想法。</p>
+<p>容易想到，对于待办列表这个页面来说，当所有任务完成时，跳转到一个祝贺页面，是常见、简单且合理的场景。</p>
+<p>于是做如下实现。</p>
+<h4 id="31-未完成项数统计">3.1 未完成项数统计</h4>
+<p>要在所有任务完成时进行页面跳转，首先应能够统计未完成的项数。</p>
+<p>这里就适合使用 <code>@Link</code> 装饰器，将父子元素双向绑定，父元素（即总页面）提供总的待办任务数，每个子元素（ <code>TodoItem</code> ）在被点为完成时将此未完成项数减一。</p>
+<p>Talk is Cheap：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="nx">struct</span> <span class="nx">TodoItem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">private</span> <span class="nx">content?</span>: <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="nx">done</span>: <span class="kt">boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@Link</span> <span class="nx">unfinishedTasks</span>: <span class="kt">number</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">     <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="nx">onClick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">done</span> <span class="o">=</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">done</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">unfinishedTasks</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">unfinishedTasks</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Index页面：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Entry</span>
+</span></span><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="nx">struct</span> <span class="nx">Index</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">private</span> <span class="nx">totalTasks</span>: <span class="kt">Array</span><span class="p">&lt;</span><span class="nt">string</span><span class="p">&gt;</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="kd">@Watch</span><span class="p">(</span><span class="s1">&#39;onTaskCountChange&#39;</span><span class="p">)</span> <span class="nx">unfinishedTasks</span>: <span class="kt">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="nx">msg</span>: <span class="kt">string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">onTaskCountChange</span><span class="p">(</span><span class="nx">propName</span>: <span class="kt">string</span><span class="p">)</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">msg</span> <span class="o">=</span> <span class="s2">&#34;toggle &#34;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">unfinishedTasks</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">unfinishedTasks</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">router</span><span class="p">.</span><span class="nx">pushUrl</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;pages/Congrats&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">params</span><span class="o">:</span> <span class="p">{</span> <span class="nx">count</span>: <span class="kt">this.totalTasks.length</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span>: <span class="kt">Error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">msg</span> <span class="o">=</span> <span class="s1">&#39;error: &#39;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">aboutToAppear() {</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">totalTasks</span> <span class="o">=</span> <span class="nx">DataModel</span><span class="p">.</span><span class="nx">getData</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">unfinishedTasks</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">totalTasks</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Column</span><span class="p">({</span> <span class="nx">space</span>: <span class="kt">CommonConstants.COLUMN_SPACE</span> <span class="p">})</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Text</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.string.page_title&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nx">Text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">msg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">textAlign</span><span class="p">(</span><span class="nx">TextAlign</span><span class="p">.</span><span class="nx">Center</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nx">ForEach</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">totalTasks</span><span class="p">,</span> <span class="p">(</span><span class="nx">item</span>: <span class="kt">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">TodoItem</span><span class="p">({</span> <span class="nx">content</span>: <span class="kt">item</span><span class="p">,</span> <span class="nx">unfinishedTasks</span>: <span class="kt">$unfinishedTasks</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span> <span class="p">(</span><span class="nx">item</span>: <span class="kt">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">item</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这里关注 <code>unfinishedTasks</code> 这个变量，它和 <code>@Link</code> 的双向绑定，也是前一节中遇到过的。</p>
+<h4 id="32-未完成项数监控">3.2 未完成项数监控</h4>
+<p>能够实时更新未完成项数之后，还有一个重要的任务就是 <em>当这个项数减为 <code>0</code> 时，要进行页面跳转</em> ，这里，通过 <code>@Watch('[callback]')</code> 装饰器，实现对这个变量的动态监控。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="kd">@Watch</span><span class="p">(</span><span class="s1">&#39;onTaskCountChange&#39;</span><span class="p">)</span> <span class="nx">unfinishedTasks</span>: <span class="kt">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">onTaskCountChange</span><span class="p">(</span><span class="nx">propName</span>: <span class="kt">string</span><span class="p">)</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">msg</span> <span class="o">=</span> <span class="s2">&#34;toggle &#34;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">unfinishedTasks</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">unfinishedTasks</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">router</span><span class="p">.</span><span class="nx">pushUrl</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;pages/Congrats&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">params</span><span class="o">:</span> <span class="p">{</span> <span class="nx">count</span>: <span class="kt">this.totalTasks.length</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span>: <span class="kt">Error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">msg</span> <span class="o">=</span> <span class="s1">&#39;error: &#39;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div><p>每次这个变量发生变化时（在这里就是由子元素触发的变化），系统会调用一次回调函数，在函数中，我们判断这个变量的值是否减至 <code>0</code> ，若是，执行页面跳转。</p>
+<h4 id="33-页面跳转">3.3 页面跳转</h4>
+<p>页面跳转的部分，就完全是 <a class="link" href="https://developer.huawei.com/consumer/cn/training/course/slightMooc/C101667310940295021?ha_linker=eyJ0cyI6MTY5Njg1MDY4NDEwMCwiaWQiOiJjZTA3YjQ0MWZkNjQ5ZjQ3ZTUwNDQ5MjY4ZjVmZTRlZSJ9"  target="_blank" rel="noopener"
+    >Demo</a> 的复刻。我们提供一个 <code>Congrats.ets</code> 页面，跳转时向它传递完成的任务总数，在页面中获取参数并打印出来。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Entry</span>
+</span></span><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="nx">struct</span> <span class="nx">Congrats</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">private</span> <span class="nx">count?</span>: <span class="kt">string</span> <span class="o">=</span> <span class="p">(</span><span class="nx">router</span><span class="p">.</span><span class="nx">getParams</span><span class="p">()</span> <span class="kr">as</span> <span class="nx">Record</span><span class="p">&lt;</span><span class="nt">string</span><span class="err">,</span> <span class="na">string</span><span class="p">&gt;)[</span><span class="s1">&#39;count&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Row() {</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Column() {</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Text</span><span class="p">(</span><span class="s1">&#39;Great! U have finished &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="s2">&#34; tasks!&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="s1">&#39;38fp&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">textAlign</span><span class="p">(</span><span class="nx">TextAlign</span><span class="p">.</span><span class="nx">Center</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">padding</span><span class="p">({</span> <span class="nx">left</span>: <span class="kt">0.5</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nx">Blank</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nx">Button</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="s1">&#39;16fp&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="s1">&#39;260vp&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="s1">&#39;40vp&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">backgroundColor</span><span class="p">(</span><span class="s1">&#39;#007DFF&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">onClick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">router</span><span class="p">.</span><span class="nx">back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">          <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="s1">&#39;100%&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="s1">&#39;100%&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="4-结果">4 结果</h3>
+<p>第二个页面没有样式设计，凑合看～</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 64; 
+			flex-basis: 155px"
+	>
+	<a href="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/1.gif" data-size="1102x1698">
+		<img src="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/1.gif"
+			width="1102"
+			height="1698"
+			srcset="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/1_hu6b2543902541b99d5b70a93e01dd6f89_531053_480x0_resize_box_1.gif 480w, /p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/1_hu6b2543902541b99d5b70a93e01dd6f89_531053_1024x0_resize_box_1.gif 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/harmonyos/">HarmonyOS</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 06, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;「emplace」的些许细节</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;位域（bit-field）简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/vscode-tasks%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">VSCode tasks简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/linux%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E4%BA%8C%E4%B8%89%E4%BA%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">Linux动态链接二三事</h2>
+            <footer class="article-time">
+                <time datetime=''>Apr 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-准备">1 准备</a></li>
+    <li><a href="#2-todoitem">2 TodoItem</a></li>
+    <li><a href="#3-完成所有任务时使用router">3 完成所有任务时使用Router</a>
+      <ul>
+        <li><a href="#31-未完成项数统计">3.1 未完成项数统计</a></li>
+        <li><a href="#32-未完成项数监控">3.2 未完成项数监控</a></li>
+        <li><a href="#33-页面跳转">3.3 页面跳转</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-结果">4 结果</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
