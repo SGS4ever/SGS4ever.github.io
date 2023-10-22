@@ -6,7 +6,17 @@
     <description>Recent content in Posts on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 22 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【HarmonyOS learning】【3】Arkts组件</title>
+      <link>https://xrg.fj.cn/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/</link>
+      <pubDate>Sun, 22 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/</guid>
+      <description>本篇主要分析 常用组件与布局 这个案例，这个 Demo 主要是Ark UI的使用，没有太多新的概念，就不再手动复现了。摘一些知识点记录一下。
+1 登录页面 1.1 定时器 // src/main/ets/pages/LoginPage.ets login(): void { if (this.account === &amp;#39;&amp;#39; || this.password === &amp;#39;&amp;#39;) { prompt.showToast({ message: $r(&amp;#39;app.string.input_empty_tips&amp;#39;) }) } else { this.isShowProgress = true; if (this.timeOutId === -1) { this.timeOutId = setTimeout(() =&amp;gt; { this.isShowProgress = false; this.timeOutId = -1; router.replaceUrl({ url: &amp;#39;pages/MainPage&amp;#39; }); }, CommonConstants.LOGIN_DELAY_TIME); } } } aboutToDisappear() { clearTimeout(this.timeOutId); this.timeOutId = -1; } 这是登录页面实现的功能逻辑，这里首次出现了 setTimeout 这个动作，然后把函数返回值保存到本地变量 timeOutId ，在 aboutToDisappear 的时候调用 clearTimeout 删除定时器。</description>
+    </item>
+    
     <item>
       <title>【HarmonyOS learning】【2】带跳转的待办列表</title>
       <link>https://xrg.fj.cn/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/</link>

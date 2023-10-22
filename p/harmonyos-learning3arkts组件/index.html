@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='本篇主要分析 常用组件与布局 这个案例，这个 Demo 主要是Ark UI的使用，没有太多新的概念，就不再手动复现了。摘一些知识点记录一下。
+1 登录页面 1.1 定时器 // src/main/ets/pages/LoginPage.ets login(): void { if (this.account === &amp;#39;&amp;#39; || this.password === &amp;#39;&amp;#39;) { prompt.showToast({ message: $r(&amp;#39;app.string.input_empty_tips&amp;#39;) }) } else { this.isShowProgress = true; if (this.timeOutId === -1) { this.timeOutId = setTimeout(() =&amp;gt; { this.isShowProgress = false; this.timeOutId = -1; router.replaceUrl({ url: &amp;#39;pages/MainPage&amp;#39; }); }, CommonConstants.LOGIN_DELAY_TIME); } } } aboutToDisappear() { clearTimeout(this.timeOutId); this.timeOutId = -1; } 这是登录页面实现的功能逻辑，这里首次出现了 setTimeout 这个动作，然后把函数返回值保存到本地变量 timeOutId ，在 aboutToDisappear 的时候调用 clearTimeout 删除定时器。'><title>【HarmonyOS learning】【3】Arkts组件</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【HarmonyOS learning】【3】Arkts组件'>
+<meta property='og:description' content='本篇主要分析 常用组件与布局 这个案例，这个 Demo 主要是Ark UI的使用，没有太多新的概念，就不再手动复现了。摘一些知识点记录一下。
+1 登录页面 1.1 定时器 // src/main/ets/pages/LoginPage.ets login(): void { if (this.account === &amp;#39;&amp;#39; || this.password === &amp;#39;&amp;#39;) { prompt.showToast({ message: $r(&amp;#39;app.string.input_empty_tips&amp;#39;) }) } else { this.isShowProgress = true; if (this.timeOutId === -1) { this.timeOutId = setTimeout(() =&amp;gt; { this.isShowProgress = false; this.timeOutId = -1; router.replaceUrl({ url: &amp;#39;pages/MainPage&amp;#39; }); }, CommonConstants.LOGIN_DELAY_TIME); } } } aboutToDisappear() { clearTimeout(this.timeOutId); this.timeOutId = -1; } 这是登录页面实现的功能逻辑，这里首次出现了 setTimeout 这个动作，然后把函数返回值保存到本地变量 timeOutId ，在 aboutToDisappear 的时候调用 clearTimeout 删除定时器。'>
+<meta property='og:url' content='https://xrg.fj.cn/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='HarmonyOS' /><meta property='article:published_time' content='2023-10-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-10-22T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【HarmonyOS learning】【3】Arkts组件">
+<meta name="twitter:description" content="本篇主要分析 常用组件与布局 这个案例，这个 Demo 主要是Ark UI的使用，没有太多新的概念，就不再手动复现了。摘一些知识点记录一下。
+1 登录页面 1.1 定时器 // src/main/ets/pages/LoginPage.ets login(): void { if (this.account === &amp;#39;&amp;#39; || this.password === &amp;#39;&amp;#39;) { prompt.showToast({ message: $r(&amp;#39;app.string.input_empty_tips&amp;#39;) }) } else { this.isShowProgress = true; if (this.timeOutId === -1) { this.timeOutId = setTimeout(() =&amp;gt; { this.isShowProgress = false; this.timeOutId = -1; router.replaceUrl({ url: &amp;#39;pages/MainPage&amp;#39; }); }, CommonConstants.LOGIN_DELAY_TIME); } } } aboutToDisappear() { clearTimeout(this.timeOutId); this.timeOutId = -1; } 这是登录页面实现的功能逻辑，这里首次出现了 setTimeout 这个动作，然后把函数返回值保存到本地变量 timeOutId ，在 aboutToDisappear 的时候调用 clearTimeout 删除定时器。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/">【HarmonyOS learning】【3】Arkts组件</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 22, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>本篇主要分析 <a class="link" href="https://developer.huawei.com/consumer/cn/training/course/slightMooc/C101667360160710997?ha_linker=eyJ0cyI6MTY5Nzk1ODg4OTE4MywiaWQiOiJjZTA3YjQ0MWZkNjQ5ZjQ3ZTUwNDQ5MjY4ZjVmZTRlZSJ9"  target="_blank" rel="noopener"
+    >常用组件与布局</a> 这个案例，这个 <a class="link" href="https://gitee.com/harmonyos/codelabs/tree/master/ArkTSComponents"  target="_blank" rel="noopener"
+    >Demo</a> 主要是Ark UI的使用，没有太多新的概念，就不再手动复现了。摘一些知识点记录一下。</p>
+<h3 id="1-登录页面">1 登录页面</h3>
+<h4 id="11-定时器">1.1 定时器</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="c1">// src/main/ets/pages/LoginPage.ets
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">login</span><span class="p">()</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">account</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">password</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">prompt</span><span class="p">.</span><span class="nx">showToast</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">message</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.string.input_empty_tips&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">isShowProgress</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeOutId</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">timeOutId</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">isShowProgress</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="nx">timeOutId</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">router</span><span class="p">.</span><span class="nx">replaceUrl</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;pages/MainPage&#39;</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span> <span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">LOGIN_DELAY_TIME</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">aboutToDisappear() {</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">clearTimeout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeOutId</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">this</span><span class="p">.</span><span class="nx">timeOutId</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这是登录页面实现的功能逻辑，这里首次出现了 <code>setTimeout</code> 这个动作，然后把函数返回值保存到本地变量 <code>timeOutId</code> ，在 <code>aboutToDisappear</code> 的时候调用 <code>clearTimeout</code> 删除定时器。</p>
+<h4 id="12-extend装饰器">1.2 @Extend装饰器</h4>
+<p><a class="link" href="https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/arkts-extend-0000001473696678-V3"  target="_blank" rel="noopener"
+    >@Extend</a> 装饰器用来简化重复的样式代码，效果还是比较显著的，比如Demo里用来装饰登录页面输入框和分割线的函数：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Extend</span><span class="p">(</span><span class="nx">TextInput</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">inputStyle() {</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">placeholderColor</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.placeholder_color&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.login_input_height&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.big_text_size&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">backgroundColor</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.background&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">FULL_PARENT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">padding</span><span class="p">({</span> <span class="nx">left</span>: <span class="kt">CommonConstants.INPUT_PADDING_LEFT</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">margin</span><span class="p">({</span> <span class="nx">top</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.float.input_margin_top&#39;</span><span class="p">)</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">@Extend</span><span class="p">(</span><span class="nx">Line</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">lineStyle() {</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">FULL_PARENT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.line_height&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">backgroundColor</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.line_color&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>以及他们的使用，达到了简化代码的目的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">TextInput</span><span class="p">({</span> <span class="nx">placeholder</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.string.account&#39;</span><span class="p">)</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">maxLength</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">INPUT_ACCOUNT_LENGTH</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kr">type</span><span class="p">(</span><span class="nx">InputType</span><span class="p">.</span><span class="nb">Number</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">inputStyle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">onChange</span><span class="p">((</span><span class="nx">value</span>: <span class="kt">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">account</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Line</span><span class="p">().</span><span class="nx">lineStyle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">TextInput</span><span class="p">({</span> <span class="nx">placeholder</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.string.password&#39;</span><span class="p">)</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">maxLength</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">INPUT_PASSWORD_LENGTH</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kr">type</span><span class="p">(</span><span class="nx">InputType</span><span class="p">.</span><span class="nx">Password</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">inputStyle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">onChange</span><span class="p">((</span><span class="nx">value</span>: <span class="kt">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Line</span><span class="p">().</span><span class="nx">lineStyle</span><span class="p">()</span>
+</span></span></code></pre></div><h4 id="13-loadingprogress组件">1.3 LoadingProgress组件</h4>
+<p><a class="link" href="http://open.weharmonyos.com/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-loadingprogress.html"  target="_blank" rel="noopener"
+    >LoadingProgress</a> 组件就纯粹是语言糖了。</p>
+<p>逆天远程仿真设备，一下午没刷出一个可用的，没看到这个组件的实际效果。</p>
+<h3 id="2-主页">2 主页</h3>
+<h4 id="21-tab">2.1 Tab</h4>
+<p>主页也是有页面跳转的，但不同于登录跳转到主页用的 <code>router</code> ，这里通过 <a class="link" href="https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/arkts-navigation-tabs-0000001503284869-V3"  target="_blank" rel="noopener"
+    >tabs</a> 实现主页面和设置页面的两个不同页面的转换。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kd">@Entry</span>
+</span></span><span class="line"><span class="cl"><span class="kd">@Component</span>
+</span></span><span class="line"><span class="cl"><span class="nx">struct</span> <span class="nx">MainPage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">@State</span> <span class="nx">currentIndex</span>: <span class="kt">number</span> <span class="o">=</span> <span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">HOME_TAB_INDEX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">private</span> <span class="nx">tabsController</span>: <span class="kt">TabsController</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TabsController</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">@Builder</span> <span class="nx">TabBuilder</span><span class="p">(</span><span class="nx">title</span>: <span class="kt">string</span><span class="p">,</span> <span class="nx">index</span>: <span class="kt">number</span><span class="p">,</span> <span class="nx">selectedImg</span>: <span class="kt">Resource</span><span class="p">,</span> <span class="nx">normalImg</span>: <span class="kt">Resource</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Column() {</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Image</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">===</span> <span class="nx">index</span> <span class="o">?</span> <span class="nx">selectedImg</span> : <span class="kt">normalImg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_baseTab_size&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_baseTab_size&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Text</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">margin</span><span class="p">({</span> <span class="nx">top</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_baseTab_top&#39;</span><span class="p">)</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.main_tab_fontSize&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">fontColor</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">===</span> <span class="nx">index</span> <span class="o">?</span> <span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.mainPage_selected&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.mainPage_normal&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">justifyContent</span><span class="p">(</span><span class="nx">FlexAlign</span><span class="p">.</span><span class="nx">Center</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_barHeight&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">FULL_PARENT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">onClick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">index</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">tabsController</span><span class="p">.</span><span class="nx">changeIndex</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">  <span class="nx">build() {</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Tabs</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">barPosition</span>: <span class="kt">BarPosition.End</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">controller</span>: <span class="kt">this.tabsController</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">TabContent() {</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Home</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">padding</span><span class="p">({</span> <span class="nx">left</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_padding&#39;</span><span class="p">),</span> <span class="nx">right</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_padding&#39;</span><span class="p">)</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">backgroundColor</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.mainPage_backgroundColor&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">tabBar</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">TabBuilder</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">HOME_TITLE</span><span class="p">,</span> <span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">HOME_TAB_INDEX</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.home_selected&#39;</span><span class="p">),</span> <span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.home_normal&#39;</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nx">TabContent() {</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Setting</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">padding</span><span class="p">({</span> <span class="nx">left</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_padding&#39;</span><span class="p">),</span> <span class="nx">right</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_padding&#39;</span><span class="p">)</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">backgroundColor</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.color.mainPage_backgroundColor&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="nx">tabBar</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">TabBuilder</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">MINE_TITLE</span><span class="p">,</span> <span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">MINE_TAB_INDEX</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.mine_selected&#39;</span><span class="p">),</span> <span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.media.mine_normal&#39;</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">CommonConstants</span><span class="p">.</span><span class="nx">FULL_PARENT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">backgroundColor</span><span class="p">(</span><span class="nx">Color</span><span class="p">.</span><span class="nx">White</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">barHeight</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.mainPage_barHeight&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">barMode</span><span class="p">(</span><span class="nx">BarMode</span><span class="p">.</span><span class="nx">Fixed</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">onChange</span><span class="p">((</span><span class="nx">index</span>: <span class="kt">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">index</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>有若干知识点值得分析：</p>
+<ul>
+<li>
+<p>实际页面是通过 <code>TabContent</code> 来呈现的，每个页面又有自己对应的 <code>tabBar</code> ；</p>
+</li>
+<li>
+<p><code>tabBar</code> 内部调用 <code>@Builder</code> 函数来创建了一个列元素；列元素又用选择渲染来对激活状态下的标签进行特殊呈现；</p>
+</li>
+<li>
+<p><code>tabBar</code> 内部对是否激活的判断，实际上是通过父组件的一个 <code>@State</code> 变量来维护的，同时每个 <code>tabBar</code> 的 <code>onClick</code> 方法又会激活不同的页面，并改变父组件的 <code>currentIndex</code> ；</p>
+</li>
+</ul>
+<h4 id="22-swiper--grid">2.2 Swiper &amp; Grid</h4>
+<p>主页第一个 <code>TabContent</code> 是 <code>Home</code> 组件，这个组件最吸引眼球的地方大概是 <a class="link" href="https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/arkts-layout-development-create-looping-0000001454931830-V3"  target="_blank" rel="noopener"
+    >Swiper</a> 。</p>
+<p>轮播组件是很多需求场景里必不可少的东西，极适合在首页展示主题相关的内容。在这里 <code>Swiper</code> 实际上就是个语言糖，遥想当年拿HTML三剑客哼哧哼哧实现的土鳖轮播效果现在居然都已经框架内嵌了……</p>
+<p>用法还是比较简单的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">Swiper</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">swiperController</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">ForEach</span><span class="p">(</span><span class="nx">mainViewModel</span><span class="p">.</span><span class="nx">getSwiperImages</span><span class="p">(),</span> <span class="p">(</span><span class="nx">img</span>: <span class="kt">Resource</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Image</span><span class="p">(</span><span class="nx">img</span><span class="p">).</span><span class="nx">borderRadius</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.home_swiper_borderRadius&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span> <span class="p">(</span><span class="nx">img</span>: <span class="kt">Resource</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">img</span><span class="p">.</span><span class="nx">id</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nx">autoPlay</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+</span></span></code></pre></div><p><a class="link" href="https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/arkts-layout-development-create-grid-0000001504486057-V3"  target="_blank" rel="noopener"
+    >Grid</a> 用于创建网格，此次Demo里的网格属于比较老实的款式，文档当中给出 <code>GridItem.rowStart/rowEnd/columnStart/columnEnd</code> 的示例，展示了网格的灵活性。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="nx">Grid() {</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">ForEach</span><span class="p">(</span><span class="nx">mainViewModel</span><span class="p">.</span><span class="nx">getFirstGridData</span><span class="p">(),</span> <span class="p">(</span><span class="nx">item</span>: <span class="kt">ItemData</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">GridItem() {</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Column() {</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Image</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">img</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.home_homeCell_size&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.home_homeCell_size&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Text</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.little_text_size&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="nx">margin</span><span class="p">({</span> <span class="nx">top</span>: <span class="kt">$r</span><span class="p">(</span><span class="s1">&#39;app.float.home_homeCell_margin&#39;</span><span class="p">)</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span> <span class="p">(</span><span class="nx">item</span>: <span class="kt">ItemData</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">item</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nx">columnsTemplate</span><span class="p">(</span><span class="s1">&#39;1fr 1fr 1fr 1fr&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nx">rowsTemplate</span><span class="p">(</span><span class="s1">&#39;1fr 1fr&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nx">columnsGap</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.home_grid_columnsGap&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="nx">rowsGap</span><span class="p">(</span><span class="nx">$r</span><span class="p">(</span><span class="s1">&#39;app.float.home_grid_rowGap&#39;</span><span class="p">))</span>
+</span></span></code></pre></div>
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/harmonyos/">HarmonyOS</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【2】带跳转的待办列表</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 06, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;「emplace」的些许细节</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;位域（bit-field）简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/vscode-tasks%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">VSCode tasks简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-登录页面">1 登录页面</a>
+      <ul>
+        <li><a href="#11-定时器">1.1 定时器</a></li>
+        <li><a href="#12-extend装饰器">1.2 @Extend装饰器</a></li>
+        <li><a href="#13-loadingprogress组件">1.3 LoadingProgress组件</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-主页">2 主页</a>
+      <ul>
+        <li><a href="#21-tab">2.1 Tab</a></li>
+        <li><a href="#22-swiper--grid">2.2 Swiper &amp; Grid</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
