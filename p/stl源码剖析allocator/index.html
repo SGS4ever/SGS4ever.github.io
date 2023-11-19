@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='序言 近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。
+GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std::alloc 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 std::allocator ，很符合直觉。
+过时的信息 为了佐证这里的信息，我们看 std::vector 里默认使用的Allocator是什么：
+// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&amp;lt;typename _Tp, typename _Alloc = std::allocator&amp;lt;_Tp&amp;gt; &amp;gt; class vector : protected _Vector_base&amp;lt;_Tp, _Alloc&amp;gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
+// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &amp;lt;bits/c&#43;&#43;allocator.h&amp;gt; // Define the base class to std::allocator. #include &amp;lt;bits/memoryfwd.h&amp;gt; #include &amp;lt;type_traits&amp;gt; namespace std _GLIBCXX_VISIBILITY(default) { template&amp;lt;&amp;gt; class allocator&amp;lt;void&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&amp;lt;typename _Tp&amp;gt; class allocator: public __allocator_base&amp;lt;_Tp&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp;amp; reference; typedef const _Tp&amp;amp; const_reference; typedef _Tp value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp;amp; __a) throw() : __allocator_base&amp;lt;_Tp&amp;gt;(__a) { } template&amp;lt;typename _Tp1&amp;gt; allocator(const allocator&amp;lt;_Tp1&amp;gt;&amp;amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：'><title>【STL源码剖析】allocator</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【STL源码剖析】allocator'>
+<meta property='og:description' content='序言 近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。
+GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std::alloc 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 std::allocator ，很符合直觉。
+过时的信息 为了佐证这里的信息，我们看 std::vector 里默认使用的Allocator是什么：
+// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&amp;lt;typename _Tp, typename _Alloc = std::allocator&amp;lt;_Tp&amp;gt; &amp;gt; class vector : protected _Vector_base&amp;lt;_Tp, _Alloc&amp;gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
+// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &amp;lt;bits/c&#43;&#43;allocator.h&amp;gt; // Define the base class to std::allocator. #include &amp;lt;bits/memoryfwd.h&amp;gt; #include &amp;lt;type_traits&amp;gt; namespace std _GLIBCXX_VISIBILITY(default) { template&amp;lt;&amp;gt; class allocator&amp;lt;void&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&amp;lt;typename _Tp&amp;gt; class allocator: public __allocator_base&amp;lt;_Tp&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp;amp; reference; typedef const _Tp&amp;amp; const_reference; typedef _Tp value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp;amp; __a) throw() : __allocator_base&amp;lt;_Tp&amp;gt;(__a) { } template&amp;lt;typename _Tp1&amp;gt; allocator(const allocator&amp;lt;_Tp1&amp;gt;&amp;amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：'>
+<meta property='og:url' content='https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-11-16T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-11-16T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【STL源码剖析】allocator">
+<meta name="twitter:description" content="序言 近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。
+GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std::alloc 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 std::allocator ，很符合直觉。
+过时的信息 为了佐证这里的信息，我们看 std::vector 里默认使用的Allocator是什么：
+// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&amp;lt;typename _Tp, typename _Alloc = std::allocator&amp;lt;_Tp&amp;gt; &amp;gt; class vector : protected _Vector_base&amp;lt;_Tp, _Alloc&amp;gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
+// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &amp;lt;bits/c&#43;&#43;allocator.h&amp;gt; // Define the base class to std::allocator. #include &amp;lt;bits/memoryfwd.h&amp;gt; #include &amp;lt;type_traits&amp;gt; namespace std _GLIBCXX_VISIBILITY(default) { template&amp;lt;&amp;gt; class allocator&amp;lt;void&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&amp;lt;typename _Tp&amp;gt; class allocator: public __allocator_base&amp;lt;_Tp&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp;amp; reference; typedef const _Tp&amp;amp; const_reference; typedef _Tp value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp;amp; __a) throw() : __allocator_base&amp;lt;_Tp&amp;gt;(__a) { } template&amp;lt;typename _Tp1&amp;gt; allocator(const allocator&amp;lt;_Tp1&amp;gt;&amp;amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/">【STL源码剖析】allocator</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Nov 16, 2023</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 11 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h3 id="序言">序言</h3>
+<p>近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。</p>
+<h3 id="gcc">GCC</h3>
+<p>侯捷老师在书中提到的基础版 <code>allocator</code> 和SGI特殊实现版 <code>std::alloc</code> 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 <code>std::allocator</code> ，很符合直觉。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 410; 
+			flex-basis: 984px"
+	>
+	<a href="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1.png" data-size="1616x394">
+		<img src="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1.png"
+			width="1616"
+			height="394"
+			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1_hub45dc5fbc9e84391871df913c1d1e3c6_100692_480x0_resize_box_3.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1_hub45dc5fbc9e84391871df913c1d1e3c6_100692_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="过时的信息">
+	</a>
+	
+	<figcaption>过时的信息</figcaption>
+	
+</figure></p>
+<p>为了佐证这里的信息，我们看 <code>std::vector</code> 里默认使用的Allocator是什么：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// /usr/include/c++/4.8.5/bits/stl_vector.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="p">,</span> <span class="k">typename</span> <span class="n">_Alloc</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span> <span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">vector</span> <span class="o">:</span> <span class="k">protected</span> <span class="n">_Vector_base</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="p">,</span> <span class="n">_Alloc</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// ===== snip =====
+</span></span></span></code></pre></div><p>直接考察GCC对 <code>std::allocator</code> 的实现（删除了一些与本节相关性不大的注释/宏/函数）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// /usr/include/c++/4.8.5/bits/allocator.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#ifndef _ALLOCATOR_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define _ALLOCATOR_H 1
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/c++allocator.h&gt; // Define the base class to std::allocator.</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/memoryfwd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">std</span> <span class="nf">_GLIBCXX_VISIBILITY</span><span class="p">(</span><span class="k">default</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">allocator</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">size_t</span>      <span class="n">size_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">ptrdiff_t</span>   <span class="n">difference_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="kt">void</span><span class="o">*</span>       <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">const_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="kt">void</span>        <span class="n">value_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">struct</span> <span class="nc">rebind</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="k">typedef</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Tp1</span><span class="o">&gt;</span> <span class="n">other</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">true_type</span> <span class="n">propagate_on_container_move_assignment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">allocator</span><span class="o">:</span> <span class="k">public</span> <span class="n">__allocator_base</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">size_t</span>     <span class="n">size_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">ptrdiff_t</span>  <span class="n">difference_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">*</span>       <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">*</span> <span class="n">const_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">&amp;</span>       <span class="n">reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">&amp;</span> <span class="n">const_reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span>        <span class="n">value_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">struct</span> <span class="nc">rebind</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="k">typedef</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Tp1</span><span class="o">&gt;</span> <span class="n">other</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">true_type</span> <span class="n">propagate_on_container_move_assignment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">allocator</span><span class="p">()</span> <span class="k">throw</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">allocator</span><span class="p">(</span><span class="k">const</span> <span class="n">allocator</span><span class="o">&amp;</span> <span class="n">__a</span><span class="p">)</span> <span class="k">throw</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="o">:</span> <span class="n">__allocator_base</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">__a</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">allocator</span><span class="p">(</span><span class="k">const</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Tp1</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="k">throw</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="o">~</span><span class="n">allocator</span><span class="p">()</span> <span class="k">throw</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="c1">// namespace std
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><p>我们看到 <code>std::allocator</code> 继承了 <code>__allocator_base</code> 这个类，继续找到它的定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++allocator.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifndef _GLIBCXX_CXX_ALLOCATOR_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define _GLIBCXX_CXX_ALLOCATOR_H 1
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ext/new_allocator.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">std</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">__allocator_base</span> <span class="o">=</span> <span class="n">__gnu_cxx</span><span class="o">::</span><span class="n">new_allocator</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// /usr/include/c++/4.8.5/ext/new_allocator.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#ifndef _NEW_ALLOCATOR_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define _NEW_ALLOCATOR_H 1
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/c++config.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;new&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/functexcept.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/move.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">__gnu_cxx</span> <span class="nf">_GLIBCXX_VISIBILITY</span><span class="p">(</span><span class="k">default</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">_GLIBCXX_BEGIN_NAMESPACE_VERSION</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">ptrdiff_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">new_allocator</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">size_t</span>     <span class="n">size_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">ptrdiff_t</span>  <span class="n">difference_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">*</span>       <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">*</span> <span class="n">const_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">&amp;</span>       <span class="n">reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">&amp;</span> <span class="n">const_reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span>        <span class="n">value_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">struct</span> <span class="nc">rebind</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="k">typedef</span> <span class="n">new_allocator</span><span class="o">&lt;</span><span class="n">_Tp1</span><span class="o">&gt;</span> <span class="n">other</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="n">propagate_on_container_move_assignment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">new_allocator</span><span class="p">()</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">new_allocator</span><span class="p">(</span><span class="k">const</span> <span class="n">new_allocator</span><span class="o">&amp;</span><span class="p">)</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_allocator</span><span class="p">(</span><span class="k">const</span> <span class="n">new_allocator</span><span class="o">&lt;</span><span class="n">_Tp1</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="o">~</span><span class="n">new_allocator</span><span class="p">()</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">pointer</span>
+</span></span><span class="line"><span class="cl">      <span class="n">address</span><span class="p">(</span><span class="n">reference</span> <span class="n">__x</span><span class="p">)</span> <span class="k">const</span> <span class="n">_GLIBCXX_NOEXCEPT</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">__addressof</span><span class="p">(</span><span class="n">__x</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">const_pointer</span>
+</span></span><span class="line"><span class="cl">      <span class="n">address</span><span class="p">(</span><span class="n">const_reference</span> <span class="n">__x</span><span class="p">)</span> <span class="k">const</span> <span class="n">_GLIBCXX_NOEXCEPT</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">__addressof</span><span class="p">(</span><span class="n">__x</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1">// NB: __n is permitted to be 0.  The C++ standard says nothing
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// about what the return value is when __n == 0.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="n">pointer</span>
+</span></span><span class="line"><span class="cl">      <span class="n">allocate</span><span class="p">(</span><span class="n">size_type</span> <span class="n">__n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">__n</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">max_size</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">      <span class="n">std</span><span class="o">::</span><span class="n">__throw_bad_alloc</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">::</span><span class="k">operator</span> <span class="k">new</span><span class="p">(</span><span class="n">__n</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1">// __p is not permitted to be a null pointer.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="kt">void</span>
+</span></span><span class="line"><span class="cl">      <span class="n">deallocate</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">,</span> <span class="n">size_type</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="o">::</span><span class="k">operator</span> <span class="k">delete</span><span class="p">(</span><span class="n">__p</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">size_type</span>
+</span></span><span class="line"><span class="cl">      <span class="n">max_size</span><span class="p">()</span> <span class="k">const</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="k">return</span> <span class="n">size_t</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#if __cplusplus &gt;= 201103L
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Up</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">_Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">void</span>
+</span></span><span class="line"><span class="cl">        <span class="n">construct</span><span class="p">(</span><span class="n">_Up</span><span class="o">*</span> <span class="n">__p</span><span class="p">,</span> <span class="n">_Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">__args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="o">::</span><span class="k">new</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">__p</span><span class="p">)</span> <span class="n">_Up</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">_Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">__args</span><span class="p">)...);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Up</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">void</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">destroy</span><span class="p">(</span><span class="n">_Up</span><span class="o">*</span> <span class="n">__p</span><span class="p">)</span> <span class="p">{</span> <span class="n">__p</span><span class="o">-&gt;~</span><span class="n">_Up</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="c1">// _GLIBCXX_RESOLVE_LIB_DEFECTS
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// 402. wrong new expression in [some_] allocator::construct
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="kt">void</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">construct</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">,</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">&amp;</span> <span class="n">__val</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="o">::</span><span class="k">new</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">__p</span><span class="p">)</span> <span class="n">_Tp</span><span class="p">(</span><span class="n">__val</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="kt">void</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">destroy</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">)</span> <span class="p">{</span> <span class="n">__p</span><span class="o">-&gt;~</span><span class="n">_Tp</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">inline</span> <span class="kt">bool</span>
+</span></span><span class="line"><span class="cl">    <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">new_allocator</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">new_allocator</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">inline</span> <span class="kt">bool</span>
+</span></span><span class="line"><span class="cl">    <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">new_allocator</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">new_allocator</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">_GLIBCXX_END_NAMESPACE_VERSION</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="c1">// namespace
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><p>详细分析，GCC 4.8.5版本的Allocator实现了几个能力：</p>
+<ul>
+<li>
+<p>申请内存。对 <code>operator new</code> 进行了简单封装，实现了成员 <code>allocate</code> ，这里允许申请 <code>0</code> 字节空间；</p>
+</li>
+<li>
+<p>释放内存。对 <code>operator delete</code> 进行了简单封装，实现了成员 <code>deallocate</code> ，这里不允许传入空指针；</p>
+</li>
+<li>
+<p>获取可用的最大空间。这里的实现极其骚气，用 <code>size_t(-1) / sizeof(_Tp)</code> 来取到可申请的最大空间，注意 <code>-1</code> 强转为无符号数就是全 <code>F</code> ，是最大无符号数；</p>
+</li>
+<li>
+<p>构造 &amp; 析构。注意上面的代码片段里没有删除宏，因为C++11有大的特性升级，直接用 <em>placement new</em> + <em>variadic template</em> 实现了原地构造；而C++11以前的 <code>construct</code> 实现，则只能拷贝构造一个新的成员（虽然也用了 <em>placement new</em> ，但类的构造本身还是存在拷贝的）。析构就是直接调指针指向的对象的析构函数。这里需要注意的是，C++11以后的Allocator版本， <code>construct/destruct</code> 本身就是模板，相当于可以直接用来干自己的事情，与Allocator的模板参数类型解耦了。</p>
+</li>
+<li>
+<p>比较运算符。比较好奇为啥需要实现这种东西，可以看到Allocator直接是恒等的。</p>
+</li>
+</ul>
+<p>至此，实际上已经看过了《STL源码剖析》中 <code>2.2.1</code> （SGI标准的空间配置器 std::allocator ）和 <code>2.2.3</code> （建构和解构基本工具：construct和destroy）这两节的内容在GCC <code>4.8.5</code> 中的实现。令我比较奇怪的是，文中介绍的 <code>construct/destroy</code> 这两个函数对不同类型的重载，似乎是更高效的内存分配手段，在当前的 <code>new_allocator</code> 里面却被回退为原始的 <code>new/delete</code> 简单封装了。</p>
+<p>至于书中花了大篇幅介绍的 <code>SGI alloc</code> 的实现，至少在我所阅读的GCC版本上已经不受默认选用了（不过仍作为 <code>pool_allocator</code> 存在）。看完书 <code>2.2.4</code> ~ <code>2.2.10</code> 节，会惊叹SGI内存池设计的精巧和复杂，两级配置器的设定充分体现出这版实现在内存管理方面粒度的精细。不过由于这部分内容现今已不作为默认Allocator存在，第二级配置器（书中指出这是默认 <code>SGI alloc</code> ）的一些实现细节，我放到 <em>附录 无限风光在险峰</em> 中再详谈。</p>
+<h3 id="clang">Clang</h3>
+<p>Clang对allocator的实现不涉及多个文件中类的继承关系，比GCC简单些。 <strong>节选</strong> 如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#ifndef _LIBCPP___MEMORY_ALLOCATOR_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define _LIBCPP___MEMORY_ALLOCATOR_H
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="n">_LIBCPP_PUSH_MACROS</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">_LIBCPP_BEGIN_NAMESPACE_STD</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Tp</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">allocator</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#if _LIBCPP_STD_VER &lt;= 17
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">template</span> <span class="o">&lt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">_LIBCPP_TEMPLATE_VIS</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="kt">void</span><span class="o">*</span>             <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span>       <span class="n">const_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="kt">void</span>              <span class="n">value_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Up</span><span class="o">&gt;</span> <span class="k">struct</span> <span class="nc">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">rebind</span> <span class="p">{</span><span class="k">typedef</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Up</span><span class="o">&gt;</span> <span class="n">other</span><span class="p">;};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">_LIBCPP_TEMPLATE_VIS</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">void</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span>       <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span>       <span class="n">const_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="k">const</span> <span class="kt">void</span>        <span class="n">value_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Up</span><span class="o">&gt;</span> <span class="k">struct</span> <span class="nc">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">rebind</span> <span class="p">{</span><span class="k">typedef</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Up</span><span class="o">&gt;</span> <span class="n">other</span><span class="p">;};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// This class provides a non-trivial default constructor to the class that derives from it
+</span></span></span><span class="line"><span class="cl"><span class="c1">// if the condition is satisfied.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// The second template parameter exists to allow giving a unique type to __non_trivial_if,
+</span></span></span><span class="line"><span class="cl"><span class="c1">// which makes it possible to avoid breaking the ABI when making this a base class of an
+</span></span></span><span class="line"><span class="cl"><span class="c1">// existing class. Without that, imagine we have classes D1 and D2, both of which used to
+</span></span></span><span class="line"><span class="cl"><span class="c1">// have no base classes, but which now derive from __non_trivial_if. The layout of a class
+</span></span></span><span class="line"><span class="cl"><span class="c1">// that inherits from both D1 and D2 will change because the two __non_trivial_if base
+</span></span></span><span class="line"><span class="cl"><span class="c1">// classes are not allowed to share the same address.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// By making those __non_trivial_if base classes unique, we work around this problem and
+</span></span></span><span class="line"><span class="cl"><span class="c1">// it is safe to start deriving from __non_trivial_if in existing classes.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">_Cond</span><span class="p">,</span> <span class="k">class</span> <span class="nc">_Unique</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">__non_trivial_if</span> <span class="p">{</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Unique</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">__non_trivial_if</span><span class="o">&lt;</span><span class="nb">true</span><span class="p">,</span> <span class="n">_Unique</span><span class="o">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_CONSTEXPR</span> <span class="nf">__non_trivial_if</span><span class="p">()</span> <span class="n">_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// allocator
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Note: For ABI compatibility between C++20 and previous standards, we make
+</span></span></span><span class="line"><span class="cl"><span class="c1">//       allocator&lt;void&gt; trivial in C++20.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">_LIBCPP_TEMPLATE_VIS</span> <span class="nl">allocator</span>
+</span></span><span class="line"><span class="cl">    <span class="p">:</span> <span class="k">private</span> <span class="n">__non_trivial_if</span><span class="o">&lt;!</span><span class="n">is_void</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;</span> <span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="n">size_t</span>      <span class="n">size_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="n">ptrdiff_t</span>   <span class="n">difference_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="n">_Tp</span>         <span class="n">value_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="n">true_type</span>   <span class="n">propagate_on_container_move_assignment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">typedef</span> <span class="n">true_type</span>   <span class="n">is_always_equal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_INLINE_VISIBILITY</span> <span class="n">_LIBCPP_CONSTEXPR_AFTER_CXX17</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">allocator</span><span class="p">()</span> <span class="n">_NOEXCEPT</span> <span class="n">_LIBCPP_DEFAULT</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Up</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_INLINE_VISIBILITY</span> <span class="n">_LIBCPP_CONSTEXPR_AFTER_CXX17</span>
+</span></span><span class="line"><span class="cl">    <span class="n">allocator</span><span class="p">(</span><span class="k">const</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Up</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="n">_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_NODISCARD_AFTER_CXX17</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span> <span class="n">_LIBCPP_CONSTEXPR_AFTER_CXX17</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Tp</span><span class="o">*</span> <span class="nf">allocate</span><span class="p">(</span><span class="n">size_t</span> <span class="n">__n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">__n</span> <span class="o">&gt;</span> <span class="n">allocator_traits</span><span class="o">&lt;</span><span class="n">allocator</span><span class="o">&gt;::</span><span class="n">max_size</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">__throw_length_error</span><span class="p">(</span><span class="s">&#34;allocator&lt;T&gt;::allocate(size_t n)&#34;</span>
+</span></span><span class="line"><span class="cl">                                 <span class="s">&#34; &#39;n&#39; exceeds maximum supported size&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">__libcpp_is_constant_evaluated</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">::</span><span class="k">operator</span> <span class="k">new</span><span class="p">(</span><span class="n">__n</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">_VSTD</span><span class="o">::</span><span class="n">__libcpp_allocate</span><span class="p">(</span><span class="n">__n</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">),</span> <span class="n">_LIBCPP_ALIGNOF</span><span class="p">(</span><span class="n">_Tp</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_INLINE_VISIBILITY</span> <span class="n">_LIBCPP_CONSTEXPR_AFTER_CXX17</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">deallocate</span><span class="p">(</span><span class="n">_Tp</span><span class="o">*</span> <span class="n">__p</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">__n</span><span class="p">)</span> <span class="n">_NOEXCEPT</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">__libcpp_is_constant_evaluated</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="o">::</span><span class="k">operator</span> <span class="k">delete</span><span class="p">(</span><span class="n">__p</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_VSTD</span><span class="o">::</span><span class="n">__libcpp_deallocate</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">__p</span><span class="p">,</span> <span class="n">__n</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">),</span> <span class="n">_LIBCPP_ALIGNOF</span><span class="p">(</span><span class="n">_Tp</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// C++20 Removed members
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#if _LIBCPP_STD_VER &lt;= 17 || defined(_LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">*</span>       <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">*</span> <span class="n">const_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">&amp;</span>       <span class="n">reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">&amp;</span> <span class="n">const_reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Up</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">rebind</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">typedef</span> <span class="n">allocator</span><span class="o">&lt;</span><span class="n">_Up</span><span class="o">&gt;</span> <span class="n">other</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pointer</span> <span class="nf">address</span><span class="p">(</span><span class="n">reference</span> <span class="n">__x</span><span class="p">)</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">_VSTD</span><span class="o">::</span><span class="n">addressof</span><span class="p">(</span><span class="n">__x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl">    <span class="n">const_pointer</span> <span class="nf">address</span><span class="p">(</span><span class="n">const_reference</span> <span class="n">__x</span><span class="p">)</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">_VSTD</span><span class="o">::</span><span class="n">addressof</span><span class="p">(</span><span class="n">__x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_NODISCARD_AFTER_CXX17</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span> <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Tp</span><span class="o">*</span> <span class="nf">allocate</span><span class="p">(</span><span class="n">size_t</span> <span class="n">__n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">allocate</span><span class="p">(</span><span class="n">__n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span> <span class="n">size_type</span> <span class="nf">max_size</span><span class="p">()</span> <span class="k">const</span> <span class="n">_NOEXCEPT</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">size_type</span><span class="p">(</span><span class="o">~</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Up</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">_Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">construct</span><span class="p">(</span><span class="n">_Up</span><span class="o">*</span> <span class="n">__p</span><span class="p">,</span> <span class="n">_Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">__args</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="o">::</span><span class="k">new</span> <span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">__p</span><span class="p">)</span> <span class="n">_Up</span><span class="p">(</span><span class="n">_VSTD</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">_Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">__args</span><span class="p">)...);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">_LIBCPP_DEPRECATED_IN_CXX17</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">destroy</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__p</span><span class="o">-&gt;~</span><span class="n">_Tp</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ===== snip =====
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 省略了 const TP_ 的版本，因为大体相同
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 省略了无关紧要的比较运算符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">_LIBCPP_END_NAMESPACE_STD</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">_LIBCPP_POP_MACROS</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif </span><span class="c1">// _LIBCPP___MEMORY_ALLOCATOR_H
+</span></span></span></code></pre></div><p>有几点感想：</p>
+<ul>
+<li>
+<p>Allocator对 <code>non_trival_if</code> 的继承，没有看明白，即使有那段那么长的注释，也看不懂这波继承的意义，留待将来考量吧。</p>
+</li>
+<li>
+<p>这个版本的 <code>allocate / deallocate</code> 也接近于对 <code>operator new</code> 的封装，在非 <a class="link" href="https://en.cppreference.com/w/cpp/types/is_constant_evaluated"  target="_blank" rel="noopener"
+    >constant-evaluated</a> 的场景下，会继续调用内部函数来申请/释放内存，否则直接调用 <code>operator new</code> 返回。后面继续分析内部的内存申请释放函数并解释为啥要多这么个流程。</p>
+</li>
+<li>
+<p>这里对 <code>construct / destroy</code> 的实现也是简单的 <em>placement new</em> ，并指出当前已经不建议使用Allocator里面的这两个成员，并将在C++ 20上彻底移除它们。查了一些资料 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> 发现目前标准的做法是不直接使用 <code>std::allocator</code> ，而使用 <code>std::allocator_traits</code> ，而 <code>construct / destroy</code> 已经在 <code>allocator_traits</code> 里有了重复实现，没必要在 <code>allocator</code> 中保留了。</p>
+</li>
+<li>
+<p>看完Clang的实现才发现刚才看的GCC 4.x太老了，这些新标准的特性等等都没有体现出来。Whatever，精髓仍在，也不把前文推倒重写了…… 另外，实际上我还是回过头看了下GCC 11.x，好家伙，满地的宏，根据各种版本选用不同实现，读上去有点崩溃，反而不如早期版本简洁明了…… <del>果然项目开展到后期代码就会变成屎山。</del></p>
+</li>
+</ul>
+<p>本篇不会考察 <code>allocator_traits</code> 的实现，这个需要等到后面实际在容器中去用Allocator的时候再研究。继续看Allocator自身的部分，内存的申请/释放：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// new
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">inline</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="o">*</span><span class="nf">__libcpp_allocate</span><span class="p">(</span><span class="n">size_t</span> <span class="n">__size</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">__align</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifndef _LIBCPP_HAS_NO_ALIGNED_ALLOCATION
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">__is_overaligned_for_new</span><span class="p">(</span><span class="n">__align</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">align_val_t</span> <span class="n">__align_val</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">align_val_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">__align</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">__libcpp_operator_new</span><span class="p">(</span><span class="n">__size</span><span class="p">,</span> <span class="n">__align_val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">__align</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">__libcpp_operator_new</span><span class="p">(</span><span class="n">__size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">inline</span> <span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">__libcpp_deallocate</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">__ptr</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">__size</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">__align</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if defined(_LIBCPP_HAS_NO_ALIGNED_ALLOCATION)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">__align</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">__do_deallocate_handle_size</span><span class="p">(</span><span class="n">__ptr</span><span class="p">,</span> <span class="n">__size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">__is_overaligned_for_new</span><span class="p">(</span><span class="n">__align</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">const</span> <span class="n">align_val_t</span> <span class="n">__align_val</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">align_val_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">__align</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">__do_deallocate_handle_size</span><span class="p">(</span><span class="n">__ptr</span><span class="p">,</span> <span class="n">__size</span><span class="p">,</span> <span class="n">__align_val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">__do_deallocate_handle_size</span><span class="p">(</span><span class="n">__ptr</span><span class="p">,</span> <span class="n">__size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">...</span><span class="nc">_Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="o">*</span> <span class="n">__libcpp_operator_new</span><span class="p">(</span><span class="n">_Args</span> <span class="p">...</span><span class="n">__args</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if __has_builtin(__builtin_operator_new) &amp;&amp; __has_builtin(__builtin_operator_delete)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="k">return</span> <span class="nf">__builtin_operator_new</span><span class="p">(</span><span class="n">__args</span><span class="p">...);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="k">return</span> <span class="o">::</span><span class="k">operator</span> <span class="k">new</span><span class="p">(</span><span class="n">__args</span><span class="p">...);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">...</span><span class="nc">_Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">_LIBCPP_INLINE_VISIBILITY</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">__do_deallocate_handle_size</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">__ptr</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">__size</span><span class="p">,</span> <span class="n">_Args</span> <span class="p">...</span><span class="n">__args</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef _LIBCPP_HAS_NO_SIZED_DEALLOCATION
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">__size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nf">__libcpp_operator_delete</span><span class="p">(</span><span class="n">__ptr</span><span class="p">,</span> <span class="n">__args</span><span class="p">...);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="k">return</span> <span class="nf">__libcpp_operator_delete</span><span class="p">(</span><span class="n">__ptr</span><span class="p">,</span> <span class="n">__size</span><span class="p">,</span> <span class="n">__args</span><span class="p">...);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">}</span>
+</span></span></code></pre></div><p>我们对内存申请/释放的探究只能深入到 <code>__builtin_operator_new/delete</code> 了，再往后的区域，已是编译器的领域。</p>
+<p>Clang自己的资料 <sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> 向我们指出，这里的封装本质上跟 <code>operator new</code> 没太大区别，不过是编译器希望内部继续对 <code>operator new</code> 进行优化而规范不允许，因而进行了一层封装以此解除限制。资料并指出了两种优化场景，比如移除 <code>new/delete</code> 对（我理解就是把A处释放的内存不归还系统而直接让B处申请走）、合并内存申请动作等。</p>
+<h3 id="附录-无限风光在险峰">附录 无限风光在险峰</h3>
+<p>如正文中所讲，侯捷老师在书中花了大篇幅介绍的两级配置器，在当前的GCC版本中实际已非首选。但我看完了相关的内容后，觉得这才是大师之作，非细读之不能一览Allocator之妙，乃有此录。</p>
+<h4 id="二级配置器">二级配置器</h4>
+<p>书中的两级配置器，实际上在当前GCC版本里面叫做 <code>pool_allocator</code> ，首先看到其基类：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">__pool_alloc_base</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">size_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">enum</span> <span class="p">{</span> <span class="n">_S_align</span> <span class="o">=</span> <span class="mi">8</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">      <span class="k">enum</span> <span class="p">{</span> <span class="n">_S_max_bytes</span> <span class="o">=</span> <span class="mi">128</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">      <span class="k">enum</span> <span class="p">{</span> <span class="n">_S_free_list_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">size_t</span><span class="p">)</span><span class="n">_S_max_bytes</span> <span class="o">/</span> <span class="p">(</span><span class="n">size_t</span><span class="p">)</span><span class="n">_S_align</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">union</span> <span class="nc">_Obj</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">union</span> <span class="nc">_Obj</span><span class="o">*</span> <span class="n">_M_free_list_link</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span>        <span class="n">_M_client_data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>    <span class="c1">// The client sees this.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">static</span> <span class="n">_Obj</span><span class="o">*</span> <span class="k">volatile</span>         <span class="n">_S_free_list</span><span class="p">[</span><span class="n">_S_free_list_size</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1">// Chunk allocation state.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">static</span> <span class="kt">char</span><span class="o">*</span>                  <span class="n">_S_start_free</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">static</span> <span class="kt">char</span><span class="o">*</span>                  <span class="n">_S_end_free</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">static</span> <span class="n">size_t</span>                 <span class="n">_S_heap_size</span><span class="p">;</span>     
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">size_t</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">_M_round_up</span><span class="p">(</span><span class="n">size_t</span> <span class="n">__bytes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="k">return</span> <span class="p">((</span><span class="n">__bytes</span> <span class="o">+</span> <span class="p">(</span><span class="n">size_t</span><span class="p">)</span><span class="n">_S_align</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span><span class="p">((</span><span class="n">size_t</span><span class="p">)</span><span class="n">_S_align</span> <span class="o">-</span> <span class="mi">1</span><span class="p">));</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">_GLIBCXX_CONST</span> <span class="n">_Obj</span><span class="o">*</span> <span class="k">volatile</span><span class="o">*</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">_M_get_free_list</span><span class="p">(</span><span class="n">size_t</span> <span class="n">__bytes</span><span class="p">)</span> <span class="k">throw</span> <span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">__mutex</span><span class="o">&amp;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">_M_get_mutex</span><span class="p">()</span> <span class="k">throw</span> <span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1">// Returns an object of size __n, and optionally adds to size __n
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// free list.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="kt">void</span><span class="o">*</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">_M_refill</span><span class="p">(</span><span class="n">size_t</span> <span class="n">__n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c1">// Allocates a chunk for nobjs of size size.  nobjs may be reduced
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// if it is inconvenient to allocate the requested number.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="kt">char</span><span class="o">*</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">_M_allocate_chunk</span><span class="p">(</span><span class="n">size_t</span> <span class="n">__n</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">__nobjs</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span></code></pre></div><p>这个类体现书 <code>2.2.6</code> 节介绍的内容，有几个要点：</p>
+<ul>
+<li>
+<p>空闲内存链表节点和用户申请到的空间，本质上是同一块内存（union）。对用户来说，申请到手后就是一块随便读写的内存，对 <code>free_list</code> 来说，反正这块内存现在不在用户手上，直接拿来记载下一块空闲内存的位置，物尽其用。这样的策略带来的好处是不必花费任何额外的专门结构来记录下一块空闲内存信息了。</p>
+</li>
+<li>
+<p>这里的 <code>_M_round_up</code> 实现非常帅，实际上就是把传入的数向上对齐为 <code>_S_align</code> 的倍数（这里是 <code>8</code> ），相比于常见的取模运算，这里的位运算就是大师带来的小小震撼了，至少我是震撼的。</p>
+</li>
+</ul>
+<p>后面的一些成员就没有实现了，继续看：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">__pool_alloc</span> <span class="o">:</span> <span class="k">private</span> <span class="n">__pool_alloc_base</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="k">static</span> <span class="n">_Atomic_word</span>        <span class="n">_S_force_new</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span>     <span class="n">size_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">ptrdiff_t</span>  <span class="n">difference_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">*</span>       <span class="n">pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">*</span> <span class="n">const_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span><span class="o">&amp;</span>       <span class="n">reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">&amp;</span> <span class="n">const_reference</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typedef</span> <span class="n">_Tp</span>        <span class="n">value_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">struct</span> <span class="nc">rebind</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="k">typedef</span> <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp1</span><span class="o">&gt;</span> <span class="n">other</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#if __cplusplus &gt;= 201103L
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="c1">// _GLIBCXX_RESOLVE_LIB_DEFECTS
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// 2103. propagate_on_container_move_assignment
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="n">propagate_on_container_move_assignment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">      <span class="n">__pool_alloc</span><span class="p">()</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">__pool_alloc</span><span class="p">(</span><span class="k">const</span> <span class="n">__pool_alloc</span><span class="o">&amp;</span><span class="p">)</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__pool_alloc</span><span class="p">(</span><span class="k">const</span> <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp1</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="o">~</span><span class="n">__pool_alloc</span><span class="p">()</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">pointer</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">address</span><span class="p">(</span><span class="n">reference</span> <span class="n">__x</span><span class="p">)</span> <span class="k">const</span> <span class="n">_GLIBCXX_NOEXCEPT</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">__addressof</span><span class="p">(</span><span class="n">__x</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">const_pointer</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">address</span><span class="p">(</span><span class="n">const_reference</span> <span class="n">__x</span><span class="p">)</span> <span class="k">const</span> <span class="n">_GLIBCXX_NOEXCEPT</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">__addressof</span><span class="p">(</span><span class="n">__x</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">size_type</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">max_size</span><span class="p">()</span> <span class="k">const</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span> 
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#if __cplusplus &gt;= 201103L
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Up</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">_Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">void</span>
+</span></span><span class="line"><span class="cl">        <span class="n">construct</span><span class="p">(</span><span class="n">_Up</span><span class="o">*</span> <span class="n">__p</span><span class="p">,</span> <span class="n">_Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">__args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="o">::</span><span class="k">new</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">__p</span><span class="p">)</span> <span class="n">_Up</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">_Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">__args</span><span class="p">)...);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Up</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">void</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">destroy</span><span class="p">(</span><span class="n">_Up</span><span class="o">*</span> <span class="n">__p</span><span class="p">)</span> <span class="p">{</span> <span class="n">__p</span><span class="o">-&gt;~</span><span class="n">_Up</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="c1">// _GLIBCXX_RESOLVE_LIB_DEFECTS
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// 402. wrong new expression in [some_] allocator::construct
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="kt">void</span> 
+</span></span><span class="line"><span class="cl">      <span class="nf">construct</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">,</span> <span class="k">const</span> <span class="n">_Tp</span><span class="o">&amp;</span> <span class="n">__val</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="o">::</span><span class="k">new</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">__p</span><span class="p">)</span> <span class="n">_Tp</span><span class="p">(</span><span class="n">__val</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="kt">void</span> 
+</span></span><span class="line"><span class="cl">      <span class="nf">destroy</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">)</span> <span class="p">{</span> <span class="n">__p</span><span class="o">-&gt;~</span><span class="n">_Tp</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">      <span class="n">_GLIBCXX_NODISCARD</span> <span class="n">pointer</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">allocate</span><span class="p">(</span><span class="n">size_type</span> <span class="n">__n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="kt">void</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">deallocate</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">__n</span><span class="p">);</span>      
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">inline</span> <span class="kt">bool</span>
+</span></span><span class="line"><span class="cl">    <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#if __cpp_impl_three_way_comparison &lt; 201907L
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">inline</span> <span class="kt">bool</span>
+</span></span><span class="line"><span class="cl">    <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;&amp;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Atomic_word</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;::</span><span class="n">_S_force_new</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_GLIBCXX_NODISCARD</span> <span class="n">_Tp</span><span class="o">*</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;::</span><span class="n">allocate</span><span class="p">(</span><span class="n">size_type</span> <span class="n">__n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">pointer</span> <span class="n">__ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">__builtin_expect</span><span class="p">(</span><span class="n">__n</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">true</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">__n</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">max_size</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">__throw_bad_alloc</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">const</span> <span class="n">size_t</span> <span class="n">__bytes</span> <span class="o">=</span> <span class="n">__n</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#if __cpp_aligned_new
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="k">if</span> <span class="p">(</span><span class="k">alignof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">__STDCPP_DEFAULT_NEW_ALIGNMENT__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">std</span><span class="o">::</span><span class="n">align_val_t</span> <span class="n">__al</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">align_val_t</span><span class="p">(</span><span class="k">alignof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">          <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">::</span><span class="k">operator</span> <span class="k">new</span><span class="p">(</span><span class="n">__bytes</span><span class="p">,</span> <span class="n">__al</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// If there is a race through here, assume answer from getenv
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// will resolve in same direction.  Inspired by techniques
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// to efficiently support threading found in basic_string.h.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">if</span> <span class="p">(</span><span class="n">_S_force_new</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#34;GLIBCXX_FORCE_NEW&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__atomic_add_dispatch</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_S_force_new</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">__atomic_add_dispatch</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_S_force_new</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">__bytes</span> <span class="o">&gt;</span> <span class="n">size_t</span><span class="p">(</span><span class="n">_S_max_bytes</span><span class="p">)</span> <span class="o">||</span> <span class="n">_S_force_new</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__ret</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">::</span><span class="k">operator</span> <span class="k">new</span><span class="p">(</span><span class="n">__bytes</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">      <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">_Obj</span><span class="o">*</span> <span class="k">volatile</span><span class="o">*</span> <span class="n">__free_list</span> <span class="o">=</span> <span class="n">_M_get_free_list</span><span class="p">(</span><span class="n">__bytes</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          <span class="n">__scoped_lock</span> <span class="nf">sentry</span><span class="p">(</span><span class="n">_M_get_mutex</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">          <span class="n">_Obj</span><span class="o">*</span> <span class="n">__restrict__</span> <span class="n">__result</span> <span class="o">=</span> <span class="o">*</span><span class="n">__free_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="n">__builtin_expect</span><span class="p">(</span><span class="n">__result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__ret</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">_M_refill</span><span class="p">(</span><span class="n">_M_round_up</span><span class="p">(</span><span class="n">__bytes</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">          <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="o">*</span><span class="n">__free_list</span> <span class="o">=</span> <span class="n">__result</span><span class="o">-&gt;</span><span class="n">_M_free_list_link</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">__ret</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">__result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="n">__ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">__throw_bad_alloc</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">__ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Tp</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__pool_alloc</span><span class="o">&lt;</span><span class="n">_Tp</span><span class="o">&gt;::</span><span class="n">deallocate</span><span class="p">(</span><span class="n">pointer</span> <span class="n">__p</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">__n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">__builtin_expect</span><span class="p">(</span><span class="n">__n</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">__p</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">true</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if __cpp_aligned_new
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="k">if</span> <span class="p">(</span><span class="k">alignof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">__STDCPP_DEFAULT_NEW_ALIGNMENT__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="o">::</span><span class="k">operator</span> <span class="k">delete</span><span class="p">(</span><span class="n">__p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">align_val_t</span><span class="p">(</span><span class="k">alignof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">          <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>      <span class="k">const</span> <span class="n">size_t</span> <span class="n">__bytes</span> <span class="o">=</span> <span class="n">__n</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">_Tp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">__bytes</span> <span class="o">&gt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_S_max_bytes</span><span class="p">)</span> <span class="o">||</span> <span class="n">_S_force_new</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">::</span><span class="k">operator</span> <span class="k">delete</span><span class="p">(</span><span class="n">__p</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">_Obj</span><span class="o">*</span> <span class="k">volatile</span><span class="o">*</span> <span class="n">__free_list</span> <span class="o">=</span> <span class="n">_M_get_free_list</span><span class="p">(</span><span class="n">__bytes</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="n">_Obj</span><span class="o">*</span> <span class="n">__q</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">_Obj</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">__p</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          <span class="n">__scoped_lock</span> <span class="nf">sentry</span><span class="p">(</span><span class="n">_M_get_mutex</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">          <span class="n">__q</span> <span class="o">-&gt;</span><span class="n">_M_free_list_link</span> <span class="o">=</span> <span class="o">*</span><span class="n">__free_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">*</span><span class="n">__free_list</span> <span class="o">=</span> <span class="n">__q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><p>这里的 <code>__pool_alloc</code> 还能依稀见到书中的样式，但具体的一些实现已经没有了。就此处能看到的内存申请/分配仍分析一二。</p>
+<ul>
+<li>
+<p>首先重申这里对应的是书中的二级配置器，那么一级配置器在这里是啥呢？实际上是 <code>operator new</code> 。对于大块内存（超出 <code>_S_max_bytes</code> 的情况）和强制new（ <code>GLIBCXX_FORCE_NEW</code> ）的情况， <code>__pool_alloc</code> 直接调用一级配置器 <code>operator new</code> 。</p>
+</li>
+<li>
+<p>对于小块内存的情况，会从 <code>free_list</code> 里面取一块合适的内存，当然，分配出去的大小其实是经过了 <code>round_up</code> 的。当 <code>free_list</code> 没有余粮时，会调用 <code>_M_refill</code> 来分配内存并顺便补充对应的空闲链表。</p>
+</li>
+</ul>
+<p><code>__pool_alloc</code> 的总体分配逻辑大概是这样的：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 106; 
+			flex-basis: 254px"
+	>
+	<a href="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2.png" data-size="826x778">
+		<img src="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2.png"
+			width="826"
+			height="778"
+			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2_hu33bd5c17e2eeb79009c2421d87b0af2d_70105_480x0_resize_box_3.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2_hu33bd5c17e2eeb79009c2421d87b0af2d_70105_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="__pool_alloc">
+	</a>
+	
+	<figcaption>__pool_alloc</figcaption>
+	
+</figure></p>
+<p>归还逻辑无非是把空间还给链表，不做叙述了。</p>
+<h4 id="重填free_list">重填free_list</h4>
+<p>比较可惜的是， <code>refill</code> 逻辑在当前的GCC版本似乎是被屏蔽掉了（或者是我没找到），这里只好回头看侯捷老师的摘录和讲解。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">//傳回一個大小為n的物件，並且有時候會f為適當的ree list增加節點.
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 假設 n 已經適當上調至 8 的倍數。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">threads</span><span class="p">,</span> <span class="kt">int</span> <span class="n">inst</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="o">*</span> <span class="n">__default_alloc_template</span><span class="o">&lt;</span><span class="n">threads</span><span class="p">,</span> <span class="n">inst</span><span class="o">&gt;::</span><span class="n">refill</span><span class="p">(</span><span class="n">size_t</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">nobjs</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 呼叫 chunk_alloc()，嘗試取得 nobjs 個區塊做為 free list 的新節點。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 注意參數 nobjs 是 pass by reference。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="o">*</span> <span class="n">chunk</span> <span class="o">=</span> <span class="n">chunk_alloc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">nobjs</span><span class="p">);</span> <span class="c1">// 下節詳述
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">obj</span> <span class="o">*</span> <span class="k">volatile</span> <span class="o">*</span> <span class="n">my_free_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">obj</span> <span class="o">*</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">obj</span> <span class="o">*</span> <span class="n">current_obj</span><span class="p">,</span> <span class="o">*</span> <span class="n">next_obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 如果只獲得一個區塊，這個區塊就撥給呼叫者用，free list 無新節點。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">==</span> <span class="n">nobjs</span><span class="p">)</span> <span class="k">return</span><span class="p">(</span><span class="n">chunk</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 否則準備調整 free list，納入新節點。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">my_free_list</span> <span class="o">=</span> <span class="n">free_list</span> <span class="o">+</span> <span class="n">FREELIST_INDEX</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//以下在chunk空間內建立free list
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj</span> <span class="o">*</span><span class="p">)</span><span class="n">chunk</span><span class="p">;</span> <span class="c1">// 這一塊準備傳回給客端
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 以下導引 free list 指向新配置的空間(取自記憶池)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">*</span><span class="n">my_free_list</span> <span class="o">=</span> <span class="n">next_obj</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj</span> <span class="o">*</span><span class="p">)(</span><span class="n">chunk</span> <span class="o">+</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 以下將 free list 的各節點串接起來。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 從1開始，因為第0個將傳回給客端
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>           <span class="n">current_obj</span> <span class="o">=</span> <span class="n">next_obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">           <span class="n">next_obj</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj</span> <span class="o">*</span><span class="p">)((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">next_obj</span> <span class="o">+</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">           <span class="k">if</span> <span class="p">(</span><span class="n">nobjs</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">               <span class="n">current_obj</span> <span class="o">-&gt;</span> <span class="n">free_list_link</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">               <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">               <span class="n">current_obj</span> <span class="o">-&gt;</span> <span class="n">free_list_link</span> <span class="o">=</span> <span class="n">next_obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这里实际上完成了我刚才说的 <em>分配内存并填充 free_list</em> 的动作，预设 <code>20</code> 个节点，分配给客户端一个，实际上往 <code>free_list</code> 填充了 <code>19</code> 个节点。</p>
+<h4 id="内存池管理">内存池管理</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 假設 size 已經適當上調至 8 的倍數。
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 注意參數 nobjs 是 pass by reference。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">threads</span><span class="p">,</span> <span class="kt">int</span> <span class="n">inst</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span><span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="n">__default_alloc_template</span><span class="o">&lt;</span><span class="n">threads</span><span class="p">,</span> <span class="n">inst</span><span class="o">&gt;::</span> <span class="n">chunk_alloc</span><span class="p">(</span><span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">nobjs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">total_bytes</span> <span class="o">=</span> <span class="n">size</span> <span class="o">*</span> <span class="n">nobjs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">bytes_left</span> <span class="o">=</span> <span class="n">end_free</span> <span class="o">-</span> <span class="n">start_free</span><span class="p">;</span> <span class="c1">// 記憶池剩餘空間
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">bytes_left</span> <span class="o">&gt;=</span> <span class="n">total_bytes</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 記憶池剩餘空間完全滿足需求量。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">result</span> <span class="o">=</span> <span class="n">start_free</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">start_free</span> <span class="o">+=</span> <span class="n">total_bytes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">       <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">bytes_left</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">         <span class="c1">// 記憶池剩餘空間不能完全滿足需求量，但足夠供應一個(含)以上的區塊。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">nobjs</span> <span class="o">=</span> <span class="n">bytes_left</span><span class="o">/</span><span class="n">size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">total_bytes</span> <span class="o">=</span> <span class="n">size</span> <span class="o">*</span> <span class="n">nobjs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">start_free</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">start_free</span> <span class="o">+=</span> <span class="n">total_bytes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">           <span class="k">return</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 記憶池剩餘空間連一個區塊的大小都無法提供。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">size_t</span> <span class="n">bytes_to_get</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">total_bytes</span> <span class="o">+</span> <span class="n">ROUND_UP</span><span class="p">(</span><span class="n">heap_size</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 以下試著讓記憶池中的殘餘零頭還有利用價值。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">bytes_left</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 記憶池內還有一些零頭，先配給適當的 free list。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// 首先尋找適當的 free list。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">obj</span> <span class="o">*</span> <span class="k">volatile</span> <span class="o">*</span> <span class="n">my_free_list</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">                <span class="n">free_list</span> <span class="o">+</span> <span class="n">FREELIST_INDEX</span><span class="p">(</span><span class="n">bytes_left</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 調整 free list，將記憶池中的殘餘空間編入。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>               <span class="p">((</span><span class="n">obj</span> <span class="o">*</span><span class="p">)</span><span class="n">start_free</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">free_list_link</span> <span class="o">=</span> <span class="o">*</span><span class="n">my_free_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">               <span class="o">*</span><span class="n">my_free_list</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj</span> <span class="o">*</span><span class="p">)</span><span class="n">start_free</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 配置 heap 空間，用來挹注記憶池。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">start_free</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">bytes_to_get</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">start_free</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// heap 空間不足，malloc() 失敗。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">obj</span> <span class="o">*</span> <span class="k">volatile</span> <span class="o">*</span> <span class="n">my_free_list</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 試著檢視我們手上擁有的東西。這不會造成傷害。我們不打算嘗試配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// 較小的區塊，因為那在多行程(multi-process)機器上容易導致災難
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// 以下搜尋適當的 free list，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// 所謂適當是指「尚有未用區塊，且區塊夠大」之 free list。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">__MAX_BYTES</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">__ALIGN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">my_free_list</span> <span class="o">=</span> <span class="n">free_list</span> <span class="o">+</span> <span class="n">FREELIST_INDEX</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="n">my_free_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// free list 內尚有未用區塊。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="c1">// 調整 free list 以釋出未用區塊
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="o">*</span><span class="n">my_free_list</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">free_list_link</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">start_free</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">end_free</span> <span class="o">=</span> <span class="n">start_free</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 遞迴呼叫自己，為了修正 nobjs。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="k">return</span><span class="p">(</span><span class="n">chunk_alloc</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">nobjs</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 注意，任何殘餘零頭終將被編入適當的 free-list 中備用。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">             <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">end_free</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 如果出現意外(山窮水盡，到處都沒記憶體可用了)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// 呼叫第一級配置器，看看 out-of-memory 機制能否盡點力
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">start_free</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc_alloc</span><span class="o">::</span><span class="n">allocate</span><span class="p">(</span><span class="n">bytes_to_get</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 這會導致擲出異常(exception)，或記憶體不足的情況獲得改善。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">heap_size</span> <span class="o">+=</span> <span class="n">bytes_to_get</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">end_free</span> <span class="o">=</span> <span class="n">start_free</span> <span class="o">+</span> <span class="n">bytes_to_get</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 遞迴呼叫自己，為了修正 nobjs。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span><span class="p">(</span><span class="n">chunk_alloc</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">nobjs</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><code>chunk_alloc</code> 有几个点是需要揣摩的：</p>
+<ul>
+<li>
+<p>先收编池内内存（ <code>start_free</code> ~ <code>end_free</code> 的部分），再向系统堆申请新的大块内存，这样做的好处显然是减少了碎片；</p>
+</li>
+<li>
+<p>向系统申请内存失败后，会去找 <code>free_list</code> 当中更大的内存，若找到，会取出一块作为新的内存池，然后回调自身，基于这块大内存完成 <code>chunk_alloc</code> 动作。这个操作可行的原因是我们此前的 <code>alloc</code> 动作一直都是去看 <strong>恰到好处</strong> 的那块 <code>free_list</code> ，而没有去惦记更大块的内存；现在当小块内存不够用而大块 <code>free_list</code> 尚有时，就会把大块内存在这里进行分割（拿去作为池子并分割了后，就会被 <code>refill</code> 填充到小块内存的 <code>free_list</code> 里了）。</p>
+</li>
+</ul>
+<p>此外，我阅读时一直觉得整个体系有点违和，根本上是因为没有搞懂内存分配的对齐机制。总觉得不管是这里的内存池转移到 <code>free_list</code> ，或者是从 <code>free_list</code> 里面摘出新的大块内存分成小内存，都有种随时随地产生碎片的风险。实际上，只要注意到不管是客户面的内存分配/释放，或者是内部的内存申请/分割，都是以 <strong>对齐后</strong> 的单位来进行的，就不会出现内存碎片的疑虑。</p>
+<p>至此，整个内存池的机制终于是看完了，当真不易也。</p>
+<h3 id="参考资料">参考资料</h3>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a class="link" href="https://blog.csdn.net/weixin_43705457/article/details/104085176"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/weixin_43705457/article/details/104085176</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a class="link" href="https://stackoverflow.com/questions/39414610/why-are-are-stdallocators-construct-and-destroy-functions-deprecated-in-c17"  target="_blank" rel="noopener"
+    >StackOverflow&ndash;Why are are std::allocator&rsquo;s construct and destroy functions deprecated in c++17?</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p><a class="link" href="https://en.cppreference.com/w/cpp/memory/allocator_traits"  target="_blank" rel="noopener"
+    >https://en.cppreference.com/w/cpp/memory/allocator_traits</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p><a class="link" href="https://clang.llvm.org/docs/LanguageExtensions.html#builtin-operator-new-and-builtin-operator-delete"  target="_blank" rel="noopener"
+    >https://clang.llvm.org/docs/LanguageExtensions.html#builtin-operator-new-and-builtin-operator-delete</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【3】Arkts组件</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 22, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【2】带跳转的待办列表</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 06, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;「emplace」的些许细节</h2>
+            <footer class="article-time">
+                <time datetime=''>Sep 17, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">C&#43;&#43;位域（bit-field）简介</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 27, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#序言">序言</a></li>
+    <li><a href="#gcc">GCC</a></li>
+    <li><a href="#clang">Clang</a></li>
+    <li><a href="#附录-无限风光在险峰">附录 无限风光在险峰</a>
+      <ul>
+        <li><a href="#二级配置器">二级配置器</a></li>
+        <li><a href="#重填free_list">重填free_list</a></li>
+        <li><a href="#内存池管理">内存池管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

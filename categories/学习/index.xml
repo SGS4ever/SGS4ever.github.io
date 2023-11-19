@@ -6,7 +6,20 @@
     <description>Recent content in 学习 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 22 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 16 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【STL源码剖析】allocator</title>
+      <link>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/</link>
+      <pubDate>Thu, 16 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/</guid>
+      <description>序言 近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。
+GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std::alloc 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 std::allocator ，很符合直觉。
+过时的信息 为了佐证这里的信息，我们看 std::vector 里默认使用的Allocator是什么：
+// /usr/include/c++/4.8.5/bits/stl_vector.h template&amp;lt;typename _Tp, typename _Alloc = std::allocator&amp;lt;_Tp&amp;gt; &amp;gt; class vector : protected _Vector_base&amp;lt;_Tp, _Alloc&amp;gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
+// /usr/include/c++/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &amp;lt;bits/c++allocator.h&amp;gt; // Define the base class to std::allocator. #include &amp;lt;bits/memoryfwd.h&amp;gt; #include &amp;lt;type_traits&amp;gt; namespace std _GLIBCXX_VISIBILITY(default) { template&amp;lt;&amp;gt; class allocator&amp;lt;void&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&amp;lt;typename _Tp&amp;gt; class allocator: public __allocator_base&amp;lt;_Tp&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp;amp; reference; typedef const _Tp&amp;amp; const_reference; typedef _Tp value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp;amp; __a) throw() : __allocator_base&amp;lt;_Tp&amp;gt;(__a) { } template&amp;lt;typename _Tp1&amp;gt; allocator(const allocator&amp;lt;_Tp1&amp;gt;&amp;amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：</description>
+    </item>
+    
     <item>
       <title>【HarmonyOS learning】【3】Arkts组件</title>
       <link>https://xrg.fj.cn/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/</link>
