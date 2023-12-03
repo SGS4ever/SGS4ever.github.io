@@ -6,7 +6,19 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 26 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【STL源码剖析】iterator &amp; traits</title>
+      <link>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/</link>
+      <pubDate>Sun, 26 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/</guid>
+      <description>本篇对应《STL源码剖析》第三章，主要看看迭代器和由此引出的 iterator_traits 。我对这部分现代源码的阅读顺序是从Clang到GCC，因此如果对本文秉承由上至下的阅读顺序，可能会丢失一些信息，特此说明。
+GCC 由于 iterator 部分我是先看的Clang，回头看GCC时又不得不说还是GCC组织的好些（为什么每一篇都觉得第二个看到的好些（x。
+GCC对 iterator 的基本概念和定义都放在 bits/stl_iterator_base_types.h 里。
+iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这些类型的继承关系是后面整个STL算法库的重要基础之一。 /** * @defgroup iterator_tags Iterator Tags * These are empty types, used to distinguish different iterators. The * distinction is not made by what they contain, but simply by what they * are. Different underlying algorithms can then be used based on the * different operations supported by different iterator types. */ ///@{ /// Marking input iterators.</description>
+    </item>
+    
     <item>
       <title>【STL源码剖析】allocator</title>
       <link>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/</link>
