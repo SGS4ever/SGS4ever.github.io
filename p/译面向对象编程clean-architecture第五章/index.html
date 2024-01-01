@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
+《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin
+Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？
+该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 o.f() 在某些情况下是不同于 f(o) 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。
+对于该问题（何为OO？）的另一常见回答是“一种对现实世界建模的方式”。这充其量是个含糊其辞的回答。“对现实世界建模”的真实含义是什么呢？而为什么我们需要这么做呢？也许这一回答希望表达的是OO使软件更贴近现实世界因而更易理解——但即使是这样的表述仍是含糊且过于宽泛了。它总的来说并没有告诉我们何为OO。
+也有一些人回归到三个表达OO本质的“魔法”词汇上：封装、继承和多态。本质上是想说OO就是这三样东西的恰到好处的结合，或至少一门OO语言必须支持这三样特性。
+那么就让我们逐一考察这三个概念吧。
+封装？ 封装 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。
+但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：
+// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &amp;#34;point.h&amp;#34; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;math.h&amp;gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&amp;gt;x = x; p-&amp;gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&amp;gt;x - p2-&amp;gt;x; double dy = p1-&amp;gt;y - p2-&amp;gt;y; return sqrt(dx*dx&#43;dy*dy); } point.'><title>【译】面向对象编程——《Clean Architecture》第五章</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【译】面向对象编程——《Clean Architecture》第五章'>
+<meta property='og:description' content='这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
+《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin
+Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？
+该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 o.f() 在某些情况下是不同于 f(o) 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。
+对于该问题（何为OO？）的另一常见回答是“一种对现实世界建模的方式”。这充其量是个含糊其辞的回答。“对现实世界建模”的真实含义是什么呢？而为什么我们需要这么做呢？也许这一回答希望表达的是OO使软件更贴近现实世界因而更易理解——但即使是这样的表述仍是含糊且过于宽泛了。它总的来说并没有告诉我们何为OO。
+也有一些人回归到三个表达OO本质的“魔法”词汇上：封装、继承和多态。本质上是想说OO就是这三样东西的恰到好处的结合，或至少一门OO语言必须支持这三样特性。
+那么就让我们逐一考察这三个概念吧。
+封装？ 封装 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。
+但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：
+// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &amp;#34;point.h&amp;#34; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;math.h&amp;gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&amp;gt;x = x; p-&amp;gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&amp;gt;x - p2-&amp;gt;x; double dy = p1-&amp;gt;y - p2-&amp;gt;y; return sqrt(dx*dx&#43;dy*dy); } point.'>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2024-01-01T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-01-01T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【译】面向对象编程——《Clean Architecture》第五章">
+<meta name="twitter:description" content="这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
+《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin
+Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？
+该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 o.f() 在某些情况下是不同于 f(o) 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。
+对于该问题（何为OO？）的另一常见回答是“一种对现实世界建模的方式”。这充其量是个含糊其辞的回答。“对现实世界建模”的真实含义是什么呢？而为什么我们需要这么做呢？也许这一回答希望表达的是OO使软件更贴近现实世界因而更易理解——但即使是这样的表述仍是含糊且过于宽泛了。它总的来说并没有告诉我们何为OO。
+也有一些人回归到三个表达OO本质的“魔法”词汇上：封装、继承和多态。本质上是想说OO就是这三样东西的恰到好处的结合，或至少一门OO语言必须支持这三样特性。
+那么就让我们逐一考察这三个概念吧。
+封装？ 封装 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。
+但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：
+// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &amp;#34;point.h&amp;#34; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;math.h&amp;gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&amp;gt;x = x; p-&amp;gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&amp;gt;x - p2-&amp;gt;x; double dy = p1-&amp;gt;y - p2-&amp;gt;y; return sqrt(dx*dx&#43;dy*dy); } point.">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" style="background-color: #2a9d8f; color: #fff;">
+                学习
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/">【译】面向对象编程——《Clean Architecture》第五章</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 01, 2024</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <blockquote>
+<p>这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。</p>
+</blockquote>
+<blockquote>
+<p>《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin</p>
+</blockquote>
+<h2 id="chapter-5-object-oriented-programming">Chapter 5 OBJECT-ORIENTED PROGRAMMING</h2>
+<p>我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？</p>
+<p>该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 <code>o.f()</code> 在某些情况下是不同于 <code>f(o)</code> 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。</p>
+<p>对于该问题（何为OO？）的另一常见回答是“一种对现实世界建模的方式”。这充其量是个含糊其辞的回答。“对现实世界建模”的真实含义是什么呢？而为什么我们需要这么做呢？也许这一回答希望表达的是OO使软件更贴近现实世界因而更易理解——但即使是这样的表述仍是含糊且过于宽泛了。它总的来说并没有告诉我们何为OO。</p>
+<p>也有一些人回归到三个表达OO本质的“魔法”词汇上：封装、继承和多态。本质上是想说OO就是这三样东西的恰到好处的结合，或至少一门OO语言必须支持这三样特性。</p>
+<p>那么就让我们逐一考察这三个概念吧。</p>
+<h3 id="封装">封装？</h3>
+<p><em>封装</em> 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。</p>
+<p>但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// point.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="n">Point</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Point</span><span class="o">*</span> <span class="nf">makePoint</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="nf">distance</span> <span class="p">(</span><span class="k">struct</span> <span class="n">Point</span> <span class="o">*</span><span class="n">p1</span><span class="p">,</span> <span class="k">struct</span> <span class="n">Point</span> <span class="o">*</span><span class="n">p2</span><span class="p">);</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// point.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;point.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> 
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Point</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Point</span><span class="o">*</span> <span class="nf">makepoint</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">Point</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">Point</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="nf">distance</span><span class="p">(</span><span class="k">struct</span> <span class="n">Point</span><span class="o">*</span> <span class="n">p1</span><span class="p">,</span> <span class="k">struct</span> <span class="n">Point</span><span class="o">*</span> <span class="n">p2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">-</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">-</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nf">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">*</span><span class="n">dx</span><span class="o">+</span><span class="n">dy</span><span class="o">*</span><span class="n">dy</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><code>point.h</code> 的用户并没有访问 <code>struct Point</code> 的成员的权限。他们可以调用 <code>makePoint()</code> 和 <code>distance()</code> 这两个函数，但不知道任何关于 <code>Point</code> 这个数据结构以及这些函数的实现细节。</p>
+<p>这就是一个完美的封装——在一个 <strong>非OO</strong> 的语言上。C程序员对此习以为常。我们可以在头文件中声明数据结构和函数，在源文件中实现它们。用户不可访问源文件中的相关元素。</p>
+<p>让我们看到面向对象的C++——C语言的完美封装被打破了。</p>
+<p>C++编译器出于技术原因，要求将一个类的成员变量在这个类的头文件中声明。因而我们的 <code>Point</code> 程序变为这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// point.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">class</span> <span class="nc">Point</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Point</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="nf">distance</span><span class="p">(</span><span class="k">const</span> <span class="n">Point</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// point.cc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;point.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> 
+</span></span><span class="line"><span class="cl"><span class="n">Point</span><span class="o">::</span><span class="n">Point</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">Point</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="k">const</span> <span class="n">Point</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">y</span><span class="o">-</span><span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nf">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="o">*</span><span class="n">dy</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><code>point.h</code> 的用户能看到成员变量 <code>x</code> 和 <code>y</code> ！编译器会阻止对它们的访问，但用户仍知道它们的存在性。例如，如果这些成员的命名被修改， <code>point.cc</code> 必须被重新编译！封装被打破了。</p>
+<p>事实上，人们又通过引入 <code>public</code> 、 <code>private</code> 和 <code>protected</code> 关键字来部分地修复封装性，然而这仅是在编译器提出要在头文件中看到这些成员变量的技术需求之后，引入的一种必要技巧。</p>
+<p>Java和C#直接完全弃用头文件/源文件的分离模式，因此更加削弱了封装性。在这些语言中，无法区分一个类的声明和实现。</p>
+<p>出于以上原因，我们无法接受OO依赖强封装性这种说法，实际上许多OO语言仅有微小的或非强制的封装性。</p>
+<p>OO当然十分依赖于程序员的良好行为，不擅自绕开对封装数据进行窥探。尽管如此，那些声称提供了OO的编程语言也仅仅是弱化了我们曾在C语言上享受的完美封装性而已。</p>
+<h3 id="继承">继承？</h3>
+<p>如果OO语言并未为向我们提供更好的封装性，那它们至少确实向我们提供了继承。</p>
+<p>好吧——某种程度上。继承实际上只是对一个特定域内的一组变量和方法的简单重复声明。这是一件C程序员在OO面世之前很久就可以手动实现的事。</p>
+<p>考虑我们的 <code>point.h</code> 的C程序的补充：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// namedPoint.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="n">NamedPoint</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="nf">makeNamedPoint</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setName</span><span class="p">(</span><span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="n">np</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span><span class="o">*</span> <span class="nf">getName</span><span class="p">(</span><span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="n">np</span><span class="p">);</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// namedPoint.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;namedPoint.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> 
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">NamedPoint</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">double</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="nf">makeNamedPoint</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">NamedPoint</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setName</span><span class="p">(</span><span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="n">np</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">np</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="kt">char</span><span class="o">*</span> <span class="nf">getName</span><span class="p">(</span><span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="n">np</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">np</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// main.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;point.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;namedPoint.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> 
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">ac</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">av</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="n">origin</span> <span class="o">=</span> <span class="nf">makeNamedPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s">&#34;origin&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">NamedPoint</span><span class="o">*</span> <span class="n">upperRight</span> <span class="o">=</span> <span class="nf">makeNamedPoint</span>  <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s">&#34;upperRight&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;distance=%f</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">distance</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">             <span class="p">(</span><span class="k">struct</span> <span class="n">Point</span><span class="o">*</span><span class="p">)</span> <span class="n">origin</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">             <span class="p">(</span><span class="k">struct</span> <span class="n">Point</span><span class="o">*</span><span class="p">)</span> <span class="n">upperRight</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>仔细阅读 <code>main</code> 程序能够发现， <code>NamedPoint</code> 这个数据结构表现得就如同它是 <code>Point</code> 的子类一样。这是因为 <code>NamedPoint</code> 的前两个成员的顺序和 <code>Point</code> 一致。简言之， <code>NamedPoint</code> 可以完全假扮 <code>Point</code> ，因为它是 <code>Point</code> 的真子集且一比一保持了和 <code>Point</code> 一致的成员顺序。</p>
+<p>此类技巧也是OO面世前的程序员们的基操。实际上，这一技巧也是C++实现单继承的法门。</p>
+<p>因此我们可以不完全正确地说，说在OO语言被发明以前我们就有某种形式上的继承机制。我们有技巧，但它远不如真正的继承来的方便。此外，多继承也是只凭借这样的技巧很难去实现的东西。</p>
+<p>另外再注意，在 <code>main.c</code> 中我强制将 <code>NamedPoint</code> 参数转换为了 <code>Point</code> 。在真正的OO语言中，这样的向上转换会是隐式的。</p>
+<p>公平地说，尽管OO语言并没有带给我们完全新颖的东西，它仍使得数据结构的相互装扮变得方便许多。</p>
+<p>回忆一下：我们在封装上给OO打了0分，在继承上也许可以打个0.5分，到目前为止这不是一个很高的分数。</p>
+<p>但还剩一个属性需要考虑。</p>
+<h3 id="多态">多态？</h3>
+<p>在OO语言之前，我们有多态吗？当然有。考虑如下简单的C代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">copy</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">((</span><span class="n">c</span><span class="o">=</span><span class="nf">getchar</span><span class="p">())</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">putchar</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>函数 <code>getchar()</code> 从 <code>STDIN</code> 中读数据。但 <code>STDIN</code> 是啥设备？同理 <code>putchar()</code> 向 <code>STDOUT</code> 中写数据， <code>STDOUT</code> 又是啥设备？这些函数是 <em>多态</em> 的——它们的行为取决于 <code>STDIN</code> 和 <code>STDOUT</code> 的类型。</p>
+<p><code>STDIN</code> 和 <code>STDOUT</code> 看起来就像Java风格的 <em>interface</em> ，对于每种设备均有实现。当然，示例C程序中并没有接口——所以对于 <code>getchar()</code> 的调用究竟是如何被传递到读取字符的设备驱动上的？</p>
+<p>对此问题的回答十分直白。UNIX操作系统要求每种IO设备驱动实现五个标准函数： <code>open</code> , <code>close</code> , <code>read</code> , <code>write</code> 和 <code>seek</code> 。这些函数的签名对于每种IO驱动必须一致。</p>
+<p><code>FILE</code> 数据结构包含了五个指针来指向这五个函数。在我们的示例中，它可能长这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">FILE</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">open</span><span class="p">)(</span><span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">close</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">read</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">write</span><span class="p">)(</span><span class="kt">char</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">seek</span><span class="p">)(</span><span class="kt">long</span> <span class="n">index</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>终端的IO驱动将实现这些函数，并在它们的地址空间内声明一个 <code>FILE</code> 结构，如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;file.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span> 
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">open</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span><span class="cm">/*...*/</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">close</span><span class="p">()</span> <span class="p">{</span><span class="cm">/*...*/</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">read</span><span class="p">()</span> <span class="p">{</span><span class="kt">int</span> <span class="n">c</span><span class="p">;</span><span class="cm">/*...*/</span> <span class="k">return</span> <span class="n">c</span><span class="p">;}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">write</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span><span class="cm">/*...*/</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">seek</span><span class="p">(</span><span class="kt">long</span> <span class="n">index</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span><span class="cm">/*...*/</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">FILE</span> <span class="n">console</span> <span class="o">=</span> <span class="p">{</span><span class="n">open</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">,</span> <span class="n">seek</span><span class="p">};</span>
+</span></span></code></pre></div><p>现在如果 <code>STDIN</code> 被定义为一个 <code>FILE*</code> ，且它指向 <code>console</code> 结构，那么 <code>getchar()</code> 就可以有如下实现：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">extern</span> <span class="k">struct</span> <span class="n">FILE</span><span class="o">*</span> <span class="n">STDIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">getchar</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">STDIN</span><span class="o">-&gt;</span><span class="nf">read</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>换言之， <code>getchar()</code> 只是调用了 <code>STDIN</code> 指向的 <code>FILE</code> 结构中的 <code>read</code> 指针所指向的方法。</p>
+<p>这一简单技巧是OO当中所有多态机制的基础。在C++中，类中的每一个虚函数都在虚表 <code>vtable</code> 中有一个指针，对于虚函数的调用就通过虚表来转发。子类的构造函数可以将它们自己重载后的虚函数的指针加载到虚表里。</p>
+<p>说到底多态就是对函数指针的应用。程序员们自冯诺伊曼架构在1940年代被首次实现后就一直在使用函数指针来实现多态行为。换言之，OO并未提供新的东西。</p>
+<p>啊，但这又不完全正确。OO语言可能并未向我们提供多态，但它们使得多态安全和高效许多。</p>
+<p>显式使用函数指针来实现多态行为的问题就在于函数指针是 <strong>危险的</strong> 。这种用法背后是一系列人为习惯。你必须记得按习惯去初始化这些指针，你必须记得按习惯去通过这些指针来调用你的函数。如果有程序员忘记了这些习惯，所导致的bug可能是极难定位和修复的。</p>
+<p>OO语言解除了这些习惯的约束，也因此消除了风险。OO语言使得多态变得普普通通。这一事实蕴含着C程序员梦寐以求的一种极大能量。在这一基础上，我们可以得出OO强制改变了控制流这一结论。</p>
+<h4 id="多态的力量">多态的力量</h4>
+<p>多态的伟力何在？为了更好地欣赏其魅力，让我们再考虑下示例的 <code>copy</code> 程序。当一款新的IO设备被创建时，程序将会发生什么？假设我们需要使用 <code>copy</code> 来将数据从手写识别设备拷贝到语音输出设备，我们需要如何改变这一程序以使它适用于这些新的设备？</p>
+<p>我们完全不需任何改变！实际上，我们甚至不需要重新编译这个程序。为什么？因为 <code>copy</code> 程序的源码并不依赖于IO设备的源码。只要这些IO设备实现了 <code>FILE</code> 结构所定义的五个标准函数， <code>copy</code> 程序就能愉快地使用它们。</p>
+<p>简单说，IO设备成为了 <code>copy</code> 程序的插件。</p>
+<p>为什么UNIX操作系统要使IO设备成为插件呢？因为我们在1950年代末期认识到，我们的程序应该是 <em>设备独立</em> 的。Why？因为我们写了太多的 <em>设备依赖</em> 的程序，最终发现我们只是需要这些程序用不同的设备完成同样的工作。</p>
+<p>例如，我们会写一款需要从一叠磁卡中读取数据、并输出到一叠新的磁卡上的程序。后来，用户不再给我们磁卡并开始给我们磁带了。这简直太不方便了，因为这意味着重写原有程序的很大一部分。假如相同的程序不依赖于磁卡，就会方便许多。</p>
+<p>插件式架构就是被发明来支持这样的IO设备独立的，并在几乎所有操作系统上都得到了实现。即便如此，多数程序员并没有将这个理念贯彻到他们的程序中去，因为使用函数指针是危险的。</p>
+<p>OO允许插件式架构在任意场合、对任意对象使用。</p>
+<h4 id="依赖倒置">依赖倒置</h4>
+<p>设想还没有一个安全方便的多态机制之前，程序会是什么样的。在典型的调用树中，主程序调用高层函数，高层函数再调用中层函数，然后调用底层函数。在这样的调用树中，源码依赖的方向不可避免地沿着控制流的方向。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 290; 
+			flex-basis: 698px"
+	>
+	<a href="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1.png" data-size="2258x776">
+		<img src="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1.png"
+			width="2258"
+			height="776"
+			srcset="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1_hu5eaebc4f0397a2ed2958a30697a1fb90_565744_480x0_resize_box_3.png 480w, /p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1_hu5eaebc4f0397a2ed2958a30697a1fb90_565744_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p><code>main</code> 函数要调用高层函数时，它必须要引用包含了目标函数的模块。在C语言中，这就是 <code>#include</code> 语句。在Java中，这是 <code>import</code> 语句。在C#中，这是 <code>using</code> 语句。实际上，一切调用者都需要引入包含了被调者的模块。</p>
+<p>这一需求给软件架构留下了很小的可选择余地。程序的控制流被系统行为所限定，源码依赖被控制流所限定。</p>
+<p>当多态入场，一切就有所不同。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 312; 
+			flex-basis: 749px"
+	>
+	<a href="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2.png" data-size="2266x726">
+		<img src="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2.png"
+			width="2266"
+			height="726"
+			srcset="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2_hu8848662830815640a7600c1fee60c499_180261_480x0_resize_box_3.png 480w, /p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2_hu8848662830815640a7600c1fee60c499_180261_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>在图 <code>5.2</code> 中，模块 <code>HL1</code> 调用了模块 <code>ML1</code> 中的 <code>F()</code> 方法。图示里通过一层接口来完成函数调用实际上是源码层面的矫揉造作，在运行时，接口并不存在，<code>HL1</code> 只是简单地调用 <code>ML1</code> 当中的 <code>F()</code> 方法。</p>
+<p>注意，<code>ML1</code> 和接口 <code>I</code> 之间的源码依赖（继承关系）指向控制流的反向。这称为 <em>依赖倒置</em> ，它对软件架构的影响是巨大的。</p>
+<p>OO语言引入了安全方便的多态机制，意味着 <em>一切源码依赖，无论何地，均可倒置</em> 。</p>
+<p>现在重新观察图 <code>5.1</code> 中的调用树，以及其中的许多源码依赖。一切源码依赖可以通过在其中插入一个接口来完成反转。</p>
+<p>在这一机制下，由OO语言开发的系统的软件架构师具有 <em>完全彻底</em> 的对整系统中源码依赖的控制力。他们不再受限于控制流。无论哪个模块是调用者，亦无论哪个模块是被调者，架构师都可以使源码依赖指向任意方向。</p>
+<p>这就是power！这就是OO提供的力量。这就是OO真正的内涵——至少从软件架构师的视角看。</p>
+<p>你能凭借这一力量做些啥？例如，你可以重排你系统中的源码依赖，使数据库和UI依赖于业务规则。</p>
+<p>这意味着UI和数据库可以作为业务规则的插件。这意味着业务规则的源码从不引入UI和数据库。</p>
+<p>由此产生的结果，业务规则、UI和数据库可以被编译为三个独立的组件或部署单元（例如jar文件、DLL或Gem文件），均依赖于同一份源码。包含了业务规则的组件不会依赖UI和数据库组件。</p>
+<p>反过来，业务规则可以被独立于UI和数据库部署。UI和数据库的改变不会对业务产生任何影响。这些组件都可以被独立部署。</p>
+<p>一言以蔽之，当一个组件中的源码发生改变，仅该组件需要被重新部署，这就是 <em>独立部署能力</em> 。</p>
+<p>如果你的系统中的模块可以被独立部署，那它们就能被不同团队独立开发，这就是 <em>独立开发能力</em> 。</p>
+<h3 id="总结">总结</h3>
+<p>何为OO？答案纷繁。然而对软件架构师来说却是明晰：OO就是借助多态去完全彻底地控制系统中的源码依赖。它允许架构师创建一个插件式架构，在这样的架构中，包含高层逻辑的模块独立于包含底层细节的模块。底层细节被降级为可独立部署、可独立开发的高层模块的插件。</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【STL源码剖析】iterator &amp; traits</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 26, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【STL源码剖析】allocator</h2>
+            <footer class="article-time">
+                <time datetime=''>Nov 16, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning3arkts%E7%BB%84%E4%BB%B6/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【3】Arkts组件</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 22, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning2%E5%B8%A6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%BE%85%E5%8A%9E%E5%88%97%E8%A1%A8/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【2】带跳转的待办列表</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 09, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</h2>
+            <footer class="article-time">
+                <time datetime=''>Oct 06, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2024 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#封装">封装？</a></li>
+    <li><a href="#继承">继承？</a></li>
+    <li><a href="#多态">多态？</a>
+      <ul>
+        <li><a href="#多态的力量">多态的力量</a></li>
+        <li><a href="#依赖倒置">依赖倒置</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

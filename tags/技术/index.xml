@@ -6,7 +6,25 @@
     <description>Recent content in 技术 on XR_G&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【译】面向对象编程——《Clean Architecture》第五章</title>
+      <link>https://xrg.fj.cn/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/</link>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/</guid>
+      <description>这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
+《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin
+Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？
+该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 o.f() 在某些情况下是不同于 f(o) 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。
+对于该问题（何为OO？）的另一常见回答是“一种对现实世界建模的方式”。这充其量是个含糊其辞的回答。“对现实世界建模”的真实含义是什么呢？而为什么我们需要这么做呢？也许这一回答希望表达的是OO使软件更贴近现实世界因而更易理解——但即使是这样的表述仍是含糊且过于宽泛了。它总的来说并没有告诉我们何为OO。
+也有一些人回归到三个表达OO本质的“魔法”词汇上：封装、继承和多态。本质上是想说OO就是这三样东西的恰到好处的结合，或至少一门OO语言必须支持这三样特性。
+那么就让我们逐一考察这三个概念吧。
+封装？ 封装 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。
+但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：
+// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &amp;#34;point.h&amp;#34; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;math.h&amp;gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&amp;gt;x = x; p-&amp;gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&amp;gt;x - p2-&amp;gt;x; double dy = p1-&amp;gt;y - p2-&amp;gt;y; return sqrt(dx*dx+dy*dy); } point.</description>
+    </item>
+    
     <item>
       <title>【STL源码剖析】iterator &amp; traits</title>
       <link>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/</link>
