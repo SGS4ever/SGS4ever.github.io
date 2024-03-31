@@ -26,6 +26,17 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
     </item>
     
     <item>
+      <title>【STL源码剖析】allocator_traits</title>
+      <link>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator_traits/</link>
+      <pubDate>Sun, 24 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator_traits/</guid>
+      <description>本篇不对应《STL源码剖析》中的章节，而是作为承上启下的一篇，介绍当代cpp中将 allocator 和 type_traits 这两个前面提过的概念组合而得到的 allocator_traits 。这个东西在后面展开的 容器 相关实现中太过于常见，且相比于最早看过的 allocator 又确实又些新东西在里面，值得单开一篇予以记录。
+GCC bits/allocator_traits.h 当中，一上来先完成基类定义：
+/// @cond undocumented struct __allocator_traits_base { template&amp;lt;typename _Tp, typename _Up, typename = void&amp;gt; struct __rebind : __replace_first_arg&amp;lt;_Tp, _Up&amp;gt; { }; template&amp;lt;typename _Tp, typename _Up&amp;gt; struct __rebind&amp;lt;_Tp, _Up, __void_t&amp;lt;typename _Tp::template rebind&amp;lt;_Up&amp;gt;::other&amp;gt;&amp;gt; { using type = typename _Tp::template rebind&amp;lt;_Up&amp;gt;::other; }; protected: template&amp;lt;typename _Tp&amp;gt; using __pointer = typename _Tp::pointer; template&amp;lt;typename _Tp&amp;gt; using __c_pointer = typename _Tp::const_pointer; template&amp;lt;typename _Tp&amp;gt; using __v_pointer = typename _Tp::void_pointer; template&amp;lt;typename _Tp&amp;gt; using __cv_pointer = typename _Tp::const_void_pointer; template&amp;lt;typename _Tp&amp;gt; using __pocca = typename _Tp::propagate_on_container_copy_assignment; template&amp;lt;typename _Tp&amp;gt; using __pocma = typename _Tp::propagate_on_container_move_assignment; template&amp;lt;typename _Tp&amp;gt; using __pocs = typename _Tp::propagate_on_container_swap; template&amp;lt;typename _Tp&amp;gt; using __equal = typename _Tp::is_always_equal; }; template&amp;lt;typename _Alloc, typename _Up&amp;gt; using __alloc_rebind = typename __allocator_traits_base::template __rebind&amp;lt;_Alloc, _Up&amp;gt;::type; /// @endcond 这里 protected 部分都是些定义，没什么看头，比较显眼的是这里的 rebind 操作，这个东西实际上来自于 allocator ，但我们在早先阅读的时候并没有深究，现在是时候展开看看了。</description>
+    </item>
+    
+    <item>
       <title>【STL源码剖析】iterator &amp; traits</title>
       <link>https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/</link>
       <pubDate>Sun, 26 Nov 2023 00:00:00 +0000</pubDate>

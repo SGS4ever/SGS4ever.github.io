@@ -257,7 +257,7 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 <p>事实上，人们又通过引入 <code>public</code> 、 <code>private</code> 和 <code>protected</code> 关键字来部分地修复封装性，然而这仅是在编译器提出要在头文件中看到这些成员变量的技术需求之后，引入的一种必要技巧。</p>
 <p>Java和C#直接完全弃用头文件/源文件的分离模式，因此更加削弱了封装性。在这些语言中，无法区分一个类的声明和实现。</p>
 <p>出于以上原因，我们无法接受OO依赖强封装性这种说法，实际上许多OO语言仅有微小的或非强制的封装性。</p>
-<p>OO当然十分依赖于程序员的良好行为，不擅自绕开对封装数据进行窥探。尽管如此，那些声称提供了OO的编程语言也仅仅是弱化了我们曾在C语言上享受的完美封装性而已。</p>
+<p>OO当然十分依赖于程序员的良好行为，不擅自绕开封装对数据进行窥探。尽管如此，那些声称提供了OO的编程语言也仅仅是弱化了我们曾在C语言上享受的完美封装性而已。</p>
 <h3 id="继承">继承？</h3>
 <p>如果OO语言并未为向我们提供更好的封装性，那它们至少确实向我们提供了继承。</p>
 <p>好吧——某种程度上。继承实际上只是对一个特定域内的一组变量和方法的简单重复声明。这是一件C程序员在OO面世之前很久就可以手动实现的事。</p>
@@ -322,7 +322,7 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 </span></span><span class="line"><span class="cl">    <span class="nf">putchar</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>函数 <code>getchar()</code> 从 <code>STDIN</code> 中读数据。但 <code>STDIN</code> 是啥设备？同理 <code>putchar()</code> 向 <code>STDOUT</code> 中写数据， <code>STDOUT</code> 又是啥设备？这些函数是 <em>多态</em> 的——它们的行为取决于 <code>STDIN</code> 和 <code>STDOUT</code> 的类型。</p>
-<p><code>STDIN</code> 和 <code>STDOUT</code> 看起来就像Java风格的 <em>interface</em> ，对于每种设备均有实现。当然，示例C程序中并没有接口——所以对于 <code>getchar()</code> 的调用究竟是如何被传递到读取字符的设备驱动上的？</p>
+<p><code>STDIN</code> 和 <code>STDOUT</code> 看起来就像Java风格的 <em>interface</em> （接口），对于每种设备均有实现。当然，示例C程序中并没有接口——所以对于 <code>getchar()</code> 的调用究竟是如何被传递到读取字符的设备驱动上的？</p>
 <p>对此问题的回答十分直白。UNIX操作系统要求每种IO设备驱动实现五个标准函数： <code>open</code> , <code>close</code> , <code>read</code> , <code>write</code> 和 <code>seek</code> 。这些函数的签名对于每种IO驱动必须一致。</p>
 <p><code>FILE</code> 数据结构包含了五个指针来指向这五个函数。在我们的示例中，它可能长这样：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">FILE</span> <span class="p">{</span>
@@ -447,6 +447,27 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
                 
                     
 <article class="">
+    <a href="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator_traits/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【STL源码剖析】allocator_traits</h2>
+            <footer class="article-time">
+                <time datetime=''>Dec 24, 2023</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
     <a href="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/">
         
         
@@ -524,27 +545,6 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
             <h2 class="article-title">【HarmonyOS learning】【2】带跳转的待办列表</h2>
             <footer class="article-time">
                 <time datetime=''>Oct 09, 2023</time>
-            </footer>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/">
-        
-        
-
-        <div class="article-image">
-            
-            <img src="/img/related-content.png" loading="lazy" 
-            data-key="" data-hash="" 
-            style="opacity: 0.3;"/>
-        </div>
-        <div class="article-details">
-            <h2 class="article-title">【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</h2>
-            <footer class="article-time">
-                <time datetime=''>Oct 06, 2023</time>
             </footer>
         </div>
     </a>
