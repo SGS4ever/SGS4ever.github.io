@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=' 这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
 《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin
 Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？
 该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 o.f() 在某些情况下是不同于 f(o) 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。
@@ -10,7 +10,8 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 那么就让我们逐一考察这三个概念吧。
 封装？ 封装 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。
 但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：
-// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &amp;#34;point.h&amp;#34; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;math.h&amp;gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&amp;gt;x = x; p-&amp;gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&amp;gt;x - p2-&amp;gt;x; double dy = p1-&amp;gt;y - p2-&amp;gt;y; return sqrt(dx*dx&#43;dy*dy); } point.'><title>【译】面向对象编程——《Clean Architecture》第五章</title>
+// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &#34;point.h&#34; #include &lt;stdlib.h&gt; #include &lt;math.h&gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&gt;x = x; p-&gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&gt;x - p2-&gt;x; double dy = p1-&gt;y - p2-&gt;y; return sqrt(dx*dx&#43;dy*dy); } point.h 的用户并没有访问 struct Point 的成员的权限。他们可以调用 makePoint() 和 distance() 这两个函数，但不知道任何关于 Point 这个数据结构以及这些函数的实现细节。
+'><title>【译】面向对象编程——《Clean Architecture》第五章</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/'>
 
@@ -34,7 +35,7 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 </script>
 
 <meta property='og:title' content='【译】面向对象编程——《Clean Architecture》第五章'>
-<meta property='og:description' content='这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
+<meta property='og:description' content=' 这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
 《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin
 Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？
 该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 o.f() 在某些情况下是不同于 f(o) 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。
@@ -43,12 +44,13 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 那么就让我们逐一考察这三个概念吧。
 封装？ 封装 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。
 但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：
-// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &amp;#34;point.h&amp;#34; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;math.h&amp;gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&amp;gt;x = x; p-&amp;gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&amp;gt;x - p2-&amp;gt;x; double dy = p1-&amp;gt;y - p2-&amp;gt;y; return sqrt(dx*dx&#43;dy*dy); } point.'>
+// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &#34;point.h&#34; #include &lt;stdlib.h&gt; #include &lt;math.h&gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&gt;x = x; p-&gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&gt;x - p2-&gt;x; double dy = p1-&gt;y - p2-&gt;y; return sqrt(dx*dx&#43;dy*dy); } point.h 的用户并没有访问 struct Point 的成员的权限。他们可以调用 makePoint() 和 distance() 这两个函数，但不知道任何关于 Point 这个数据结构以及这些函数的实现细节。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2024-01-01T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-01-01T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="【译】面向对象编程——《Clean Architecture》第五章">
-<meta name="twitter:description" content="这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
+<meta name="twitter:description" content=" 这是一篇初读时就给我留下深刻印象的文章，其中阐述的理念个人认为极具指导意义。在这元旦假期的最后一晚，重读此文，斗胆自译，贻笑大方尔尔。
 《Clean Architecture: A CRAFTSMAN’S GUIDE TO SOFTWARE STRUCTURE AND DESIGN》——by Robert C. Martin
 Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设计原则（object-oriented）的良好理解和应用是一个良好架构的基础，但何为OO？
 该问题的回答之一是“数据和方法的结合”。尽管这种论调到处被引用，它仍是一个令人很不满意的回答，因为它似乎隐约告诉人们 o.f() 在某些情况下是不同于 f(o) 的。这很荒谬，因为在Dahl和Nygaard于1966年把函数调用栈挪到堆上并发明OO以前，程序员们一直都将数据结构传入函数中去。
@@ -57,7 +59,8 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 那么就让我们逐一考察这三个概念吧。
 封装？ 封装 之所以被认为是OO基本定义之一，是因为面向对象语言对数据和方法提供了简洁高效的封装。封装的结果，是人们可以在数据和方法的外围画一条线，在线外面，数据被隐藏，只有一些方法是可见的。这一概念通常体现在一个类的私有数据和公有方法上。
 但这一理念当然不独属于OO。实际上，在C语言中也有完美的封装，考虑这段代码：
-// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &amp;#34;point.h&amp;#34; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;math.h&amp;gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&amp;gt;x = x; p-&amp;gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&amp;gt;x - p2-&amp;gt;x; double dy = p1-&amp;gt;y - p2-&amp;gt;y; return sqrt(dx*dx&#43;dy*dy); } point.">
+// point.h struct Point; struct Point* makePoint(double x, double y); double distance (struct Point *p1, struct Point *p2); // point.c #include &#34;point.h&#34; #include &lt;stdlib.h&gt; #include &lt;math.h&gt; struct Point { double x,y; }; struct Point* makepoint(double x, double y) { struct Point* p = malloc(sizeof(struct Point)); p-&gt;x = x; p-&gt;y = y; return p; } double distance(struct Point* p1, struct Point* p2) { double dx = p1-&gt;x - p2-&gt;x; double dy = p1-&gt;y - p2-&gt;y; return sqrt(dx*dx&#43;dy*dy); } point.h 的用户并没有访问 struct Point 的成员的权限。他们可以调用 makePoint() 和 distance() 这两个函数，但不知道任何关于 Point 这个数据结构以及这些函数的实现细节。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -375,7 +378,7 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 		<img src="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1.png"
 			width="2258"
 			height="776"
-			srcset="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1_hu5eaebc4f0397a2ed2958a30697a1fb90_565744_480x0_resize_box_3.png 480w, /p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1_hu5eaebc4f0397a2ed2958a30697a1fb90_565744_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1_hu8076034433536792984.png 480w, /p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/1_hu4690855980410757590.png 1024w"
 			loading="lazy"
 			>
 	</a>
@@ -395,7 +398,7 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
 		<img src="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2.png"
 			width="2266"
 			height="726"
-			srcset="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2_hu8848662830815640a7600c1fee60c499_180261_480x0_resize_box_3.png 480w, /p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2_hu8848662830815640a7600c1fee60c499_180261_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2_hu2613016225757240509.png 480w, /p/%E8%AF%91%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8Bclean-architecture%E7%AC%AC%E4%BA%94%E7%AB%A0/2_hu2218994761754807869.png 1024w"
 			loading="lazy"
 			>
 	</a>
@@ -595,14 +598,14 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -723,7 +726,7 @@ Chapter 5 OBJECT-ORIENTED PROGRAMMING 我们可以看到，对面向对象的设
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

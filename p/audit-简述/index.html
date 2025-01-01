@@ -12,9 +12,7 @@ audit内核审计的消息可以由应用或系统活动来触发，而 audit da
 auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。 添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
-对文件和目录访问的审计
-监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：
-# auditctl -w /etc/passwd -p rwxa 也可以监控对某一路径的访问：'><title>audit 简述</title>
+'><title>audit 简述</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/'>
 
@@ -49,9 +47,7 @@ audit内核审计的消息可以由应用或系统活动来触发，而 audit da
 auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。 添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
-对文件和目录访问的审计
-监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：
-# auditctl -w /etc/passwd -p rwxa 也可以监控对某一路径的访问：'>
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/audit-%E7%AE%80%E8%BF%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2021-08-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-08-25T00:00:00&#43;00:00'/>
@@ -67,9 +63,7 @@ audit内核审计的消息可以由应用或系统活动来触发，而 audit da
 auditctl ：直接控制守护进程的行为，如添加规则等； /etc/audit/audit.rules ：内含audit守护进程的规则和各种变量； aureport ：生成系统活动的审计报告； ausearch ：在审计日志中对各类事件进行搜索； auditspd ：用于将事件消息通知给其他应用的守护进程，有了此进程，事件就不需要通过磁盘上的audit日志来进行传递了； autrace ：用于追踪某一进程的命令，类似 strace ； etc/audit/auditd.conf ：关于日志记录的配置文件。 添加规则 基础 注意，audit框架对事件的审计是全面而细致的，添加规则之前，我们需要对规则有充分的认知，否则，可能仅仅由于一条规则，我们的日志文件就被瞬间写满了。
 audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditctl -R /etc/audit/audit.rules 从规则文件中批量读取。
 通过 auditctl 命令添加的规则会在系统重启之后丢失。如希望使规则持续生效，就将它们写入 /etc/audit/audit.rules 文件中，通过命令 rcauditd resatrt 重启audit服务使规则文件生效。
-对文件和目录访问的审计
-监控某一特定文件的访问行为属于audit框架的基础用法。使用 -w 选项（表示”watch“）来指定你要监控的文件或目录。最常见的规则是监控对 passwd 文件的访问：
-# auditctl -w /etc/passwd -p rwxa 也可以监控对某一路径的访问：">
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -212,7 +206,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 		<img src="/p/audit-%E7%AE%80%E8%BF%B0/2.png"
 			width="1168"
 			height="829"
-			srcset="/p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_480x0_resize_box_3.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/2_hue7ee2b7f5943f6b7ef8bdbcc137bbf0c_92736_1024x0_resize_box_3.png 1024w"
+			srcset="/p/audit-%E7%AE%80%E8%BF%B0/2_hu17421478577695767342.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/2_hu6289381710750679899.png 1024w"
 			loading="lazy"
 			alt="img">
 	</a>
@@ -234,7 +228,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
 		<img src="/p/audit-%E7%AE%80%E8%BF%B0/1.png"
 			width="816"
 			height="182"
-			srcset="/p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_480x0_resize_box_3.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/1_hu2bf0bc4c34d6505ce24fe8521dedf17a_22604_1024x0_resize_box_3.png 1024w"
+			srcset="/p/audit-%E7%AE%80%E8%BF%B0/1_hu3412965497063838235.png 480w, /p/audit-%E7%AE%80%E8%BF%B0/1_hu16235315030132061178.png 1024w"
 			loading="lazy"
 			alt="img">
 	</a>
@@ -680,14 +674,14 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -824,7 +818,7 @@ audit规则的加载可以通过命令行工具 auditctl 或使用命令 auditct
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

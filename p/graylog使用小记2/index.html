@@ -11,7 +11,7 @@ Jul 12 06:09:43 combo sshd(pam_unix)[4048]: authentication failure; logname= uid
 extractors 其中只有 SSH_PAM_SESSION_OPEN 是用于匹配登录成功的日志，其余提取器均用于登录失败日志。
 这里有一个我比较不满意的点，就是配置正则提取器的时候只能提取出 第一个 匹配组（match group）；当我希望从登录失败日志当中提取较多信息的时候，就要配置很多个提取器（比如上图当中配置了提取远程主机、用户名、时间、进程ID等信息的提取器），这些提取器用的其实都是同一个正则，完全没必要进行这么多冗余配置。
 上图中有两个提取器值得展开说明，它们是 SSH_PAM_AUTH_FAILURE 和 SSH_PAM_SESSION_OPEN ：
-SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实就是把整个消息体都匹配出来，放到了对应的自定义字段里。这样做的意义是便于使用我们在 前一篇使用小记 当中提到的筛选方式 _exists_: [xxx] 来筛选出所有满足正则的消息，相当于绕了个弯来实现 正则筛选 ，这么做的原因是按照官方Demo来写正则筛选语句根本筛不到对应的日志，我觉得没必要浪费时间来研究这种不属于我的问题。'><title>Graylog使用小记——2</title>
+SSH_PAM_AUTH_FAILURE '><title>Graylog使用小记——2</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/'>
 
@@ -45,7 +45,7 @@ Jul 12 06:09:43 combo sshd(pam_unix)[4048]: authentication failure; logname= uid
 extractors 其中只有 SSH_PAM_SESSION_OPEN 是用于匹配登录成功的日志，其余提取器均用于登录失败日志。
 这里有一个我比较不满意的点，就是配置正则提取器的时候只能提取出 第一个 匹配组（match group）；当我希望从登录失败日志当中提取较多信息的时候，就要配置很多个提取器（比如上图当中配置了提取远程主机、用户名、时间、进程ID等信息的提取器），这些提取器用的其实都是同一个正则，完全没必要进行这么多冗余配置。
 上图中有两个提取器值得展开说明，它们是 SSH_PAM_AUTH_FAILURE 和 SSH_PAM_SESSION_OPEN ：
-SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实就是把整个消息体都匹配出来，放到了对应的自定义字段里。这样做的意义是便于使用我们在 前一篇使用小记 当中提到的筛选方式 _exists_: [xxx] 来筛选出所有满足正则的消息，相当于绕了个弯来实现 正则筛选 ，这么做的原因是按照官方Demo来写正则筛选语句根本筛不到对应的日志，我觉得没必要浪费时间来研究这种不属于我的问题。'>
+SSH_PAM_AUTH_FAILURE '>
 <meta property='og:url' content='https://xrg.fj.cn/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-10-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-10-02T00:00:00&#43;00:00'/>
@@ -60,7 +60,7 @@ Jul 12 06:09:43 combo sshd(pam_unix)[4048]: authentication failure; logname= uid
 extractors 其中只有 SSH_PAM_SESSION_OPEN 是用于匹配登录成功的日志，其余提取器均用于登录失败日志。
 这里有一个我比较不满意的点，就是配置正则提取器的时候只能提取出 第一个 匹配组（match group）；当我希望从登录失败日志当中提取较多信息的时候，就要配置很多个提取器（比如上图当中配置了提取远程主机、用户名、时间、进程ID等信息的提取器），这些提取器用的其实都是同一个正则，完全没必要进行这么多冗余配置。
 上图中有两个提取器值得展开说明，它们是 SSH_PAM_AUTH_FAILURE 和 SSH_PAM_SESSION_OPEN ：
-SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实就是把整个消息体都匹配出来，放到了对应的自定义字段里。这样做的意义是便于使用我们在 前一篇使用小记 当中提到的筛选方式 _exists_: [xxx] 来筛选出所有满足正则的消息，相当于绕了个弯来实现 正则筛选 ，这么做的原因是按照官方Demo来写正则筛选语句根本筛不到对应的日志，我觉得没必要浪费时间来研究这种不属于我的问题。">
+SSH_PAM_AUTH_FAILURE ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -218,7 +218,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
 		<img src="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/1.png"
 			width="2428"
 			height="1573"
-			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/1_hu8b603abdc69b1555d3a0a06e8b195ee8_269474_480x0_resize_box_3.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/1_hu8b603abdc69b1555d3a0a06e8b195ee8_269474_1024x0_resize_box_3.png 1024w"
+			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/1_hu11268538635601594713.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/1_hu16172369313794174899.png 1024w"
 			loading="lazy"
 			alt="extractors">
 	</a>
@@ -240,7 +240,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
 		<img src="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/2.png"
 			width="2391"
 			height="360"
-			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/2_hudbd7cf2b13677cd43786dbc76155b559_78376_480x0_resize_box_3.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/2_hudbd7cf2b13677cd43786dbc76155b559_78376_1024x0_resize_box_3.png 1024w"
+			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/2_hu11432598958079465861.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/2_hu4217335663664213120.png 1024w"
 			loading="lazy"
 			alt="SSH_PAM_AUTH_FAILURE">
 	</a>
@@ -259,7 +259,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
 		<img src="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/3.png"
 			width="2394"
 			height="381"
-			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/3_hu337ec845db58be233a7fb1aeab4d3a80_71689_480x0_resize_box_3.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/3_hu337ec845db58be233a7fb1aeab4d3a80_71689_1024x0_resize_box_3.png 1024w"
+			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/3_hu4252598041471181639.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/3_hu10302339299360189710.png 1024w"
 			loading="lazy"
 			alt="SSH_PAM_SESSION_OPEN">
 	</a>
@@ -285,7 +285,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
 		<img src="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/4.png"
 			width="2400"
 			height="1000"
-			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/4_hud5eb7e56e401a82f182792af7ea05f80_136180_480x0_resize_box_3.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/4_hud5eb7e56e401a82f182792af7ea05f80_136180_1024x0_resize_box_3.png 1024w"
+			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/4_hu5410059307445228580.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/4_hu7800664000592156557.png 1024w"
 			loading="lazy"
 			alt="Aggregation">
 	</a>
@@ -305,7 +305,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
 		<img src="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/5.png"
 			width="2429"
 			height="1158"
-			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/5_huf8b00ced5c8a441236cd4ce5ce3a1cd6_226550_480x0_resize_box_3.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/5_huf8b00ced5c8a441236cd4ce5ce3a1cd6_226550_1024x0_resize_box_3.png 1024w"
+			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/5_hu5708526346560518350.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/5_hu8281577228861035565.png 1024w"
 			loading="lazy"
 			alt="Fields">
 	</a>
@@ -325,7 +325,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
 		<img src="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/6.png"
 			width="2387"
 			height="916"
-			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/6_hu37806c699352a393266b9ec89f54cf16_254748_480x0_resize_box_3.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/6_hu37806c699352a393266b9ec89f54cf16_254748_1024x0_resize_box_3.png 1024w"
+			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/6_hu12395176332608340703.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/6_hu18246412229269221807.png 1024w"
 			loading="lazy"
 			alt="events">
 	</a>
@@ -346,7 +346,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
 		<img src="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/7.png"
 			width="1633"
 			height="872"
-			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/7_hu124e2b63ab70bade4ffe8d6059237c7d_169122_480x0_resize_box_3.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/7_hu124e2b63ab70bade4ffe8d6059237c7d_169122_1024x0_resize_box_3.png 1024w"
+			srcset="/p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/7_hu6236821261174754833.png 480w, /p/graylog%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%AE%B02/7_hu9005585785746763403.png 1024w"
 			loading="lazy"
 			alt="correlations">
 	</a>
@@ -536,14 +536,14 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -658,7 +658,7 @@ SSH_PAM_AUTH_FAILURE SSH_PAM_SESSION_OPEN 可以看到，这两条正则其实�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

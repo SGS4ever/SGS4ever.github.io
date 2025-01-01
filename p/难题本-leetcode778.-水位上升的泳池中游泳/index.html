@@ -12,20 +12,21 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 题目描述
 一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
 输入格式
-第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&amp;rsquo;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&amp;rsquo;。
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&lt;= R，C &lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&rsquo;.&lsquo;表示，有障碍物的格子用&rsquo;#&lsquo;表示。 迷宫左上角和右下角都是&rsquo;.&rsquo;。
 输出格式
 输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
 输入1：
 5 5
 ..###
-#&amp;hellip;.
+#&hellip;.
 #.#.#
 #.#.#
 #.#..
 输出1： 8
-这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&amp;rsquo;#&amp;rsquo;）且该点未被访问，则记录它到源点的距离。
+这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&rsquo;#&rsquo;）且该点未被访问，则记录它到源点的距离。
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
-#include &amp;lt;queue&amp;gt; #include &amp;lt;iostream&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.'><title>难题本 | LeetCode778. 水位上升的泳池中游泳</title>
+#include &lt;queue&gt; #include &lt;iostream&gt; #include &lt;algorithm&gt; #include &lt;vector&gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&lt;Point&gt; q; vector&lt;pair&lt;int, int&gt;&gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.x = tmp.y = 0; visited[0][0] = 1; dist[0][0] = 0; q.push(tmp); // 开始宽搜 while (!q.empty()) { head = q.front(); q.pop(); for (const auto [dirx, diry] : dirs) { tmp.x = head.x &#43; dirx; tmp.y = head.y &#43; diry; if ( 0 &lt;= tmp.x &amp;&amp; tmp.x &lt; R &amp;&amp; 0 &lt;= tmp.y &amp;&amp; tmp.y &lt; C &amp;&amp; graph[tmp.x][tmp.y] != &#39;#&#39; &amp;&amp; !visited[tmp.x][tmp.y] ) { dist[tmp.x][tmp.y] = dist[head.x][head.y] &#43; 1; visited[tmp.x][tmp.y] = 1; q.push(tmp); } } } } int main() { cin &gt;&gt; R &gt;&gt; C; for (int i = 0; i &lt; R; &#43;&#43;i) { for (int j = 0; j &lt; C; &#43;&#43;j) { cin &gt;&gt; graph[i][j]; dist[i][j] = 0xffff; } } bfs(); if (dist[R - 1][C - 1] != 0xffff) { cout &lt;&lt; dist[R - 1][C - 1] &lt;&lt; endl; } else { cout &lt;&lt; &#34;NO\n&#34;; } return 0; } SPFA 终于来到了正题。
+'><title>难题本 | LeetCode778. 水位上升的泳池中游泳</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/'>
 
@@ -60,20 +61,21 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 题目描述
 一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
 输入格式
-第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&amp;rsquo;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&amp;rsquo;。
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&lt;= R，C &lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&rsquo;.&lsquo;表示，有障碍物的格子用&rsquo;#&lsquo;表示。 迷宫左上角和右下角都是&rsquo;.&rsquo;。
 输出格式
 输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
 输入1：
 5 5
 ..###
-#&amp;hellip;.
+#&hellip;.
 #.#.#
 #.#.#
 #.#..
 输出1： 8
-这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&amp;rsquo;#&amp;rsquo;）且该点未被访问，则记录它到源点的距离。
+这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&rsquo;#&rsquo;）且该点未被访问，则记录它到源点的距离。
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
-#include &amp;lt;queue&amp;gt; #include &amp;lt;iostream&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.'>
+#include &lt;queue&gt; #include &lt;iostream&gt; #include &lt;algorithm&gt; #include &lt;vector&gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&lt;Point&gt; q; vector&lt;pair&lt;int, int&gt;&gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.x = tmp.y = 0; visited[0][0] = 1; dist[0][0] = 0; q.push(tmp); // 开始宽搜 while (!q.empty()) { head = q.front(); q.pop(); for (const auto [dirx, diry] : dirs) { tmp.x = head.x &#43; dirx; tmp.y = head.y &#43; diry; if ( 0 &lt;= tmp.x &amp;&amp; tmp.x &lt; R &amp;&amp; 0 &lt;= tmp.y &amp;&amp; tmp.y &lt; C &amp;&amp; graph[tmp.x][tmp.y] != &#39;#&#39; &amp;&amp; !visited[tmp.x][tmp.y] ) { dist[tmp.x][tmp.y] = dist[head.x][head.y] &#43; 1; visited[tmp.x][tmp.y] = 1; q.push(tmp); } } } } int main() { cin &gt;&gt; R &gt;&gt; C; for (int i = 0; i &lt; R; &#43;&#43;i) { for (int j = 0; j &lt; C; &#43;&#43;j) { cin &gt;&gt; graph[i][j]; dist[i][j] = 0xffff; } } bfs(); if (dist[R - 1][C - 1] != 0xffff) { cout &lt;&lt; dist[R - 1][C - 1] &lt;&lt; endl; } else { cout &lt;&lt; &#34;NO\n&#34;; } return 0; } SPFA 终于来到了正题。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-30T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-30T00:00:00&#43;00:00'/>
@@ -89,20 +91,21 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 题目描述
 一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。 给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。
 输入格式
-第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&amp;lt;= R，C &amp;lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&amp;rsquo;.&amp;lsquo;表示，有障碍物的格子用&amp;rsquo;#&amp;lsquo;表示。 迷宫左上角和右下角都是&amp;rsquo;.&amp;rsquo;。
+第一行是两个整数，Ｒ和Ｃ，代表迷宫的长和宽。（ 1&lt;= R，C &lt;= 40) 接下来是Ｒ行，每行Ｃ个字符，代表整个迷宫。 空地格子用&rsquo;.&lsquo;表示，有障碍物的格子用&rsquo;#&lsquo;表示。 迷宫左上角和右下角都是&rsquo;.&rsquo;。
 输出格式
 输出从左上角走到右下角至少要经过多少步（即至少要经过多少个空地格子）。计算步数要包括终点,，不包括起点。如果不能到达右下角，输出“NO”.
 输入1：
 5 5
 ..###
-#&amp;hellip;.
+#&hellip;.
 #.#.#
 #.#.#
 #.#..
 输出1： 8
-这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&amp;rsquo;#&amp;rsquo;）且该点未被访问，则记录它到源点的距离。
+这是一道宽搜模板题。从源点出发，向四个方向（上下左右）探寻邻接点，若邻接点合法（即没有越界）且该点不是障碍（&rsquo;#&rsquo;）且该点未被访问，则记录它到源点的距离。
 我一直不会证明宽搜的正确性，总觉得它理所当然，就直接放代码了：
-#include &amp;lt;queue&amp;gt; #include &amp;lt;iostream&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&amp;lt;Point&amp;gt; q; vector&amp;lt;pair&amp;lt;int, int&amp;gt;&amp;gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.">
+#include &lt;queue&gt; #include &lt;iostream&gt; #include &lt;algorithm&gt; #include &lt;vector&gt; using namespace std; typedef struct { int x, y; } Point; char graph[44][44]; int visited[44][44]; int dist[44][44]; int R, C; queue&lt;Point&gt; q; vector&lt;pair&lt;int, int&gt;&gt; dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; void bfs() { Point head; Point tmp; // 源点入队 tmp.x = tmp.y = 0; visited[0][0] = 1; dist[0][0] = 0; q.push(tmp); // 开始宽搜 while (!q.empty()) { head = q.front(); q.pop(); for (const auto [dirx, diry] : dirs) { tmp.x = head.x &#43; dirx; tmp.y = head.y &#43; diry; if ( 0 &lt;= tmp.x &amp;&amp; tmp.x &lt; R &amp;&amp; 0 &lt;= tmp.y &amp;&amp; tmp.y &lt; C &amp;&amp; graph[tmp.x][tmp.y] != &#39;#&#39; &amp;&amp; !visited[tmp.x][tmp.y] ) { dist[tmp.x][tmp.y] = dist[head.x][head.y] &#43; 1; visited[tmp.x][tmp.y] = 1; q.push(tmp); } } } } int main() { cin &gt;&gt; R &gt;&gt; C; for (int i = 0; i &lt; R; &#43;&#43;i) { for (int j = 0; j &lt; C; &#43;&#43;j) { cin &gt;&gt; graph[i][j]; dist[i][j] = 0xffff; } } bfs(); if (dist[R - 1][C - 1] != 0xffff) { cout &lt;&lt; dist[R - 1][C - 1] &lt;&lt; endl; } else { cout &lt;&lt; &#34;NO\n&#34;; } return 0; } SPFA 终于来到了正题。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -350,7 +353,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1.png"
 			width="562"
 			height="386"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu7ae7a455f639fceca29db9e3f35bbd4a_14947_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu8509531722655045071.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/1_hu12948783787961605244.png 1024w"
 			loading="lazy"
 			alt="BFS在带权图中不适用">
 	</a>
@@ -385,7 +388,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2.png"
 			width="671"
 			height="562"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu179df88e6bd12b0b1aa785fc68f9a632_29734_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu8427802594458669545.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/2_hu6490733600899581420.png 1024w"
 			loading="lazy"
 			alt="有向图">
 	</a>
@@ -498,7 +501,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3.png"
 			width="587"
 			height="128"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu880a01b99fdaaf5c4ce97b6eff298186_14608_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu9976929329413882767.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode778.-%E6%B0%B4%E4%BD%8D%E4%B8%8A%E5%8D%87%E7%9A%84%E6%B3%B3%E6%B1%A0%E4%B8%AD%E6%B8%B8%E6%B3%B3/3_hu8433004840916681031.png 1024w"
 			loading="lazy"
 			alt="Performance">
 	</a>
@@ -699,14 +702,14 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -819,7 +822,7 @@ BFS搜索的方法就像那荡开的涟漪，从源点开始不断向外扩张�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

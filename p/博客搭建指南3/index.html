@@ -16,11 +16,7 @@ main.scss 按照import的顺序，HTML文档中的各个标签、各个Class都�
 这种覆盖原则就是我们自定义hugo样式的基础。
 3. 精确定义样式 基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
 在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：
-main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件，这使得定义在其中的样式位于最终CSS文件的末尾，其中重复定义的样式会被作为页面的最终效果。
-于是我们的问题就变得很简单了：找到你希望修改的元素和它对应的选择器，重新定义这个选择器即可。
-所幸，现代浏览器为我们提供的开发者工具使得这一切都变得无比简单。以Edge Beta为例，按下F12弹出开发者工具，使用左上角的小箭头使你的鼠标变成一个查看器，现在你点击页面上的任何元素，立即可以在右边的窗口看到这个元素对应的源码。
-例如，在我的博客中有这样的元素已经让我不爽很久了：
-精确选取元素 可以看到跟这个project相同的aboutme.md这个单词被拆成了两半，真是岂有此理。'><title>博客搭建指南——3</title>
+main.scss的最后几行 '><title>博客搭建指南——3</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/'>
 
@@ -59,11 +55,7 @@ main.scss 按照import的顺序，HTML文档中的各个标签、各个Class都�
 这种覆盖原则就是我们自定义hugo样式的基础。
 3. 精确定义样式 基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
 在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：
-main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件，这使得定义在其中的样式位于最终CSS文件的末尾，其中重复定义的样式会被作为页面的最终效果。
-于是我们的问题就变得很简单了：找到你希望修改的元素和它对应的选择器，重新定义这个选择器即可。
-所幸，现代浏览器为我们提供的开发者工具使得这一切都变得无比简单。以Edge Beta为例，按下F12弹出开发者工具，使用左上角的小箭头使你的鼠标变成一个查看器，现在你点击页面上的任何元素，立即可以在右边的窗口看到这个元素对应的源码。
-例如，在我的博客中有这样的元素已经让我不爽很久了：
-精确选取元素 可以看到跟这个project相同的aboutme.md这个单词被拆成了两半，真是岂有此理。'>
+main.scss的最后几行 '>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客搭建' /><meta property='article:published_time' content='2021-01-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-19T00:00:00&#43;00:00'/>
@@ -83,11 +75,7 @@ main.scss 按照import的顺序，HTML文档中的各个标签、各个Class都�
 这种覆盖原则就是我们自定义hugo样式的基础。
 3. 精确定义样式 基于上面提到的覆盖原则，我们能够对指定的选择器进行多次的样式定义，而最终效果以最后一次定义为准，类似于变量的多次赋值。
 在我所知道的hugo主题中，asset/css目录中都有_custom.scss文件，这个文件就是让用户自定义样式的地方。至于为什么可以用这个文件实现样式的自定义，我们可以重新看看main.scss的最后几行：
-main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件，这使得定义在其中的样式位于最终CSS文件的末尾，其中重复定义的样式会被作为页面的最终效果。
-于是我们的问题就变得很简单了：找到你希望修改的元素和它对应的选择器，重新定义这个选择器即可。
-所幸，现代浏览器为我们提供的开发者工具使得这一切都变得无比简单。以Edge Beta为例，按下F12弹出开发者工具，使用左上角的小箭头使你的鼠标变成一个查看器，现在你点击页面上的任何元素，立即可以在右边的窗口看到这个元素对应的源码。
-例如，在我的博客中有这样的元素已经让我不爽很久了：
-精确选取元素 可以看到跟这个project相同的aboutme.md这个单词被拆成了两半，真是岂有此理。">
+main.scss的最后几行 ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -248,7 +236,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1.png"
 			width="873"
 			height="816"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu17468cbb32b3dcd379ee3ef146ac72b2_179348_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu16666299886081327796.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-1_hu6451934490370740093.png 1024w"
 			loading="lazy"
 			alt="main.scss">
 	</a>
@@ -287,7 +275,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2.png"
 			width="815"
 			height="306"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu3cd97ac31aff6492584698cb30c7079e_50173_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu9002181512309798277.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-2_hu1323820722689927313.png 1024w"
 			loading="lazy"
 			alt="main.scss的最后几行">
 	</a>
@@ -310,7 +298,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3.png"
 			width="1921"
 			height="987"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu149dac5966025a932f0530535d6ac8c9_357370_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu6182730388942538487.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/3-3_hu17401273984161486324.png 1024w"
 			loading="lazy"
 			alt="精确选取元素">
 	</a>
@@ -331,7 +319,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1.png"
 			width="687"
 			height="306"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_huc6d0dc783866e54af9b44ae090515c5e_22651_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_hu18053343307592268011.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-1_hu8698999426926701701.png 1024w"
 			loading="lazy"
 			alt="在开发者工具中修改样式">
 	</a>
@@ -350,7 +338,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1.png"
 			width="1117"
 			height="418"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hub3ffcb1a137a42d0c2339c32355195e0_89757_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hu7488266191937618280.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-1_hu5407319832492129116.png 1024w"
 			loading="lazy"
 			alt="效果">
 	</a>
@@ -371,7 +359,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2.png"
 			width="1170"
 			height="548"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hud0eb19cfbf459765b47a76cadd24237c_133493_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hu8147415817109549181.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-2_hu13767716437435561847.png 1024w"
 			loading="lazy"
 			alt="在SCSS文件中修改样式，包括暗黑模式的样式">
 	</a>
@@ -391,7 +379,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2.png"
 			width="1922"
 			height="533"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hub4c7b190fe80737b08d4f00a444d61ba_78524_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hu14022916991630112232.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-2_hu10750045191639275317.png 1024w"
 			loading="lazy"
 			alt="本地效果">
 	</a>
@@ -410,7 +398,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
 		<img src="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3.png"
 			width="1030"
 			height="427"
-			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_480x0_resize_box_3.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu28f135c342b40fe4ea39d425a7c54828_60818_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu62152597989718137.png 480w, /p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%8C%87%E5%8D%973/CSS-modify-res-3_hu8975403076211448078.png 1024w"
 			loading="lazy"
 			alt="本地效果（黑）">
 	</a>
@@ -610,14 +598,14 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -732,7 +720,7 @@ main.scss的最后几行 可以看到，最后一行引入了_custom.scss文件�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

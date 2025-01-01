@@ -26,7 +26,8 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
 参数调节 TCP协议的参数是指预先写好的、控制协议工作的一些参数，如用于进行拥塞避免的拥塞窗口阈值，用于传输数据的MTU，用于判断超时的超时时间等。针对这些参数进行仔细的调节，可以一定程度达到TCP加速的目的。
 并行TCP 并行TCP的理念是将原本的一条TCP连接修改为多条TCP连接，将原本使用一条连接来传输的数据放在多条连接上传输。这种思路归根到底是对拥塞避免算法的改造，原本一条连接上的拥塞避免算法，其强度在改为多条连接之后得到了削弱。例如原本的拥塞窗口是 N ，改成 k 条连接之后就成了 kN ，每次在拥塞避免时还是只把阈值减少 N/2 ，对总的窗口的影响就没那么大了。
 双边加速——以UDP Speeder为例 双边加速要求在客户端和服务端都部署相同的加速方案，常规思路是把复杂的TCP协议转化为私有的协议。使用私有协议，可以对数据包处理、重传/拥塞避免等机制进行调整，从而达到加速的目的。
-以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。'><title>TCP加速技术简述</title>
+以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。
+'><title>TCP加速技术简述</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/'>
 
@@ -75,7 +76,8 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
 参数调节 TCP协议的参数是指预先写好的、控制协议工作的一些参数，如用于进行拥塞避免的拥塞窗口阈值，用于传输数据的MTU，用于判断超时的超时时间等。针对这些参数进行仔细的调节，可以一定程度达到TCP加速的目的。
 并行TCP 并行TCP的理念是将原本的一条TCP连接修改为多条TCP连接，将原本使用一条连接来传输的数据放在多条连接上传输。这种思路归根到底是对拥塞避免算法的改造，原本一条连接上的拥塞避免算法，其强度在改为多条连接之后得到了削弱。例如原本的拥塞窗口是 N ，改成 k 条连接之后就成了 kN ，每次在拥塞避免时还是只把阈值减少 N/2 ，对总的窗口的影响就没那么大了。
 双边加速——以UDP Speeder为例 双边加速要求在客户端和服务端都部署相同的加速方案，常规思路是把复杂的TCP协议转化为私有的协议。使用私有协议，可以对数据包处理、重传/拥塞避免等机制进行调整，从而达到加速的目的。
-以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。'>
+以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2021-11-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-11-25T00:00:00&#43;00:00'/>
@@ -105,7 +107,8 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
 参数调节 TCP协议的参数是指预先写好的、控制协议工作的一些参数，如用于进行拥塞避免的拥塞窗口阈值，用于传输数据的MTU，用于判断超时的超时时间等。针对这些参数进行仔细的调节，可以一定程度达到TCP加速的目的。
 并行TCP 并行TCP的理念是将原本的一条TCP连接修改为多条TCP连接，将原本使用一条连接来传输的数据放在多条连接上传输。这种思路归根到底是对拥塞避免算法的改造，原本一条连接上的拥塞避免算法，其强度在改为多条连接之后得到了削弱。例如原本的拥塞窗口是 N ，改成 k 条连接之后就成了 kN ，每次在拥塞避免时还是只把阈值减少 N/2 ，对总的窗口的影响就没那么大了。
 双边加速——以UDP Speeder为例 双边加速要求在客户端和服务端都部署相同的加速方案，常规思路是把复杂的TCP协议转化为私有的协议。使用私有协议，可以对数据包处理、重传/拥塞避免等机制进行调整，从而达到加速的目的。
-以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。">
+以开源的 UDP Speeder 为例，该系统在客户-服务器之间架设了一条隧道，在隧道中传输的数据使用了前向纠错编码，使得数据即便在传输过程中产生了一些错误和丢失，也能通过冗余的编码数据来把原始数据恢复过来。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -287,7 +290,7 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1.png"
 			width="1522"
 			height="432"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1_huf66ac7774a042e3cacb2a8c0a44a9981_66794_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1_huf66ac7774a042e3cacb2a8c0a44a9981_66794_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1_hu17452273041302750586.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/1_hu11144380435319769226.png 1024w"
 			loading="lazy"
 			alt="客户端">
 	</a>
@@ -306,7 +309,7 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2.png"
 			width="1463"
 			height="447"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2_hu261e99c416bbf82d1d3113fc9a419c89_59556_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2_hu261e99c416bbf82d1d3113fc9a419c89_59556_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2_hu13443665395376857206.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E7%AE%80%E8%BF%B0/2_hu1030887534443978523.png 1024w"
 			loading="lazy"
 			alt="服务端">
 	</a>
@@ -508,14 +511,14 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -636,7 +639,7 @@ TCP卸载引擎的缺点是存在的，那就是网卡硬件性能的提升要�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

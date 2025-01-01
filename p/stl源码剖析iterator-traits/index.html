@@ -4,7 +4,8 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='本篇对应《STL源码剖析》第三章，主要看看迭代器和由此引出的 iterator_traits 。我对这部分现代源码的阅读顺序是从Clang到GCC，因此如果对本文秉承由上至下的阅读顺序，可能会丢失一些信息，特此说明。
 GCC 由于 iterator 部分我是先看的Clang，回头看GCC时又不得不说还是GCC组织的好些（为什么每一篇都觉得第二个看到的好些（x。
 GCC对 iterator 的基本概念和定义都放在 bits/stl_iterator_base_types.h 里。
-iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这些类型的继承关系是后面整个STL算法库的重要基础之一。 /** * @defgroup iterator_tags Iterator Tags * These are empty types, used to distinguish different iterators. The * distinction is not made by what they contain, but simply by what they * are. Different underlying algorithms can then be used based on the * different operations supported by different iterator types. */ ///@{ /// Marking input iterators.'><title>【STL源码剖析】iterator &amp; traits</title>
+iterator &amp; iterator_traits 首先是迭代器的几种 category ，这些类型的继承关系是后面整个STL算法库的重要基础之一。 /** * @defgroup iterator_tags Iterator Tags * These are empty types, used to distinguish different iterators. The * distinction is not made by what they contain, but simply by what they * are. Different underlying algorithms can then be used based on the * different operations supported by different iterator types. */ ///@{ /// Marking input iterators. struct input_iterator_tag { }; /// Marking output iterators. struct output_iterator_tag { }; /// Forward iterators support a superset of input iterator operations. struct forward_iterator_tag : public input_iterator_tag { }; /// Bidirectional iterators support a superset of forward iterator /// operations. struct bidirectional_iterator_tag : public forward_iterator_tag { }; /// Random-access iterators support a superset of bidirectional /// iterator operations. struct random_access_iterator_tag : public bidirectional_iterator_tag { }; #if __cplusplus &gt; 201703L /// Contiguous iterators point to objects stored contiguously in memory. struct contiguous_iterator_tag : public random_access_iterator_tag { }; #endif ///@} 迭代器基本原型，注释指出其他XX迭代器都可以继承这个类，可以省点工作（其实就是少几个typedef） /** * @brief Common %iterator class. * * This class does nothing but define nested typedefs. %Iterator classes * can inherit from this class to save some work. The typedefs are then * used in specializations and overloading. * * In particular, there are no default implementations of requirements * such as @c operator&#43;&#43; and the like. (How could there be?) */ template&lt;typename _Category, typename _Tp, typename _Distance = ptrdiff_t, typename _Pointer = _Tp*, typename _Reference = _Tp&amp;&gt; struct iterator { /// One of the @link iterator_tags tag types@endlink. typedef _Category iterator_category; /// The type &#34;pointed to&#34; by the iterator. typedef _Tp value_type; /// Distance between iterators is represented as this type. typedef _Distance difference_type; /// This type represents a pointer-to-value_type. typedef _Pointer pointer; /// This type represents a reference-to-value_type. typedef _Reference reference; }; iterator_traits ，这个东西跟迭代器基本原型放在同一个文件里，对阅读来说是很友好的（说的就是你Clang）
+'><title>【STL源码剖析】iterator &amp; traits</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/'>
 
@@ -31,7 +32,8 @@ iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这�
 <meta property='og:description' content='本篇对应《STL源码剖析》第三章，主要看看迭代器和由此引出的 iterator_traits 。我对这部分现代源码的阅读顺序是从Clang到GCC，因此如果对本文秉承由上至下的阅读顺序，可能会丢失一些信息，特此说明。
 GCC 由于 iterator 部分我是先看的Clang，回头看GCC时又不得不说还是GCC组织的好些（为什么每一篇都觉得第二个看到的好些（x。
 GCC对 iterator 的基本概念和定义都放在 bits/stl_iterator_base_types.h 里。
-iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这些类型的继承关系是后面整个STL算法库的重要基础之一。 /** * @defgroup iterator_tags Iterator Tags * These are empty types, used to distinguish different iterators. The * distinction is not made by what they contain, but simply by what they * are. Different underlying algorithms can then be used based on the * different operations supported by different iterator types. */ ///@{ /// Marking input iterators.'>
+iterator &amp; iterator_traits 首先是迭代器的几种 category ，这些类型的继承关系是后面整个STL算法库的重要基础之一。 /** * @defgroup iterator_tags Iterator Tags * These are empty types, used to distinguish different iterators. The * distinction is not made by what they contain, but simply by what they * are. Different underlying algorithms can then be used based on the * different operations supported by different iterator types. */ ///@{ /// Marking input iterators. struct input_iterator_tag { }; /// Marking output iterators. struct output_iterator_tag { }; /// Forward iterators support a superset of input iterator operations. struct forward_iterator_tag : public input_iterator_tag { }; /// Bidirectional iterators support a superset of forward iterator /// operations. struct bidirectional_iterator_tag : public forward_iterator_tag { }; /// Random-access iterators support a superset of bidirectional /// iterator operations. struct random_access_iterator_tag : public bidirectional_iterator_tag { }; #if __cplusplus &gt; 201703L /// Contiguous iterators point to objects stored contiguously in memory. struct contiguous_iterator_tag : public random_access_iterator_tag { }; #endif ///@} 迭代器基本原型，注释指出其他XX迭代器都可以继承这个类，可以省点工作（其实就是少几个typedef） /** * @brief Common %iterator class. * * This class does nothing but define nested typedefs. %Iterator classes * can inherit from this class to save some work. The typedefs are then * used in specializations and overloading. * * In particular, there are no default implementations of requirements * such as @c operator&#43;&#43; and the like. (How could there be?) */ template&lt;typename _Category, typename _Tp, typename _Distance = ptrdiff_t, typename _Pointer = _Tp*, typename _Reference = _Tp&amp;&gt; struct iterator { /// One of the @link iterator_tags tag types@endlink. typedef _Category iterator_category; /// The type &#34;pointed to&#34; by the iterator. typedef _Tp value_type; /// Distance between iterators is represented as this type. typedef _Distance difference_type; /// This type represents a pointer-to-value_type. typedef _Pointer pointer; /// This type represents a reference-to-value_type. typedef _Reference reference; }; iterator_traits ，这个东西跟迭代器基本原型放在同一个文件里，对阅读来说是很友好的（说的就是你Clang）
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-11-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-12-03T00:00:00&#43;00:00'/>
@@ -39,7 +41,8 @@ iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这�
 <meta name="twitter:description" content="本篇对应《STL源码剖析》第三章，主要看看迭代器和由此引出的 iterator_traits 。我对这部分现代源码的阅读顺序是从Clang到GCC，因此如果对本文秉承由上至下的阅读顺序，可能会丢失一些信息，特此说明。
 GCC 由于 iterator 部分我是先看的Clang，回头看GCC时又不得不说还是GCC组织的好些（为什么每一篇都觉得第二个看到的好些（x。
 GCC对 iterator 的基本概念和定义都放在 bits/stl_iterator_base_types.h 里。
-iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这些类型的继承关系是后面整个STL算法库的重要基础之一。 /** * @defgroup iterator_tags Iterator Tags * These are empty types, used to distinguish different iterators. The * distinction is not made by what they contain, but simply by what they * are. Different underlying algorithms can then be used based on the * different operations supported by different iterator types. */ ///@{ /// Marking input iterators.">
+iterator &amp; iterator_traits 首先是迭代器的几种 category ，这些类型的继承关系是后面整个STL算法库的重要基础之一。 /** * @defgroup iterator_tags Iterator Tags * These are empty types, used to distinguish different iterators. The * distinction is not made by what they contain, but simply by what they * are. Different underlying algorithms can then be used based on the * different operations supported by different iterator types. */ ///@{ /// Marking input iterators. struct input_iterator_tag { }; /// Marking output iterators. struct output_iterator_tag { }; /// Forward iterators support a superset of input iterator operations. struct forward_iterator_tag : public input_iterator_tag { }; /// Bidirectional iterators support a superset of forward iterator /// operations. struct bidirectional_iterator_tag : public forward_iterator_tag { }; /// Random-access iterators support a superset of bidirectional /// iterator operations. struct random_access_iterator_tag : public bidirectional_iterator_tag { }; #if __cplusplus &gt; 201703L /// Contiguous iterators point to objects stored contiguously in memory. struct contiguous_iterator_tag : public random_access_iterator_tag { }; #endif ///@} 迭代器基本原型，注释指出其他XX迭代器都可以继承这个类，可以省点工作（其实就是少几个typedef） /** * @brief Common %iterator class. * * This class does nothing but define nested typedefs. %Iterator classes * can inherit from this class to save some work. The typedefs are then * used in specializations and overloading. * * In particular, there are no default implementations of requirements * such as @c operator&#43;&#43; and the like. (How could there be?) */ template&lt;typename _Category, typename _Tp, typename _Distance = ptrdiff_t, typename _Pointer = _Tp*, typename _Reference = _Tp&amp;&gt; struct iterator { /// One of the @link iterator_tags tag types@endlink. typedef _Category iterator_category; /// The type &#34;pointed to&#34; by the iterator. typedef _Tp value_type; /// Distance between iterators is represented as this type. typedef _Distance difference_type; /// This type represents a pointer-to-value_type. typedef _Pointer pointer; /// This type represents a reference-to-value_type. typedef _Reference reference; }; iterator_traits ，这个东西跟迭代器基本原型放在同一个文件里，对阅读来说是很友好的（说的就是你Clang）
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -308,7 +311,7 @@ iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这�
 		<img src="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/2.png"
 			width="1842"
 			height="2176"
-			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/2_hu51453b279e26c295f7d523db88386703_412307_480x0_resize_box_3.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/2_hu51453b279e26c295f7d523db88386703_412307_1024x0_resize_box_3.png 1024w"
+			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/2_hu12706408198252388379.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/2_hu17340404123999427155.png 1024w"
 			loading="lazy"
 			alt="SFINAE unfriendly">
 	</a>
@@ -680,7 +683,7 @@ iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这�
 		<img src="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/1.png"
 			width="2982"
 			height="564"
-			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/1_huc7b219d15608e9db9b7612daf963282b_202341_480x0_resize_box_3.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/1_huc7b219d15608e9db9b7612daf963282b_202341_1024x0_resize_box_3.png 1024w"
+			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/1_hu4527044404144818520.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90iterator-traits/1_hu12834268380500212467.png 1024w"
 			loading="lazy"
 			alt="behavior of std::distance">
 	</a>
@@ -874,14 +877,14 @@ iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -1007,7 +1010,7 @@ iterator &amp;amp; iterator_traits 首先是迭代器的几种 category ，这�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

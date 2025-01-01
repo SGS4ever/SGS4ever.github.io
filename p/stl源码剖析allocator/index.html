@@ -4,8 +4,9 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='序言 近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。
 GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std::alloc 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 std::allocator ，很符合直觉。
 过时的信息 为了佐证这里的信息，我们看 std::vector 里默认使用的Allocator是什么：
-// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&amp;lt;typename _Tp, typename _Alloc = std::allocator&amp;lt;_Tp&amp;gt; &amp;gt; class vector : protected _Vector_base&amp;lt;_Tp, _Alloc&amp;gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
-// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &amp;lt;bits/c&#43;&#43;allocator.h&amp;gt; // Define the base class to std::allocator. #include &amp;lt;bits/memoryfwd.h&amp;gt; #include &amp;lt;type_traits&amp;gt; namespace std _GLIBCXX_VISIBILITY(default) { template&amp;lt;&amp;gt; class allocator&amp;lt;void&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&amp;lt;typename _Tp&amp;gt; class allocator: public __allocator_base&amp;lt;_Tp&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp;amp; reference; typedef const _Tp&amp;amp; const_reference; typedef _Tp value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp;amp; __a) throw() : __allocator_base&amp;lt;_Tp&amp;gt;(__a) { } template&amp;lt;typename _Tp1&amp;gt; allocator(const allocator&amp;lt;_Tp1&amp;gt;&amp;amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：'><title>【STL源码剖析】allocator</title>
+// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&lt;typename _Tp, typename _Alloc = std::allocator&lt;_Tp&gt; &gt; class vector : protected _Vector_base&lt;_Tp, _Alloc&gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
+// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &lt;bits/c&#43;&#43;allocator.h&gt; // Define the base class to std::allocator. #include &lt;bits/memoryfwd.h&gt; #include &lt;type_traits&gt; namespace std _GLIBCXX_VISIBILITY(default) { template&lt;&gt; class allocator&lt;void&gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&lt;typename _Tp1&gt; struct rebind { typedef allocator&lt;_Tp1&gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&lt;typename _Tp&gt; class allocator: public __allocator_base&lt;_Tp&gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp; reference; typedef const _Tp&amp; const_reference; typedef _Tp value_type; template&lt;typename _Tp1&gt; struct rebind { typedef allocator&lt;_Tp1&gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp; __a) throw() : __allocator_base&lt;_Tp&gt;(__a) { } template&lt;typename _Tp1&gt; allocator(const allocator&lt;_Tp1&gt;&amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：
+'><title>【STL源码剖析】allocator</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/'>
 
@@ -32,8 +33,9 @@ GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std:
 <meta property='og:description' content='序言 近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。
 GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std::alloc 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 std::allocator ，很符合直觉。
 过时的信息 为了佐证这里的信息，我们看 std::vector 里默认使用的Allocator是什么：
-// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&amp;lt;typename _Tp, typename _Alloc = std::allocator&amp;lt;_Tp&amp;gt; &amp;gt; class vector : protected _Vector_base&amp;lt;_Tp, _Alloc&amp;gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
-// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &amp;lt;bits/c&#43;&#43;allocator.h&amp;gt; // Define the base class to std::allocator. #include &amp;lt;bits/memoryfwd.h&amp;gt; #include &amp;lt;type_traits&amp;gt; namespace std _GLIBCXX_VISIBILITY(default) { template&amp;lt;&amp;gt; class allocator&amp;lt;void&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&amp;lt;typename _Tp&amp;gt; class allocator: public __allocator_base&amp;lt;_Tp&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp;amp; reference; typedef const _Tp&amp;amp; const_reference; typedef _Tp value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp;amp; __a) throw() : __allocator_base&amp;lt;_Tp&amp;gt;(__a) { } template&amp;lt;typename _Tp1&amp;gt; allocator(const allocator&amp;lt;_Tp1&amp;gt;&amp;amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：'>
+// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&lt;typename _Tp, typename _Alloc = std::allocator&lt;_Tp&gt; &gt; class vector : protected _Vector_base&lt;_Tp, _Alloc&gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
+// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &lt;bits/c&#43;&#43;allocator.h&gt; // Define the base class to std::allocator. #include &lt;bits/memoryfwd.h&gt; #include &lt;type_traits&gt; namespace std _GLIBCXX_VISIBILITY(default) { template&lt;&gt; class allocator&lt;void&gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&lt;typename _Tp1&gt; struct rebind { typedef allocator&lt;_Tp1&gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&lt;typename _Tp&gt; class allocator: public __allocator_base&lt;_Tp&gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp; reference; typedef const _Tp&amp; const_reference; typedef _Tp value_type; template&lt;typename _Tp1&gt; struct rebind { typedef allocator&lt;_Tp1&gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp; __a) throw() : __allocator_base&lt;_Tp&gt;(__a) { } template&lt;typename _Tp1&gt; allocator(const allocator&lt;_Tp1&gt;&amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-11-16T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-11-16T00:00:00&#43;00:00'/>
@@ -41,8 +43,9 @@ GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std:
 <meta name="twitter:description" content="序言 近期看《STL源码剖析》，诚然颇有所得，但仍不太满足于看这十几年前的例子，因而颇起了一些豪情，打算跟随书中的讲解，亲眼看一看当前最新的源码是怎样的。这一道阻且长的探索将成为本博客中的一个不小的系列，不过我的好奇能否保持、能否坚持写作，总是要留待后话了。好的地方是，这序言是在Allocator篇写完后才补上的，至少这第一步是已迈了出去。
 GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std::alloc 的区别，现在已经没有了（应该是基础版被干掉了）。现在统一叫 std::allocator ，很符合直觉。
 过时的信息 为了佐证这里的信息，我们看 std::vector 里默认使用的Allocator是什么：
-// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&amp;lt;typename _Tp, typename _Alloc = std::allocator&amp;lt;_Tp&amp;gt; &amp;gt; class vector : protected _Vector_base&amp;lt;_Tp, _Alloc&amp;gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
-// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &amp;lt;bits/c&#43;&#43;allocator.h&amp;gt; // Define the base class to std::allocator. #include &amp;lt;bits/memoryfwd.h&amp;gt; #include &amp;lt;type_traits&amp;gt; namespace std _GLIBCXX_VISIBILITY(default) { template&amp;lt;&amp;gt; class allocator&amp;lt;void&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&amp;lt;typename _Tp&amp;gt; class allocator: public __allocator_base&amp;lt;_Tp&amp;gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp;amp; reference; typedef const _Tp&amp;amp; const_reference; typedef _Tp value_type; template&amp;lt;typename _Tp1&amp;gt; struct rebind { typedef allocator&amp;lt;_Tp1&amp;gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp;amp; __a) throw() : __allocator_base&amp;lt;_Tp&amp;gt;(__a) { } template&amp;lt;typename _Tp1&amp;gt; allocator(const allocator&amp;lt;_Tp1&amp;gt;&amp;amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：">
+// /usr/include/c&#43;&#43;/4.8.5/bits/stl_vector.h template&lt;typename _Tp, typename _Alloc = std::allocator&lt;_Tp&gt; &gt; class vector : protected _Vector_base&lt;_Tp, _Alloc&gt; // ===== snip ===== 直接考察GCC对 std::allocator 的实现（删除了一些与本节相关性不大的注释/宏/函数）：
+// /usr/include/c&#43;&#43;/4.8.5/bits/allocator.h #ifndef _ALLOCATOR_H #define _ALLOCATOR_H 1 #include &lt;bits/c&#43;&#43;allocator.h&gt; // Define the base class to std::allocator. #include &lt;bits/memoryfwd.h&gt; #include &lt;type_traits&gt; namespace std _GLIBCXX_VISIBILITY(default) { template&lt;&gt; class allocator&lt;void&gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef void* pointer; typedef const void* const_pointer; typedef void value_type; template&lt;typename _Tp1&gt; struct rebind { typedef allocator&lt;_Tp1&gt; other; }; typedef true_type propagate_on_container_move_assignment; }; template&lt;typename _Tp&gt; class allocator: public __allocator_base&lt;_Tp&gt; { public: typedef size_t size_type; typedef ptrdiff_t difference_type; typedef _Tp* pointer; typedef const _Tp* const_pointer; typedef _Tp&amp; reference; typedef const _Tp&amp; const_reference; typedef _Tp value_type; template&lt;typename _Tp1&gt; struct rebind { typedef allocator&lt;_Tp1&gt; other; }; typedef true_type propagate_on_container_move_assignment; allocator() throw() { } allocator(const allocator&amp; __a) throw() : __allocator_base&lt;_Tp&gt;(__a) { } template&lt;typename _Tp1&gt; allocator(const allocator&lt;_Tp1&gt;&amp;) throw() { } ~allocator() throw() { } }; // ===== snip ===== } // namespace std #endif 我们看到 std::allocator 继承了 __allocator_base 这个类，继续找到它的定义：
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -185,7 +188,7 @@ GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std:
 		<img src="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1.png"
 			width="1616"
 			height="394"
-			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1_hub45dc5fbc9e84391871df913c1d1e3c6_100692_480x0_resize_box_3.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1_hub45dc5fbc9e84391871df913c1d1e3c6_100692_1024x0_resize_box_3.png 1024w"
+			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1_hu13354497161978413637.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/1_hu8606617891884545939.png 1024w"
 			loading="lazy"
 			alt="过时的信息">
 	</a>
@@ -203,8 +206,8 @@ GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std:
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#ifndef _ALLOCATOR_H
 </span></span></span><span class="line"><span class="cl"><span class="cp">#define _ALLOCATOR_H 1
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/c++allocator.h&gt; // Define the base class to std::allocator.</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/memoryfwd.h&gt;</span><span class="cp">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;bits/c++allocator.h&gt;</span><span class="cp"> </span><span class="c1">// Define the base class to std::allocator.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;bits/memoryfwd.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">std</span> <span class="nf">_GLIBCXX_VISIBILITY</span><span class="p">(</span><span class="k">default</span><span class="p">)</span>
@@ -867,7 +870,7 @@ GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std:
 		<img src="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2.png"
 			width="826"
 			height="778"
-			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2_hu33bd5c17e2eeb79009c2421d87b0af2d_70105_480x0_resize_box_3.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2_hu33bd5c17e2eeb79009c2421d87b0af2d_70105_1024x0_resize_box_3.png 1024w"
+			srcset="/p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2_hu8258441276399729393.png 480w, /p/stl%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90allocator/2_hu15323084886433345842.png 1024w"
 			loading="lazy"
 			alt="__pool_alloc">
 	</a>
@@ -1195,14 +1198,14 @@ GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std:
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -1325,7 +1328,7 @@ GCC 侯捷老师在书中提到的基础版 allocator 和SGI特殊实现版 std:
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

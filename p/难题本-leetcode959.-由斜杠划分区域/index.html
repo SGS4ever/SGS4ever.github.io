@@ -4,7 +4,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：https://leetcode-cn.com/problems/regions-cut-by-slashes/
 令我思考很久的一道题，最后还是学着官方题解做出来的([1])。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。
 题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
-（请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
+（请注意，反斜杠字符是转义的，因此 \ 用 &ldquo;\\&rdquo; 表示。）。
 返回区域的数目。
 分析 将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
@@ -12,15 +12,9 @@
 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。 格间合并
 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。 最终操作
 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。 模拟 考虑对于示例4：
-输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5 网格如下：
+输入：[&quot;/\\&quot;,&quot;\\/&quot;] 输出：5 网格如下：
 图2. 网格 我们从左上到右下进行遍历。
-首先第一个单元格进行格内合并：
-Step1 第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。
-Step2 第二个单元格的格内合并：
-Step3 格间合并，此时它已经没有右邻居：
-Step4 第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：
-Final AC代码 将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标(x, y)的单元格位于一维数组中的n * x &#43; y处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。
-最终，坐标(x, y)的单元格位于4 * (n * x &#43; y)到4 * (n * x &#43; y) &#43; 3的下标位置。'><title>难题本 | LeetCode959. 由斜杠划分区域</title>
+'><title>难题本 | LeetCode959. 由斜杠划分区域</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/'>
 
@@ -47,7 +41,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 <meta property='og:description' content='题目链接：https://leetcode-cn.com/problems/regions-cut-by-slashes/
 令我思考很久的一道题，最后还是学着官方题解做出来的([1])。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。
 题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
-（请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
+（请注意，反斜杠字符是转义的，因此 \ 用 &ldquo;\\&rdquo; 表示。）。
 返回区域的数目。
 分析 将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
@@ -55,15 +49,9 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。 格间合并
 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。 最终操作
 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。 模拟 考虑对于示例4：
-输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5 网格如下：
+输入：[&quot;/\\&quot;,&quot;\\/&quot;] 输出：5 网格如下：
 图2. 网格 我们从左上到右下进行遍历。
-首先第一个单元格进行格内合并：
-Step1 第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。
-Step2 第二个单元格的格内合并：
-Step3 格间合并，此时它已经没有右邻居：
-Step4 第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：
-Final AC代码 将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标(x, y)的单元格位于一维数组中的n * x &#43; y处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。
-最终，坐标(x, y)的单元格位于4 * (n * x &#43; y)到4 * (n * x &#43; y) &#43; 3的下标位置。'>
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-01-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-25T00:00:00&#43;00:00'/>
@@ -71,7 +59,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 <meta name="twitter:description" content="题目链接：https://leetcode-cn.com/problems/regions-cut-by-slashes/
 令我思考很久的一道题，最后还是学着官方题解做出来的([1])。思考过程中也想过并查集，然而并没有想到题解中的做法；想到过求一个图中环路的个数，然而不会。
 题目 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
-（请注意，反斜杠字符是转义的，因此 \ 用 &amp;ldquo;\\&amp;rdquo; 表示。）。
+（请注意，反斜杠字符是转义的，因此 \ 用 &ldquo;\\&rdquo; 表示。）。
 返回区域的数目。
 分析 将单元格进一步细分，便于并查集操作。
 每个单元格对角点互连，即可分成四个小三角形（图1），根据本格中的字符是/还是\，合并不同的小三角形。
@@ -79,15 +67,9 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 当本格字符为空格时，所有小三角形处于同一个区域中，全部合并； 当本格字符为/时，合并0号和3号，合并1号和2号，且这两个区域不互通； 当本格字符为\时，合并0号和1号，合并3号和2号，且这两个区域不互通。 格间合并
 格间合并是指单元格之间的小三角形合并。无论本单元格中的字符是什么，当前单元格的1号三角形和右边单元格的3号永远处于同一个区域，当前单元格的2号和下边单元格的0号永远处于同一个区域。同理考虑左边和上边单元格。 我们要遍历所有的单元格，故格间合并只需要顾及左右两侧邻居之一、上下两侧邻居之一即可；例如对于每个单元格只考虑与其右边单元格和下边单元格的合并，每个单元格都如此，则所有单元格都能正常完成合并。 最终操作
 遍历每个单元格，按照字符进行格内合并；如果右边和下边有邻居就进行格间合并。这样最后剩下的独立并查集个数就是最终划分得到的区域数。 这种方式的关键在于格间合并，无论格内字符是什么，格间的联通总能使得离散的区域聚到一起。 模拟 考虑对于示例4：
-输入：[&amp;quot;/\\&amp;quot;,&amp;quot;\\/&amp;quot;] 输出：5 网格如下：
+输入：[&quot;/\\&quot;,&quot;\\/&quot;] 输出：5 网格如下：
 图2. 网格 我们从左上到右下进行遍历。
-首先第一个单元格进行格内合并：
-Step1 第一个单元格的格间合并，从此图中就不难看出格间合并的规律与格内字符无关。
-Step2 第二个单元格的格内合并：
-Step3 格间合并，此时它已经没有右邻居：
-Step4 第三、第四个单元格分别格内、格间合并，最终得到的各个独立集合如下：
-Final AC代码 将上面的模拟转化成代码，其关键在于单元格和小三角形的表示。我们将二维的网格拉直，则一个坐标(x, y)的单元格位于一维数组中的n * x &#43; y处；每个单元格分为4个小三角形，故一个单元格占据4个数组空间。
-最终，坐标(x, y)的单元格位于4 * (n * x &#43; y)到4 * (n * x &#43; y) &#43; 3的下标位置。">
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -237,7 +219,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1.png"
 			width="512"
 			height="503"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu57feb8e5a6a7b7e162e20bda3639f69b_11070_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu12461034554045284523.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/1_hu7106969146994118593.png 1024w"
 			loading="lazy"
 			alt="图1. 单元格划分">
 	</a>
@@ -289,7 +271,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2.png"
 			width="326"
 			height="326"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_huca78e0702fa203aab467e1dfdc858162_12698_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_hu2587066131197474803.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/2_hu10854460542142781219.png 1024w"
 			loading="lazy"
 			alt="图2. 网格">
 	</a>
@@ -310,7 +292,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3.png"
 			width="312"
 			height="316"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hue21e67978904be5c22a76340dab79a99_13076_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hu15865058391524549854.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/3_hu12084624890581869833.png 1024w"
 			loading="lazy"
 			alt="Step1">
 	</a>
@@ -330,7 +312,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4.png"
 			width="323"
 			height="317"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu0efd41918ddf57197dba8d9a611cce97_13782_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu16077212272826061122.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/4_hu12236526809114123929.png 1024w"
 			loading="lazy"
 			alt="Step2">
 	</a>
@@ -350,7 +332,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5.png"
 			width="310"
 			height="308"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu8bf7992501ac9e194107c4ca4edb286c_13918_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu17708051903857230160.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/5_hu12911398285536136916.png 1024w"
 			loading="lazy"
 			alt="Step3">
 	</a>
@@ -370,7 +352,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6.png"
 			width="321"
 			height="311"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu2df6497e71e95c601b7640f77fb894a5_14103_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu12877174878860859804.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/6_hu6512235548995529596.png 1024w"
 			loading="lazy"
 			alt="Step4">
 	</a>
@@ -390,7 +372,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7.png"
 			width="336"
 			height="317"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hud5757451f444e1834b5d357cc9c4b0ad_15077_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hu18001306581270476224.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/7_hu7887732659389176782.png 1024w"
 			loading="lazy"
 			alt="Final">
 	</a>
@@ -500,7 +482,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
 		<img src="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8.png"
 			width="811"
 			height="171"
-			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_480x0_resize_box_3.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hub67a868eabb8115598586e3fc5bb9597_17658_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hu18364802404692182588.png 480w, /p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode959.-%E7%94%B1%E6%96%9C%E6%9D%A0%E5%88%92%E5%88%86%E5%8C%BA%E5%9F%9F/8_hu9768640567555224344.png 1024w"
 			loading="lazy"
 			alt="Performance">
 	</a>
@@ -694,14 +676,14 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -819,7 +801,7 @@ Final AC代码 将上面的模拟转化成代码，其关键在于单元格和�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

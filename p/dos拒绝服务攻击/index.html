@@ -22,10 +22,8 @@ TearDrop 又是IP协议实现的问题。故事从IP分片讲起。
 IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：
 IP Header 第二行的标识字段占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。
 标志位有3比特。实际上只有后面2个比特有意义。它们分别是：
-MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&amp;rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。 片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。
-Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并故意将片偏移字段设置成错误的值（与上一片重叠或错开）。某些操作系统在处理这类分片的时候会出现系统崩溃、重启等现象。
-这里主要以重叠为例。重叠是指第二片IP包的偏移量小于第一片的尾部，且算上第二片的长度也没有超过第一片的尾部。我认为更加准确的描述应该是IP分片的镶嵌，如下所示：
-分片重叠（镶嵌） 这时，我们要求第二个分片的长度，如果使用len2 = end2 - end1来计算，就产生了一个负值。'><title>DoS——拒绝服务攻击</title>
+MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。 片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。
+'><title>DoS——拒绝服务攻击</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/'>
 
@@ -70,10 +68,8 @@ TearDrop 又是IP协议实现的问题。故事从IP分片讲起。
 IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：
 IP Header 第二行的标识字段占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。
 标志位有3比特。实际上只有后面2个比特有意义。它们分别是：
-MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&amp;rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。 片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。
-Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并故意将片偏移字段设置成错误的值（与上一片重叠或错开）。某些操作系统在处理这类分片的时候会出现系统崩溃、重启等现象。
-这里主要以重叠为例。重叠是指第二片IP包的偏移量小于第一片的尾部，且算上第二片的长度也没有超过第一片的尾部。我认为更加准确的描述应该是IP分片的镶嵌，如下所示：
-分片重叠（镶嵌） 这时，我们要求第二个分片的长度，如果使用len2 = end2 - end1来计算，就产生了一个负值。'>
+MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。 片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2021-02-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-02-02T00:00:00&#43;00:00'/>
@@ -99,10 +95,8 @@ TearDrop 又是IP协议实现的问题。故事从IP分片讲起。
 IP协议使用首部的标识、标志和片偏移字段来完成对片的重组。我们看看IP数据报的首部：
 IP Header 第二行的标识字段占16位。它是一个计数器，每产生一个数据报就加一。分片时每个数据报片都复制一次标识号，以便能正确重装成原来的数据报。
 标志位有3比特。实际上只有后面2个比特有意义。它们分别是：
-MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&amp;rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。 片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。
-Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并故意将片偏移字段设置成错误的值（与上一片重叠或错开）。某些操作系统在处理这类分片的时候会出现系统崩溃、重启等现象。
-这里主要以重叠为例。重叠是指第二片IP包的偏移量小于第一片的尾部，且算上第二片的长度也没有超过第一片的尾部。我认为更加准确的描述应该是IP分片的镶嵌，如下所示：
-分片重叠（镶嵌） 这时，我们要求第二个分片的长度，如果使用len2 = end2 - end1来计算，就产生了一个负值。">
+MF位（More Fragment）。当MF = 1时，表示这个数据报后面还有后续的片；当MF = 0时表示这是最后一个片。 DF位（Don&rsquo;t Fragment）。只有DF = 0时才允许将一个数据报分片。若DF = 1且数据报大小大于链路层的MTU，只能丢弃并发送ICMP错误信息。 片偏移占13位。既然一个数据报能被分成好几个小片，那么每个小片需要记录自己在原始数据报中的位置，否则怎么重组呢？片偏移的单位是8B，也就意味着除了最后一个片外，每个片中的有效载荷都是8的倍数（字节）。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -280,7 +274,7 @@ Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并
 		<img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1.png"
 			width="906"
 			height="518"
-			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_huad1b783e413552ffb544bede6d79cde8_294723_480x0_resize_box_3.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_huad1b783e413552ffb544bede6d79cde8_294723_1024x0_resize_box_3.png 1024w"
+			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_hu3360648763880945663.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/1_hu18096489878057281178.png 1024w"
 			loading="lazy"
 			alt="IP Header">
 	</a>
@@ -309,7 +303,7 @@ Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并
 		<img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2.png"
 			width="681"
 			height="286"
-			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu8e9566d9328d471df5fc6103fa022397_11247_480x0_resize_box_3.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu8e9566d9328d471df5fc6103fa022397_11247_1024x0_resize_box_3.png 1024w"
+			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu17737602452025549058.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/2_hu6721368738585173675.png 1024w"
 			loading="lazy"
 			alt="分片重叠（镶嵌）">
 	</a>
@@ -322,7 +316,7 @@ Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并
 <blockquote>
 <p>就我个人来说，其实还没有想清楚为什么要使用<code>end2 - end1</code>的办法来计算<code>len2</code>，明明长度字段就写在报头&hellip;</p>
 <p>不过如果报头的长度字段也被伪造了，怎么办呢？Teardrop的防御办法是将接受到的数据报先缓存起来，然后先根据标识分组来进行检查，对于分片信息有错误的报文就直接丢弃。</p>
-<p>不过，还是简单一点，没有什么是一个补丁无法解决的，如果有，那就两个。😤</p>
+<p>不过，还是简单一点，没有什么是一个补丁无法解决的，如果有，那就两个。&#x1f624;</p>
 </blockquote>
 <h3 id="land攻击">LAND攻击</h3>
 <p>在TCP连接管理中，源地址、目的地址、源端口、目的端口是最为重要的几个参数。如果交由你来实现TCP连接监听，是否会向一个SYN包中的源IP直接发起ACK应答呢？</p>
@@ -360,7 +354,7 @@ Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并
 		<img src="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3.png"
 			width="1117"
 			height="682"
-			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu87c83953a84d7a3420c3455bff1e29f8_139545_480x0_resize_box_3.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu87c83953a84d7a3420c3455bff1e29f8_139545_1024x0_resize_box_3.png 1024w"
+			srcset="/p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu3162939402022191065.png 480w, /p/dos%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%94%BB%E5%87%BB/3_hu9068962283103899700.png 1024w"
 			loading="lazy"
 			alt="Smurf">
 	</a>
@@ -616,14 +610,14 @@ Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -758,7 +752,7 @@ Teardrop 该攻击的原理是向目标主机发送一些分片的IP报文，并
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

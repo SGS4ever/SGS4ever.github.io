@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='背景 近来发现工作 &amp;amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
-Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&amp;rsquo;◡&amp;rsquo;●)
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='背景 近来发现工作 &amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
+Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&rsquo;◡&rsquo;●)
 Step 1 background 对于一个又大又黑的终端来说，一个非常显著的提升颜值的办法就是换上一张自己满意的背景图片。
 点击Windows Terminal顶栏的小倒三角，进入【设置】——【Windows Powershell】——【外观】——【背景图片】，选择图片路径即可。
 再微调一下透明度，整个质感会马上提高：
 background image 审美各异，勿杠。
 Step 2 安装oh-my-posh oh-my-posh 是一个终端美化程序，类似MacOS终端美化常用的zsh。
 建议 不要使用 官网介绍的下载办法：
-# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&amp;#39;https://ohmyposh.dev/install.ps1&amp;#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
+# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&#39;https://ohmyposh.dev/install.ps1&#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
 可以手动下载上述命令中提到的安装脚本 https://ohmyposh.dev/install.ps1 ，看一眼就知道实际上它就是到 Github release 上把安装程序下载下来而已，不是很理解为什么要用户用一个反人类的命令安装。
 因此，我们直接把对应的 installer 下到本地（访问GitHub的时候可以科学上网，或使用gitee镜像），运行，即可完成 oh-my-posh 的安装。
-Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之前我们要先安装字体，以便正确显示特殊字符。'><title>Windows Terminal美化小记</title>
+'><title>Windows Terminal美化小记</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/'>
 
@@ -36,34 +36,34 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
 </script>
 
 <meta property='og:title' content='Windows Terminal美化小记'>
-<meta property='og:description' content='背景 近来发现工作 &amp;amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
-Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&amp;rsquo;◡&amp;rsquo;●)
+<meta property='og:description' content='背景 近来发现工作 &amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
+Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&rsquo;◡&rsquo;●)
 Step 1 background 对于一个又大又黑的终端来说，一个非常显著的提升颜值的办法就是换上一张自己满意的背景图片。
 点击Windows Terminal顶栏的小倒三角，进入【设置】——【Windows Powershell】——【外观】——【背景图片】，选择图片路径即可。
 再微调一下透明度，整个质感会马上提高：
 background image 审美各异，勿杠。
 Step 2 安装oh-my-posh oh-my-posh 是一个终端美化程序，类似MacOS终端美化常用的zsh。
 建议 不要使用 官网介绍的下载办法：
-# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&amp;#39;https://ohmyposh.dev/install.ps1&amp;#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
+# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&#39;https://ohmyposh.dev/install.ps1&#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
 可以手动下载上述命令中提到的安装脚本 https://ohmyposh.dev/install.ps1 ，看一眼就知道实际上它就是到 Github release 上把安装程序下载下来而已，不是很理解为什么要用户用一个反人类的命令安装。
 因此，我们直接把对应的 installer 下到本地（访问GitHub的时候可以科学上网，或使用gitee镜像），运行，即可完成 oh-my-posh 的安装。
-Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之前我们要先安装字体，以便正确显示特殊字符。'>
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-09-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-09-17T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Windows Terminal美化小记">
-<meta name="twitter:description" content="背景 近来发现工作 &amp;amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
-Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&amp;rsquo;◡&amp;rsquo;●)
+<meta name="twitter:description" content="背景 近来发现工作 &amp; 生活的时候跟Windows Terminal打的交道蛮多的，但每每打开它都眼前一黑：
+Widows terminal 于是决定对它进行一些简单的美化，让这些小细节给自己的心情增加点颜色 (●&rsquo;◡&rsquo;●)
 Step 1 background 对于一个又大又黑的终端来说，一个非常显著的提升颜值的办法就是换上一张自己满意的背景图片。
 点击Windows Terminal顶栏的小倒三角，进入【设置】——【Windows Powershell】——【外观】——【背景图片】，选择图片路径即可。
 再微调一下透明度，整个质感会马上提高：
 background image 审美各异，勿杠。
 Step 2 安装oh-my-posh oh-my-posh 是一个终端美化程序，类似MacOS终端美化常用的zsh。
 建议 不要使用 官网介绍的下载办法：
-# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&amp;#39;https://ohmyposh.dev/install.ps1&amp;#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
+# 错误案例： # winget winget install JanDeDobbeleer.OhMyPosh -s winget #scoop scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json # manual Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(&#39;https://ohmyposh.dev/install.ps1&#39;)) 完全不理解为什么在官网上要有这么挫的下载方式，它明明就有安装程序……国内伙伴用这个办法去下载的时候，只能说生死由命，用了梯子也不行，还得为终端配置代理，属于是没有意义的步骤。
 可以手动下载上述命令中提到的安装脚本 https://ohmyposh.dev/install.ps1 ，看一眼就知道实际上它就是到 Github release 上把安装程序下载下来而已，不是很理解为什么要用户用一个反人类的命令安装。
 因此，我们直接把对应的 installer 下到本地（访问GitHub的时候可以科学上网，或使用gitee镜像），运行，即可完成 oh-my-posh 的安装。
-Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之前我们要先安装字体，以便正确显示特殊字符。">
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -204,7 +204,7 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
 		<img src="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/1.png"
 			width="2560"
 			height="1518"
-			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/1_hu849227245cb5ca3c7f64cfcbce26bc52_2417859_480x0_resize_box_3.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/1_hu849227245cb5ca3c7f64cfcbce26bc52_2417859_1024x0_resize_box_3.png 1024w"
+			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/1_hu7097783955094064051.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/1_hu12688935979521274149.png 1024w"
 			loading="lazy"
 			alt="Widows terminal">
 	</a>
@@ -228,7 +228,7 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
 		<img src="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/2.png"
 			width="2560"
 			height="1518"
-			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/2_hu644daed47158661ca1392e9e10e20691_4570995_480x0_resize_box_3.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/2_hu644daed47158661ca1392e9e10e20691_4570995_1024x0_resize_box_3.png 1024w"
+			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/2_hu2552113943342304369.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/2_hu14813063219293462685.png 1024w"
 			loading="lazy"
 			alt="background image">
 	</a>
@@ -271,7 +271,7 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
 </span></span><span class="line"><span class="cl"><span class="c"># 如果文件管理器找不到这个路径可以新建</span>
 </span></span><span class="line"><span class="cl"><span class="c"># New-Item -Path $PROFILE -Type File -Force</span>
 </span></span></code></pre></div><p>用 <code>notepad</code> 或其他任何编辑器在这个文件里写上：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">oh-my</span><span class="n">-posh</span> <span class="n">init</span> <span class="n">pwsh</span> <span class="p">[-</span><span class="n">-config</span><span class="p">]</span> <span class="p">[</span><span class="err">主题路径</span><span class="p">]</span> <span class="p">|</span> <span class="nb">Invoke-Expression</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">oh-my</span><span class="n">-posh</span> <span class="n">init</span> <span class="n">pwsh</span> <span class="p">[-</span><span class="n">-config</span><span class="p">]</span> <span class="p">[</span><span class="n">主题路径</span><span class="p">]</span> <span class="p">|</span> <span class="nb">Invoke-Expression</span>
 </span></span></code></pre></div><p>保存，重启 <code>powershell</code> 即可。</p>
 <p><figure 
 	
@@ -284,7 +284,7 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
 		<img src="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/3.png"
 			width="2560"
 			height="1518"
-			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/3_hu314a0df31992db681370287a4f0765cd_4583619_480x0_resize_box_3.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/3_hu314a0df31992db681370287a4f0765cd_4583619_1024x0_resize_box_3.png 1024w"
+			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/3_hu16796794652781460644.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/3_hu9691593885259158859.png 1024w"
 			loading="lazy"
 			alt="powershell">
 	</a>
@@ -307,7 +307,7 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
 		<img src="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/4.png"
 			width="1085"
 			height="507"
-			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/4_hu44162314fd667cf5917fe46a74da39b7_356468_480x0_resize_box_3.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/4_hu44162314fd667cf5917fe46a74da39b7_356468_1024x0_resize_box_3.png 1024w"
+			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/4_hu309585521416741307.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/4_hu8993330247589893536.png 1024w"
 			loading="lazy"
 			alt="WSL in Windows Terminal">
 	</a>
@@ -351,7 +351,7 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
 		<img src="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/5.png"
 			width="2560"
 			height="1518"
-			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/5_hu35a48c8dd0a8f7806c995f3cb4915efa_4802032_480x0_resize_box_3.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/5_hu35a48c8dd0a8f7806c995f3cb4915efa_4802032_1024x0_resize_box_3.png 1024w"
+			srcset="/p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/5_hu10398684601253923548.png 480w, /p/windows-terminal%E7%BE%8E%E5%8C%96%E5%B0%8F%E8%AE%B0/5_hu15780470776495035410.png 1024w"
 			loading="lazy"
 			alt="WSL">
 	</a>
@@ -539,14 +539,14 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -670,7 +670,7 @@ Step 3 下载字体 oh-my-posh 基于 Nerd Fonts 开发，因此在使用它之�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

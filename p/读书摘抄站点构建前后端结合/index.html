@@ -15,7 +15,7 @@ VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变�
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .'><title>读书摘抄站点构建（前后端结合）</title>
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .get(&#39;/index&#39;) .then(function (response) { var respJSON = JSON.parse(JSON.stringify(response.data)); vueThis.login = respJSON[&#34;login&#34;]; vueThis.cards = respJSON[&#34;cards&#34;]; vueThis.totalBooks = respJSON[&#34;totalBooks&#34;]; }) .catch(function (error) { console.log(error); }); } }, mounted() { let vueThis = this; this.fetchData(vueThis); } }).mount(&#39;#app&#39;) 0x02 交互逻辑设计 总体交互逻辑 '><title>读书摘抄站点构建（前后端结合）</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
 
@@ -53,7 +53,7 @@ VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变�
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .'>
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .get(&#39;/index&#39;) .then(function (response) { var respJSON = JSON.parse(JSON.stringify(response.data)); vueThis.login = respJSON[&#34;login&#34;]; vueThis.cards = respJSON[&#34;cards&#34;]; vueThis.totalBooks = respJSON[&#34;totalBooks&#34;]; }) .catch(function (error) { console.log(error); }); } }, mounted() { let vueThis = this; this.fetchData(vueThis); } }).mount(&#39;#app&#39;) 0x02 交互逻辑设计 总体交互逻辑 '>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2022-03-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-06-09T00:00:00&#43;00:00'/>
@@ -72,7 +72,7 @@ VCPKG 安装的依赖存在大大小小的问题，折腾了若干次环境变�
 VUE 是一个前端渲染框架，只需按照给定的语法，提供特定的数据（例如使用Ajax从服务端请求），就可以实现前端渲染。
 现有的VUE项目规模都比较大，用到了一些高级特性，如单文件组件等；我的读书摘抄站点满打满算一共三四个页面，不怎么存在组件复用等情况，因此我直接将每个文件都绑定一个VUE APP，各自实现其功能。对于VUE来说，主要只用到它的实时渲染的特性而已。
 前端引入VUE之后，交互就变得比较简单。目前还没有实现分段加载的功能，因此直接在页面加载的时候从后端获取所有数据。在VUE中定义一个 fetchData() 的方法，其中使用 axios 从后端请求数据，然后更新到实例的 data 上；这个方法在 mounted() 的时候被调用。需要注意，在 fetchData() 里面使用的 this 指向的不是组件实例，要从外部传入实例才行。
-const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .">
+const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchData(vueThis) { axios .get(&#39;/index&#39;) .then(function (response) { var respJSON = JSON.parse(JSON.stringify(response.data)); vueThis.login = respJSON[&#34;login&#34;]; vueThis.cards = respJSON[&#34;cards&#34;]; vueThis.totalBooks = respJSON[&#34;totalBooks&#34;]; }) .catch(function (error) { console.log(error); }); } }, mounted() { let vueThis = this; this.fetchData(vueThis); } }).mount(&#39;#app&#39;) 0x02 交互逻辑设计 总体交互逻辑 ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -266,7 +266,7 @@ const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchDa
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1.png"
 			width="353"
 			height="675"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1_huf80c7fbaae80b4fefe1919dc680145b4_40009_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1_huf80c7fbaae80b4fefe1919dc680145b4_40009_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1_hu8969895457116074267.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/1_hu3791305045215098385.png 1024w"
 			loading="lazy"
 			alt="总体交互逻辑">
 	</a>
@@ -289,7 +289,7 @@ const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchDa
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2.png"
 			width="1066"
 			height="261"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2_huf83a29e63f5cbd5fc444fce2edb7f7ab_48118_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2_huf83a29e63f5cbd5fc444fce2edb7f7ab_48118_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2_hu14061744355600915364.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/2_hu11872666627779495359.png 1024w"
 			loading="lazy"
 			alt="登录认证机制">
 	</a>
@@ -366,7 +366,7 @@ const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchDa
 <p>JWT存到cookie，是一种妥协。标准的做法是实现 <em>本地存储</em> ，然后每次进行请求时都从本地获取JWT并放入请求头（如axios设置拦截器）。但是，我的页面中并不是所有的请求都是由我控制的，即并不是所有请求都是由Ajax代码发起的：当直接使用浏览器访问某个页面时发起的GET请求就可能不带JWT，就失去了一致性；将JWT放到cookie中可以解决这一问题，带来的CSRF等安全性问题则需要其他办法进行加固。</p>
 </li>
 <li>
-<p>急于上线使用，没有手撸加密算法，因此学到的东西不多。 😢</p>
+<p>急于上线使用，没有手撸加密算法，因此学到的东西不多。 &#x1f622;</p>
 </li>
 </ul>
 <h3 id="0x04-数据库">0x04 数据库</h3>
@@ -467,7 +467,7 @@ const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchDa
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3.png"
 			width="729"
 			height="736"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hua527065085a1154cd41fd1947186dc7b_46433_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hua527065085a1154cd41fd1947186dc7b_46433_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hu12072491752400020868.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/3_hu15121591423463986844.png 1024w"
 			loading="lazy"
 			alt="流程">
 	</a>
@@ -490,7 +490,7 @@ const app = Vue.createApp({ // ==== 略 ==== methods: { // ==== 略 ==== fetchDa
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4.png"
 			width="752"
 			height="990"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu8712c57ee0a1f0264ffabaf334c2c4f5_22774_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu8712c57ee0a1f0264ffabaf334c2c4f5_22774_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu14574375692381688560.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/4_hu14527409882187003565.png 1024w"
 			loading="lazy"
 			alt="内容结构">
 	</a>
@@ -582,7 +582,7 @@ $$</p>
 		<img src="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5.png"
 			width="559"
 			height="716"
-			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5_huaf459d47493527683fbe343a39552bfc_174656_480x0_resize_box_3.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5_huaf459d47493527683fbe343a39552bfc_174656_1024x0_resize_box_3.png 1024w"
+			srcset="/p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5_hu14732916395087838275.png 480w, /p/%E8%AF%BB%E4%B9%A6%E6%91%98%E6%8A%84%E7%AB%99%E7%82%B9%E6%9E%84%E5%BB%BA%E5%89%8D%E5%90%8E%E7%AB%AF%E7%BB%93%E5%90%88/5_hu15593841818264970072.png 1024w"
 			loading="lazy"
 			alt="分享图">
 	</a>
@@ -594,7 +594,7 @@ $$</p>
     >第一篇</a> 教会我们如何把 <code>canvas</code> 转化为可以写入剪贴板中的数据； <a class="link" href="https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write"  target="_blank" rel="noopener"
     >第二篇</a> 介绍了浏览器的 <code>navigator.clipboard.write</code> 接口的用法，据此，可以实现一键复制图片的功能。</p>
 <h3 id="0x08-to-do">0x08 To Do</h3>
-<p>本文的叙述相比之前的两篇简单很多，因为内容实在太多了，详写不来 😢</p>
+<p>本文的叙述相比之前的两篇简单很多，因为内容实在太多了，详写不来 &#x1f622;</p>
 <p>整个站点还有一些地方是可以改进的：</p>
 <ul>
 <li>
@@ -821,14 +821,14 @@ $$</p>
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -949,7 +949,7 @@ $$</p>
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

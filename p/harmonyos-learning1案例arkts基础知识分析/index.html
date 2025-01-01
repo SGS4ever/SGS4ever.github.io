@@ -7,7 +7,11 @@
 // src/main/ets/common/bean/RankData.ets export class RankData { name: Resource; vote: string; // Number of votes id: string; constructor(id: string, name: Resource, vote: string) { this.id = id; this.name = name; this.vote = vote; } } 这里的 RankData.name 的类型是 Resource ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。
 至于另一份数据类型文件 src/main/ets/common/constants/Constants.ets ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。
 1.3 准备资源 应用程序的资源目录在 src/main/resources 路径下，这里直接把开源Demo的资源整个复制到我们的 Demo 里即可，这些资源包括字符定义、多媒体文件等。
-例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。'><title>【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</title>
+例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。
+1.4 准备数据源 程序打桩了数据源，把数据写死在 src/main/ets/model/DataModel.ts 里面，并在 src/main/ets/viewmodel/RankViewModel.ets 提供了获取数据的接口。因此把这两个文件也拷贝到我们的工程中。
+2 页面组件 2.1 标题 首先实现标题栏组件。
+@Component export struct TitleComponent { @Link isRefreshData: boolean; @State title: Resource = $r(&#39;app.string.title_default&#39;); // ===== snip ===== } src/main/ets/view/TitleComponent.ets 文件的实现，体现了ArkTs的若干知识点：
+'><title>【HarmonyOS learning】【1】「案例：ArkTS基础知识」分析</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/'>
 
@@ -37,7 +41,11 @@
 // src/main/ets/common/bean/RankData.ets export class RankData { name: Resource; vote: string; // Number of votes id: string; constructor(id: string, name: Resource, vote: string) { this.id = id; this.name = name; this.vote = vote; } } 这里的 RankData.name 的类型是 Resource ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。
 至于另一份数据类型文件 src/main/ets/common/constants/Constants.ets ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。
 1.3 准备资源 应用程序的资源目录在 src/main/resources 路径下，这里直接把开源Demo的资源整个复制到我们的 Demo 里即可，这些资源包括字符定义、多媒体文件等。
-例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。'>
+例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。
+1.4 准备数据源 程序打桩了数据源，把数据写死在 src/main/ets/model/DataModel.ts 里面，并在 src/main/ets/viewmodel/RankViewModel.ets 提供了获取数据的接口。因此把这两个文件也拷贝到我们的工程中。
+2 页面组件 2.1 标题 首先实现标题栏组件。
+@Component export struct TitleComponent { @Link isRefreshData: boolean; @State title: Resource = $r(&#39;app.string.title_default&#39;); // ===== snip ===== } src/main/ets/view/TitleComponent.ets 文件的实现，体现了ArkTs的若干知识点：
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='HarmonyOS' /><meta property='article:published_time' content='2023-10-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-10-06T00:00:00&#43;00:00'/>
@@ -48,7 +56,11 @@
 // src/main/ets/common/bean/RankData.ets export class RankData { name: Resource; vote: string; // Number of votes id: string; constructor(id: string, name: Resource, vote: string) { this.id = id; this.name = name; this.vote = vote; } } 这里的 RankData.name 的类型是 Resource ，这应该是SDK提供的一种现成数据类型，此处先不管，后文可以看到这个类型的用法。
 至于另一份数据类型文件 src/main/ets/common/constants/Constants.ets ，也直接从开源Demo工程拷贝即可，这文件里主要是一些常量的定义，比如页面宽度、高度、padding等。
 1.3 准备资源 应用程序的资源目录在 src/main/resources 路径下，这里直接把开源Demo的资源整个复制到我们的 Demo 里即可，这些资源包括字符定义、多媒体文件等。
-例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。">
+例如 src/main/resources/base/element/color.json 和 src/main/resources/base/element/string.json ，这两个文件提供的部分配置会在 Constants.ets 代码中通过 $r() 表达式取用。
+1.4 准备数据源 程序打桩了数据源，把数据写死在 src/main/ets/model/DataModel.ts 里面，并在 src/main/ets/viewmodel/RankViewModel.ets 提供了获取数据的接口。因此把这两个文件也拷贝到我们的工程中。
+2 页面组件 2.1 标题 首先实现标题栏组件。
+@Component export struct TitleComponent { @Link isRefreshData: boolean; @State title: Resource = $r(&#39;app.string.title_default&#39;); // ===== snip ===== } src/main/ets/view/TitleComponent.ets 文件的实现，体现了ArkTs的若干知识点：
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -395,7 +407,7 @@
 		<img src="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1.png"
 			width="2560"
 			height="2636"
-			srcset="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1_hu146e4ff56a547673e09e7934fd0ade89_1220806_480x0_resize_box_3.png 480w, /p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1_hu146e4ff56a547673e09e7934fd0ade89_1220806_1024x0_resize_box_3.png 1024w"
+			srcset="/p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1_hu12823414723402554834.png 480w, /p/harmonyos-learning1%E6%A1%88%E4%BE%8Barkts%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%88%86%E6%9E%90/1_hu14748554805905704010.png 1024w"
 			loading="lazy"
 			alt="life cycle">
 	</a>
@@ -691,14 +703,14 @@
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -834,7 +846,7 @@
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

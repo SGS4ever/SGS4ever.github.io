@@ -5,9 +5,9 @@
 题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
 解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
 错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
-更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != &#39;\0&#39; &amp;&amp; words2[idx] != &#39;\0&#39;)。
 AC代码：
-class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组 for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比 { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &amp;gt; 0) // cmp返回正数，前者比后者大 { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低 } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !'><title>错题本 | LeetCode953. 验证外星语词典</title>
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&lt;string&gt;&amp; words, string order) { vector&lt;string&gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组 for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比 { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &gt; 0) // cmp返回正数，前者比后者大 { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &#39;a&#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低 } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != &#39;\0&#39; &amp;&amp; words2[idx] != &#39;\0&#39;) { &#43;&#43;idx; } // 循环结束，word1[idx] != words2[idx] // 分三种情况 if (words1[idx] == &#39;\0&#39;) // words1到达末尾 { if (words2[idx] == &#39;\0&#39;) return 0; else return -1; // word1 &lt; words2 } else if (words2[idx] == &#39;\0&#39;) // words2 到达末尾 { return 1; // word1 &gt; words2 } else // 出现不相等，比较两者字符的rank，越低的越小 return order_rank[words1[idx] - &#39;a&#39;] - order_rank[words2[idx] - &#39;a&#39;]; // words1[idx]的rank更小，返回负数 } }; '><title>错题本 | LeetCode953. 验证外星语词典</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953.-%E9%AA%8C%E8%AF%81%E5%A4%96%E6%98%9F%E8%AF%AD%E8%AF%8D%E5%85%B8/'>
 
@@ -35,9 +35,9 @@ class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;st
 题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
 解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
 错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
-更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != &#39;\0&#39; &amp;&amp; words2[idx] != &#39;\0&#39;)。
 AC代码：
-class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组 for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比 { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &amp;gt; 0) // cmp返回正数，前者比后者大 { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低 } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !'>
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&lt;string&gt;&amp; words, string order) { vector&lt;string&gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组 for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比 { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &gt; 0) // cmp返回正数，前者比后者大 { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &#39;a&#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低 } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != &#39;\0&#39; &amp;&amp; words2[idx] != &#39;\0&#39;) { &#43;&#43;idx; } // 循环结束，word1[idx] != words2[idx] // 分三种情况 if (words1[idx] == &#39;\0&#39;) // words1到达末尾 { if (words2[idx] == &#39;\0&#39;) return 0; else return -1; // word1 &lt; words2 } else if (words2[idx] == &#39;\0&#39;) // words2 到达末尾 { return 1; // word1 &gt; words2 } else // 出现不相等，比较两者字符的rank，越低的越小 return order_rank[words1[idx] - &#39;a&#39;] - order_rank[words2[idx] - &#39;a&#39;]; // words1[idx]的rank更小，返回负数 } }; '>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%94%99%E9%A2%98%E6%9C%AC-leetcode953.-%E9%AA%8C%E8%AF%81%E5%A4%96%E6%98%9F%E8%AF%AD%E8%AF%8D%E5%85%B8/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2021-01-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-12T00:00:00&#43;00:00'/>
@@ -46,9 +46,9 @@ class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;st
 题目分析：由题目给定字符的大小等级，依照此等级比较字符串大小。
 解题思路：定义一个数组order_rank[26]，给定某个字符c, order_rank[&#39;a&#39; - c]表示该字符在order中的位置。
 错误记录：程序第32行，原本写作：while (words1[idx] == words2[idx])，这样的写法无法满足两个字符串相等的情况（即两个字符串每个字符都相等，包括最后的\0符号也相等，产生了溢出，理论上循环将在字符串后的某个位置上停止。
-更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] != &#39;\0&#39; &amp;amp;&amp;amp; words2[idx] != &#39;\0&#39;)。
+更正：循环中判断两个字符的终止，改为while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != &#39;\0&#39; &amp;&amp; words2[idx] != &#39;\0&#39;)。
 AC代码：
-class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;string&amp;gt;&amp;amp; words, string order) { vector&amp;lt;string&amp;gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组 for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比 { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &amp;gt; 0) // cmp返回正数，前者比后者大 { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &amp;lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &amp;#39;a&amp;#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低 } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;amp;&amp;amp; words1[idx] !">
+class Solution { public: int order_rank[26]; bool isAlienSorted(vector&lt;string&gt;&amp; words, string order) { vector&lt;string&gt;::iterator ite; bool ret = true; set_rank(order); // 设置order_rank数组 for (ite = words.begin(); ite != words.end(); &#43;&#43;ite) // 两两对比 { if (ite != words.end() - 1) { if (cmp(*ite, *(ite &#43; 1)) &gt; 0) // cmp返回正数，前者比后者大 { ret = false; break; } } } return ret; } void set_rank(string order) { int idx = 0; for (idx = 0; idx &lt; 26; &#43;&#43;idx) { order_rank[order[idx] - &#39;a&#39;] = idx; // 得到每个字母的顺序，rank越小，出现越早，等级越低 } } int cmp(string words1, string words2) { int idx = 0; while (words1[idx] == words2[idx] &amp;&amp; words1[idx] != &#39;\0&#39; &amp;&amp; words2[idx] != &#39;\0&#39;) { &#43;&#43;idx; } // 循环结束，word1[idx] != words2[idx] // 分三种情况 if (words1[idx] == &#39;\0&#39;) // words1到达末尾 { if (words2[idx] == &#39;\0&#39;) return 0; else return -1; // word1 &lt; words2 } else if (words2[idx] == &#39;\0&#39;) // words2 到达末尾 { return 1; // word1 &gt; words2 } else // 出现不相等，比较两者字符的rank，越低的越小 return order_rank[words1[idx] - &#39;a&#39;] - order_rank[words2[idx] - &#39;a&#39;]; // words1[idx]的rank更小，返回负数 } }; ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -122,7 +122,7 @@ class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;st
                     
                     
                         
-                        <img src="/img/avatar_hu53eb95313f34f2c4eaf7d87a8aa930a8_16189_300x0_resize_q75_box.jpg" width="300"
+                        <img src="/img/avatar_hu1780871296191313796.jpg" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -542,14 +542,14 @@ class Solution { public: int order_rank[26]; bool isAlienSorted(vector&amp;lt;st
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 

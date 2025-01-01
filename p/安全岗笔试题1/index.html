@@ -1,7 +1,30 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='&lt;!doctype html&gt; &amp;quot;安全岗笔试题——1&amp;quot; 近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。 以下哪些说法是正确的？（） A、 iOS系统从iOS6开始引入kernel ASLR安全措施 B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎 C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用 D、 Android4.1 系统默认启用了内存ASLR 答案 ABD iOS系统也采用了安全引导链，C错误 以下哪个工具可以用来运行DDoS攻击？（） A、 菜刀 B、 WSI C、 Dosend D、 Chkrootkit 答案 C 中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。 以下哪些服务器曾被发现文件解析漏洞？（） A、 Apache B、 IIS C、 nginx D、 squid 答案 ABC A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。 C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。 squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。 以下哪几种工具可以对网站进行自动化Web漏洞扫描？（） A、 hackbar B、 AWVS C、 IBM appsacn D、 nmap 答案 BC hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。 黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现： C:\Users\test&amp;gt;ping www.baidu.com -n 1 正在 Pingwww.a.shifen.com [14.215.177.38] 具有32字节的数据： 请求超时'><title>安全岗笔试题——1</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='&lt;!doctype html&gt; &quot;安全岗笔试题——1&quot; 近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+答案 ABD iOS系统也采用了安全引导链，C错误 以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+答案 C 中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。 以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+答案 ABC A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。 C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&lt;=0.7.65,0.8&lt;=0.0.37。 squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。 以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar
+B、 AWVS
+C、 IBM appsacn
+D、 nmap
+答案 BC hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。 黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现：
+C:\Users\test&gt;ping www.baidu.com -n 1 正在 Pingwww.a.shifen.com [14.215.177.38] 具有32字节的数据： 请求超时
+'><title>安全岗笔试题——1</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/'>
 
@@ -25,12 +48,58 @@
 </script>
 
 <meta property='og:title' content='安全岗笔试题——1'>
-<meta property='og:description' content='&lt;!doctype html&gt; &amp;quot;安全岗笔试题——1&amp;quot; 近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。 以下哪些说法是正确的？（） A、 iOS系统从iOS6开始引入kernel ASLR安全措施 B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎 C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用 D、 Android4.1 系统默认启用了内存ASLR 答案 ABD iOS系统也采用了安全引导链，C错误 以下哪个工具可以用来运行DDoS攻击？（） A、 菜刀 B、 WSI C、 Dosend D、 Chkrootkit 答案 C 中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。 以下哪些服务器曾被发现文件解析漏洞？（） A、 Apache B、 IIS C、 nginx D、 squid 答案 ABC A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。 C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。 squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。 以下哪几种工具可以对网站进行自动化Web漏洞扫描？（） A、 hackbar B、 AWVS C、 IBM appsacn D、 nmap 答案 BC hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。 黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现： C:\Users\test&amp;gt;ping www.baidu.com -n 1 正在 Pingwww.a.shifen.com [14.215.177.38] 具有32字节的数据： 请求超时'>
+<meta property='og:description' content='&lt;!doctype html&gt; &quot;安全岗笔试题——1&quot; 近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+答案 ABD iOS系统也采用了安全引导链，C错误 以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+答案 C 中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。 以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+答案 ABC A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。 C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&lt;=0.7.65,0.8&lt;=0.0.37。 squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。 以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar
+B、 AWVS
+C、 IBM appsacn
+D、 nmap
+答案 BC hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。 黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现：
+C:\Users\test&gt;ping www.baidu.com -n 1 正在 Pingwww.a.shifen.com [14.215.177.38] 具有32字节的数据： 请求超时
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E5%AE%89%E5%85%A8%E5%B2%97%E7%AC%94%E8%AF%95%E9%A2%981/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='网络安全' /><meta property='article:published_time' content='2021-01-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-29T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="安全岗笔试题——1">
-<meta name="twitter:description" content="&lt;!doctype html&gt; &amp;quot;安全岗笔试题——1&amp;quot; 近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。 以下哪些说法是正确的？（） A、 iOS系统从iOS6开始引入kernel ASLR安全措施 B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎 C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用 D、 Android4.1 系统默认启用了内存ASLR 答案 ABD iOS系统也采用了安全引导链，C错误 以下哪个工具可以用来运行DDoS攻击？（） A、 菜刀 B、 WSI C、 Dosend D、 Chkrootkit 答案 C 中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。 以下哪些服务器曾被发现文件解析漏洞？（） A、 Apache B、 IIS C、 nginx D、 squid 答案 ABC A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。 C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&amp;lt;=0.7.65,0.8&amp;lt;=0.0.37。 squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。 以下哪几种工具可以对网站进行自动化Web漏洞扫描？（） A、 hackbar B、 AWVS C、 IBM appsacn D、 nmap 答案 BC hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。 黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现： C:\Users\test&amp;gt;ping www.baidu.com -n 1 正在 Pingwww.a.shifen.com [14.215.177.38] 具有32字节的数据： 请求超时">
+<meta name="twitter:description" content="&lt;!doctype html&gt; &quot;安全岗笔试题——1&quot; 近期准备安全岗实习的笔试，结果悲伤地证实了我的知识体系中还是存在很多漏洞，在此对我不够熟悉的题目进行记录。
+以下哪些说法是正确的？（）
+A、 iOS系统从iOS6开始引入kernel ASLR安全措施
+B、 主流的iPhone手机内置了AES和RSA硬件加速解密引擎
+C、 安卓系统采用了安全引导链（Secureboot Chain），而iOS系统则未采用
+D、 Android4.1 系统默认启用了内存ASLR
+答案 ABD iOS系统也采用了安全引导链，C错误 以下哪个工具可以用来运行DDoS攻击？（）
+A、 菜刀
+B、 WSI
+C、 Dosend
+D、 Chkrootkit
+答案 C 中国菜刀是一款专业的网站管理软件； WSI是PHP注入工具，具体可以参考这篇文章； Dosend是一款Linux发包工具，可以用来实现DDoS攻击； chkrootkit是用来检查rootkit的。 以下哪些服务器曾被发现文件解析漏洞？（）
+A、 Apache
+B、 IIS
+C、 nginx
+D、 squid
+答案 ABC A、Apache解析漏洞：该服务器从右到左判断解析文件，如果为不可识别解析，就继续往左判断。如shell.php.owf.rar，其中.owf和.rar是Apache不可解析的，就将此文件最终解析为shell.php B、IIS解析漏洞：一是IIS5.x/6.0中，网站下建立名为.asp/.asa的文件夹，其内的任何文件都被当成asp文件解析并执行；二是123.asp;.jpg会被解析为123.asp。 C、nginx解析漏洞：一是nginx默认Fast-CGI开启的情况下，黑客上传名为upupimage.jpg，内容为PHP代码的文件，然后访问upupimage.jpg/.php，在这个目录下就会生成一句话木马shell.php；二是在图片中嵌入PHP代码，然后通过访问xxx.jpg%00.php来执行其中的代码。影响版本0.5,0.6,0.7&lt;=0.7.65,0.8&lt;=0.0.37。 squid爆出来的更多是拒绝服务攻击。它是一个高效的Web缓存及代理程序，最初是为Unix平台开发的，现在也被移植到Linux和大多数的Unix类系统中，最新的Squid可以运行在Windows平台下。 以下哪几种工具可以对网站进行自动化Web漏洞扫描？（）
+A、 hackbar
+B、 AWVS
+C、 IBM appsacn
+D、 nmap
+答案 BC hackbar可以用来快速构建一个HTTP请求、编码解码base64等操作，不能自动化Web漏洞扫描；nmap是一款网络端口扫描工具，可以扫描各种端口及其服务甚至是系统漏洞检测。从它的NSE脚本可以看到它也可以进行Web漏洞扫描，但是需要复杂的配置命令，故不能自动化扫描。 黑客控制一台Windows服务器，发现IE浏览器使用了代理，可以访问外网，执行如下命令发现：
+C:\Users\test&gt;ping www.baidu.com -n 1 正在 Pingwww.a.shifen.com [14.215.177.38] 具有32字节的数据： 请求超时
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -104,7 +173,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu53eb95313f34f2c4eaf7d87a8aa930a8_16189_300x0_resize_q75_box.jpg" width="300"
+                        <img src="/img/avatar_hu1780871296191313796.jpg" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -651,14 +720,14 @@
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 

@@ -4,42 +4,30 @@
     <title>Pages on XR_G&#39;s Blog</title>
     <link>https://xrg.fj.cn/page/</link>
     <description>Recent content in Pages on XR_G&#39;s Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://xrg.fj.cn/page/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 09 Oct 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://xrg.fj.cn/page/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>归档</title>
       <link>https://xrg.fj.cn/archives/</link>
       <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://xrg.fj.cn/archives/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>关于我</title>
       <link>https://xrg.fj.cn/%E5%85%B3%E4%BA%8E%E6%88%91/</link>
       <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://xrg.fj.cn/%E5%85%B3%E4%BA%8E%E6%88%91/</guid>
-      <description>关于作者：
-XR_G，生长于闽南小镇，好交友，好骑行，好爬山，好羽球。
-永远好奇，永远向往文艺。
-此生惟愿有一团和气、两句歪诗、三两清茶、四季衣裳、五六好友，能闲看秋风，画船听雨，如此而已。
-你可以通过 xunrui_guo@qq.com联系我。
-关于本博客：
-初建于2020&amp;ndash;09-18，始于兴趣，不知所终。
-希望它成为我记录所学和所想的平台，也希望来访此站的有缘人能有所收获。</description>
+      <description>&lt;p&gt;关于作者：&lt;/p&gt;&#xA;&lt;p&gt;XR_G，生长于闽南小镇，好交友，好骑行，好爬山，好羽球。&lt;/p&gt;&#xA;&lt;p&gt;永远好奇，永远向往文艺。&lt;/p&gt;&#xA;&lt;p&gt;此生惟愿有一团和气、两句歪诗、三两清茶、四季衣裳、五六好友，能闲看秋风，画船听雨，如此而已。&lt;/p&gt;&#xA;&lt;p&gt;你可以通过 &lt;!-- raw HTML omitted --&gt;&lt;a class=&#34;link&#34; href=&#34;mailto:xunrui_guo@qq.com&#34; &gt;xunrui_guo@qq.com&lt;/a&gt;联系我。&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;关于本博客：&lt;/p&gt;&#xA;&lt;p&gt;初建于2020&amp;ndash;09-18，始于兴趣，不知所终。&lt;/p&gt;&#xA;&lt;p&gt;希望它成为我记录所学和所想的平台，也希望来访此站的有缘人能有所收获。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>搜索</title>
       <link>https://xrg.fj.cn/search/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>https://xrg.fj.cn/search/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

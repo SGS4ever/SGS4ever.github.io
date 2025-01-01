@@ -4,7 +4,9 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='较新版本的cpp容器支持一些 emplace 操作，比如 vector::empalce 和 map::emplace ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。
 不过 emplace 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 emplace 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。
 1 emplace左值——退化为拷贝 为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：
-class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } ~Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;dtor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj &amp;amp;operator=(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } Obj &amp;amp;operator=(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } void Echo() { std::cout &amp;lt;&amp;lt; &amp;#34;Hello world&amp;#34; &amp;lt;&amp;lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。'><title>C&#43;&#43;「emplace」的些许细节</title>
+class Obj { public: Obj() { std::cout &lt;&lt; &#34;ctor&#34; &lt;&lt; std::endl; } ~Obj() { std::cout &lt;&lt; &#34;dtor&#34; &lt;&lt; std::endl; } Obj(const Obj &amp;rhs) { std::cout &lt;&lt; &#34;copy ctor&#34; &lt;&lt; std::endl; } Obj(Obj &amp;&amp;rhs) { std::cout &lt;&lt; &#34;move ctor&#34; &lt;&lt; std::endl; } Obj &amp;operator=(const Obj &amp;rhs) { std::cout &lt;&lt; &#34;copy operator=&#34; &lt;&lt; std::endl; return *this; } Obj &amp;operator=(Obj &amp;&amp;rhs) { std::cout &lt;&lt; &#34;move operator=&#34; &lt;&lt; std::endl; return *this; } void Echo() { std::cout &lt;&lt; &#34;Hello world&#34; &lt;&lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。
+class Shelter { public: void Push(std::pair&lt;int, Obj&gt; item); void Dump(); private: std::multimap&lt;int, Obj&gt; mmp_; }; void Shelter::Push(std::pair&lt;int, Obj&gt; item) { std::cout &lt;&lt; &#34;Shelter::Push =========&gt;&#34; &lt;&lt; std::endl; mmp_.emplace(item); } void Shelter::Dump() { for (auto &amp;[k, v] : mmp_) { v.Echo(); } } 1.1 传值 上面给出的 Shelter 实现中， Push 参数按值传递。
+'><title>C&#43;&#43;「emplace」的些许细节</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/'>
 
@@ -31,7 +33,9 @@ class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &a
 <meta property='og:description' content='较新版本的cpp容器支持一些 emplace 操作，比如 vector::empalce 和 map::emplace ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。
 不过 emplace 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 emplace 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。
 1 emplace左值——退化为拷贝 为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：
-class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } ~Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;dtor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj &amp;amp;operator=(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } Obj &amp;amp;operator=(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } void Echo() { std::cout &amp;lt;&amp;lt; &amp;#34;Hello world&amp;#34; &amp;lt;&amp;lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。'>
+class Obj { public: Obj() { std::cout &lt;&lt; &#34;ctor&#34; &lt;&lt; std::endl; } ~Obj() { std::cout &lt;&lt; &#34;dtor&#34; &lt;&lt; std::endl; } Obj(const Obj &amp;rhs) { std::cout &lt;&lt; &#34;copy ctor&#34; &lt;&lt; std::endl; } Obj(Obj &amp;&amp;rhs) { std::cout &lt;&lt; &#34;move ctor&#34; &lt;&lt; std::endl; } Obj &amp;operator=(const Obj &amp;rhs) { std::cout &lt;&lt; &#34;copy operator=&#34; &lt;&lt; std::endl; return *this; } Obj &amp;operator=(Obj &amp;&amp;rhs) { std::cout &lt;&lt; &#34;move operator=&#34; &lt;&lt; std::endl; return *this; } void Echo() { std::cout &lt;&lt; &#34;Hello world&#34; &lt;&lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。
+class Shelter { public: void Push(std::pair&lt;int, Obj&gt; item); void Dump(); private: std::multimap&lt;int, Obj&gt; mmp_; }; void Shelter::Push(std::pair&lt;int, Obj&gt; item) { std::cout &lt;&lt; &#34;Shelter::Push =========&gt;&#34; &lt;&lt; std::endl; mmp_.emplace(item); } void Shelter::Dump() { for (auto &amp;[k, v] : mmp_) { v.Echo(); } } 1.1 传值 上面给出的 Shelter 实现中， Push 参数按值传递。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/c-emplace%E7%9A%84%E4%BA%9B%E8%AE%B8%E7%BB%86%E8%8A%82/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-09-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-09-17T00:00:00&#43;00:00'/>
@@ -39,7 +43,9 @@ class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &a
 <meta name="twitter:description" content="较新版本的cpp容器支持一些 emplace 操作，比如 vector::empalce 和 map::emplace ，其原地构造特性对于一些拷贝成本较高的对象容器来说着实吸引人。
 不过 emplace 动作有些时候会退化回拷贝，近期恰好有需求要用到拷贝成本高的对象，希望在它们的容器中善用 emplace 来节约开销，因此在业余时间浅做了一些实验，希望这些认知可以指导后续的实践。
 1 emplace左值——退化为拷贝 为了便于观察对象的移动/拷贝，简单实现一个对象（经典做法）：
-class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } ~Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;dtor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move ctor&amp;#34; &amp;lt;&amp;lt; std::endl; } Obj &amp;amp;operator=(const Obj &amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;copy operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } Obj &amp;amp;operator=(Obj &amp;amp;&amp;amp;rhs) { std::cout &amp;lt;&amp;lt; &amp;#34;move operator=&amp;#34; &amp;lt;&amp;lt; std::endl; return *this; } void Echo() { std::cout &amp;lt;&amp;lt; &amp;#34;Hello world&amp;#34; &amp;lt;&amp;lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。">
+class Obj { public: Obj() { std::cout &lt;&lt; &#34;ctor&#34; &lt;&lt; std::endl; } ~Obj() { std::cout &lt;&lt; &#34;dtor&#34; &lt;&lt; std::endl; } Obj(const Obj &amp;rhs) { std::cout &lt;&lt; &#34;copy ctor&#34; &lt;&lt; std::endl; } Obj(Obj &amp;&amp;rhs) { std::cout &lt;&lt; &#34;move ctor&#34; &lt;&lt; std::endl; } Obj &amp;operator=(const Obj &amp;rhs) { std::cout &lt;&lt; &#34;copy operator=&#34; &lt;&lt; std::endl; return *this; } Obj &amp;operator=(Obj &amp;&amp;rhs) { std::cout &lt;&lt; &#34;move operator=&#34; &lt;&lt; std::endl; return *this; } void Echo() { std::cout &lt;&lt; &#34;Hello world&#34; &lt;&lt; std::endl; } }; 对于通常的业务代码，容器一般是封装在某个类中的，在这里为了更加还原实际场景，简单设置一个 Shelter 类，其成员是一个 multimap ，提供一个对外的 Push 接口来往 multimap 中添加数据，然后在 Push 接口里调用 multimap::emplace 方法。
+class Shelter { public: void Push(std::pair&lt;int, Obj&gt; item); void Dump(); private: std::multimap&lt;int, Obj&gt; mmp_; }; void Shelter::Push(std::pair&lt;int, Obj&gt; item) { std::cout &lt;&lt; &#34;Shelter::Push =========&gt;&#34; &lt;&lt; std::endl; mmp_.emplace(item); } void Shelter::Dump() { for (auto &amp;[k, v] : mmp_) { v.Echo(); } } 1.1 传值 上面给出的 Shelter 实现中， Push 参数按值传递。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -506,14 +512,14 @@ class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &a
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -632,7 +638,7 @@ class Obj { public: Obj() { std::cout &amp;lt;&amp;lt; &amp;#34;ctor&amp;#34; &a
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

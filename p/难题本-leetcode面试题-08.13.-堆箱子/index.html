@@ -9,9 +9,10 @@
 输入： box = [[1, 1, 1], [2, 3, 4], [2, 6, 7], [3, 4, 5]] 输出： 10 数据范围
 箱子的数目不大于3000个。 分析 箱子有三个维度，一瞬间就让人想到了三维的DP。
 能否降低循环层数呢？我们注意到题目中所说的 下面箱子的宽度、高度和深度必须大于上面的箱子 ，那么，只需要根据任意一个维度进行排序，最终箱子叠起来的顺序就是排序后的顺序（正序或反序）。
-更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &amp;lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。
+更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。
 这样，我们就可以少考虑一个维度了。
-sort(box.begin(), box.end(), [](const vector&amp;lt;int&amp;gt;&amp;amp; a, const vector&amp;lt;int&amp;gt;&amp;amp; b) { return a[0] &amp;gt; b[0]; }); 接着，我们考虑深度和高度。'><title>难题本 | LeetCode面试题 08.13. 堆箱子</title>
+sort(box.begin(), box.end(), [](const vector&lt;int&gt;&amp; a, const vector&lt;int&gt;&amp; b) { return a[0] &gt; b[0]; }); 接着，我们考虑深度和高度。
+'><title>难题本 | LeetCode面试题 08.13. 堆箱子</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/'>
 
@@ -43,9 +44,10 @@ sort(box.begin(), box.end(), [](const vector&amp;lt;int&amp;gt;&amp;amp; a, cons
 输入： box = [[1, 1, 1], [2, 3, 4], [2, 6, 7], [3, 4, 5]] 输出： 10 数据范围
 箱子的数目不大于3000个。 分析 箱子有三个维度，一瞬间就让人想到了三维的DP。
 能否降低循环层数呢？我们注意到题目中所说的 下面箱子的宽度、高度和深度必须大于上面的箱子 ，那么，只需要根据任意一个维度进行排序，最终箱子叠起来的顺序就是排序后的顺序（正序或反序）。
-更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &amp;lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。
+更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。
 这样，我们就可以少考虑一个维度了。
-sort(box.begin(), box.end(), [](const vector&amp;lt;int&amp;gt;&amp;amp; a, const vector&amp;lt;int&amp;gt;&amp;amp; b) { return a[0] &amp;gt; b[0]; }); 接着，我们考虑深度和高度。'>
+sort(box.begin(), box.end(), [](const vector&lt;int&gt;&amp; a, const vector&lt;int&gt;&amp; b) { return a[0] &gt; b[0]; }); 接着，我们考虑深度和高度。
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode%E9%9D%A2%E8%AF%95%E9%A2%98-08.13.-%E5%A0%86%E7%AE%B1%E5%AD%90/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LeetCode' /><meta property='article:tag' content='难题本' /><meta property='article:published_time' content='2021-07-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-07-17T00:00:00&#43;00:00'/>
@@ -58,9 +60,10 @@ sort(box.begin(), box.end(), [](const vector&amp;lt;int&amp;gt;&amp;amp; a, cons
 输入： box = [[1, 1, 1], [2, 3, 4], [2, 6, 7], [3, 4, 5]] 输出： 10 数据范围
 箱子的数目不大于3000个。 分析 箱子有三个维度，一瞬间就让人想到了三维的DP。
 能否降低循环层数呢？我们注意到题目中所说的 下面箱子的宽度、高度和深度必须大于上面的箱子 ，那么，只需要根据任意一个维度进行排序，最终箱子叠起来的顺序就是排序后的顺序（正序或反序）。
-更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &amp;lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。
+更具体地说，假如我们以宽度 w 为参照进行降序排序，则当 i &lt; j 时，第 i 个箱子 一定 在第 j 个箱子下面（如果它们都被选中的话），因为第 i 个箱子的宽度更大。
 这样，我们就可以少考虑一个维度了。
-sort(box.begin(), box.end(), [](const vector&amp;lt;int&amp;gt;&amp;amp; a, const vector&amp;lt;int&amp;gt;&amp;amp; b) { return a[0] &amp;gt; b[0]; }); 接着，我们考虑深度和高度。">
+sort(box.begin(), box.end(), [](const vector&lt;int&gt;&amp; a, const vector&lt;int&gt;&amp; b) { return a[0] &gt; b[0]; }); 接着，我们考虑深度和高度。
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -504,14 +507,14 @@ sort(box.begin(), box.end(), [](const vector&amp;lt;int&amp;gt;&amp;amp; a, cons
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -627,7 +630,7 @@ sort(box.begin(), box.end(), [](const vector&amp;lt;int&amp;gt;&amp;amp; a, cons
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

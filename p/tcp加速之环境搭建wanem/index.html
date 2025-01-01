@@ -7,14 +7,11 @@
 简介 WANem基于iptables和tc（Traffic Control）实现，可以实现对网络延迟、丢包率、抖动、噪音等的模拟，使用者可以简单地设定并复现出某个特定的网络环境，因而逐渐替代软件仿真成为新一代的网络测试床。与之具备类似概念的工具有微软的Network Emulator for Windows Toolkit（NEWT）、Linux 2.6自带的Netem等。事实上，此前说的tc（Traffic Control）就是用来控制Netem工作的，因此可以理解为WANem是基于Netem所构建。
 安装与访问 WANem类似于一台虚拟机，可以直接 下载 iso文件，并在VMWare中安装。Linux类型选择 其他Linux 64位 即可。
 启动之后，可以使用DHCP获取IP，或者手动配置IP；虚拟机会要求你设置口令，你可以使用用户名 perc 和你设置的口令来远程登录到系统上。
-成功启动之后，会出现 WANemControl@PERC&amp;gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
-一般来说，你现在就可以在另一台机器的浏览器上使用 http://&amp;lt;WANem IP&amp;gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
+成功启动之后，会出现 WANemControl@PERC&gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
+一般来说，你现在就可以在另一台机器的浏览器上使用 http://&lt;WANem IP&gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
 成功访问WANem 配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
 点击导航栏中的 Advanced Mode 进入高级配置，我们看到如下的界面：
-Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
-可以指定我们的规则的适用范围，如果你只希望你配置的规则在两台特定主机之间生效，那么就填写下图红框框出的一行，否则保留原样即可。
-规则 使用 保存我们设置好的规则，即刻开始使用它吧。
-我们的两台实验机器分别是 CentOS7 192.168.213.128 和 Ubuntu 192.168.213.129 ，WANem是 192.168.213.130 。'><title>TCP加速之环境搭建（WANem）</title>
+Advanced Mode '><title>TCP加速之环境搭建（WANem）</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/'>
 
@@ -44,14 +41,11 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 简介 WANem基于iptables和tc（Traffic Control）实现，可以实现对网络延迟、丢包率、抖动、噪音等的模拟，使用者可以简单地设定并复现出某个特定的网络环境，因而逐渐替代软件仿真成为新一代的网络测试床。与之具备类似概念的工具有微软的Network Emulator for Windows Toolkit（NEWT）、Linux 2.6自带的Netem等。事实上，此前说的tc（Traffic Control）就是用来控制Netem工作的，因此可以理解为WANem是基于Netem所构建。
 安装与访问 WANem类似于一台虚拟机，可以直接 下载 iso文件，并在VMWare中安装。Linux类型选择 其他Linux 64位 即可。
 启动之后，可以使用DHCP获取IP，或者手动配置IP；虚拟机会要求你设置口令，你可以使用用户名 perc 和你设置的口令来远程登录到系统上。
-成功启动之后，会出现 WANemControl@PERC&amp;gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
-一般来说，你现在就可以在另一台机器的浏览器上使用 http://&amp;lt;WANem IP&amp;gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
+成功启动之后，会出现 WANemControl@PERC&gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
+一般来说，你现在就可以在另一台机器的浏览器上使用 http://&lt;WANem IP&gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
 成功访问WANem 配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
 点击导航栏中的 Advanced Mode 进入高级配置，我们看到如下的界面：
-Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
-可以指定我们的规则的适用范围，如果你只希望你配置的规则在两台特定主机之间生效，那么就填写下图红框框出的一行，否则保留原样即可。
-规则 使用 保存我们设置好的规则，即刻开始使用它吧。
-我们的两台实验机器分别是 CentOS7 192.168.213.128 和 Ubuntu 192.168.213.129 ，WANem是 192.168.213.130 。'>
+Advanced Mode '>
 <meta property='og:url' content='https://xrg.fj.cn/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2021-11-23T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-11-23T00:00:00&#43;00:00'/>
@@ -62,14 +56,11 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 简介 WANem基于iptables和tc（Traffic Control）实现，可以实现对网络延迟、丢包率、抖动、噪音等的模拟，使用者可以简单地设定并复现出某个特定的网络环境，因而逐渐替代软件仿真成为新一代的网络测试床。与之具备类似概念的工具有微软的Network Emulator for Windows Toolkit（NEWT）、Linux 2.6自带的Netem等。事实上，此前说的tc（Traffic Control）就是用来控制Netem工作的，因此可以理解为WANem是基于Netem所构建。
 安装与访问 WANem类似于一台虚拟机，可以直接 下载 iso文件，并在VMWare中安装。Linux类型选择 其他Linux 64位 即可。
 启动之后，可以使用DHCP获取IP，或者手动配置IP；虚拟机会要求你设置口令，你可以使用用户名 perc 和你设置的口令来远程登录到系统上。
-成功启动之后，会出现 WANemControl@PERC&amp;gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
-一般来说，你现在就可以在另一台机器的浏览器上使用 http://&amp;lt;WANem IP&amp;gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
+成功启动之后，会出现 WANemControl@PERC&gt; 的命令行提示符，使用 help 命令可以查看该命令行支持的命令。
+一般来说，你现在就可以在另一台机器的浏览器上使用 http://&lt;WANem IP&gt;/WANem 来访问控制界面了（注意URL大小写）。假如你不知道WANem的IP地址，则使用 exit2shell 命令来返回到Linux命令行中，使用我们熟悉的 ip addr 命令就可以看到WANem的IP。
 成功访问WANem 配置规则 首次进入控制界面时，我们看到的是WANem的 Basic Mode ，这个模式下，我们可以配置 带宽 和 延迟 。
 点击导航栏中的 Advanced Mode 进入高级配置，我们看到如下的界面：
-Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此不多费口舌解释。在上图中，我们已经写好了一条”延迟100ms、随机丢包率20%“的规则。
-可以指定我们的规则的适用范围，如果你只希望你配置的规则在两台特定主机之间生效，那么就填写下图红框框出的一行，否则保留原样即可。
-规则 使用 保存我们设置好的规则，即刻开始使用它吧。
-我们的两台实验机器分别是 CentOS7 192.168.213.128 和 Ubuntu 192.168.213.129 ，WANem是 192.168.213.130 。">
+Advanced Mode ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -219,7 +210,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/1.png"
 			width="1668"
 			height="666"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/1_hu2abdb91cec41d31a539a418334b40e96_79804_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/1_hu2abdb91cec41d31a539a418334b40e96_79804_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/1_hu7404484509399747497.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/1_hu3848007734253178292.png 1024w"
 			loading="lazy"
 			alt="成功访问WANem">
 	</a>
@@ -241,7 +232,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/2.png"
 			width="1670"
 			height="697"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/2_hu3e4a35e782f937f4ad1e31873b2eb881_134922_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/2_hu3e4a35e782f937f4ad1e31873b2eb881_134922_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/2_hu14173777976511409815.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/2_hu8687160397923716579.png 1024w"
 			loading="lazy"
 			alt="Advanced Mode">
 	</a>
@@ -262,7 +253,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/3.png"
 			width="1668"
 			height="717"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/3_hua3293251cc07afe14a590ef882a846a2_147039_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/3_hua3293251cc07afe14a590ef882a846a2_147039_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/3_hu12431261687198244508.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/3_hu12624305583476048549.png 1024w"
 			loading="lazy"
 			alt="规则">
 	</a>
@@ -286,7 +277,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/4.png"
 			width="592"
 			height="127"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/4_hu35454ba9e332e2be5e7ecafb3ad61220_24071_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/4_hu35454ba9e332e2be5e7ecafb3ad61220_24071_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/4_hu12366105382116593464.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/4_hu14717533571833347598.png 1024w"
 			loading="lazy"
 			alt="iperf server">
 	</a>
@@ -306,7 +297,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/5.png"
 			width="872"
 			height="365"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/5_hu2b81cdaaac7316496f7499dcbc935241_66962_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/5_hu2b81cdaaac7316496f7499dcbc935241_66962_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/5_hu4954541798417303031.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/5_hu16886475467384521292.png 1024w"
 			loading="lazy"
 			alt="iperf client">
 	</a>
@@ -326,7 +317,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/6.png"
 			width="724"
 			height="342"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/6_huacdc08dbb124254c7a4219b4faef25a8_56939_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/6_huacdc08dbb124254c7a4219b4faef25a8_56939_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/6_hu9644919801231263769.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/6_hu9980552367762601009.png 1024w"
 			loading="lazy"
 			alt="添加路由">
 	</a>
@@ -346,7 +337,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/7.png"
 			width="782"
 			height="362"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/7_hu45672577cc023296b3b6718607ccdbf6_62197_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/7_hu45672577cc023296b3b6718607ccdbf6_62197_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/7_hu2897845608941741128.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/7_hu662169747063905790.png 1024w"
 			loading="lazy"
 			alt="iperf client">
 	</a>
@@ -367,7 +358,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
 		<img src="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/8.png"
 			width="834"
 			height="365"
-			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/8_hucac49da705cf6cb48241acf3db7fd1e5_69545_480x0_resize_box_3.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/8_hucac49da705cf6cb48241acf3db7fd1e5_69545_1024x0_resize_box_3.png 1024w"
+			srcset="/p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/8_hu1983749790550364316.png 480w, /p/tcp%E5%8A%A0%E9%80%9F%E4%B9%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAwanem/8_hu13158322337251557730.png 1024w"
 			loading="lazy"
 			alt="iperf UDP">
 	</a>
@@ -568,14 +559,14 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -692,7 +683,7 @@ Advanced Mode 界面上已经将各项指标都标识得比较清楚了，因此
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

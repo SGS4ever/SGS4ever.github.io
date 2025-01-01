@@ -15,7 +15,8 @@ authpriv.* /var/log/secure
 规则的组成 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
-#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages! *.'><title>syslog机制简述</title>
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&#39;t log private authentication messages! *.info;mail.none;authpriv.none;cron.none /var/log/messages # The authpriv file has restricted access. authpriv.* /var/log/secure # Log all the mail messages in one place. mail.* -/var/log/maillog # Log cron stuff cron.* /var/log/cron # Everybody gets emergency messages *.emerg :omusrmsg:* facility 规则的第一部分facility指的是消息源设备的类型。syslog体系中已经将Linux中的大部分进程进行了合理的分类，例如与内核消息相关的 kern 类型、与授权信息相关的 auth/authpriv 类型等等，官方为我们总结出了如下的表格：
+'><title>syslog机制简述</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/'>
 
@@ -53,7 +54,8 @@ authpriv.* /var/log/secure
 规则的组成 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
-#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages! *.'>
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&#39;t log private authentication messages! *.info;mail.none;authpriv.none;cron.none /var/log/messages # The authpriv file has restricted access. authpriv.* /var/log/secure # Log all the mail messages in one place. mail.* -/var/log/maillog # Log cron stuff cron.* /var/log/cron # Everybody gets emergency messages *.emerg :omusrmsg:* facility 规则的第一部分facility指的是消息源设备的类型。syslog体系中已经将Linux中的大部分进程进行了合理的分类，例如与内核消息相关的 kern 类型、与授权信息相关的 auth/authpriv 类型等等，官方为我们总结出了如下的表格：
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2021-07-03T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-07-03T00:00:00&#43;00:00'/>
@@ -72,7 +74,8 @@ authpriv.* /var/log/secure
 规则的组成 第一个部分是facility（设备类型），第二个部分是priority（优先级/严重性），第三个部分是action（动作）。
 你应该能够想到，这一条规则就描述了上文所说的对消息进行分类分级处理的过程！
 仔细看看配置文件吧，每一条规则都是如此的简单而实用：
-#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&amp;#39;t log private authentication messages! *.">
+#### RULES #### # Log all kernel messages to the console. # Logging much else clutters up the screen. #kern.* /dev/console # Log anything (except mail) of level info or higher. # Don&#39;t log private authentication messages! *.info;mail.none;authpriv.none;cron.none /var/log/messages # The authpriv file has restricted access. authpriv.* /var/log/secure # Log all the mail messages in one place. mail.* -/var/log/maillog # Log cron stuff cron.* /var/log/cron # Everybody gets emergency messages *.emerg :omusrmsg:* facility 规则的第一部分facility指的是消息源设备的类型。syslog体系中已经将Linux中的大部分进程进行了合理的分类，例如与内核消息相关的 kern 类型、与授权信息相关的 auth/authpriv 类型等等，官方为我们总结出了如下的表格：
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -219,7 +222,7 @@ authpriv.* /var/log/secure
 		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1.png"
 			width="1335"
 			height="658"
-			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu2a132ba86368ae48d7ca4b3177802c28_63856_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu2a132ba86368ae48d7ca4b3177802c28_63856_1024x0_resize_box_3.png 1024w"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu7883374867173539920.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/1_hu12547852286366588959.png 1024w"
 			loading="lazy"
 			alt="syslog处理分类分级处理信息">
 	</a>
@@ -243,7 +246,7 @@ authpriv.* /var/log/secure
 		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2.png"
 			width="730"
 			height="125"
-			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hua64d7bced7b5541c9155f4c6c1515890_127055_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hua64d7bced7b5541c9155f4c6c1515890_127055_1024x0_resize_box_3.png 1024w"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hu16577264644277157641.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/2_hu6818802664199606356.png 1024w"
 			loading="lazy"
 			alt="规则的组成">
 	</a>
@@ -289,7 +292,7 @@ authpriv.* /var/log/secure
 		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3.png"
 			width="649"
 			height="911"
-			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hudf588dce9af02c203636c1dbc4296b2c_146200_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hudf588dce9af02c203636c1dbc4296b2c_146200_1024x0_resize_box_3.png 1024w"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hu3009461595612708153.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/3_hu1973385587011742568.png 1024w"
 			loading="lazy"
 			alt="facilities">
 	</a>
@@ -310,7 +313,7 @@ authpriv.* /var/log/secure
 		<img src="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4.png"
 			width="657"
 			height="371"
-			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu7b6910958e27d1c2c0ef4e6ffcbc3a51_86172_480x0_resize_box_3.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu7b6910958e27d1c2c0ef4e6ffcbc3a51_86172_1024x0_resize_box_3.png 1024w"
+			srcset="/p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu10269370290965402264.png 480w, /p/syslog%E6%9C%BA%E5%88%B6%E7%AE%80%E8%BF%B0/4_hu97371876809132829.png 1024w"
 			loading="lazy"
 			alt="Severities">
 	</a>
@@ -376,42 +379,42 @@ authpriv.* /var/log/secure
 </span></span><span class="line"><span class="cl">···
 </span></span></code></pre></div><p>rsyslog给出了一些模板中可用的属性，此处列出几个常用的属性，详细信息可以查看参考资料[2]。</p>
 <table>
-<thead>
-<tr>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>%timestamp%</td>
-<td>时间戳，格式为默认为 MMM dd HH:mm:ss</td>
-</tr>
-<tr>
-<td>%syslogtag%</td>
-<td>消息的标签，一般为 进程名[进程ID] 的形式，如 sshd[1234]</td>
-</tr>
-<tr>
-<td>%msg%</td>
-<td>原程序发送的消息内容，这一字段由原始进程自行定义，一般各不相同</td>
-</tr>
-<tr>
-<td>%fromhost-ip%</td>
-<td>一般用于远程接收日志的服务器上，获取日志发送方的IP</td>
-</tr>
-<tr>
-<td>%syslogfacility-text%</td>
-<td>以文字形式打印出facility</td>
-</tr>
-<tr>
-<td>%syslogseverity-text%</td>
-<td>以文字形式打印出severity</td>
-</tr>
-<tr>
-<td>%hostname%</td>
-<td>主机名</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">属性</th>
+          <th style="text-align: left">含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">%timestamp%</td>
+          <td style="text-align: left">时间戳，格式为默认为 MMM dd HH:mm:ss</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">%syslogtag%</td>
+          <td style="text-align: left">消息的标签，一般为 进程名[进程ID] 的形式，如 sshd[1234]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">%msg%</td>
+          <td style="text-align: left">原程序发送的消息内容，这一字段由原始进程自行定义，一般各不相同</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">%fromhost-ip%</td>
+          <td style="text-align: left">一般用于远程接收日志的服务器上，获取日志发送方的IP</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">%syslogfacility-text%</td>
+          <td style="text-align: left">以文字形式打印出facility</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">%syslogseverity-text%</td>
+          <td style="text-align: left">以文字形式打印出severity</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">%hostname%</td>
+          <td style="text-align: left">主机名</td>
+      </tr>
+  </tbody>
 </table>
 <p>我们需要为自定义的模板命名，当然，不能与系统默认保留的一些模板重名，比如下面几个系统自带的模板：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">template<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;RSYSLOG_TraditionalForwardFormat&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;string&#34;</span>
@@ -611,14 +614,14 @@ authpriv.* /var/log/secure
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -746,7 +749,7 @@ authpriv.* /var/log/secure
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

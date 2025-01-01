@@ -4,10 +4,9 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='近来与VSCode打交道颇多，偶然认识了其 Tasks 特性，很觉得对效率提升大有裨益，浅做一记，以备后用。
 所谓 Tasks ，实际上就是一组快捷命令的组合，将我们常用的操作整理为一个集合，一键式执行，可以极大地减少手动的命令输入和记忆成本。
 在VSCode工作区根目录 .vscode 文件夹下创建 tasks.json 文件，写入第一个快捷指令：
-tasks.json file location { // See https://go.microsoft.com/fwlink/?LinkId=733558 // for the documentation about the tasks.json format &amp;#34;version&amp;#34;: &amp;#34;2.0.0&amp;#34;, &amp;#34;tasks&amp;#34;: [ { &amp;#34;label&amp;#34;: &amp;#34;Run tests&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;shell&amp;#34;, &amp;#34;command&amp;#34;: &amp;#34;echo &amp;#39;Hello world&amp;#39;&amp;#34;, &amp;#34;group&amp;#34;: &amp;#34;test&amp;#34;, &amp;#34;presentation&amp;#34;: { &amp;#34;reveal&amp;#34;: &amp;#34;always&amp;#34;, &amp;#34;panel&amp;#34;: &amp;#34;new&amp;#34; } } ] } 从菜单栏【Terminal】&amp;ndash;【Run task】手动打开任务栏（或自己绑定快捷键）：
+tasks.json file location { // See https://go.microsoft.com/fwlink/?LinkId=733558 // for the documentation about the tasks.json format &#34;version&#34;: &#34;2.0.0&#34;, &#34;tasks&#34;: [ { &#34;label&#34;: &#34;Run tests&#34;, &#34;type&#34;: &#34;shell&#34;, &#34;command&#34;: &#34;echo &#39;Hello world&#39;&#34;, &#34;group&#34;: &#34;test&#34;, &#34;presentation&#34;: { &#34;reveal&#34;: &#34;always&#34;, &#34;panel&#34;: &#34;new&#34; } } ] } 从菜单栏【Terminal】&ndash;【Run task】手动打开任务栏（或自己绑定快捷键）：
 run task 运行！
-task result 实际场景：一键编译 见到了SHELL语句的自动执行后，很容易就能在实际生产中用上这个特性，毕竟，SHELL语句本身是支持分隔符的（ ; ），即使对 Tasks 的高端用法没什么了解，直接把一堆命令拼到一起，把 task 当快捷键用，也足以覆盖很多的生产场景了。
-例如，我打开了一个小项目，其中只有一份源文件和一份CMake文件，希望在这个项目根目录下创建一个 build 目录，并且自动完成 cmake 和 make ，那么我会写一个这样的 task ：'><title>VSCode tasks简介</title>
+task result '><title>VSCode tasks简介</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/vscode-tasks%E7%AE%80%E4%BB%8B/'>
 
@@ -34,10 +33,9 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 <meta property='og:description' content='近来与VSCode打交道颇多，偶然认识了其 Tasks 特性，很觉得对效率提升大有裨益，浅做一记，以备后用。
 所谓 Tasks ，实际上就是一组快捷命令的组合，将我们常用的操作整理为一个集合，一键式执行，可以极大地减少手动的命令输入和记忆成本。
 在VSCode工作区根目录 .vscode 文件夹下创建 tasks.json 文件，写入第一个快捷指令：
-tasks.json file location { // See https://go.microsoft.com/fwlink/?LinkId=733558 // for the documentation about the tasks.json format &amp;#34;version&amp;#34;: &amp;#34;2.0.0&amp;#34;, &amp;#34;tasks&amp;#34;: [ { &amp;#34;label&amp;#34;: &amp;#34;Run tests&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;shell&amp;#34;, &amp;#34;command&amp;#34;: &amp;#34;echo &amp;#39;Hello world&amp;#39;&amp;#34;, &amp;#34;group&amp;#34;: &amp;#34;test&amp;#34;, &amp;#34;presentation&amp;#34;: { &amp;#34;reveal&amp;#34;: &amp;#34;always&amp;#34;, &amp;#34;panel&amp;#34;: &amp;#34;new&amp;#34; } } ] } 从菜单栏【Terminal】&amp;ndash;【Run task】手动打开任务栏（或自己绑定快捷键）：
+tasks.json file location { // See https://go.microsoft.com/fwlink/?LinkId=733558 // for the documentation about the tasks.json format &#34;version&#34;: &#34;2.0.0&#34;, &#34;tasks&#34;: [ { &#34;label&#34;: &#34;Run tests&#34;, &#34;type&#34;: &#34;shell&#34;, &#34;command&#34;: &#34;echo &#39;Hello world&#39;&#34;, &#34;group&#34;: &#34;test&#34;, &#34;presentation&#34;: { &#34;reveal&#34;: &#34;always&#34;, &#34;panel&#34;: &#34;new&#34; } } ] } 从菜单栏【Terminal】&ndash;【Run task】手动打开任务栏（或自己绑定快捷键）：
 run task 运行！
-task result 实际场景：一键编译 见到了SHELL语句的自动执行后，很容易就能在实际生产中用上这个特性，毕竟，SHELL语句本身是支持分隔符的（ ; ），即使对 Tasks 的高端用法没什么了解，直接把一堆命令拼到一起，把 task 当快捷键用，也足以覆盖很多的生产场景了。
-例如，我打开了一个小项目，其中只有一份源文件和一份CMake文件，希望在这个项目根目录下创建一个 build 目录，并且自动完成 cmake 和 make ，那么我会写一个这样的 task ：'>
+task result '>
 <meta property='og:url' content='https://xrg.fj.cn/p/vscode-tasks%E7%AE%80%E4%BB%8B/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-08-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-08-27T00:00:00&#43;00:00'/>
@@ -45,10 +43,9 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 <meta name="twitter:description" content="近来与VSCode打交道颇多，偶然认识了其 Tasks 特性，很觉得对效率提升大有裨益，浅做一记，以备后用。
 所谓 Tasks ，实际上就是一组快捷命令的组合，将我们常用的操作整理为一个集合，一键式执行，可以极大地减少手动的命令输入和记忆成本。
 在VSCode工作区根目录 .vscode 文件夹下创建 tasks.json 文件，写入第一个快捷指令：
-tasks.json file location { // See https://go.microsoft.com/fwlink/?LinkId=733558 // for the documentation about the tasks.json format &amp;#34;version&amp;#34;: &amp;#34;2.0.0&amp;#34;, &amp;#34;tasks&amp;#34;: [ { &amp;#34;label&amp;#34;: &amp;#34;Run tests&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;shell&amp;#34;, &amp;#34;command&amp;#34;: &amp;#34;echo &amp;#39;Hello world&amp;#39;&amp;#34;, &amp;#34;group&amp;#34;: &amp;#34;test&amp;#34;, &amp;#34;presentation&amp;#34;: { &amp;#34;reveal&amp;#34;: &amp;#34;always&amp;#34;, &amp;#34;panel&amp;#34;: &amp;#34;new&amp;#34; } } ] } 从菜单栏【Terminal】&amp;ndash;【Run task】手动打开任务栏（或自己绑定快捷键）：
+tasks.json file location { // See https://go.microsoft.com/fwlink/?LinkId=733558 // for the documentation about the tasks.json format &#34;version&#34;: &#34;2.0.0&#34;, &#34;tasks&#34;: [ { &#34;label&#34;: &#34;Run tests&#34;, &#34;type&#34;: &#34;shell&#34;, &#34;command&#34;: &#34;echo &#39;Hello world&#39;&#34;, &#34;group&#34;: &#34;test&#34;, &#34;presentation&#34;: { &#34;reveal&#34;: &#34;always&#34;, &#34;panel&#34;: &#34;new&#34; } } ] } 从菜单栏【Terminal】&ndash;【Run task】手动打开任务栏（或自己绑定快捷键）：
 run task 运行！
-task result 实际场景：一键编译 见到了SHELL语句的自动执行后，很容易就能在实际生产中用上这个特性，毕竟，SHELL语句本身是支持分隔符的（ ; ），即使对 Tasks 的高端用法没什么了解，直接把一堆命令拼到一起，把 task 当快捷键用，也足以覆盖很多的生产场景了。
-例如，我打开了一个小项目，其中只有一份源文件和一份CMake文件，希望在这个项目根目录下创建一个 build 目录，并且自动完成 cmake 和 make ，那么我会写一个这样的 task ：">
+task result ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -190,7 +187,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 		<img src="/p/vscode-tasks%E7%AE%80%E4%BB%8B/1.png"
 			width="305"
 			height="95"
-			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/1_hu070e53f75e2554958c134ddaeb18005a_8894_480x0_resize_box_3.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/1_hu070e53f75e2554958c134ddaeb18005a_8894_1024x0_resize_box_3.png 1024w"
+			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/1_hu1842593037623388316.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/1_hu10387253341257391332.png 1024w"
 			loading="lazy"
 			alt="tasks.json file location">
 	</a>
@@ -227,7 +224,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 		<img src="/p/vscode-tasks%E7%AE%80%E4%BB%8B/2.png"
 			width="863"
 			height="310"
-			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/2_huff9dd3431b7c675f52e28a2e3b775a8c_30741_480x0_resize_box_3.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/2_huff9dd3431b7c675f52e28a2e3b775a8c_30741_1024x0_resize_box_3.png 1024w"
+			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/2_hu6981416865545357727.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/2_hu12280926541951993275.png 1024w"
 			loading="lazy"
 			alt="run task">
 	</a>
@@ -247,7 +244,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 		<img src="/p/vscode-tasks%E7%AE%80%E4%BB%8B/3.png"
 			width="1969"
 			height="180"
-			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/3_hu3a37058e91e64b7d7dffbb97f8432e49_29962_480x0_resize_box_3.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/3_hu3a37058e91e64b7d7dffbb97f8432e49_29962_1024x0_resize_box_3.png 1024w"
+			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/3_hu14544947482160190816.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/3_hu2393465021458125559.png 1024w"
 			loading="lazy"
 			alt="task result">
 	</a>
@@ -285,7 +282,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 		<img src="/p/vscode-tasks%E7%AE%80%E4%BB%8B/4.png"
 			width="915"
 			height="857"
-			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/4_hu9922ca24fd7b9d079e95d504f54f1a26_166904_480x0_resize_box_3.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/4_hu9922ca24fd7b9d079e95d504f54f1a26_166904_1024x0_resize_box_3.png 1024w"
+			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/4_hu3133489330412753905.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/4_hu6278175248728431046.png 1024w"
 			loading="lazy"
 			alt="compile project task result">
 	</a>
@@ -305,7 +302,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 		<img src="/p/vscode-tasks%E7%AE%80%E4%BB%8B/5.png"
 			width="407"
 			height="284"
-			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/5_hu08a8becac1b04b936a214f41bc179901_23974_480x0_resize_box_3.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/5_hu08a8becac1b04b936a214f41bc179901_23974_1024x0_resize_box_3.png 1024w"
+			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/5_hu6871616267596959338.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/5_hu3138751418749655549.png 1024w"
 			loading="lazy"
 			alt="folder">
 	</a>
@@ -359,7 +356,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 		<img src="/p/vscode-tasks%E7%AE%80%E4%BB%8B/6.png"
 			width="868"
 			height="89"
-			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/6_hu2faf04c051e19d4c5e680876e21cbad1_14336_480x0_resize_box_3.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/6_hu2faf04c051e19d4c5e680876e21cbad1_14336_1024x0_resize_box_3.png 1024w"
+			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/6_hu8347033255586918196.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/6_hu16160318155917706406.png 1024w"
 			loading="lazy"
 			alt="workdir is required">
 	</a>
@@ -379,7 +376,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
 		<img src="/p/vscode-tasks%E7%AE%80%E4%BB%8B/7.png"
 			width="911"
 			height="804"
-			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/7_hu872cffb2008bf15290ead46bd4905211_162392_480x0_resize_box_3.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/7_hu872cffb2008bf15290ead46bd4905211_162392_1024x0_resize_box_3.png 1024w"
+			srcset="/p/vscode-tasks%E7%AE%80%E4%BB%8B/7_hu12633909013190511318.png 480w, /p/vscode-tasks%E7%AE%80%E4%BB%8B/7_hu17507721486640540280.png 1024w"
 			loading="lazy"
 			alt="workdir is used in task">
 	</a>
@@ -578,14 +575,14 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -701,7 +698,7 @@ task result 实际场景：一键编译 见到了SHELL语句的自动执行后�
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

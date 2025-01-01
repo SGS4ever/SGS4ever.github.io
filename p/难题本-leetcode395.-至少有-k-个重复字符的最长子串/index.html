@@ -4,18 +4,19 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='题目链接： https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/
 题目 给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
 示例1
-输入： s = &amp;ldquo;aaabb&amp;rdquo;, k = 3
+输入： s = &ldquo;aaabb&rdquo;, k = 3
 输出： 3
 解释： 最长子串为“aaa”，其中”a“重复了3次
 示例2
 输入： s = “ababbc”, k = 2
 输出： 5
 数据范围
-1 &amp;lt;= s.length &amp;lt;= 104 s 仅由小写英文字母组成 1 &amp;lt;= k &amp;lt;= 105 分析 没有任何思路，参照题解的分治法将此题解出，稍作记录。
+1 &lt;= s.length &lt;= 104 s 仅由小写英文字母组成 1 &lt;= k &lt;= 105 分析 没有任何思路，参照题解的分治法将此题解出，稍作记录。
 首先，对于 s 中的所有字符，我们可以统计它们出现的次数，对于所有出现次数小于 k 的字符，答案中一定不包含它。
 则我们只需要考虑这些字符之外的子串。我们可以遍历整个字符串，当某个字符出现次数小于 k 的时候，将其位置记录下来；我们凭借这些位点，可以将原字符串 s 分割成许多个子串，然后按照相同的办法去处理这些子串即可。
 按照这样的分析，整个题目可以使用递归的写法来实现分治算法。
-AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.'><title>难题本 | LeetCode395. 至少有 K 个重复字符的最长子串</title>
+AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.size() &lt; k) return 0; // 统计频数 vector&lt;int&gt; cnt(26, 0); for (auto ch : s) cnt[ch - &#39;a&#39;]&#43;&#43;; // 记录分割位点 vector&lt;int&gt; split; for (int i = 0; i &lt; s.size(); i&#43;&#43;) { if (cnt[s[i] - &#39;a&#39;] &lt; k) { split.push_back(i); } } if (split.size() == 0) // 无需分割 return s.size(); int start = 0; // 当前子串的起点 int res = 0; // 最终答案 for (auto pos : split) { // string.substr(pos, len) // 从位置pos开始的连续len个字符 res = max(res, longestSubstring(s.substr(start, pos - start), k)); start = pos &#43; 1; } if (start != s.size() - 1) // 对于最后一个子串 { res = max(res, longestSubstring(s.substr(start, s.size() - start), k)); } return res; } }; 参考资料 [1] 力扣官方题解.至少有K个重复字符的最长子串[EB/OL].2021-02-27
+'><title>难题本 | LeetCode395. 至少有 K 个重复字符的最长子串</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395.-%E8%87%B3%E5%B0%91%E6%9C%89-k-%E4%B8%AA%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/'>
 
@@ -42,18 +43,19 @@ AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.
 <meta property='og:description' content='题目链接： https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/
 题目 给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
 示例1
-输入： s = &amp;ldquo;aaabb&amp;rdquo;, k = 3
+输入： s = &ldquo;aaabb&rdquo;, k = 3
 输出： 3
 解释： 最长子串为“aaa”，其中”a“重复了3次
 示例2
 输入： s = “ababbc”, k = 2
 输出： 5
 数据范围
-1 &amp;lt;= s.length &amp;lt;= 104 s 仅由小写英文字母组成 1 &amp;lt;= k &amp;lt;= 105 分析 没有任何思路，参照题解的分治法将此题解出，稍作记录。
+1 &lt;= s.length &lt;= 104 s 仅由小写英文字母组成 1 &lt;= k &lt;= 105 分析 没有任何思路，参照题解的分治法将此题解出，稍作记录。
 首先，对于 s 中的所有字符，我们可以统计它们出现的次数，对于所有出现次数小于 k 的字符，答案中一定不包含它。
 则我们只需要考虑这些字符之外的子串。我们可以遍历整个字符串，当某个字符出现次数小于 k 的时候，将其位置记录下来；我们凭借这些位点，可以将原字符串 s 分割成许多个子串，然后按照相同的办法去处理这些子串即可。
 按照这样的分析，整个题目可以使用递归的写法来实现分治算法。
-AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.'>
+AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.size() &lt; k) return 0; // 统计频数 vector&lt;int&gt; cnt(26, 0); for (auto ch : s) cnt[ch - &#39;a&#39;]&#43;&#43;; // 记录分割位点 vector&lt;int&gt; split; for (int i = 0; i &lt; s.size(); i&#43;&#43;) { if (cnt[s[i] - &#39;a&#39;] &lt; k) { split.push_back(i); } } if (split.size() == 0) // 无需分割 return s.size(); int start = 0; // 当前子串的起点 int res = 0; // 最终答案 for (auto pos : split) { // string.substr(pos, len) // 从位置pos开始的连续len个字符 res = max(res, longestSubstring(s.substr(start, pos - start), k)); start = pos &#43; 1; } if (start != s.size() - 1) // 对于最后一个子串 { res = max(res, longestSubstring(s.substr(start, s.size() - start), k)); } return res; } }; 参考资料 [1] 力扣官方题解.至少有K个重复字符的最长子串[EB/OL].2021-02-27
+'>
 <meta property='og:url' content='https://xrg.fj.cn/p/%E9%9A%BE%E9%A2%98%E6%9C%AC-leetcode395.-%E8%87%B3%E5%B0%91%E6%9C%89-k-%E4%B8%AA%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='难题本' /><meta property='article:tag' content='LeetCode' /><meta property='article:published_time' content='2021-02-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-02-27T00:00:00&#43;00:00'/>
@@ -61,18 +63,19 @@ AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.
 <meta name="twitter:description" content="题目链接： https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/
 题目 给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
 示例1
-输入： s = &amp;ldquo;aaabb&amp;rdquo;, k = 3
+输入： s = &ldquo;aaabb&rdquo;, k = 3
 输出： 3
 解释： 最长子串为“aaa”，其中”a“重复了3次
 示例2
 输入： s = “ababbc”, k = 2
 输出： 5
 数据范围
-1 &amp;lt;= s.length &amp;lt;= 104 s 仅由小写英文字母组成 1 &amp;lt;= k &amp;lt;= 105 分析 没有任何思路，参照题解的分治法将此题解出，稍作记录。
+1 &lt;= s.length &lt;= 104 s 仅由小写英文字母组成 1 &lt;= k &lt;= 105 分析 没有任何思路，参照题解的分治法将此题解出，稍作记录。
 首先，对于 s 中的所有字符，我们可以统计它们出现的次数，对于所有出现次数小于 k 的字符，答案中一定不包含它。
 则我们只需要考虑这些字符之外的子串。我们可以遍历整个字符串，当某个字符出现次数小于 k 的时候，将其位置记录下来；我们凭借这些位点，可以将原字符串 s 分割成许多个子串，然后按照相同的办法去处理这些子串即可。
 按照这样的分析，整个题目可以使用递归的写法来实现分治算法。
-AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.">
+AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.size() &lt; k) return 0; // 统计频数 vector&lt;int&gt; cnt(26, 0); for (auto ch : s) cnt[ch - &#39;a&#39;]&#43;&#43;; // 记录分割位点 vector&lt;int&gt; split; for (int i = 0; i &lt; s.size(); i&#43;&#43;) { if (cnt[s[i] - &#39;a&#39;] &lt; k) { split.push_back(i); } } if (split.size() == 0) // 无需分割 return s.size(); int start = 0; // 当前子串的起点 int res = 0; // 最终答案 for (auto pos : split) { // string.substr(pos, len) // 从位置pos开始的连续len个字符 res = max(res, longestSubstring(s.substr(start, pos - start), k)); start = pos &#43; 1; } if (start != s.size() - 1) // 对于最后一个子串 { res = max(res, longestSubstring(s.substr(start, s.size() - start), k)); } return res; } }; 参考资料 [1] 力扣官方题解.至少有K个重复字符的最长子串[EB/OL].2021-02-27
+">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -473,14 +476,14 @@ AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -594,7 +597,7 @@ AC代码 class Solution { public: int longestSubstring(string s, int k) { if (s.
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     

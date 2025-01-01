@@ -3,7 +3,9 @@
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 位域 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。
 0 何为位域 位域（ bit-field ，后文均用 bit-field ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 比特位 ，临近的 bit-field 成员因此有可能在内存上共用或横跨字节 1 。
-struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &amp;lt;&amp;lt; &amp;#34;sizeof Foo: &amp;#34; &amp;lt;&amp;lt; sizeof(Foo) &amp;lt;&amp;lt; std::endl &amp;lt;&amp;lt; &amp;#34;sizeof Bar: &amp;#34; &amp;lt;&amp;lt; sizeof(Bar) &amp;lt;&amp;lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：'><title>C&#43;&#43;位域（bit-field）简介</title>
+struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &lt;&lt; &#34;sizeof Foo: &#34; &lt;&lt; sizeof(Foo) &lt;&lt; std::endl &lt;&lt; &#34;sizeof Bar: &#34; &lt;&lt; sizeof(Bar) &lt;&lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：
+Foo bit-field 写法下的 Bar 所占用的内存结构如下：
+Bar '><title>C&#43;&#43;位域（bit-field）简介</title>
 
 <link rel='canonical' href='https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/'>
 
@@ -29,14 +31,18 @@ struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field 
 <meta property='og:title' content='C&#43;&#43;位域（bit-field）简介'>
 <meta property='og:description' content='近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 位域 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。
 0 何为位域 位域（ bit-field ，后文均用 bit-field ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 比特位 ，临近的 bit-field 成员因此有可能在内存上共用或横跨字节 1 。
-struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &amp;lt;&amp;lt; &amp;#34;sizeof Foo: &amp;#34; &amp;lt;&amp;lt; sizeof(Foo) &amp;lt;&amp;lt; std::endl &amp;lt;&amp;lt; &amp;#34;sizeof Bar: &amp;#34; &amp;lt;&amp;lt; sizeof(Bar) &amp;lt;&amp;lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：'>
+struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &lt;&lt; &#34;sizeof Foo: &#34; &lt;&lt; sizeof(Foo) &lt;&lt; std::endl &lt;&lt; &#34;sizeof Bar: &#34; &lt;&lt; sizeof(Bar) &lt;&lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：
+Foo bit-field 写法下的 Bar 所占用的内存结构如下：
+Bar '>
 <meta property='og:url' content='https://xrg.fj.cn/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/'>
 <meta property='og:site_name' content='XR_G&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2023-08-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-08-27T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="C&#43;&#43;位域（bit-field）简介">
 <meta name="twitter:description" content="近来修改业务代码的Codecheck，其中有几处移位运算，本来是想着屏蔽检查的，后来被组内大佬建议改用 位域 进行改写，登时觉得惭愧：我所了解的知识竟不至于修改一处小小的代码规范检查？后浅作研究，方觉得这个东西倒也不甚玄妙，此处不予置评，文末方说。
 0 何为位域 位域（ bit-field ，后文均用 bit-field ）是一种特殊的类定义写法，其显式指明了一个类成员所占用的 比特位 ，临近的 bit-field 成员因此有可能在内存上共用或横跨字节 1 。
-struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &amp;lt;&amp;lt; &amp;#34;sizeof Foo: &amp;#34; &amp;lt;&amp;lt; sizeof(Foo) &amp;lt;&amp;lt; std::endl &amp;lt;&amp;lt; &amp;#34;sizeof Bar: &amp;#34; &amp;lt;&amp;lt; sizeof(Bar) &amp;lt;&amp;lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：">
+struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field unsigned int x : 23; unsigned int y : 9; }; int main() { std::cout &lt;&lt; &#34;sizeof Foo: &#34; &lt;&lt; sizeof(Foo) &lt;&lt; std::endl &lt;&lt; &#34;sizeof Bar: &#34; &lt;&lt; sizeof(Bar) &lt;&lt; std::endl; } /** output: sizeof Foo: 8 sizeof Bar: 4 */ 我们已知 unsigned int 大小是 4 字节，则 Foo 所占用的内存结构如下：
+Foo bit-field 写法下的 Bar 所占用的内存结构如下：
+Bar ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -199,7 +205,7 @@ struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field 
 		<img src="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1.png"
 			width="857"
 			height="218"
-			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1_hu57632a3e7723a7580dbb016eef280929_18766_480x0_resize_box_3.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1_hu57632a3e7723a7580dbb016eef280929_18766_1024x0_resize_box_3.png 1024w"
+			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1_hu18258092256824163982.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/1_hu6645466794642715992.png 1024w"
 			loading="lazy"
 			alt="Foo">
 	</a>
@@ -219,7 +225,7 @@ struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field 
 		<img src="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2.png"
 			width="1489"
 			height="287"
-			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2_hu3ceb512fb850b2dca412218b54bf9eff_29003_480x0_resize_box_3.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2_hu3ceb512fb850b2dca412218b54bf9eff_29003_1024x0_resize_box_3.png 1024w"
+			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2_hu14238918705793442322.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/2_hu9422436444157033066.png 1024w"
 			loading="lazy"
 			alt="Bar">
 	</a>
@@ -391,7 +397,7 @@ struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field 
 		<img src="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3.png"
 			width="1139"
 			height="610"
-			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3_hu1fe22cbcc4dcd4a6ca436ef7eb414729_129755_480x0_resize_box_3.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3_hu1fe22cbcc4dcd4a6ca436ef7eb414729_129755_1024x0_resize_box_3.png 1024w"
+			srcset="/p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3_hu6233349541454794023.png 480w, /p/c-%E4%BD%8D%E5%9F%9Fbit-field%E7%AE%80%E4%BB%8B/3_hu15976527916898672351.png 1024w"
 			loading="lazy"
 			alt="gdb print &foo">
 	</a>
@@ -718,14 +724,14 @@ struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field 
         
             2020 - 
         
-        2024 XR_G&#39;s Blog
+        2025 XR_G&#39;s Blog
     </section>
     
     <section class="powerby">
         
             有朋自远方来，不亦说乎？ <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+         <br />
+        
     </section>
 </footer>
 
@@ -850,7 +856,7 @@ struct Foo { unsigned int a; unsigned int b; }; struct Bar { // using bit field 
             
             
             <a id="back-to-top" href="#">
-                <img src="/img/top_hu3510154d40dce46e1c35729c8e5fbe52_10490_40x0_resize_box_3.png" />
+                <img src="/img/top_hu10958439986251666570.png" />
             </a>
         </aside>
     
