@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='许久未在博客写技术向的文章了，虽说此篇也算不得非常技术，好歹沾点边，免得这博客成为个人荒废的见证。
+按照《计算机图形学编程（使用OpenGL和C&#43;&#43;）》这本书对OpenGL的学习终于触及了一些难啃的部分，这一周前几天花了点时间来领会球体的实现，今日又花了不少时间来领会环面，颇觉得环面的实现还是比球体难一些。值得一记。
+一些背景 这本书的坐标系都是右手坐标系，z轴指向屏幕外 y轴 ↑ | | O——→ x轴（右） / / z轴（指向屏幕外） 环面的内径和外径的定义如下图 总体思路是微积分，把环面视为一个位于xOy平面上的圆绕y轴旋转出来的，每次旋转微小的角度，形成环面。 方法1、旋转 教程上的方法是基于旋转，悟到之后是不算难。
+对于 Torus 类，提供一些常规的方法，供主函数使用：
+#include &lt;cmath&gt; #include &lt;glm/glm.hpp&gt; #include &lt;vector&gt; class Torus { public: /** * @brief Construct a new Torus object * @param outerRadius Outer radius of the torus * @param innerRadius Inner radius of the torus * @param precision Precision of the torus */ Torus(float outerRadius, float innerRadius, uint16_t precision); size_t GetIndicesCount() const; size_t GetVerticesCount() const; /** @brief Get the indices of the torus */ std::vector&lt;uint16_t&gt; GetIndices() const; /** @brief Get the normals of the torus */ std::vector&lt;glm::vec3&gt; GetNormals() const; /** @brief Get the texture coordinates of the torus */ std::vector&lt;glm::vec2&gt; GetTexCoords() const; /** @brief Get the vertices of the torus */ std::vector&lt;glm::vec3&gt; GetVertices() const; /** @brief Get the tangents of the torus (direction: y axis) */ std::vector&lt;glm::vec3&gt; GetSTangents() const; /** @brief Get the tangents of the torus (direction: z axis) */ std::vector&lt;glm::vec3&gt; GetTTangents() const; private: uint16_t mPrecision{0U}; float mOuterRadius{.0f}; float mInnerRadius{.0f}; std::vector&lt;uint16_t&gt; mIndices; std::vector&lt;glm::vec3&gt; mNormals; std::vector&lt;glm::vec2&gt; mTexCoords; std::vector&lt;glm::vec3&gt; mVertices; std::vector&lt;glm::vec3&gt; mSTangents; std::vector&lt;glm::vec3&gt; mTTangents; private: void Build(); }; 旋转法构造环面的思路：
+'><title>【OpenGL】旋转法实现环面</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【OpenGL】旋转法实现环面'>
+<meta property='og:description' content='许久未在博客写技术向的文章了，虽说此篇也算不得非常技术，好歹沾点边，免得这博客成为个人荒废的见证。
+按照《计算机图形学编程（使用OpenGL和C&#43;&#43;）》这本书对OpenGL的学习终于触及了一些难啃的部分，这一周前几天花了点时间来领会球体的实现，今日又花了不少时间来领会环面，颇觉得环面的实现还是比球体难一些。值得一记。
+一些背景 这本书的坐标系都是右手坐标系，z轴指向屏幕外 y轴 ↑ | | O——→ x轴（右） / / z轴（指向屏幕外） 环面的内径和外径的定义如下图 总体思路是微积分，把环面视为一个位于xOy平面上的圆绕y轴旋转出来的，每次旋转微小的角度，形成环面。 方法1、旋转 教程上的方法是基于旋转，悟到之后是不算难。
+对于 Torus 类，提供一些常规的方法，供主函数使用：
+#include &lt;cmath&gt; #include &lt;glm/glm.hpp&gt; #include &lt;vector&gt; class Torus { public: /** * @brief Construct a new Torus object * @param outerRadius Outer radius of the torus * @param innerRadius Inner radius of the torus * @param precision Precision of the torus */ Torus(float outerRadius, float innerRadius, uint16_t precision); size_t GetIndicesCount() const; size_t GetVerticesCount() const; /** @brief Get the indices of the torus */ std::vector&lt;uint16_t&gt; GetIndices() const; /** @brief Get the normals of the torus */ std::vector&lt;glm::vec3&gt; GetNormals() const; /** @brief Get the texture coordinates of the torus */ std::vector&lt;glm::vec2&gt; GetTexCoords() const; /** @brief Get the vertices of the torus */ std::vector&lt;glm::vec3&gt; GetVertices() const; /** @brief Get the tangents of the torus (direction: y axis) */ std::vector&lt;glm::vec3&gt; GetSTangents() const; /** @brief Get the tangents of the torus (direction: z axis) */ std::vector&lt;glm::vec3&gt; GetTTangents() const; private: uint16_t mPrecision{0U}; float mOuterRadius{.0f}; float mInnerRadius{.0f}; std::vector&lt;uint16_t&gt; mIndices; std::vector&lt;glm::vec3&gt; mNormals; std::vector&lt;glm::vec2&gt; mTexCoords; std::vector&lt;glm::vec3&gt; mVertices; std::vector&lt;glm::vec3&gt; mSTangents; std::vector&lt;glm::vec3&gt; mTTangents; private: void Build(); }; 旋转法构造环面的思路：
+'>
+<meta property='og:url' content='https://xrg.fj.cn/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2025-08-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-08-10T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【OpenGL】旋转法实现环面">
+<meta name="twitter:description" content="许久未在博客写技术向的文章了，虽说此篇也算不得非常技术，好歹沾点边，免得这博客成为个人荒废的见证。
+按照《计算机图形学编程（使用OpenGL和C&#43;&#43;）》这本书对OpenGL的学习终于触及了一些难啃的部分，这一周前几天花了点时间来领会球体的实现，今日又花了不少时间来领会环面，颇觉得环面的实现还是比球体难一些。值得一记。
+一些背景 这本书的坐标系都是右手坐标系，z轴指向屏幕外 y轴 ↑ | | O——→ x轴（右） / / z轴（指向屏幕外） 环面的内径和外径的定义如下图 总体思路是微积分，把环面视为一个位于xOy平面上的圆绕y轴旋转出来的，每次旋转微小的角度，形成环面。 方法1、旋转 教程上的方法是基于旋转，悟到之后是不算难。
+对于 Torus 类，提供一些常规的方法，供主函数使用：
+#include &lt;cmath&gt; #include &lt;glm/glm.hpp&gt; #include &lt;vector&gt; class Torus { public: /** * @brief Construct a new Torus object * @param outerRadius Outer radius of the torus * @param innerRadius Inner radius of the torus * @param precision Precision of the torus */ Torus(float outerRadius, float innerRadius, uint16_t precision); size_t GetIndicesCount() const; size_t GetVerticesCount() const; /** @brief Get the indices of the torus */ std::vector&lt;uint16_t&gt; GetIndices() const; /** @brief Get the normals of the torus */ std::vector&lt;glm::vec3&gt; GetNormals() const; /** @brief Get the texture coordinates of the torus */ std::vector&lt;glm::vec2&gt; GetTexCoords() const; /** @brief Get the vertices of the torus */ std::vector&lt;glm::vec3&gt; GetVertices() const; /** @brief Get the tangents of the torus (direction: y axis) */ std::vector&lt;glm::vec3&gt; GetSTangents() const; /** @brief Get the tangents of the torus (direction: z axis) */ std::vector&lt;glm::vec3&gt; GetTTangents() const; private: uint16_t mPrecision{0U}; float mOuterRadius{.0f}; float mInnerRadius{.0f}; std::vector&lt;uint16_t&gt; mIndices; std::vector&lt;glm::vec3&gt; mNormals; std::vector&lt;glm::vec2&gt; mTexCoords; std::vector&lt;glm::vec3&gt; mVertices; std::vector&lt;glm::vec3&gt; mSTangents; std::vector&lt;glm::vec3&gt; mTTangents; private: void Build(); }; 旋转法构造环面的思路：
+">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E6%8A%80%E6%9C%AF/" >
+                技术
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/">【OpenGL】旋转法实现环面</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 10, 2025</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>许久未在博客写技术向的文章了，虽说此篇也算不得非常技术，好歹沾点边，免得这博客成为个人荒废的见证。</p>
+<p>按照《计算机图形学编程（使用OpenGL和C++）》这本书对OpenGL的学习终于触及了一些难啃的部分，这一周前几天花了点时间来领会球体的实现，今日又花了不少时间来领会环面，颇觉得环面的实现还是比球体难一些。值得一记。</p>
+<h3 id="一些背景">一些背景</h3>
+<ol>
+<li>这本书的坐标系都是右手坐标系，z轴指向屏幕外</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">          y轴  
+</span></span><span class="line"><span class="cl">           ↑  
+</span></span><span class="line"><span class="cl">           |  
+</span></span><span class="line"><span class="cl">           |  
+</span></span><span class="line"><span class="cl">           O——→ x轴（右）  
+</span></span><span class="line"><span class="cl">          /  
+</span></span><span class="line"><span class="cl">         /  
+</span></span><span class="line"><span class="cl">        z轴（指向屏幕外）
+</span></span></code></pre></div><ol start="2">
+<li>环面的内径和外径的定义如下图</li>
+</ol>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 283; 
+			flex-basis: 681px"
+	>
+	<a href="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/1.png" data-size="2490x877">
+		<img src="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/1.png"
+			width="2490"
+			height="877"
+			srcset="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/1_hu8032348720925827265.png 480w, /p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/1_hu10085851724247408597.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ol start="3">
+<li>总体思路是微积分，把环面视为一个位于xOy平面上的圆绕y轴旋转出来的，每次旋转微小的角度，形成环面。</li>
+</ol>
+<h3 id="方法1旋转">方法1、旋转</h3>
+<p>教程上的方法是基于旋转，悟到之后是不算难。</p>
+<p>对于 <code>Torus</code> 类，提供一些常规的方法，供主函数使用：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;glm/glm.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Torus</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief Construct a new Torus object
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param outerRadius Outer radius of the torus
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param innerRadius Inner radius of the torus
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param precision Precision of the torus
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Torus</span><span class="p">(</span><span class="kt">float</span> <span class="n">outerRadius</span><span class="p">,</span> <span class="kt">float</span> <span class="n">innerRadius</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">precision</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="nf">GetIndicesCount</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="nf">GetVerticesCount</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/** @brief Get the indices of the torus */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint16_t</span><span class="o">&gt;</span> <span class="n">GetIndices</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/** @brief Get the normals of the torus */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">GetNormals</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/** @brief Get the texture coordinates of the torus */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span> <span class="n">GetTexCoords</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/** @brief Get the vertices of the torus */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">GetVertices</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/** @brief Get the tangents of the torus (direction: y axis) */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">GetSTangents</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/** @brief Get the tangents of the torus (direction: z axis) */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">GetTTangents</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint16_t</span> <span class="n">mPrecision</span><span class="p">{</span><span class="mi">0U</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">mOuterRadius</span><span class="p">{</span><span class="mf">.0f</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">mInnerRadius</span><span class="p">{</span><span class="mf">.0f</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint16_t</span><span class="o">&gt;</span> <span class="n">mIndices</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">mNormals</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span> <span class="n">mTexCoords</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">mVertices</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">mSTangents</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">mTTangents</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>旋转法构造环面的思路：</p>
+<ol>
+<li>构建第0个环，位于XOY平面，它是由位于原点的圆平移内径距离得到的。原点上的圆的采样点本身又由 <code>(outerRadius，0，0)</code> 绕z轴旋转得到。因此，对于精度 <code>mPrecision</code> 的环，第 <code>i</code> 个顶点就是 <code>(outerRadius，0，0)</code> 先绕z轴旋转 <code>angle</code> 、再向外平移 <code>innerRadius</code> 得到，其中<code>angle</code> 就是 <code>i * 2π/mPrecision</code> 。</li>
+</ol>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 127; 
+			flex-basis: 305px"
+	>
+	<a href="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/2.png" data-size="376x295">
+		<img src="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/2.png"
+			width="376"
+			height="295"
+			srcset="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/2_hu18078749216065732742.png 480w, /p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/2_hu413337020295101016.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ol start="2">
+<li>
+<p>切向量随便找两条，按照教程上采用旋转后的y轴和z轴，相乘得到法向量。目前这些向量没啥用。</p>
+</li>
+<li>
+<p>对于纹理，这里的思路是把纹理水平伸展贴到环面上，类似于把一张长条形的包装纸贴到甜甜圈上，其中用包装纸短边包裹柱体。因此，对于XOY平面的纹理，只有y坐标需要赋值（根据采样精度来取点），x坐标是 <code>0</code> 。</p>
+</li>
+</ol>
+<p>综上，第一个环如下构造：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0f</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glm</span><span class="o">::</span><span class="n">mat4</span> <span class="n">rMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">rotate</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="n">angle</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span> <span class="c1">// 沿z轴转
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span> <span class="n">point</span> <span class="o">=</span> <span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mOuterRadius</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mVertices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">point</span> <span class="o">+</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">mInnerRadius</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">));</span> <span class="c1">// 旋转后平移，得出XOY平面上的圆的采样点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 纹理坐标
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mTexCoords</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 切向量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mTTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mSTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 法向量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mNormals</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">mTTangents</span><span class="p">.</span><span class="n">back</span><span class="p">(),</span> <span class="n">mSTangents</span><span class="p">.</span><span class="n">back</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>对于第2~n个环，实际就是把第一个环沿y轴旋转，采样精度是 <code>mPrecision</code> 的情况下，每此旋转 <code>2π/mPrecision</code> 。切向量和法向量都和顶点一样直接拿第一个环的数据旋转。</p>
+<p>纹理，要从x方向采样，因此纹理的x坐标每次增加 <code>1/mPrecision</code> 。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 第2~n个环，沿y轴旋转第一个环得出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">ring</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">ring</span> <span class="o">&lt;=</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">ring</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">theta</span> <span class="o">=</span> <span class="mf">2.0f</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">*</span> <span class="n">ring</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glm</span><span class="o">::</span><span class="n">mat4</span> <span class="n">rMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">rotate</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="n">theta</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 第 ring 个环上第 i 个顶点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 直接旋转第0个环的顶点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mVertices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mVertices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">1.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 纹理水平展开
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mTexCoords</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 切向量和法向量都直接旋转
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mSTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mSTangents</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mTTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mTTangents</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mNormals</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mNormals</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>顶点索引，是指第 <code>i</code> 个三角形的三个顶点分别取用哪些点。本书的思路是取相邻环上的四个点，构成两个三角形。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 181; 
+			flex-basis: 435px"
+	>
+	<a href="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/3.png" data-size="425x234">
+		<img src="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/3.png"
+			width="425"
+			height="234"
+			srcset="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/3_hu9348145144653037813.png 480w, /p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/3_hu9713832858409662750.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<blockquote>
+<p>这里的竖线可以理解为某个圆环的 <strong>侧视</strong> ，环上的一点 <code>i</code> 和它的邻点 <code>i + 1</code> ；</p>
+<p>隔壁环上与点 <code>i</code> 处于同一水平线的一点，一定与当前的点 <code>i</code> 隔了 <code>precision + 1</code> 个点（因为每个环采样了 <code>precision + 1</code> 个点），因此是 <code>i + precision + 1</code> 和它的邻点 <code>i + precision + 2</code> 。</p>
+</blockquote>
+<p>综上所述，按照旋转法构建的环面，核心代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Torus</span><span class="o">::</span><span class="n">Build</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 第一个环，XOY平面，构建第 i 个顶点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0f</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glm</span><span class="o">::</span><span class="n">mat4</span> <span class="n">rMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">rotate</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="n">angle</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span> <span class="c1">// 沿z轴转
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span> <span class="n">point</span> <span class="o">=</span> <span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mOuterRadius</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mVertices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">point</span> <span class="o">+</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">mInnerRadius</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">));</span> <span class="c1">// 旋转后平移，得出XOY平面上的圆的采样点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 纹理坐标
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mTexCoords</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 切向量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mTTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mSTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 法向量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mNormals</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">mTTangents</span><span class="p">.</span><span class="n">back</span><span class="p">(),</span> <span class="n">mSTangents</span><span class="p">.</span><span class="n">back</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 第2~n个环，沿y轴旋转第一个环得出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">ring</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">ring</span> <span class="o">&lt;=</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">ring</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="n">theta</span> <span class="o">=</span> <span class="mf">2.0f</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">pi</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">*</span> <span class="n">ring</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glm</span><span class="o">::</span><span class="n">mat4</span> <span class="n">rMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">rotate</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="n">theta</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 第 ring 个环上第 i 个顶点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 直接旋转第0个环的顶点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">mVertices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mVertices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">1.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 纹理水平展开
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">mTexCoords</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="n">mPrecision</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 切向量和法向量都直接旋转
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">mSTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mSTangents</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mTTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mTTangents</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mNormals</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">mNormals</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">mPrecision</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">uint16_t</span> <span class="n">first</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="n">mPrecision</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">uint16_t</span> <span class="n">second</span> <span class="o">=</span> <span class="n">first</span> <span class="o">+</span> <span class="n">mPrecision</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mIndices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mIndices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">second</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mIndices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">mIndices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">second</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mIndices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">second</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mIndices</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>而 <code>main.cpp</code> 中，初始化时就把环面的顶点数据传入VBO，其中索引数据通过 <code>GL_ELEMENT_ARRAY_BUFFER</code> 标识。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Torus</span> <span class="n">torus</span> <span class="p">{</span> <span class="mf">0.5f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mi">48U</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setupVertices</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">vertices</span> <span class="o">=</span> <span class="n">torus</span><span class="p">.</span><span class="n">GetVertices</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">normals</span> <span class="o">=</span> <span class="n">torus</span><span class="p">.</span><span class="n">GetNormals</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">texCoords</span> <span class="o">=</span> <span class="n">torus</span><span class="p">.</span><span class="n">GetTexCoords</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">torus</span><span class="p">.</span><span class="n">GetIndices</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 先生成并绑定VAO和VBO
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vao</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">vao</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glGenBuffers</span><span class="p">(</span><span class="n">numVBOs</span><span class="p">,</span> <span class="n">vbo</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 填充顶点位置数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">vertexData</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vertexData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vertex</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vertexData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vertex</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vertexData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vertex</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vbo</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vertexData</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="n">vertexData</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 填充纹理坐标数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">texCoordData</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">texCoord</span> <span class="p">:</span> <span class="n">texCoords</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">texCoordData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">texCoord</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">texCoordData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">texCoord</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vbo</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">texCoordData</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="n">texCoordData</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 填充法线数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">normalData</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">normal</span> <span class="p">:</span> <span class="n">normals</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">normalData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">normal</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">normalData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">normal</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">normalData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">normal</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vbo</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">normalData</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="n">normalData</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 填充索引
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vbo</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint16_t</span><span class="p">),</span> <span class="n">indices</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 96; 
+			flex-basis: 232px"
+	>
+	<a href="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/4.gif" data-size="608x628">
+		<img src="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/4.gif"
+			width="608"
+			height="628"
+			srcset="/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/4_hu7570607091485387943.gif 480w, /p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/4_hu6876963954625829056.gif 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h3 id="todo方法2数学">【TODO】方法2、数学</h3>
+<p>yeah，环面和球面一样，也是有数学表达式的，感觉会比先构造第一个环、再旋转出第2~n个环优雅一些，不过可能要再考虑一下切向量和法向量怎么求得。todo……</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2025 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一些背景">一些背景</a></li>
+    <li><a href="#方法1旋转">方法1、旋转</a></li>
+    <li><a href="#todo方法2数学">【TODO】方法2、数学</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu10958439986251666570.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
