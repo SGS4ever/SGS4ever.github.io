@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=' reference: 《计算机图形学编程（使用OpenGL和C&#43;&#43;）》
+1 光照模型 1.1 光源 书中介绍的ADS光照模型：
+A——环境光反射（Ambient Reflection）：模拟低级光照，影响场景中所有物体。
+D——漫反射（Diffuse Reflection）：根据光线的入射角度调整物体亮度。
+S——镜面反射（Specular Reflection）：展示物体的光泽，通过在物体表面上，光线直接地反射到我们的眼睛的位置，策略性地放置适当大小的高光来实现。
+一个光源对物体的影响，可以体现在这三个反射。例如要描述一道红光，它的声明可以是：
+// RGBA std::array&lt;float, 4&gt; redLightAmbient { 0.1f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightDiffuse { 1.0f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightSpecular { 1.0f, .0f, .0f, 1.0f }; 这表明这道光对于环境光有微小的贡献（ 0.1 ）；而当它照到物体上时，为漫反射和镜面反射分别提供RGBA为 { 1.0f, .0f, .0f, 1.0f } 的光强，用于最终的颜色计算。
+反射与光的入射角有关。这里只先考虑一个 位置光 ，它是位于3D场景下某个坐标的点光源，对于一个物体上的不同顶点，这个点光源发出的光入射到这些顶点的角度不同，因此产生不同的反射效果。位置 (5, 2, -3) 处的红色点光源，描述如下：
+// RGBA std::array&lt;float, 4&gt; redLightAmbient { 0.1f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightDiffuse { 1.0f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightSpecular { 1.0f, .0f, .0f, 1.0f }; // position std::array&lt;float, 3&gt; redLightPosition { 5.0f, 2.0f, -3.0f }; 1.2 材质 一个物体最终的光照着色效果，由光源和物体本身的材质决定。光源主要描述光的颜色和位置，而材质描述物体接受光照后反射的效果。
+在ADS模型下，物体的材质也围绕这三种反射来描述。
+光源加在物体上的环境光、漫反射光、镜面光分别体现出物体材质上的三种不同反射，它们的建模策略如下：
+环境光：直接用环境光加在物体上的光强乘以材质本身对环境光的反射参数即可。 漫反射光：与光源提供的漫反射光强、材质的漫反射参数、入射角（反射角）有关。随着入射角变大，反射出来的光会减弱，当入射角的余弦值变为负（大于90°或小于-90°），反射出来的光是 0 。 镜面光：与光源提供的镜面光强、材质的镜面反射参数、入射角（反射角）、观察方向有关。镜面光虽然不会随着入射角变大而变弱，但是会随着相机与反射光的夹角变大而变弱。 镜面光 对于镜面反射，不同物体的 光泽度 又不同，随着光泽度的增加，镜面反射的现象应该变显著，反射的光会较少地逸散，当相机与反射光的夹角变大时，光强的衰减会变得明显。使用余弦的指数来作为镜面反射衰减的建模：
+镜面反射衰减 '><title>【图形学学习笔记】【OpenGL】光照和着色</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【图形学学习笔记】【OpenGL】光照和着色'>
+<meta property='og:description' content=' reference: 《计算机图形学编程（使用OpenGL和C&#43;&#43;）》
+1 光照模型 1.1 光源 书中介绍的ADS光照模型：
+A——环境光反射（Ambient Reflection）：模拟低级光照，影响场景中所有物体。
+D——漫反射（Diffuse Reflection）：根据光线的入射角度调整物体亮度。
+S——镜面反射（Specular Reflection）：展示物体的光泽，通过在物体表面上，光线直接地反射到我们的眼睛的位置，策略性地放置适当大小的高光来实现。
+一个光源对物体的影响，可以体现在这三个反射。例如要描述一道红光，它的声明可以是：
+// RGBA std::array&lt;float, 4&gt; redLightAmbient { 0.1f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightDiffuse { 1.0f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightSpecular { 1.0f, .0f, .0f, 1.0f }; 这表明这道光对于环境光有微小的贡献（ 0.1 ）；而当它照到物体上时，为漫反射和镜面反射分别提供RGBA为 { 1.0f, .0f, .0f, 1.0f } 的光强，用于最终的颜色计算。
+反射与光的入射角有关。这里只先考虑一个 位置光 ，它是位于3D场景下某个坐标的点光源，对于一个物体上的不同顶点，这个点光源发出的光入射到这些顶点的角度不同，因此产生不同的反射效果。位置 (5, 2, -3) 处的红色点光源，描述如下：
+// RGBA std::array&lt;float, 4&gt; redLightAmbient { 0.1f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightDiffuse { 1.0f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightSpecular { 1.0f, .0f, .0f, 1.0f }; // position std::array&lt;float, 3&gt; redLightPosition { 5.0f, 2.0f, -3.0f }; 1.2 材质 一个物体最终的光照着色效果，由光源和物体本身的材质决定。光源主要描述光的颜色和位置，而材质描述物体接受光照后反射的效果。
+在ADS模型下，物体的材质也围绕这三种反射来描述。
+光源加在物体上的环境光、漫反射光、镜面光分别体现出物体材质上的三种不同反射，它们的建模策略如下：
+环境光：直接用环境光加在物体上的光强乘以材质本身对环境光的反射参数即可。 漫反射光：与光源提供的漫反射光强、材质的漫反射参数、入射角（反射角）有关。随着入射角变大，反射出来的光会减弱，当入射角的余弦值变为负（大于90°或小于-90°），反射出来的光是 0 。 镜面光：与光源提供的镜面光强、材质的镜面反射参数、入射角（反射角）、观察方向有关。镜面光虽然不会随着入射角变大而变弱，但是会随着相机与反射光的夹角变大而变弱。 镜面光 对于镜面反射，不同物体的 光泽度 又不同，随着光泽度的增加，镜面反射的现象应该变显著，反射的光会较少地逸散，当相机与反射光的夹角变大时，光强的衰减会变得明显。使用余弦的指数来作为镜面反射衰减的建模：
+镜面反射衰减 '>
+<meta property='og:url' content='https://xrg.fj.cn/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2025-08-24T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-08-24T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【图形学学习笔记】【OpenGL】光照和着色">
+<meta name="twitter:description" content=" reference: 《计算机图形学编程（使用OpenGL和C&#43;&#43;）》
+1 光照模型 1.1 光源 书中介绍的ADS光照模型：
+A——环境光反射（Ambient Reflection）：模拟低级光照，影响场景中所有物体。
+D——漫反射（Diffuse Reflection）：根据光线的入射角度调整物体亮度。
+S——镜面反射（Specular Reflection）：展示物体的光泽，通过在物体表面上，光线直接地反射到我们的眼睛的位置，策略性地放置适当大小的高光来实现。
+一个光源对物体的影响，可以体现在这三个反射。例如要描述一道红光，它的声明可以是：
+// RGBA std::array&lt;float, 4&gt; redLightAmbient { 0.1f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightDiffuse { 1.0f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightSpecular { 1.0f, .0f, .0f, 1.0f }; 这表明这道光对于环境光有微小的贡献（ 0.1 ）；而当它照到物体上时，为漫反射和镜面反射分别提供RGBA为 { 1.0f, .0f, .0f, 1.0f } 的光强，用于最终的颜色计算。
+反射与光的入射角有关。这里只先考虑一个 位置光 ，它是位于3D场景下某个坐标的点光源，对于一个物体上的不同顶点，这个点光源发出的光入射到这些顶点的角度不同，因此产生不同的反射效果。位置 (5, 2, -3) 处的红色点光源，描述如下：
+// RGBA std::array&lt;float, 4&gt; redLightAmbient { 0.1f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightDiffuse { 1.0f, .0f, .0f, 1.0f }; std::array&lt;float, 4&gt; redLightSpecular { 1.0f, .0f, .0f, 1.0f }; // position std::array&lt;float, 3&gt; redLightPosition { 5.0f, 2.0f, -3.0f }; 1.2 材质 一个物体最终的光照着色效果，由光源和物体本身的材质决定。光源主要描述光的颜色和位置，而材质描述物体接受光照后反射的效果。
+在ADS模型下，物体的材质也围绕这三种反射来描述。
+光源加在物体上的环境光、漫反射光、镜面光分别体现出物体材质上的三种不同反射，它们的建模策略如下：
+环境光：直接用环境光加在物体上的光强乘以材质本身对环境光的反射参数即可。 漫反射光：与光源提供的漫反射光强、材质的漫反射参数、入射角（反射角）有关。随着入射角变大，反射出来的光会减弱，当入射角的余弦值变为负（大于90°或小于-90°），反射出来的光是 0 。 镜面光：与光源提供的镜面光强、材质的镜面反射参数、入射角（反射角）、观察方向有关。镜面光虽然不会随着入射角变大而变弱，但是会随着相机与反射光的夹角变大而变弱。 镜面光 对于镜面反射，不同物体的 光泽度 又不同，随着光泽度的增加，镜面反射的现象应该变显著，反射的光会较少地逸散，当相机与反射光的夹角变大时，光强的衰减会变得明显。使用余弦的指数来作为镜面反射衰减的建模：
+镜面反射衰减 ">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E6%8A%80%E6%9C%AF/" >
+                技术
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/">【图形学学习笔记】【OpenGL】光照和着色</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 24, 2025</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <blockquote>
+<p>reference: 《计算机图形学编程（使用OpenGL和C++）》</p>
+</blockquote>
+<h3 id="1-光照模型">1 光照模型</h3>
+<h4 id="11-光源">1.1 光源</h4>
+<p>书中介绍的ADS光照模型：</p>
+<p>A——环境光反射（Ambient Reflection）：模拟低级光照，影响场景中所有物体。</p>
+<p>D——漫反射（Diffuse Reflection）：根据光线的入射角度调整物体亮度。</p>
+<p>S——镜面反射（Specular Reflection）：展示物体的光泽，通过在物体表面上，光线直接地反射到我们的眼睛的位置，策略性地放置适当大小的高光来实现。</p>
+<p>一个光源对物体的影响，可以体现在这三个反射。例如要描述一道红光，它的声明可以是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// RGBA
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">redLightAmbient</span> <span class="p">{</span> <span class="mf">0.1f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span> 
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">redLightDiffuse</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span> 
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">redLightSpecular</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span> 
+</span></span></code></pre></div><p>这表明这道光对于环境光有微小的贡献（ <code>0.1</code> ）；而当它照到物体上时，为漫反射和镜面反射分别提供RGBA为 <code>{ 1.0f, .0f, .0f, 1.0f }</code> 的光强，用于最终的颜色计算。</p>
+<p>反射与光的入射角有关。这里只先考虑一个 <em>位置光</em> ，它是位于3D场景下某个坐标的点光源，对于一个物体上的不同顶点，这个点光源发出的光入射到这些顶点的角度不同，因此产生不同的反射效果。位置 <code>(5, 2, -3)</code> 处的红色点光源，描述如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// RGBA
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">redLightAmbient</span> <span class="p">{</span> <span class="mf">0.1f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">redLightDiffuse</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">redLightSpecular</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// position
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">redLightPosition</span> <span class="p">{</span> <span class="mf">5.0f</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span> <span class="p">};</span>
+</span></span></code></pre></div><h2 id="12-材质">1.2 材质</h2>
+<p>一个物体最终的光照着色效果，由光源和物体本身的材质决定。光源主要描述光的颜色和位置，而材质描述物体接受光照后反射的效果。</p>
+<p>在ADS模型下，物体的材质也围绕这三种反射来描述。</p>
+<p>光源加在物体上的环境光、漫反射光、镜面光分别体现出物体材质上的三种不同反射，它们的建模策略如下：</p>
+<ul>
+<li>环境光：直接用环境光加在物体上的光强乘以材质本身对环境光的反射参数即可。</li>
+<li>漫反射光：与光源提供的漫反射光强、材质的漫反射参数、入射角（反射角）有关。随着入射角变大，反射出来的光会减弱，当入射角的余弦值变为负（大于90°或小于-90°），反射出来的光是 <code>0</code> 。</li>
+<li>镜面光：与光源提供的镜面光强、材质的镜面反射参数、入射角（反射角）、观察方向有关。镜面光虽然不会随着入射角变大而变弱，但是会随着相机与反射光的夹角变大而变弱。</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 138; 
+			flex-basis: 332px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/1.png" data-size="1045x755">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/1.png"
+			width="1045"
+			height="755"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/1_hu6369390628119606489.png 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/1_hu16691656833453214221.png 1024w"
+			loading="lazy"
+			alt="镜面光">
+	</a>
+	
+	<figcaption>镜面光</figcaption>
+	
+</figure></p>
+<p>对于镜面反射，不同物体的 <em>光泽度</em> 又不同，随着光泽度的增加，镜面反射的现象应该变显著，反射的光会较少地逸散，当相机与反射光的夹角变大时，光强的衰减会变得明显。使用余弦的指数来作为镜面反射衰减的建模：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 201; 
+			flex-basis: 482px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/2.png" data-size="1048x521">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/2.png"
+			width="1048"
+			height="521"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/2_hu6991897137896045660.png 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/2_hu3934096547112635589.png 1024w"
+			loading="lazy"
+			alt="镜面反射衰减">
+	</a>
+	
+	<figcaption>镜面反射衰减</figcaption>
+	
+</figure></p>
+<p>以黄金为例，它的材质描述为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// ADS反射参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">glodMaterialAmbient</span> <span class="p">{</span> <span class="mf">0.24725f</span><span class="p">,</span> <span class="mf">0.1995f</span><span class="p">,</span> <span class="mf">0.0745f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span> 
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">glodMaterialDiffuse</span> <span class="p">{</span> <span class="mf">0.75164f</span><span class="p">,</span> <span class="mf">0.60648f</span><span class="p">,</span> <span class="mf">0.22648f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span> 
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">glodMaterialSpecular</span> <span class="p">{</span> <span class="mf">0.628281f</span><span class="p">,</span> <span class="mf">0.555802f</span><span class="p">,</span> <span class="mf">0.366065f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">// 光泽，即反射光衰减的余弦的指数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">glodMaterialShininess</span> <span class="p">{</span> <span class="mf">51.2f</span> <span class="p">};</span> 
+</span></span></code></pre></div><h3 id="2-gouraud着色">2 Gouraud着色</h3>
+<p>把我们第1节理解到的光照模型作用在物体的 <strong>顶点</strong> 上，就是Gouraud着色的基本思路：</p>
+<ol>
+<li>确定每个顶点的颜色</li>
+<li>栅格化过程中插入像素时对颜色（即光照）也进行插值</li>
+</ol>
+<p>首先定义材质，这是很简单的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">utils</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Gold material properties
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">namespace</span> <span class="n">Gold</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">getAmbient</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">{</span><span class="mf">0.24725f</span><span class="p">,</span> <span class="mf">0.1995f</span><span class="p">,</span> <span class="mf">0.0745f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">getDiffuse</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">{</span><span class="mf">0.75164f</span><span class="p">,</span> <span class="mf">0.60648f</span><span class="p">,</span> <span class="mf">0.22648f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">getSpecular</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">{</span><span class="mf">0.628281f</span><span class="p">,</span> <span class="mf">0.555802f</span><span class="p">,</span> <span class="mf">0.366065f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">float</span> <span class="nf">getShininess</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mf">51.2f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>随后是光源：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// ===== light =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span> <span class="n">gInitialLightLoc</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">5.0f</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">gGlobalAmbient</span> <span class="p">{</span> <span class="mf">0.7f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">gLightAmbient</span> <span class="p">{</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">gLightDiffuse</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="mi">4</span><span class="o">&gt;</span> <span class="n">gLightSpecular</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+</span></span></code></pre></div><p>由于每个顶点的位置不同，没法在C++程序中计算光照，必须把这些信息传入顶点着色器中计算，因此定义一个函数传输这些信息：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// 全局变量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">GLuint</span> <span class="n">globalAmbLoc</span><span class="p">,</span> <span class="n">lAmbLoc</span><span class="p">,</span> <span class="n">lDiffLoc</span><span class="p">,</span> <span class="n">lSpecLoc</span><span class="p">,</span> <span class="n">posLoc</span><span class="p">,</span> <span class="n">mAmbLoc</span><span class="p">,</span> <span class="n">mDiffLoc</span><span class="p">,</span> <span class="n">mSpecLoc</span><span class="p">,</span> <span class="n">mShiLoc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">installLights</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">globalAmbLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;globalAmbient&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lAmbLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;light.ambient&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lDiffLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;light.diffuse&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lSpecLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;light.specular&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">posLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;light.position&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">mAmbLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;material.ambient&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mDiffLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;material.diffuse&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mSpecLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;material.specular&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mShiLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;material.shininess&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform3fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">posLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">gCurrentLightPos</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform4fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">globalAmbLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gGlobalAmbient</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform4fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">lAmbLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gLightAmbient</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform4fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">lDiffLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gLightDiffuse</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform4fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">lSpecLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gLightSpecular</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform4fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">mAmbLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gMaterialAmbient</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform4fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">mDiffLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gMaterialDiffuse</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform4fv</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">mSpecLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gMaterialSpecular</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glProgramUniform1f</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="n">mShiLoc</span><span class="p">,</span> <span class="n">gMaterialShininess</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>在 <code>display</code> 函数中，还有最后一个特殊的计算是mv矩阵的逆转置矩阵，用于计算每个顶点完成mv变换后的法向量。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">display</span><span class="p">(</span><span class="n">GLFWwindow</span> <span class="o">*</span><span class="n">window</span><span class="p">,</span> <span class="kt">double</span> <span class="n">currentTime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glUseProgram</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// initialization
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span> <span class="o">|</span> <span class="n">GL_DEPTH_BUFFER_BIT</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_CULL_FACE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glFrontFace</span><span class="p">(</span><span class="n">GL_CCW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glDepthFunc</span><span class="p">(</span><span class="n">GL_LEQUAL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 启用混合以支持透明度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// M 矩阵在GLSL内构建，V矩阵在cpp构建
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">projLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;proj_matrix&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mvLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;mv_matrix&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">normLoc</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">renderingProgram</span><span class="p">,</span> <span class="s">&#34;norm_matrix&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">vMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">translate</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">cameraX</span><span class="p">,</span> <span class="o">-</span><span class="n">cameraY</span><span class="p">,</span> <span class="o">-</span><span class="n">cameraZ</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">translate</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">pyramidX</span><span class="p">,</span> <span class="n">pyramidY</span><span class="p">,</span> <span class="n">pyramidZ</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 透视矩阵先赋值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">projLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">pMat</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 稍微沿X轴旋转一些，观察模型底部
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">glm</span><span class="o">::</span><span class="n">mat4</span> <span class="n">rotxMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">rotate</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">currentTime</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glm</span><span class="o">::</span><span class="n">mat4</span> <span class="n">scalMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">scale</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">mat4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">),</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.f</span><span class="p">,</span> <span class="mf">2.f</span><span class="p">,</span> <span class="mf">2.f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mMat</span> <span class="o">=</span> <span class="n">rotxMat</span> <span class="o">*</span> <span class="n">scalMat</span> <span class="o">*</span> <span class="n">mMat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mvMat</span> <span class="o">=</span> <span class="n">vMat</span> <span class="o">*</span> <span class="n">mMat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">mvLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">mvMat</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 逆转置矩阵
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">invTrMat</span> <span class="o">=</span> <span class="n">glm</span><span class="o">::</span><span class="n">transpose</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">mvMat</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">normLoc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="n">glm</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">invTrMat</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ===== 其余无关代码略 =====
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>现在，顶点着色器拿到了光照计算所需的一切，</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="cp">#version 410</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">PosotionLight</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">ambient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">diffuse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">specular</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Material</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">ambient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">diffuse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">specular</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">shininess</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec2</span> <span class="n">textureCoord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">normal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">proj_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">v_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">m_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">mv_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">norm_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">Material</span> <span class="n">material</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">PosotionLight</span> <span class="n">light</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="k">vec4</span> <span class="n">globalAmbient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec4</span> <span class="n">varying_color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// vertex.glsl</span>
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 顶点位置</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">P</span> <span class="o">=</span> <span class="n">mv_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 法向量转换到视觉空间（不能直接用mv，要用mv的逆转置矩阵）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">N</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">((</span><span class="n">norm_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)).</span><span class="n">xyz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 视觉空间光照向量（顶点到光源）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">L</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">P</span><span class="p">.</span><span class="n">xyz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 视觉向量（顶点发出的光传入相机）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">V</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">P</span><span class="p">.</span><span class="n">xyz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射向量</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">R</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">reflect</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 环境光</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">ambient</span> <span class="o">=</span> <span class="p">(</span><span class="n">globalAmbient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">light</span><span class="p">.</span><span class="n">ambient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span><span class="p">).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 漫反射</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">specular</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">shininess</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">varying_color</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">((</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">diffuse</span> <span class="o">+</span> <span class="n">specular</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">proj_matrix</span> <span class="o">*</span> <span class="n">mv_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>而片段着色器只要承接颜色就好：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="cp">#version 410</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec4</span> <span class="n">varying_color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec4</span> <span class="n">color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// fragment.glsl</span>
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">color</span> <span class="o">=</span> <span class="n">varying_color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 95; 
+			flex-basis: 230px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/3.gif" data-size="608x634">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/3.gif"
+			width="608"
+			height="634"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/3_hu4823578220808504917.gif 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/3_hu18027011285190131116.gif 1024w"
+			loading="lazy"
+			alt="Gouraud">
+	</a>
+	
+	<figcaption>Gouraud</figcaption>
+	
+</figure></p>
+<blockquote>
+<p>导出成gif后画质炸了，实际还是比较平滑的
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 96; 
+			flex-basis: 231px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/4.png" data-size="607x629">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/4.png"
+			width="607"
+			height="629"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/4_hu2035897221017984259.png 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/4_hu5116582685949424221.png 1024w"
+			loading="lazy"
+			alt="Gouraud">
+	</a>
+	
+	<figcaption>Gouraud</figcaption>
+	
+</figure></p>
+</blockquote>
+<h3 id="3-phong着色">3 Phong着色</h3>
+<p>在顶点着色器中进行ADS光照计算带来的问题是镜面高光有片面感。原因是光照计算只发生在顶点，三角形的面积范围内的像素只是进行了插值。</p>
+<p>Phong将ADS计算放到片段着色器中，在顶点着色器中计算法向量和光照向量，藉由插值机制使得片段着色器内每个像素都能进行ADS计算，即使得光照计算按像素而非按顶点完成。</p>
+<p>实现这个算法只需要对Gouraud着色的实现进行微小调整，顶点着色器只计算N和L：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="cp">#version 410</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">PosotionLight</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">ambient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">diffuse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">specular</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Material</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">ambient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">diffuse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">specular</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">shininess</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec2</span> <span class="n">textureCoord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">normal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">proj_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">v_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">m_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">mv_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">norm_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">Material</span> <span class="n">material</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">PosotionLight</span> <span class="n">light</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="k">vec4</span> <span class="n">globalAmbient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">varyingNormal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">varyingLightDir</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">varyingVertPos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// vertex.glsl</span>
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">varyingVertPos</span> <span class="o">=</span> <span class="p">(</span><span class="n">mv_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">varyingLightDir</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">varyingVertPos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">varyingNormal</span> <span class="o">=</span> <span class="p">(</span><span class="n">norm_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">proj_matrix</span> <span class="o">*</span> <span class="n">mv_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>片段着色器中完成剩余的ADS计算：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="cp">#version 410</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">PosotionLight</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">ambient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">diffuse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">specular</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Material</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">ambient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">diffuse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">specular</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">shininess</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec2</span> <span class="n">textureCoord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">normal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">proj_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">v_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">m_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">mv_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">mat4</span> <span class="n">norm_matrix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">Material</span> <span class="n">material</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="n">PosotionLight</span> <span class="n">light</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">uniform</span> <span class="k">vec4</span> <span class="n">globalAmbient</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">varyingNormal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">varyingLightDir</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">varyingVertPos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec4</span> <span class="n">color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">N</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">varyingNormal</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">L</span> <span class="o">=</span>  <span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">varyingLightDir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 视觉向量（顶点发出的光传入相机）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">V</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">varyingVertPos</span><span class="p">.</span><span class="n">xyz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射向量</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">R</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">reflect</span><span class="p">(</span><span class="o">-</span><span class="n">varyingLightDir</span><span class="p">,</span> <span class="n">varyingNormal</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 环境光</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">ambient</span> <span class="o">=</span> <span class="p">(</span><span class="n">globalAmbient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">light</span><span class="p">.</span><span class="n">ambient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span><span class="p">).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 漫反射</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">specular</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">shininess</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">color</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">((</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">diffuse</span> <span class="o">+</span> <span class="n">specular</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>效果对比（左Gouraud着色，右Phong着色）：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 200; 
+			flex-basis: 481px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/5.png" data-size="1216x606">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/5.png"
+			width="1216"
+			height="606"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/5_hu240530927818459087.png 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/5_hu18413695098467079270.png 1024w"
+			loading="lazy"
+			alt="cmp">
+	</a>
+	
+	<figcaption>cmp</figcaption>
+	
+</figure></p>
+<h3 id="4-blinn-phong着色">4 Blinn-Phong着色</h3>
+<p>todo…</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/">
+        
+        
+
+        <div class="article-image">
+            
+            <img src="/img/related-content.png" loading="lazy" 
+            data-key="" data-hash="" 
+            style="opacity: 0.3;"/>
+        </div>
+        <div class="article-details">
+            <h2 class="article-title">【图形学学习笔记】【OpenGL】旋转法实现环面</h2>
+            <footer class="article-time">
+                <time datetime=''>Aug 10, 2025</time>
+            </footer>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2025 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-光照模型">1 光照模型</a>
+      <ul>
+        <li><a href="#11-光源">1.1 光源</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#2-gouraud着色">2 Gouraud着色</a></li>
+    <li><a href="#3-phong着色">3 Phong着色</a></li>
+    <li><a href="#4-blinn-phong着色">4 Blinn-Phong着色</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu10958439986251666570.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>

@@ -2,25 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://xrg.fj.cn/p/opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/</loc>
-    <lastmod>2025-08-10T00:00:00+00:00</lastmod>
+    <loc>https://xrg.fj.cn/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/</loc>
+    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/categories/</loc>
-    <lastmod>2025-08-10T00:00:00+00:00</lastmod>
+    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/post/</loc>
-    <lastmod>2025-08-10T00:00:00+00:00</lastmod>
+    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/</loc>
-    <lastmod>2025-08-10T00:00:00+00:00</lastmod>
+    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/</loc>
-    <lastmod>2025-08-10T00:00:00+00:00</lastmod>
+    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
-    <lastmod>2025-08-10T00:00:00+00:00</lastmod>
+    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/categories/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E6%97%8B%E8%BD%AC%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%8E%AF%E9%9D%A2/</loc>
     <lastmod>2025-08-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/%E5%A7%91%E8%8B%8F%E6%B8%B8%E8%AE%B0/</loc>
