@@ -582,18 +582,18 @@ S——镜面反射（Specular Reflection）：展示物体的光泽，通过在
 </span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">N</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">varyingNormal</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">L</span> <span class="o">=</span>  <span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">varyingLightDir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">L</span> <span class="o">=</span>  <span class="n">normalize</span><span class="p">(</span><span class="n">varyingLightDir</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 视觉向量（顶点发出的光传入相机）</span>
 </span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">V</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">varyingVertPos</span><span class="p">.</span><span class="n">xyz</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射向量</span>
-</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">R</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">reflect</span><span class="p">(</span><span class="o">-</span><span class="n">varyingLightDir</span><span class="p">,</span> <span class="n">varyingNormal</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">R</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">reflect</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 环境光</span>
 </span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">ambient</span> <span class="o">=</span> <span class="p">(</span><span class="n">globalAmbient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">light</span><span class="p">.</span><span class="n">ambient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span><span class="p">).</span><span class="n">xyz</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 漫反射</span>
 </span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射</span>
-</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">specular</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">shininess</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">specular</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">R</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">shininess</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">color</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">((</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">diffuse</span> <span class="o">+</span> <span class="n">specular</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">a</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -618,7 +618,119 @@ S——镜面反射（Specular Reflection）：展示物体的光泽，通过在
 	
 </figure></p>
 <h3 id="4-blinn-phong着色">4 Blinn-Phong着色</h3>
-<p>todo…</p>
+<p>直接摘录对这一改进的描述：</p>
+<blockquote>
+<p>James Blinn在1977年提出了一种对于Phong着色的优化方法，称为Blinn-Phong反射模型。这种优化的依据是，我们观察到，Phong着色中消耗最大的计算之一是求反射向量R。</p>
+<p>Blinn发现向量R在计算过程中并不是必需的——R只是用来计算角φ的手段。角φ的计算可以不使用向量R，而通过L与V的角平分线向量H得到。如图7.13所示，H和N之间的角α刚好等于1/2(φ)。虽然α与φ不同，但Blinn展示了使用α代替φ就已经可以获得足够好的结果</p>
+</blockquote>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 130; 
+			flex-basis: 313px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/6.png" data-size="998x763">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/6.png"
+			width="998"
+			height="763"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/6_hu16196723647308788093.png 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/6_hu2472887933634036168.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>总的来说，就是省略了反射计算，直接用L和V求和得到H，再用H和N点乘算cos alpha。</p>
+<p>我本来以为可能还涉及一些半角函数的转换，没想到实际上这老哥直接拿α代替φ，真是暴力美学。</p>
+<p>修改后的光照计算：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">varyingNormal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">varyingLightDir</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">varyingVertPos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">varyingHalfVector</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 顶点着色器新增半角向量计算</span>
+</span></span><span class="line"><span class="cl">    <span class="n">varyingVertPos</span> <span class="o">=</span> <span class="p">(</span><span class="n">mv_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">varyingLightDir</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">varyingVertPos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">varyingNormal</span> <span class="o">=</span> <span class="p">(</span><span class="n">norm_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">varyingHalfVector</span> <span class="o">=</span> <span class="n">varyingLightDir</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="n">varyingVertPos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">proj_matrix</span> <span class="o">*</span> <span class="n">mv_matrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">varyingNormal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">varyingLightDir</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">varyingVertPos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">varyingHalfVector</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec4</span> <span class="n">color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">N</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">varyingNormal</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">L</span> <span class="o">=</span>  <span class="n">normalize</span><span class="p">(</span><span class="n">varyingLightDir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 视觉向量（顶点发出的光传入相机）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">V</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">varyingVertPos</span><span class="p">.</span><span class="n">xyz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射向量用半角替代</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">cosPhi</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">varyingHalfVector</span><span class="p">),</span> <span class="n">N</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 环境光</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">ambient</span> <span class="o">=</span> <span class="p">(</span><span class="n">globalAmbient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">light</span><span class="p">.</span><span class="n">ambient</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">ambient</span><span class="p">).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 漫反射</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 镜面反射，由于反射角取了半角，光泽度乘3用于调整效果</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">specular</span> <span class="o">=</span> <span class="p">(</span><span class="n">light</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">material</span><span class="p">.</span><span class="n">specular</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">cosPhi</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">shininess</span> <span class="o">*</span> <span class="mf">3.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">color</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">((</span><span class="n">ambient</span> <span class="o">+</span> <span class="n">diffuse</span> <span class="o">+</span> <span class="n">specular</span><span class="p">),</span> <span class="n">material</span><span class="p">.</span><span class="n">diffuse</span><span class="p">.</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>既然Blinn-Phong着色强调的是性能优化，自然简单地看一下效果的对比：</p>
+<ul>
+<li>
+<p>Phong:
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 276; 
+			flex-basis: 664px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/7.png" data-size="1735x627">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/7.png"
+			width="1735"
+			height="627"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/7_hu14620750308589677280.png 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/7_hu15750495223692931846.png 1024w"
+			loading="lazy"
+			alt="Phong">
+	</a>
+	
+	<figcaption>Phong</figcaption>
+	
+</figure></p>
+</li>
+<li>
+<p>Blinn-Phong:
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 278; 
+			flex-basis: 668px"
+	>
+	<a href="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/8.png" data-size="1739x624">
+		<img src="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/8.png"
+			width="1739"
+			height="624"
+			srcset="/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/8_hu3216183947108694371.png 480w, /p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/8_hu12518574387534692392.png 1024w"
+			loading="lazy"
+			alt="Blinn-Phong">
+	</a>
+	
+	<figcaption>Blinn-Phong</figcaption>
+	
+</figure></p>
+</li>
+</ul>
+<p>个人感觉高光变暗了，性能收益也并不明显，更精细的测试没有跑了，浅尝辄止。</p>
 
 </section>
 

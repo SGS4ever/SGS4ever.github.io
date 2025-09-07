@@ -287,7 +287,7 @@
 </figure></p>
 <ol start="2">
 <li>
-<p>切向量随便找两条，按照教程上采用旋转后的y轴和z轴，相乘得到法向量。目前这些向量没啥用。</p>
+<p>切向量随便找两条，按照教程上采用-y和-z叉乘得到法向量，然后跟着环旋转。目前法向量没啥用，但将来计算光照时会用到，所以不容出错。</p>
 </li>
 <li>
 <p>对于纹理，这里的思路是把纹理水平伸展贴到环面上，类似于把一张长条形的包装纸贴到甜甜圈上，其中用包装纸短边包裹柱体。因此，对于XOY平面的纹理，只有y坐标需要赋值（根据采样精度来取点），x坐标是 <code>0</code> 。</p>
@@ -371,7 +371,7 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// 切向量
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mTTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">rMat</span> <span class="o">*</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">        <span class="n">mSTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mSTangents</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// 法向量
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mNormals</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">mTTangents</span><span class="p">.</span><span class="n">back</span><span class="p">(),</span> <span class="n">mSTangents</span><span class="p">.</span><span class="n">back</span><span class="p">()));</span>
