@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='今年的cppcon相当有趣，有好几个选题看上去对我的工作颇有启发，后面应该会慢慢看完。
+今天看的演讲是Daisy Hollman带来的《Crafting the Code You Don’t Write: Sculpting Software in an AI World》，她作为Anthropic（Claude编程模型的母公司）的一员，分享了关于软件工程师如何在AI时代跟上潮流、不断进步的方法。
+1 理解LLM 1.1 Transformers &amp; 早期预训练模型（2017、2018） 这部分在公司看的，不做细致记录了~（懒）。
+大致就是介绍了一下模型注意力机制的由来以及早起的预训练模型（类似深度学习这样的训练-预测的玩法）。
+1.2 Scale 力大砖飞（2019~2020） LLM第二阶段，Daisy称之为取得了 unreasonable effectiveness of scale ，在我看来它是一个力大砖飞的阶段。
+以往的模型有点类似于训练数据的压缩包，训练的过程就是把训练数据“压缩”到模型中，而测试或使用的过程就是要求模型把训练数据“解压”出来，通过概率的方式表达。随着训练规模的增长，产生了一些概念泛化（ conceptual generalization ）的效果，由原本的训练集的复读机变成看上去稍微有点思想的东西。
+Daisy以一个返回值填充的案例来说明大模型在什么地方取得了概念泛化。首先是人类的思维模型：
+这里的答案其实是 widget ，这是自C&#43;&#43;11就有的返回值自动移动机制，Daisy在后文称为隐式移动（ implicit move ）。
+拓展阅读
+https://en.cppreference.com/w/cpp/language/return.html#Notes
+https://stackoverflow.com/questions/9779079/why-does-c11-have-implicit-moves-for-value-parameters-but-not-for-rvalue-para
+接下来Daisy做了很有趣的分享，把这段程序喂给模型，模型的输出是什么？
+unique_ptr&lt;Widget&gt; widget_factory() { using namespace std; unique_ptr&lt;Widget&gt; var = make_unique&lt;Widget&gt;(); var-&gt;initialize(); return 🤔🤔🤔 } 注、这段程序有几个点是经过设计的：
+'><title>【cppcon25】Crafting the Code You Don&#39;t Write</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/cppcon25crafting-the-code-you-dont-write/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【cppcon25】Crafting the Code You Don&#39;t Write'>
+<meta property='og:description' content='今年的cppcon相当有趣，有好几个选题看上去对我的工作颇有启发，后面应该会慢慢看完。
+今天看的演讲是Daisy Hollman带来的《Crafting the Code You Don’t Write: Sculpting Software in an AI World》，她作为Anthropic（Claude编程模型的母公司）的一员，分享了关于软件工程师如何在AI时代跟上潮流、不断进步的方法。
+1 理解LLM 1.1 Transformers &amp; 早期预训练模型（2017、2018） 这部分在公司看的，不做细致记录了~（懒）。
+大致就是介绍了一下模型注意力机制的由来以及早起的预训练模型（类似深度学习这样的训练-预测的玩法）。
+1.2 Scale 力大砖飞（2019~2020） LLM第二阶段，Daisy称之为取得了 unreasonable effectiveness of scale ，在我看来它是一个力大砖飞的阶段。
+以往的模型有点类似于训练数据的压缩包，训练的过程就是把训练数据“压缩”到模型中，而测试或使用的过程就是要求模型把训练数据“解压”出来，通过概率的方式表达。随着训练规模的增长，产生了一些概念泛化（ conceptual generalization ）的效果，由原本的训练集的复读机变成看上去稍微有点思想的东西。
+Daisy以一个返回值填充的案例来说明大模型在什么地方取得了概念泛化。首先是人类的思维模型：
+这里的答案其实是 widget ，这是自C&#43;&#43;11就有的返回值自动移动机制，Daisy在后文称为隐式移动（ implicit move ）。
+拓展阅读
+https://en.cppreference.com/w/cpp/language/return.html#Notes
+https://stackoverflow.com/questions/9779079/why-does-c11-have-implicit-moves-for-value-parameters-but-not-for-rvalue-para
+接下来Daisy做了很有趣的分享，把这段程序喂给模型，模型的输出是什么？
+unique_ptr&lt;Widget&gt; widget_factory() { using namespace std; unique_ptr&lt;Widget&gt; var = make_unique&lt;Widget&gt;(); var-&gt;initialize(); return 🤔🤔🤔 } 注、这段程序有几个点是经过设计的：
+'>
+<meta property='og:url' content='https://xrg.fj.cn/p/cppcon25crafting-the-code-you-dont-write/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2025-09-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-09-21T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【cppcon25】Crafting the Code You Don&#39;t Write">
+<meta name="twitter:description" content="今年的cppcon相当有趣，有好几个选题看上去对我的工作颇有启发，后面应该会慢慢看完。
+今天看的演讲是Daisy Hollman带来的《Crafting the Code You Don’t Write: Sculpting Software in an AI World》，她作为Anthropic（Claude编程模型的母公司）的一员，分享了关于软件工程师如何在AI时代跟上潮流、不断进步的方法。
+1 理解LLM 1.1 Transformers &amp; 早期预训练模型（2017、2018） 这部分在公司看的，不做细致记录了~（懒）。
+大致就是介绍了一下模型注意力机制的由来以及早起的预训练模型（类似深度学习这样的训练-预测的玩法）。
+1.2 Scale 力大砖飞（2019~2020） LLM第二阶段，Daisy称之为取得了 unreasonable effectiveness of scale ，在我看来它是一个力大砖飞的阶段。
+以往的模型有点类似于训练数据的压缩包，训练的过程就是把训练数据“压缩”到模型中，而测试或使用的过程就是要求模型把训练数据“解压”出来，通过概率的方式表达。随着训练规模的增长，产生了一些概念泛化（ conceptual generalization ）的效果，由原本的训练集的复读机变成看上去稍微有点思想的东西。
+Daisy以一个返回值填充的案例来说明大模型在什么地方取得了概念泛化。首先是人类的思维模型：
+这里的答案其实是 widget ，这是自C&#43;&#43;11就有的返回值自动移动机制，Daisy在后文称为隐式移动（ implicit move ）。
+拓展阅读
+https://en.cppreference.com/w/cpp/language/return.html#Notes
+https://stackoverflow.com/questions/9779079/why-does-c11-have-implicit-moves-for-value-parameters-but-not-for-rvalue-para
+接下来Daisy做了很有趣的分享，把这段程序喂给模型，模型的输出是什么？
+unique_ptr&lt;Widget&gt; widget_factory() { using namespace std; unique_ptr&lt;Widget&gt; var = make_unique&lt;Widget&gt;(); var-&gt;initialize(); return 🤔🤔🤔 } 注、这段程序有几个点是经过设计的：
+">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/cppcon25crafting-the-code-you-dont-write/">【cppcon25】Crafting the Code You Don&#39;t Write</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 21, 2025</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>今年的cppcon相当有趣，有好几个选题看上去对我的工作颇有启发，后面应该会慢慢看完。</p>
+<p>今天看的演讲是Daisy Hollman带来的《Crafting the Code You Don’t Write: Sculpting Software in an AI World》，她作为Anthropic（Claude编程模型的母公司）的一员，分享了关于软件工程师如何在AI时代跟上潮流、不断进步的方法。</p>
+<h3 id="1-理解llm">1 理解LLM</h3>
+<h4 id="11-transformers--早期预训练模型20172018">1.1 Transformers &amp; 早期预训练模型（2017、2018）</h4>
+<p>这部分在公司看的，不做细致记录了~（懒）。</p>
+<p>大致就是介绍了一下模型注意力机制的由来以及早起的预训练模型（类似深度学习这样的训练-预测的玩法）。</p>
+<h4 id="12-scale-力大砖飞20192020">1.2 Scale 力大砖飞（2019~2020）</h4>
+<p>LLM第二阶段，Daisy称之为取得了 <em>unreasonable effectiveness of scale</em> ，在我看来它是一个力大砖飞的阶段。</p>
+<p>以往的模型有点类似于训练数据的压缩包，训练的过程就是把训练数据“压缩”到模型中，而测试或使用的过程就是要求模型把训练数据“解压”出来，通过概率的方式表达。随着训练规模的增长，产生了一些概念泛化（ <em>conceptual generalization</em> ）的效果，由原本的训练集的复读机变成看上去稍微有点思想的东西。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 431px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/4.png" data-size="1830x1019">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/4.png"
+			width="1830"
+			height="1019"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/4_hu2592777943853950484.png 480w, /p/cppcon25crafting-the-code-you-dont-write/4_hu4343333197409641500.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>Daisy以一个返回值填充的案例来说明大模型在什么地方取得了概念泛化。首先是人类的思维模型：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 428px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/5.png" data-size="1829x1025">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/5.png"
+			width="1829"
+			height="1025"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/5_hu9130088879739271844.png 480w, /p/cppcon25crafting-the-code-you-dont-write/5_hu1649831251763248275.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>这里的答案其实是 <code>widget</code> ，这是自C++11就有的返回值自动移动机制，Daisy在后文称为隐式移动（ <em>implicit move</em> ）。</p>
+<blockquote>
+<p>拓展阅读</p>
+<p><a class="link" href="https://en.cppreference.com/w/cpp/language/return.html#Notes"  target="_blank" rel="noopener"
+    >https://en.cppreference.com/w/cpp/language/return.html#Notes</a></p>
+<p><a class="link" href="https://stackoverflow.com/questions/9779079/why-does-c11-have-implicit-moves-for-value-parameters-but-not-for-rvalue-para"  target="_blank" rel="noopener"
+    >https://stackoverflow.com/questions/9779079/why-does-c11-have-implicit-moves-for-value-parameters-but-not-for-rvalue-para</a></p>
+</blockquote>
+<p>接下来Daisy做了很有趣的分享，把这段程序喂给模型，模型的输出是什么？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">widget_factory</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">var</span> <span class="o">=</span> <span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">var</span><span class="o">-&gt;</span><span class="n">initialize</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="err">🤔🤔🤔</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><blockquote>
+<p>注、这段程序有几个点是经过设计的：</p>
+<ol>
+<li>变量名改为 <code>var</code> ，这样模型就不会产生关于 <code>Widget</code> 的倾向</li>
+<li><code>using namespace std;</code>，使得模型更关注返回值是否使用 <code>move</code> 而非命名空间</li>
+</ol>
+</blockquote>
+<p>模型的输出概率分布：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 430px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/6.png" data-size="1829x1020">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/6.png"
+			width="1829"
+			height="1020"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/6_hu16191379676641631970.png 480w, /p/cppcon25crafting-the-code-you-dont-write/6_hu9088505201027343692.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>这里有个有意思的点是：较老的模型反而坚定地输出 <code>var</code> ，而较新的模型则在保证答案正确的情况下，有一定的概率输出 <code>move(var)</code> 。Daisy和她的同事经过了调研，最终给出的解释是 <strong>老模型纯粹地认为这段代码是Python</strong> （绷🤣）；而新的模型已经泛化出了移动语义的概念，只是有小部分时间会遗忘隐式移动的存在，输出显式的 <code>move</code> 。</p>
+<p>对于能够理解 <em>移动</em> 语义而只是单纯忘记有隐式移动这么一回事的模型，只要一个简单的trick就可以证明：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">widget_factory</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">var</span> <span class="o">=</span> <span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">var</span><span class="o">-&gt;</span><span class="n">initialize</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Implicit move
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span>  <span class="err">🤔🤔🤔</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>在返回值之前添加了隐式移动的注释后，真正理解这个概念的较新的模型，得到了正确的输出：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 428px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/7.png" data-size="1832x1025">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/7.png"
+			width="1832"
+			height="1025"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/7_hu14603621533969867096.png 480w, /p/cppcon25crafting-the-code-you-dont-write/7_hu1827496864323269996.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>Daisy从反方向构造了新的考验：如果模型真的理解什么是隐式移动，那么告诉模型当前 <strong>不能</strong> 使用隐式移动的话，能够得到正确的输出吗？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">widget_factory</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span> <span class="n">var</span> <span class="o">=</span> <span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Widget</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">var</span><span class="o">-&gt;</span><span class="n">initialize</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// remember that implicit move is broken in our compiler
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span>  <span class="err">🤔🤔🤔</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>模型输出概率分布：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 428px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/8.png" data-size="1831x1025">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/8.png"
+			width="1831"
+			height="1025"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/8_hu7772952623235158955.png 480w, /p/cppcon25crafting-the-code-you-dont-write/8_hu10771115494170925741.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>总而言之，这一节的关键在于提出了“数据压缩”、“概念泛化”这样的概念。阐明了随着模型规模的增长，模型的知识存储与输出的方式达到了更高的层次。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 658; 
+			flex-basis: 1580px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/9.png" data-size="1666x253">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/9.png"
+			width="1666"
+			height="253"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/9_hu7324154624386216789.png 480w, /p/cppcon25crafting-the-code-you-dont-write/9_hu11339737499310904096.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h4 id="13-强化学习2022">1.3 强化学习（2022）</h4>
+<p>这一章介绍得比较简略，主要是讲了一些强化学习的核心思路。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 431px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/10.png" data-size="1821x1013">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/10.png"
+			width="1821"
+			height="1013"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/10_hu7792348975484360686.png 480w, /p/cppcon25crafting-the-code-you-dont-write/10_hu2770219885572073579.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>强化学习的核心概念还是比较容易理解，跟我们教育小朋友是类似的，当小朋友做出了错误行为时，会受到惩罚，而当小朋友做出正确的行为时，会获得奖励，以此引导小朋友做出正确的行为。对于LLM，当模型产生了不符合预期的输出时，会受到惩罚（调整权重使得模型下次更少地产生这种输出），而当模型产生符合预期的输出时，会获得奖励（调整权重使得模型下次更多地产生这种输出），以此逐渐使得模型的输出符合人们预设的偏好。</p>
+<blockquote>
+<p>拓展阅读</p>
+<p><a class="link" href="https://huggingface.co/learn/llm-course/chapter12/2#introduction-to-reinforcement-learning-and-its-role-in-llms"  target="_blank" rel="noopener"
+    >Introduction to Reinforcement Learning and its Role in LLMs</a></p>
+</blockquote>
+<h4 id="14-工具使用20232024">1.4 工具使用（2023~2024）</h4>
+<p>人们意识到，类似于XML/JSON等含有特殊语法的标记语言，本质上仍是一些文本内容，不妨为大模型定义一些特定的 <em>schema</em> （非AI领域，不确定这个词中文术语是啥），当模型的输出过程中产生了符合 <em>schema</em> 的内容时，可以视为一次工具调用。</p>
+<p>Daisy演示了当前Claude code是如何完成文本编辑的：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 431px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/11.png" data-size="1809x1007">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/11.png"
+			width="1809"
+			height="1007"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/11_hu166383136715216336.png 480w, /p/cppcon25crafting-the-code-you-dont-write/11_hu8476015858158716995.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>Daisy这里给出了一个比喻，这样进行工具调用简直是处于 <em>ed</em> 时代，尚未发明 <em>vi</em> 。简单看了下 <a class="link" href="https://www.runoob.com/linux/linux-comm-ed.html"  target="_blank" rel="noopener"
+    >ed</a> 是个啥，的确有点原始，Daisy想表达的意思也可见一斑了。</p>
+<blockquote>
+<p>拓展阅读</p>
+<p><a class="link" href="https://python.langchain.com/docs/how_to/tool_calling/"  target="_blank" rel="noopener"
+    >How to use chat models to call tools</a></p>
+</blockquote>
+<h4 id="15-推理late-2024">1.5 推理（Late 2024）</h4>
+<p>模型的上下文窗口在过去的时间里取得了长足的增长，对数图：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 430px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/12.png" data-size="1825x1018">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/12.png"
+			width="1825"
+			height="1018"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/12_hu13169394250301987815.png 480w, /p/cppcon25crafting-the-code-you-dont-write/12_hu14658754464519399508.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>人类对于如何使用这么大的上下文窗口，经历了一定的返璞归真的创新，由RAG（信息检索增强）、工具调用，逐步走到了让模型自行进行推理。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 190; 
+			flex-basis: 456px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/13.png" data-size="1799x945">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/13.png"
+			width="1799"
+			height="945"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/13_hu2998519690513565399.png 480w, /p/cppcon25crafting-the-code-you-dont-write/13_hu17101168898975129050.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h4 id="16-agent2025">1.6 Agent（2025）</h4>
+<p>随着上下文窗口的扩展，模型能够对当前任务所发生过的历史情形有更多的了解，并能够自行分析自己上一步行为的结果并进行迭代优化。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 189; 
+			flex-basis: 453px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/14.png" data-size="1804x954">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/14.png"
+			width="1804"
+			height="954"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/14_hu10739030327335930176.png 480w, /p/cppcon25crafting-the-code-you-dont-write/14_hu7763235665981165979.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 181; 
+			flex-basis: 436px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/15.png" data-size="1812x997">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/15.png"
+			width="1812"
+			height="997"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/15_hu16271880069243797997.png 480w, /p/cppcon25crafting-the-code-you-dont-write/15_hu18213652440798071409.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>这种模式在编码领域的应用，就是Coding Agent。</p>
+<p>不妨考虑人类在参与一个巨大工程时的行为：</p>
+<ul>
+<li>
+<p>找到我们需要维护的功能的关键入口</p>
+</li>
+<li>
+<p>找到这个入口函数的调用点、参数等</p>
+</li>
+<li>
+<p>对于其它的功能，我们只是了解一些大概</p>
+</li>
+</ul>
+<p>在巨大上下文窗口的加持下，这样的模式完全能够由Agent实现。</p>
+<h3 id="2-coding-with-llm">2 Coding with LLM</h3>
+<p>这一部分的开始，Daisy解释了她是如何看待一个Coding Agent的，和我个人的实际体感不谋而合：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 431px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/16.png" data-size="1822x1014">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/16.png"
+			width="1822"
+			height="1014"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/16_hu12385721228788054191.png 480w, /p/cppcon25crafting-the-code-you-dont-write/16_hu6389237709093447424.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>AI在抽象设计、需要平衡多方利益的功能库开发等场合，表现并不好，而在系统构建、模板元编程等方面可能表现优异（得益于丰富的训练数据）。</p>
+<p>一些适于运用Agent的方向，一定程度上也拓展了我的思路：</p>
+<ul>
+<li>快速原型构建</li>
+<li>辅助编程——核心逻辑人工开发，分支逻辑交给AI</li>
+<li>规划和头脑风暴</li>
+<li>学习和调研</li>
+<li>重构</li>
+<li>测试用例生成</li>
+</ul>
+<h4 id="最佳实践清晰明白的代码">最佳实践：清晰明白的代码</h4>
+<p>不要让模型“猜”我们的接口或函数。当我们开发代码时，保持“最小困惑”原则，思考我们的代码可能被以哪些方式 <em>误解</em> ，以最 <strong>直白</strong> 的方式来表达一件事情。</p>
+<p>避开一些可能令模型惊讶（实际上，同时也令人惊讶）的c++写法：</p>
+<ul>
+<li>避免自作聪明地重载运算符</li>
+<li>避免在同一个类型中混合使用拥有和非拥有语义</li>
+<li>避免使用宏</li>
+<li>避免使用参数依赖查找（ADL）</li>
+<li>避免隐式转换</li>
+<li>尽量使用基础类型</li>
+</ul>
+<blockquote>
+<p>拓展阅读</p>
+<p><a class="link" href="https://luyoungcn.github.io/posts/%E6%B7%B1%E5%85%A5-c&#43;&#43;-%E7%9A%84%E9%9A%90%E7%A7%98%E8%A7%92%E8%90%BD%E5%BD%BB%E5%BA%95%E8%A7%A3%E6%9E%90%E5%8F%82%E6%95%B0%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE-adl/#%E7%9B%AE%E5%BD%95"  target="_blank" rel="noopener"
+    >深入 C++ 的隐秘角落：彻底解析参数依赖查找 (ADL)</a></p>
+</blockquote>
+<h4 id="最佳实践封装优先">最佳实践：封装优先</h4>
+<p>🔹1. Create, maintain, and document rigorous invariants at encapsulation boundaries</p>
+<ul>
+<li>
+<p>创建、维护并记录封装边界上的严格不变量（invariants）</p>
+</li>
+<li>
+<p>不变量（invariant） 是指对象在生命周期中必须始终成立的条件。例如：一个表示“非负数”的类，其内部值永远不能为负。</p>
+</li>
+<li>
+<p>封装边界 指的是类或模块的接口（public API），外部代码只能通过这些接口与内部逻辑交互。</p>
+</li>
+<li>
+<p>✅ 建议：在接口处明确声明和保护这些不变量，确保即使外部调用错误也不会破坏内部状态。这有助于提高代码的健壮性和可预测性。</p>
+</li>
+</ul>
+<p>🔹 2. The agent should be able to reason about the code in isolation as much as possible</p>
+<p>代理（agent）应尽可能独立地推理代码行为</p>
+<p>要求：代码模块的设计应足够清晰，使得 AI 或其他自动化工具无需了解全局上下文就能理解其功能和约束。</p>
+<p>✅ 实现方式：</p>
+<ul>
+<li>使用清晰的命名</li>
+<li>提供完整的文档注释</li>
+<li>避免隐式依赖</li>
+<li>👉 这样可以提升代码的可读性、可测试性和可维护性。</li>
+</ul>
+<p>🔹 3. Avoid code coupling!</p>
+<p>避免代码耦合！</p>
+<p>耦合（coupling） 指不同模块之间的依赖程度。高耦合意味着修改一个模块会影响多个其他模块。</p>
+<ul>
+<li>❌ 不推荐做法：为了复用代码而在完全不同场景中共享同一段实现，从而破坏封装。</li>
+<li>✅ 推荐做法：宁愿重复代码（DRY 原则的适度放松），也不要强行将不相关的逻辑绑定在一起。</li>
+<li>📌 特别强调：“Err on the side of repeating yourself rather than breaking encapsulation by reusing code in vastly different scenarios”
+👉 即：宁可重复，也不破坏封装。</li>
+</ul>
+<p>这体现了现代 C++ 设计哲学中的一个重要思想：封装优于复用，尤其是在面对复杂系统时。</p>
+<h4 id="最佳实践代码文档化">最佳实践：代码文档化</h4>
+<p>🔹 1. Comments are more important for agents than they are for humans!</p>
+<p>注释对 AI 代理比对人类更重要！高质量的注释是 AI 理解你意图的关键输入。</p>
+<p>🔹 2. Frequent, verbose comments in code can act like extended thinking</p>
+<p>频繁且详尽的注释可以作为“扩展思维”的体现</p>
+<p>注释不仅仅是解释“做什么”，还可以表达“为什么这么做”、“有哪些限制”、“未来可能如何演变”等。</p>
+<p>对于 AI 来说，这种额外的信息相当于提供了上下文推理能力，有助于它做出更合理的决策。</p>
+<p>📌 类比：就像你在写论文时加入大量思考过程，AI 可以从中学习你的设计逻辑。</p>
+<p>🔹 3. Unlike previous advice: redundancy is useful!</p>
+<p>与以往建议相反：冗余是有用的！</p>
+<p>传统编程原则提倡“不要重复自己”（DRY），但这里指出，在注释中适度重复是可以接受甚至有益的。</p>
+<p>例如：</p>
+<ol>
+<li>
+<p>在函数头部写清楚参数含义</p>
+</li>
+<li>
+<p>在关键逻辑处再次说明其目的。即使某些信息可以从代码推断出来，也应显式写出</p>
+</li>
+</ol>
+<p>👉 目的是让 AI 更容易捕捉到关键信息，避免因上下文缺失而误解。</p>
+<p>🔹 4. Think about the things that you can&rsquo;t say with your code and put them in comments</p>
+<p>思考那些无法用代码表达的内容，并将其写入注释</p>
+<p>代码只能表达“怎么做”，但不能直接表达：</p>
+<ul>
+<li>设计假设（assumptions）</li>
+<li>性能权衡（trade-offs）</li>
+<li>业务规则（business logic）
+“对于所有情况”的契约（&ldquo;For all&rdquo; contracts）</li>
+</ul>
+<p>📌 示例：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// This function assumes that input is always valid due to upstream validation.
+</span></span></span><span class="line"><span class="cl"><span class="c1">// It does not handle malformed data because it&#39;s guaranteed by contract.
+</span></span></span></code></pre></div><p>🔹 5. Agents are very good at generating and maintaining comments</p>
+<p>AI Agent非常擅长生成和维护注释。当前 AI 工具已经能够根据代码自动生成文档、添加注释、更新过时内容。</p>
+<p>✅ 建议：利用这一能力，将注释维护自动化。</p>
+<p>💡 具体建议：Add a CI step that asks an agent to verify all of the comments related to changes in your pull request!</p>
+<p>在持续集成（CI）流程中加入一个步骤，由 AI 检查 PR 中修改的代码是否附带了足够清晰、准确的注释。如果注释缺失或不一致，自动标记问题，提醒开发者补充。</p>
+<h4 id="小结">小结</h4>
+<p>最佳实践本身并不区分代码是写给AI看还是写给人看，本质上只是要求我们写出来的代码更 <strong>易懂</strong> 。在AI时代，你的代码是否真正易懂，可以侧面体现在模型是否快速理解了这段代码的意图，并正确地维护起这段代码。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 610; 
+			flex-basis: 1464px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/18.png" data-size="1642x269">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/18.png"
+			width="1642"
+			height="269"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/18_hu5912191295527875040.png 480w, /p/cppcon25crafting-the-code-you-dont-write/18_hu17773437829658078672.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h3 id="3-面向ai的编程语言演变">3 面向AI的编程语言演变</h3>
+<blockquote>
+<p>这一章，Daisy提出了面向AI的c++语言进化方向，使得这门语言在将来更易于与AI编程结合。</p>
+</blockquote>
+<h4 id="函数调用的two-sided-naming">函数调用的“Two-sided Naming”</h4>
+<p>由于这个词是Daisy发明的，不特地翻译。简单来说，就是认为在函数调用点处对参数信息提供更多的声明。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 193; 
+			flex-basis: 463px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/19.png" data-size="1817x941">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/19.png"
+			width="1817"
+			height="941"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/19_hu11192340402467271352.png 480w, /p/cppcon25crafting-the-code-you-dont-write/19_hu18015940206952537046.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>这个特性对人类来说可能无关痛痒，毕竟目前在各种IDE中基本都有类似的插件可以索引到一个函数的声明（无需跳转到头文件）；不过面向AI，的确是一个挺关键的思路：如果cpp本身带有一个函数的参数信息，AI就可以不再需要自行检索头文件，而这恰好是非常考验AI能力的一步。</p>
+<h4 id="契约和影响描述">契约和影响描述</h4>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 192; 
+			flex-basis: 462px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/20.png" data-size="1824x946">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/20.png"
+			width="1824"
+			height="946"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/20_hu16989537544984392448.png 480w, /p/cppcon25crafting-the-code-you-dont-write/20_hu13031910579731085782.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>这部分基本属于大佬的YY，也许是一个注释就能搞定的事情？</p>
+<p>没有太get到这个倡议的点，简单让千问帮我梳理了下：</p>
+<hr>
+<p>✅ 总结：
+这张幻灯片的核心观点是：</p>
+<p>在未来由 AI 协助开发的世界中，良好的封装不仅是软件工程的最佳实践，更是提升 AI 理解能力的关键。</p>
+<p>而 契约 和 效果系统 正是实现这一目标的强大工具：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">特性</th>
+          <th style="text-align: left">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">契约</td>
+          <td style="text-align: left">提供行为规范，支持泛化推理（如 Liskov 替换）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">效果系统</td>
+          <td style="text-align: left">明确副作用，支持局部推理和安全性分析</td>
+      </tr>
+  </tbody>
+</table>
+<p>这标志着编程语言设计正在从“面向机器执行”转向“面向人类与 AI 共同理解”。</p>
+<hr>
+<p>观感上可能和最佳实践里的“封装”和“文档化”差不多吧。</p>
+<h3 id="4-总结">4 总结</h3>
+<p>最后贴上Daisy的总结：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 191; 
+			flex-basis: 458px"
+	>
+	<a href="/p/cppcon25crafting-the-code-you-dont-write/21.png" data-size="1825x955">
+		<img src="/p/cppcon25crafting-the-code-you-dont-write/21.png"
+			width="1825"
+			height="955"
+			srcset="/p/cppcon25crafting-the-code-you-dont-write/21_hu4297791529158294098.png 480w, /p/cppcon25crafting-the-code-you-dont-write/21_hu12249208821269665477.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>其中有几个很有意思的点，写一点感悟。</p>
+<ul>
+<li>
+<p>&ldquo;LLM做不到这点&rdquo; &ndash;&gt; &ldquo;我不能用LLM做到这点&rdquo; 。的确，LLM的能力就在那里，有谁能说自己已经摸到了LLM的上限呢？世界上依托大模型快速构建出来的软件甚至公司都有不少，作为比较基层的开发人员，用得好，用不好，目前更多的还是个人而非LLM的能力问题，将对LLM的使用作为一项技能而不断磨练精进，可能是更妥当的思路。</p>
+</li>
+<li>
+<p>AI和代码的互相驱动。以往我们总是关注AI如何实现我们的需求，而忽视了我们的代码本身如何使得AI更好或不好地实现我们的需求。AI理解不了我们的项目——这完全是AI的问题吗？我们的代码是否做到了简洁、架构是否做到了清晰？相比于苦苦探索如何通过冗长的思维链、繁琐的工作流、精巧的提示词来使AI理解项目代码，另一条更优雅的路径可能埋藏在代码本身之中。蓦然回首，那人却在灯火阑珊处。</p>
+</li>
+</ul>
+<h3 id="5-qa">5 Q&amp;A</h3>
+<p>Q&amp;A环节，一些问题也颇有启发，浅做记录（记录我理解到的意思而非忠实地翻译问答对话）。</p>
+<p>Q:在一个较大的团队中，如何在使用Agent的过程中避免上下文混乱，类似于多方会谈中，如何清晰地交接任务？</p>
+<p>A:一种方向是Agent的记忆（ <em>memory</em> ），建议大家关注这个话题。</p>
+<p>Q:如何处理上文（该演讲）中提到的不确定性所带来的安全问题？</p>
+<p>A:自己编写关键代码。在公司中有一部分文件，是绝大多数人不允许用Claude编写的。这是我们的实践。</p>
+<p>Q:（提到关于最佳实践中注释的部分）注释通常是静态的，而代码是动态演进的。AI在自动（基于最新代码）维护注释这方面表现有多好？</p>
+<p>A:我们定期运行这个步骤（指AI自动维护注释）并审查AI的输出，效果非常好。实际上我们的CI已经基本解决了注释腐化的问题。我们确信这是Agent非常擅长的任务。</p>
+<blockquote>
+<p>Coooool，一种不错的思路</p>
+</blockquote>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2025 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-理解llm">1 理解LLM</a>
+      <ul>
+        <li><a href="#11-transformers--早期预训练模型20172018">1.1 Transformers &amp; 早期预训练模型（2017、2018）</a></li>
+        <li><a href="#12-scale-力大砖飞20192020">1.2 Scale 力大砖飞（2019~2020）</a></li>
+        <li><a href="#13-强化学习2022">1.3 强化学习（2022）</a></li>
+        <li><a href="#14-工具使用20232024">1.4 工具使用（2023~2024）</a></li>
+        <li><a href="#15-推理late-2024">1.5 推理（Late 2024）</a></li>
+        <li><a href="#16-agent2025">1.6 Agent（2025）</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-coding-with-llm">2 Coding with LLM</a>
+      <ul>
+        <li><a href="#最佳实践清晰明白的代码">最佳实践：清晰明白的代码</a></li>
+        <li><a href="#最佳实践封装优先">最佳实践：封装优先</a></li>
+        <li><a href="#最佳实践代码文档化">最佳实践：代码文档化</a></li>
+        <li><a href="#小结">小结</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-面向ai的编程语言演变">3 面向AI的编程语言演变</a>
+      <ul>
+        <li><a href="#函数调用的two-sided-naming">函数调用的“Two-sided Naming”</a></li>
+        <li><a href="#契约和影响描述">契约和影响描述</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-总结">4 总结</a></li>
+    <li><a href="#5-qa">5 Q&amp;A</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu10958439986251666570.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
