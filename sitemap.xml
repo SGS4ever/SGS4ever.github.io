@@ -2,19 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://xrg.fj.cn/p/cppcon25crafting-the-code-you-dont-write/</loc>
-    <lastmod>2025-09-21T00:00:00+00:00</lastmod>
+    <loc>https://xrg.fj.cn/p/cppcon25pratical-data-oriented-design-in-c-/</loc>
+    <lastmod>2025-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/post/</loc>
-    <lastmod>2025-09-21T00:00:00+00:00</lastmod>
+    <lastmod>2025-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/</loc>
-    <lastmod>2025-09-21T00:00:00+00:00</lastmod>
+    <lastmod>2025-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/</loc>
-    <lastmod>2025-09-21T00:00:00+00:00</lastmod>
+    <lastmod>2025-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/tags/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2025-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xrg.fj.cn/p/cppcon25crafting-the-code-you-dont-write/</loc>
     <lastmod>2025-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xrg.fj.cn/p/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0opengl%E5%85%89%E7%85%A7%E5%92%8C%E7%9D%80%E8%89%B2/</loc>

@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='今天看的演讲是关于数据驱动设计（ Data-oriented Design, DoD ）的，真令我大开眼界。这个设计思路的性能收益很高，可读性也很好，实在应该找个机会狠狠落实到工作中。
+Vittorio的演讲风格挺干练的，talk is cheap，全程围绕一个小Demo来演绎如何通过DoD实现巨大的性能优化。
+1 一个简单的Demo Demo是一个简单的场景模拟，要求在屏幕上飞过一些 可以喷射粒子 的 火箭 ，并为了更加贴近实际，附加了几点需求：
+运动模拟：火箭需要模拟出位置、速度、加速度等 效果：不同类型的粒子和发射器，支持自定义参数（透明度、大小、旋转角等） 实体：为了便于控制单个实体，理论上可以建模为例如火箭&#43;发射器 扩展性：便于增加新的实体或效果 一个简单的建模会是这样的（其中深蓝色为实体类，浅蓝色为抽象类）：
+场景中所有的对象都是一个 实体 Entity 发射器和粒子可以有不同类型，如火焰发射器&amp;烟雾发射器，对应火焰粒子&amp;烟雾粒子 对象的实现可能是这样的（结合个人理解，对声明顺序进行了调整，以便呈现思路，其余代码细节均与演讲保持一致）：
+struct Entity { // 1 首先实体在我们的设计中是一个抽象类，通常需要虚析构函数 virtual ~Entity() = default; // 2 实体需要遵循物理规律，因此提供一些物理属性（位置、速度、加速度） sf::Vector2f position; sf::Vector2f velocity; sf::Vector2f acceleration; // 3 实体需要更新和渲染 virtual void update(float dt) { position &#43;= velocity * dt; velocity &#43;= acceleration * dt; } virtual void draw(sf::RenderTarget&amp;); // 4 实体需要感知别的实体，因此会引用世界对象，同时，告诉世界自身是否还存活 World&amp; world; bool alive = true; }; 粒子的实现，在实体基础上增加了大小、透明度和旋转角，同时当透明度降为 0 时，会自动销毁：
+'><title>【cppcon25】Pratical Data-Oriented Design in C&#43;&#43;</title>
+
+<link rel='canonical' href='https://xrg.fj.cn/p/cppcon25pratical-data-oriented-design-in-c-/'>
+
+<link rel="stylesheet" href="/scss/style.min.744aa3042babb8291bcb36af694eb272f909f9b1e9c66387395b00d22da84726.css"><script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+
+<meta property='og:title' content='【cppcon25】Pratical Data-Oriented Design in C&#43;&#43;'>
+<meta property='og:description' content='今天看的演讲是关于数据驱动设计（ Data-oriented Design, DoD ）的，真令我大开眼界。这个设计思路的性能收益很高，可读性也很好，实在应该找个机会狠狠落实到工作中。
+Vittorio的演讲风格挺干练的，talk is cheap，全程围绕一个小Demo来演绎如何通过DoD实现巨大的性能优化。
+1 一个简单的Demo Demo是一个简单的场景模拟，要求在屏幕上飞过一些 可以喷射粒子 的 火箭 ，并为了更加贴近实际，附加了几点需求：
+运动模拟：火箭需要模拟出位置、速度、加速度等 效果：不同类型的粒子和发射器，支持自定义参数（透明度、大小、旋转角等） 实体：为了便于控制单个实体，理论上可以建模为例如火箭&#43;发射器 扩展性：便于增加新的实体或效果 一个简单的建模会是这样的（其中深蓝色为实体类，浅蓝色为抽象类）：
+场景中所有的对象都是一个 实体 Entity 发射器和粒子可以有不同类型，如火焰发射器&amp;烟雾发射器，对应火焰粒子&amp;烟雾粒子 对象的实现可能是这样的（结合个人理解，对声明顺序进行了调整，以便呈现思路，其余代码细节均与演讲保持一致）：
+struct Entity { // 1 首先实体在我们的设计中是一个抽象类，通常需要虚析构函数 virtual ~Entity() = default; // 2 实体需要遵循物理规律，因此提供一些物理属性（位置、速度、加速度） sf::Vector2f position; sf::Vector2f velocity; sf::Vector2f acceleration; // 3 实体需要更新和渲染 virtual void update(float dt) { position &#43;= velocity * dt; velocity &#43;= acceleration * dt; } virtual void draw(sf::RenderTarget&amp;); // 4 实体需要感知别的实体，因此会引用世界对象，同时，告诉世界自身是否还存活 World&amp; world; bool alive = true; }; 粒子的实现，在实体基础上增加了大小、透明度和旋转角，同时当透明度降为 0 时，会自动销毁：
+'>
+<meta property='og:url' content='https://xrg.fj.cn/p/cppcon25pratical-data-oriented-design-in-c-/'>
+<meta property='og:site_name' content='XR_G&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='技术' /><meta property='article:published_time' content='2025-09-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-09-27T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="【cppcon25】Pratical Data-Oriented Design in C&#43;&#43;">
+<meta name="twitter:description" content="今天看的演讲是关于数据驱动设计（ Data-oriented Design, DoD ）的，真令我大开眼界。这个设计思路的性能收益很高，可读性也很好，实在应该找个机会狠狠落实到工作中。
+Vittorio的演讲风格挺干练的，talk is cheap，全程围绕一个小Demo来演绎如何通过DoD实现巨大的性能优化。
+1 一个简单的Demo Demo是一个简单的场景模拟，要求在屏幕上飞过一些 可以喷射粒子 的 火箭 ，并为了更加贴近实际，附加了几点需求：
+运动模拟：火箭需要模拟出位置、速度、加速度等 效果：不同类型的粒子和发射器，支持自定义参数（透明度、大小、旋转角等） 实体：为了便于控制单个实体，理论上可以建模为例如火箭&#43;发射器 扩展性：便于增加新的实体或效果 一个简单的建模会是这样的（其中深蓝色为实体类，浅蓝色为抽象类）：
+场景中所有的对象都是一个 实体 Entity 发射器和粒子可以有不同类型，如火焰发射器&amp;烟雾发射器，对应火焰粒子&amp;烟雾粒子 对象的实现可能是这样的（结合个人理解，对声明顺序进行了调整，以便呈现思路，其余代码细节均与演讲保持一致）：
+struct Entity { // 1 首先实体在我们的设计中是一个抽象类，通常需要虚析构函数 virtual ~Entity() = default; // 2 实体需要遵循物理规律，因此提供一些物理属性（位置、速度、加速度） sf::Vector2f position; sf::Vector2f velocity; sf::Vector2f acceleration; // 3 实体需要更新和渲染 virtual void update(float dt) { position &#43;= velocity * dt; velocity &#43;= acceleration * dt; } virtual void draw(sf::RenderTarget&amp;); // 4 实体需要感知别的实体，因此会引用世界对象，同时，告诉世界自身是否还存活 World&amp; world; bool alive = true; }; 粒子的实现，在实体基础上增加了大小、透明度和旋转角，同时当透明度降为 0 时，会自动销毁：
+">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+        <div id="loading-box">
+                
+                <div class="loading-left-bg"></div>
+                <div class="loading-right-bg"></div>
+                
+                <div class="spinner-box">
+                        <div class="configure-border-1">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                                <div class="configure-core"></div>
+                        </div>
+                        <div class="loading-word">加载中...</div>
+                </div>
+      </div>
+      
+      <script>
+        $(document).ready(function () {
+                
+                document.getElementById('loading-box').classList.add("loaded")
+        })
+      </script>
+
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>返回</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/cppcon25pratical-data-oriented-design-in-c-/">【cppcon25】Pratical Data-Oriented Design in C&#43;&#43;</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 27, 2025</time>
+            </div>
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 6 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <p>今天看的演讲是关于数据驱动设计（ <em>Data-oriented Design, DoD</em> ）的，真令我大开眼界。这个设计思路的性能收益很高，可读性也很好，实在应该找个机会狠狠落实到工作中。</p>
+<p>Vittorio的演讲风格挺干练的，talk is cheap，全程围绕一个小Demo来演绎如何通过DoD实现巨大的性能优化。</p>
+<h3 id="1-一个简单的demo">1 一个简单的Demo</h3>
+<p>Demo是一个简单的场景模拟，要求在屏幕上飞过一些 <em>可以喷射粒子</em> 的 <em>火箭</em> ，并为了更加贴近实际，附加了几点需求：</p>
+<ul>
+<li>运动模拟：火箭需要模拟出位置、速度、加速度等</li>
+<li>效果：不同类型的粒子和发射器，支持自定义参数（透明度、大小、旋转角等）</li>
+<li>实体：为了便于控制单个实体，理论上可以建模为例如火箭+发射器</li>
+<li>扩展性：便于增加新的实体或效果</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 137; 
+			flex-basis: 329px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/1.png" data-size="1067x778">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/1.png"
+			width="1067"
+			height="778"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/1_hu5410305169650136899.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/1_hu10257298369898371339.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>一个简单的建模会是这样的（其中深蓝色为实体类，浅蓝色为抽象类）：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 181; 
+			flex-basis: 436px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/2.png" data-size="1502x826">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/2.png"
+			width="1502"
+			height="826"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/2_hu2386365465619707563.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/2_hu17582678550926521366.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ul>
+<li>场景中所有的对象都是一个 <em>实体</em> <code>Entity</code></li>
+<li>发射器和粒子可以有不同类型，如火焰发射器&amp;烟雾发射器，对应火焰粒子&amp;烟雾粒子</li>
+</ul>
+<p>对象的实现可能是这样的（结合个人理解，对声明顺序进行了调整，以便呈现思路，其余代码细节均与演讲保持一致）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Entity</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1 首先实体在我们的设计中是一个抽象类，通常需要虚析构函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">virtual</span> <span class="o">~</span><span class="n">Entity</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2 实体需要遵循物理规律，因此提供一些物理属性（位置、速度、加速度）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">velocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">acceleration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3 实体需要更新和渲染
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">position</span> <span class="o">+=</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">velocity</span> <span class="o">+=</span> <span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">draw</span><span class="p">(</span><span class="n">sf</span><span class="o">::</span><span class="n">RenderTarget</span><span class="o">&amp;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4 实体需要感知别的实体，因此会引用世界对象，同时，告诉世界自身是否还存活
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">World</span><span class="o">&amp;</span> <span class="n">world</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">alive</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>粒子的实现，在实体基础上增加了大小、透明度和旋转角，同时当透明度降为 <code>0</code> 时，会自动销毁：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Particle</span> <span class="o">:</span> <span class="n">Entity</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">scale</span><span class="err">，</span> <span class="n">scaleRate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">opacity</span><span class="p">,</span> <span class="n">opacityChange</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">angularVelocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span> <span class="k">override</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Entity</span><span class="o">::</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">scale</span> <span class="o">+=</span> <span class="n">scaleRate</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">opacity</span> <span class="o">+=</span> <span class="n">opacityChange</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rotation</span> <span class="o">+=</span> <span class="n">angularVelocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">alive</span> <span class="o">=</span> <span class="n">opacity</span> <span class="o">&gt;</span> <span class="mf">0.0f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>具体粒子的实现，如烟雾粒子，只是使用特定纹理实现了渲染能力，演讲中没有给出具体实现：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">SmokeParticle</span> <span class="o">:</span> <span class="n">Particle</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">draw</span><span class="p">(</span><span class="n">sf</span><span class="o">::</span><span class="n">RenderTarget</span><span class="o">&amp;</span> <span class="n">target</span><span class="p">)</span> <span class="k">override</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ... draw using smoke texture ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>所有的实体保存在世界中，世界对象会管理所有实体，并调用每个实体的更新和渲染方法：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">World</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Entity</span><span class="o">&gt;&gt;</span> <span class="n">entities</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">entities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">entity</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">draw</span><span class="p">(</span><span class="n">sf</span><span class="o">::</span><span class="n">RenderTarget</span><span class="o">&amp;</span> <span class="n">target</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">entities</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">entity</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">(</span><span class="n">target</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">cleanup</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">erase_if</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">entity</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">!</span><span class="n">entity</span><span class="o">-&gt;</span><span class="n">alive</span><span class="p">;</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>发射器的功能就是定期发射粒子，而具体发射器的实现，如烟雾发射器，只是生成一个粒子对象，并添加到世界中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Emitter</span> <span class="o">:</span> <span class="n">Entity</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">spawnTimer</span><span class="p">,</span> <span class="n">spawnRate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">spawnParticle</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span> <span class="k">override</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ... periodically call `spawnParticle()` ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">SmokeEmitter</span> <span class="o">:</span> <span class="n">Emitter</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">spawnParticle</span><span class="p">()</span> <span class="k">override</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 这里的代码和演讲里的代码稍有不同，我认为这个实现才对
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// 演讲的代码里把 `world` 当指针用，但实际上在 Entity 的定义中， `world` 是一个引用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">world</span><span class="p">.</span><span class="n">entities</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">SmokeParticle</span><span class="o">&gt;</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>最后一个实体是火箭，它和发射器的关系是组合关系，它的移动会带着发射器移动：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Rocket</span> <span class="o">:</span> <span class="n">Entity</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 因为能够保证生命周期，所以这里使用裸指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">SmokeEmitter</span> <span class="o">*</span><span class="n">smokeEmitter</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FireEmitter</span> <span class="o">*</span><span class="n">fireEmitter</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Rocket</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ... create emitters ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span> <span class="k">override</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ... move emitters with rocket ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><blockquote>
+<p>上述的实现有些地方也禁不起严格推敲，例如 <code>Entity::update</code> 实现了移动，但 <code>Emitter::update</code> 行为和它的基类完全不一样… whatever，这个实现还是比较OOP style的</p>
+</blockquote>
+<p>作者的benckmark测试结果如下，横轴为不同实体数量，纵轴为update消耗的时间：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 430px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/3.png" data-size="1522x849">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/3.png"
+			width="1522"
+			height="849"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/3_hu6696551923100701951.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/3_hu4248200274122669967.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>看上去还可以的表现，但又考虑到两个数据：</p>
+<ul>
+<li><code>60FPS = ~16.67ms</code></li>
+<li><code>144FPS = ~6.94ms</code></li>
+</ul>
+<p>😲🥲！这样看来，为了流畅运行，每一帧留给开发者的时间真的非常短，常规实现的性能问题非常之显著。</p>
+<h3 id="2-题外话内存和cache">2 题外话：内存和Cache</h3>
+<p>这一节不打算跟着演讲详细记录，仅摘录一些重要的点。</p>
+<ul>
+<li><em>Cache line</em> 是最小的内存传输单元：即使我们只需要一个字节的数据，内存也是按照整行读入的；因此更宜使用连续内存，且按照利于CPU预测的方式进行数据访问；</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 182; 
+			flex-basis: 436px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/4.png" data-size="1511x830">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/4.png"
+			width="1511"
+			height="830"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/4_hu3006604439347195105.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/4_hu11840952683576943485.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h3 id="3-oop实现的性能问题分析">3 OOP实现的性能问题分析</h3>
+<ol>
+<li>世界对象中使用的是实体的指针，即，内存中实体的分布可能是分散的，这导致了几乎每次迭代都可能产生Cache Miss</li>
+<li>每次调用实体的 <code>update</code> 方法都需要进行虚函数的动态分发（运行时多态，依赖虚表查找真正的实现）</li>
+<li>较多的内存申请/释放</li>
+</ol>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 430px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/5.png" data-size="1518x846">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/5.png"
+			width="1518"
+			height="846"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/5_hu7351305689579101415.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/5_hu2237564057126370495.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h3 id="4-设计哲学的对比">4 设计哲学的对比</h3>
+<p>从设计哲学来看，最初的实现虽然存在性能问题，但基本上已经符合OOP的设计哲学：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 180; 
+			flex-basis: 432px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/6.png" data-size="1507x836">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/6.png"
+			width="1507"
+			height="836"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/6_hu13626525986782113667.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/6_hu15220238138771443978.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ul>
+<li>世界由对象组成</li>
+<li>通过消息传递进行交流</li>
+<li>暴露行为、隐藏数据</li>
+<li>规划未知的需求</li>
+</ul>
+<blockquote>
+<p>Vittorio说这个 <em>bet</em> （赌注）一词是他精心安排的，我一定程度上同意。OOP的基类，每一个方法都在赌自己对于世界的描述是正确的；后续扩展出来的子类，满足基类的设计则皆大欢喜，不满足基类的设计则拖泥带水地改动。这不是说OOP本身有问题，而是在实践中这太过于考验开发人员的设计水平，谁又能要求每个人都是大pro呢？</p>
+</blockquote>
+<p>相比之下，面向数据的设计哲学可能是这样的：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 180; 
+			flex-basis: 432px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/7.png" data-size="1503x835">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/7.png"
+			width="1503"
+			height="835"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/7_hu2318994575623631177.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/7_hu17420241732183230488.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ul>
+<li>世界由数据组成，代码的作用是把数据从一个状态转换到另一个状态</li>
+<li>直接操作批量数据</li>
+<li>暴露数据，集中行为</li>
+<li>规划当下</li>
+</ul>
+<p>转变思路的关键：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 176; 
+			flex-basis: 423px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/8.png" data-size="1434x812">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/8.png"
+			width="1434"
+			height="812"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/8_hu10384310888831867967.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/8_hu10081852515287269042.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ul>
+<li>认识到代码的唯一作用就是进行数据转换</li>
+<li>认识到数据是核心，而不是需要隐藏起来的东西</li>
+<li>认识到计算机更喜欢简单、可预测的工作，向计算机提供大段连续的数据</li>
+<li>认识到设计服务于机器，而非问题的建模</li>
+</ul>
+<blockquote>
+<p>的确比较振聋发聩，尤其是“Design for the machine”，完全是对习惯于OOP的人的一大冲击</p>
+</blockquote>
+<h3 id="5-对demo的优化">5 对Demo的优化</h3>
+<h4 id="51-优化1">5.1 优化1</h4>
+<ul>
+<li>避免单独的内存请求：干掉指针</li>
+<li>拉平架构：干掉继承</li>
+<li>数据和逻辑解耦：实体只是一些数据，世界决定行为</li>
+<li>将不同的类型存在各自的连续的数组中：从一个基类指针数组切换到若干实际对象的数组</li>
+</ul>
+<p>talk is cheap：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 当前发射器和粒子需要区分烟雾和火焰
+</span></span></span><span class="line"><span class="cl"><span class="c1">// *暂且* 通过一个 `type` 属性来区分，后面会继续优化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">enum</span> <span class="k">class</span> <span class="nc">ParticleType</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Smoke</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Fire</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Emitter</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">velocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">acceleration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">spawnTimer</span><span class="p">,</span> <span class="n">spawnRate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">ParticleType</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Particle</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 数据之间不再有继承关系，尽管这样会带来物理要素的重复，但没太大关系
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">velocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">acceleration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">scale</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">opacity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">rotation</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">scaleRate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">opacityChange</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">rotationVelocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">ParticleType</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Rocket</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">velocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">acceleration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 火箭不再通过指针来管理发射器，而是通过索引来关联
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">smokeEmitterIndex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">fireEmitterIndex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>世界对象现在管理数据：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">World</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Particle</span><span class="o">&gt;</span> <span class="n">particles</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Rocket</span><span class="o">&gt;</span> <span class="n">rockets</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 要点：由于我们的rocket通过索引关联发射器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 当发射器移除，不应重排内存，而只是将对应槽位置为无效，因此这里使用optional
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&gt;</span> <span class="n">emitters</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">addRocket</span><span class="p">(</span><span class="k">const</span> <span class="n">Rocket</span> <span class="o">&amp;</span><span class="n">rocket</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">addEmitter</span><span class="p">(</span><span class="k">const</span> <span class="n">Emitter</span> <span class="o">&amp;</span><span class="n">emitter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span><span class="err">；</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">draw</span><span class="p">(</span><span class="n">sf</span><span class="o">::</span><span class="n">RenderTarget</span> <span class="o">&amp;</span><span class="n">target</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">cleanup</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>世界对象的 <code>update</code> 方法：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">World</span><span class="o">::</span><span class="n">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">Particle</span> <span class="o">&amp;</span><span class="nl">particle</span> <span class="p">:</span> <span class="n">particles</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">scale</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">scaleRate</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">opacity</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">opacityChange</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">rotation</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">rotationVelocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="nl">e</span> <span class="p">:</span> <span class="n">emitters</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">e</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnRate</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(;</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">&gt;=</span> <span class="mf">1.f</span><span class="p">;</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">-=</span> <span class="mf">1.f</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">ParticleType</span><span class="o">::</span><span class="n">Smoke</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">particles</span><span class="p">.</span><span class="n">push_back</span><span class="p">({...});</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">e</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">ParticleType</span><span class="o">::</span><span class="n">Fire</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">particles</span><span class="p">.</span><span class="n">push_back</span><span class="p">({...});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">Rocket</span> <span class="o">&amp;</span><span class="nl">rocket</span> <span class="p">:</span> <span class="n">rockets</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rocket</span><span class="p">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">rocket</span><span class="p">.</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rocket</span><span class="p">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">rocket</span><span class="p">.</span><span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">se</span> <span class="o">=</span> <span class="n">emitters</span><span class="p">[</span><span class="n">rocket</span><span class="p">.</span><span class="n">smokeEmitterIndex</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="n">se</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">=</span> <span class="n">rocket</span><span class="p">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span><span class="p">(</span><span class="mf">12.f</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">fe</span> <span class="o">=</span> <span class="n">emitters</span><span class="p">[</span><span class="n">rocket</span><span class="p">.</span><span class="n">fireEmitterIndex</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fe</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">=</span> <span class="n">rocket</span><span class="p">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span><span class="p">(</span><span class="mf">12.f</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>添加发射器：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">World</span><span class="o">::</span><span class="n">addEmitter</span><span class="p">(</span><span class="k">const</span> <span class="n">Emitter</span> <span class="o">&amp;</span><span class="n">emitter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">emitters</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">emitters</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">has_value</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">emitters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">emitter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">emitters</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">emitter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">emitters</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>清理：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">World</span><span class="o">::</span><span class="n">cleanup</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 清理粒子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">erase_if</span><span class="p">(</span><span class="n">particles</span><span class="p">,</span> <span class="p">[](</span><span class="k">const</span> <span class="n">Particle</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">p</span><span class="p">.</span><span class="n">opacity</span> <span class="o">&lt;=</span> <span class="mf">0.f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 清理火箭，发射器的生命周期跟着火箭
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">erase_if</span><span class="p">(</span><span class="n">rockets</span><span class="p">,</span> <span class="p">[](</span><span class="k">const</span> <span class="n">Rocket</span> <span class="o">&amp;</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">bounds</span><span class="p">.</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 清理对应的发射器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">emitters</span><span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="n">smokeEmitterIndex</span><span class="p">].</span><span class="n">reset</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">emitters</span><span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="n">fireEmitterIndex</span><span class="p">].</span><span class="n">reset</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 超出屏幕范围
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">})</span><span class="err">；</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>可怕的性能提升😲🫡：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 430px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/9.png" data-size="1518x847">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/9.png"
+			width="1518"
+			height="847"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/9_hu18302114455711385202.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/9_hu10654747247858193818.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<hr>
+<p><strong>扩展性</strong></p>
+<p>在某些扩展需求场景下，DoD还有显著的优势。</p>
+<p>例如，当我们需要跟踪火箭的数量时，OOP不是太慢、就是会打破各种面向对象的原则，而DoD一行秒了：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 427px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/10.png" data-size="1511x848">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/10.png"
+			width="1511"
+			height="848"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/10_hu839920638594494017.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/10_hu7936819700054189616.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 180; 
+			flex-basis: 432px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/11.png" data-size="1513x840">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/11.png"
+			width="1513"
+			height="840"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/11_hu10294139693594287059.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/11_hu3443738303422378384.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>例如，对多线程的支持。OOP的实现实际上很难支持并发，毕竟每个对象都对全局的对象产生影响，而DoD的朴素循环天然支持并发操作：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 429px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/14.png" data-size="1520x850">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/14.png"
+			width="1520"
+			height="850"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/14_hu12858367930504213327.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/14_hu13471575707855015029.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 429px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/15.png" data-size="1516x847">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/15.png"
+			width="1516"
+			height="847"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/15_hu958766615921814844.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/15_hu16196223889278836658.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p><strong>可读性</strong></p>
+<p>至于代码的可读性，DoD的代码比OOP更直白，更松耦合，更易维护。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 430px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/12.png" data-size="1516x845">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/12.png"
+			width="1516"
+			height="845"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/12_hu10419330792162832265.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/12_hu17981198533867461022.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure> <figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 429px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/13.png" data-size="1522x850">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/13.png"
+			width="1522"
+			height="850"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/13_hu11801942938935829101.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/13_hu17883041461787745195.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<blockquote>
+<p>✔️感悟：在工作中的确发现OOP的代码在复杂的继承关系出现时会变成一坨。接触新功能模块时点出一个抽象类的所有子类一个个看过去，还要在一边时刻记着调用点的上下文，不知道带走了我多少个脑细胞… 😶‍🌫️</p>
+</blockquote>
+<h4 id="52-优化2">5.2 优化2</h4>
+<ul>
+<li>在高频循环中避免分支，以免缓存命中率下降</li>
+<li>减小公共类型的体积，使得缓存可以塞下更多的对象</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 【5.2】相比于5.1，不再需要发射器/粒子类型，将由世界对象来分类
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="nc">Emitter</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">velocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">acceleration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">spawnTimer</span><span class="p">,</span> <span class="n">spawnRate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Particle</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 数据之间不再有继承关系，尽管这样会带来字段的重复，但没太大关系
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">velocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">acceleration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">scale</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">opacity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">rotation</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">scaleRate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">opacityChange</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">float</span> <span class="n">rotationVelocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Rocket</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">velocity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span> <span class="n">acceleration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 【5.2】作者指出5.1的 size_t 占用的大小太大（64比特），实际只需要 u16
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 说实话，我感觉65536个发射器好像不满足benchmark上百万个火箭的需要，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 可能是因为一个屏没办法同时存在这么多数据，内存是循环利用的，才能做这种改造？
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span> <span class="n">smokeEmitterIndex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span> <span class="n">fireEmitterIndex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>由于我们不再进行发射器/粒子的分类，世界对象的数据管理会变得精细：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">World</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 【5.2】相比于5.1，这里对数组的管理更细
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Particle</span><span class="o">&gt;</span> <span class="n">smokeParticles</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Particle</span><span class="o">&gt;</span> <span class="n">fireParticles</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Rocket</span><span class="o">&gt;</span> <span class="n">rockets</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&gt;</span> <span class="n">smokeEmitters</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&gt;</span> <span class="n">fireEmitters</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">addRocket</span><span class="p">(</span><span class="k">const</span> <span class="n">Rocket</span> <span class="o">&amp;</span><span class="n">rocket</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// // 【5.2】相比于5.1，这里支持指定要添加的数组
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">addEmitter</span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">targetVec</span><span class="p">,</span> <span class="k">const</span> <span class="n">Emitter</span> <span class="o">&amp;</span><span class="n">emitter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span><span class="err">；</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">draw</span><span class="p">(</span><span class="n">sf</span><span class="o">::</span><span class="n">RenderTarget</span> <span class="o">&amp;</span><span class="n">target</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">cleanup</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>优化后的更新函数：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">World</span><span class="o">::</span><span class="n">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">updateParticles</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">Particle</span><span class="o">&amp;</span> <span class="n">particles</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">scale</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">scaleRate</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">opacity</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">opacityChange</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">particle</span><span class="p">.</span><span class="n">rotation</span> <span class="o">+=</span> <span class="n">particle</span><span class="p">.</span><span class="n">rotationVelocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">Particle</span> <span class="o">&amp;</span><span class="nl">particle</span> <span class="p">:</span> <span class="n">smokeParticles</span><span class="p">)</span> <span class="n">updateParticles</span><span class="p">(</span><span class="n">particle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">Particle</span> <span class="o">&amp;</span><span class="nl">particle</span> <span class="p">:</span> <span class="n">fireParticles</span><span class="p">)</span> <span class="n">updateParticles</span><span class="p">(</span><span class="n">particle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">updateEmitter</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&amp;</span> <span class="n">e</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">fSpawn</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">e</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnRate</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(;</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">&gt;=</span> <span class="mf">1.f</span><span class="p">;</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">-=</span> <span class="mf">1.f</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fSpawn</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&amp;</span> <span class="nl">e</span> <span class="p">:</span> <span class="n">smokeEmitters</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">updateEmitter</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">{</span> <span class="n">smokeParticles</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(...);</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&amp;</span> <span class="nl">e</span> <span class="p">:</span> <span class="n">fireEmitters</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">updateEmitter</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">{</span> <span class="n">fireParticles</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(...);</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>性能提升并不很大，原因是对于作者的benchmark测试来说，性能瓶颈已经不在于数据的安排，而在于更新particle。作者自陈，优化后的数据结构在渲染时带来了12%的性能提升。</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 428px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/16.png" data-size="1518x850">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/16.png"
+			width="1518"
+			height="850"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/16_hu18069446886534235613.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/16_hu233018878266016890.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h4 id="53-优化3">5.3 优化3</h4>
+<ul>
+<li>从 <em>Array of Structs</em> （对象数组）改成 <em>Struct of Arrays</em> （数组对象）</li>
+</ul>
+<p>不敲代码了：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 179; 
+			flex-basis: 431px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/17.png" data-size="1511x841">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/17.png"
+			width="1511"
+			height="841"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/17_hu2444119559110335323.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/17_hu6560399056473588303.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>相比于AoS，SoA存在如下方面的提升：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 429px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/18.png" data-size="1513x846">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/18.png"
+			width="1513"
+			height="846"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/18_hu17402534095562776053.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/18_hu15862703896513886581.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ul>
+<li>没有对象内部的 <em>padding</em> 。我们知道一个数据结构内部的字段不等长，因此AoS单元之间会由于每个对象内部的对齐，存在一些空内存</li>
+<li>更灵活的字段加载。当我们只需要访问一个对象的一个字段时，AoS会需要逐个加载整个对象，而SoA能够批量加载所有对象的这个字段，不需要加载其余无关字段。（注、我的理解，这实际上需要和数据处理逻辑部分深度联系，即，可能需要实现字段级别的批处理时，这种特性的优势会比较明显，反之则是劣势）</li>
+<li>更好地支持向量化操作。这里主要也是指便于进行字段级别的批处理，在这种应用场景下SIMD（单指令多数据）会进一步带来性能提升</li>
+</ul>
+<blockquote>
+<p>拓展阅读：</p>
+<p>[1] 理解SIMD技术，高效并行计算的利器,https://blog.csdn.net/qq_34068440/article/details/139636268</p>
+</blockquote>
+<p>改造为SoA的实现如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">ParticleSoA</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span><span class="o">&gt;</span> <span class="n">positions</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span><span class="o">&gt;</span> <span class="n">velocitys</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">sf</span><span class="o">::</span><span class="n">Vector2f</span><span class="o">&gt;</span> <span class="n">accelerations</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">scales</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">opacities</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">rotations</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">scaleRates</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">opacityChanges</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">rotationVelocities</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">forAllVectors</span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">positions</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">velocitys</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">accelerations</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">scales</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">opacities</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">rotations</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">scaleRates</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">opacityChanges</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="p">(</span><span class="n">rotationVelocities</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">World</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 【5.3】相比于5.2，这里粒子类型使用了SoA
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">ParticleSoA</span> <span class="n">smokeParticles</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ParticleSoA</span> <span class="n">fireParticles</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 【5.3】这里不做改造的原因是性能瓶颈不在这里
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Rocket</span><span class="o">&gt;</span> <span class="n">rockets</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&gt;</span> <span class="n">smokeEmitters</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&gt;</span> <span class="n">fireEmitters</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span></code></pre></div><p>改造后的更新函数：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">World</span><span class="o">::</span><span class="n">update</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 【5.3】相比于5.2，这里使用了SoA
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">auto</span> <span class="n">updateParticles</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">ParticleSoA</span><span class="o">&amp;</span> <span class="n">soa</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">const</span> <span class="k">auto</span> <span class="n">nParticles</span> <span class="o">=</span> <span class="n">soa</span><span class="p">.</span><span class="n">positions</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 迭代里面的操作是混合的，主要是Vittorio做的实验发现这里混合迭代性能较好
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nParticles</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">            <span class="n">soa</span><span class="p">.</span><span class="n">velocitys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">soa</span><span class="p">.</span><span class="n">accelerations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">soa</span><span class="p">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">soa</span><span class="p">.</span><span class="n">velocitys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">soa</span><span class="p">.</span><span class="n">scales</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">soa</span><span class="p">.</span><span class="n">scaleRates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">soa</span><span class="p">.</span><span class="n">opacities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">soa</span><span class="p">.</span><span class="n">opacityChanges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">soa</span><span class="p">.</span><span class="n">rotations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">soa</span><span class="p">.</span><span class="n">rotationVelocities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">updateParticles</span><span class="p">(</span><span class="n">smokeParticles</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">updateParticles</span><span class="p">(</span><span class="n">fireParticles</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Emitter</span><span class="o">&gt;&amp;</span> <span class="nl">e</span> <span class="p">:</span> <span class="n">smokeEmitters</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">e</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">acceleration</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">+=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnRate</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(;</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">&gt;=</span> <span class="mf">1.f</span><span class="p">;</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">spawnTimer</span> <span class="o">-=</span> <span class="mf">1.f</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 【5.3】这里不得不分别对每个字段单独添加，比较恶心但没办法 🫥
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// 也许SoA对象自行封装一个emplace函数，来完成这个操作会更好，不重要~
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">smokeParticles</span><span class="p">.</span><span class="n">positions</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(...);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">smokeParticles</span><span class="p">.</span><span class="n">velocitys</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(...);</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">smokeParticles</span><span class="p">.</span><span class="n">rotationVelocities</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(...);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>清理函数也是带有SoA风格的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 首先定义一个简单的帮助方法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">soaEraseIf</span><span class="p">(</span><span class="n">ParticleSoA</span><span class="o">&amp;</span> <span class="n">soa</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">predicate</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">soa</span><span class="p">.</span><span class="n">positions</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0u</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">predicate</span><span class="p">(</span><span class="n">soa</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 🔖这里很妙，需细品
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="o">--</span><span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">soa</span><span class="p">.</span><span class="n">forAllVectors</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[</span><span class="n">n</span><span class="p">];</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">soa</span><span class="p">.</span><span class="n">forAllVectors</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span> <span class="n">vec</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">World</span><span class="o">::</span><span class="n">cleanup</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">hasNegativeOpacity</span> <span class="o">=</span> <span class="p">[](</span><span class="k">const</span> <span class="n">ParticleSoA</span><span class="o">&amp;</span> <span class="n">soa</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">soa</span><span class="p">.</span><span class="n">opacities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">soaEraseIf</span><span class="p">(</span><span class="n">smokeParticles</span><span class="p">,</span> <span class="n">hasNegativeOpacity</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">soaEraseIf</span><span class="p">(</span><span class="n">fireParticles</span><span class="p">,</span> <span class="n">hasNegativeOpacity</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>收益也是非常的amazing：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 429px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/19.png" data-size="1516x847">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/19.png"
+			width="1516"
+			height="847"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/19_hu2484940084883594255.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/19_hu10252215922456562818.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>对于SoA分为多个数组字段所带来的不易维护问题，Vittorio提供了一些反射实现：</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 429px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/20.png" data-size="1512x845">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/20.png"
+			width="1512"
+			height="845"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/20_hu4569994164053250784.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/20_hu12051097503537907757.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>并提及这些实现将在C++26有真正的官方支持~😲</p>
+<h4 id="54-one-more-thing">5.4 one more thing</h4>
+<ul>
+<li>DoD和SoA并没有直接联系，SoA只是一种优化策略而非终极答案</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 187; 
+			flex-basis: 450px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/21.png" data-size="1477x787">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/21.png"
+			width="1477"
+			height="787"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/21_hu8230816338949601031.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/21_hu9981513575824479441.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<ul>
+<li>DoD也并非终极答案，OOP在更上层的业务中仍起到优秀的抽象作用（注、OOP是外壳，DoD是引擎，这句话个人觉得非常好地描述了两者的合适的关系）</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 182; 
+			flex-basis: 436px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/22.png" data-size="1504x826">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/22.png"
+			width="1504"
+			height="826"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/22_hu6524415594779468322.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/22_hu5508765578805549557.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<h3 id="6-总结">6 总结</h3>
+<ul>
+<li>考量性能于最初</li>
+<li>扁平、精简的数据结构</li>
+<li>妥当的分类而非各种类型标识</li>
+<li>在需要批处理时考虑SoA</li>
+</ul>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 182; 
+			flex-basis: 438px"
+	>
+	<a href="/p/cppcon25pratical-data-oriented-design-in-c-/23.png" data-size="1506x825">
+		<img src="/p/cppcon25pratical-data-oriented-design-in-c-/23.png"
+			width="1506"
+			height="825"
+			srcset="/p/cppcon25pratical-data-oriented-design-in-c-/23_hu11643206164514503739.png 480w, /p/cppcon25pratical-data-oriented-design-in-c-/23_hu11282351607161604186.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p><em>Data drives design</em></p>
+<ul>
+<li>数据是设计的核心驱动力。这意味着在进行系统或代码设计时，应以实际的数据结构、数据流和使用场景为依据，而不是凭空想象或遵循固定模式。</li>
+</ul>
+<p><em>Target the machine</em></p>
+<ul>
+<li>编程的目标是让机器高效运行。强调要关注底层硬件和执行效率，编写能够被机器高效执行的代码，避免过度抽象或不必要的开销。</li>
+</ul>
+<p><em>It’s a spectrum, not dogma</em></p>
+<ul>
+<li>软件开发中的各种方法和技术是一个连续谱系，而非非黑即白的教条。鼓励灵活选择适合当前场景的技术方案，不盲目追随某种“最佳实践”。</li>
+</ul>
+<p><em>Embrace Modern C++</em></p>
+<ul>
+<li>积极采用现代C++（如C++11及以上版本）的新特性，例如智能指针、lambda表达式、范围for循环等，以提升代码的安全性、可读性和性能。</li>
+</ul>
+<p><em>Pragmatism wins</em></p>
+<ul>
+<li>实用主义胜出。最终决定因素是实际效果：是否解决了问题、是否易于维护、是否高效稳定。不要为了追求“优雅”而牺牲实用性。</li>
+</ul>
+<h3 id="7-qa">7 Q&amp;A</h3>
+<blockquote>
+<p>Q&amp;A环节，一些问题也颇有启发，浅做记录（记录我理解到的意思而非忠实地翻译问答对话）。</p>
+</blockquote>
+<p>Q:我认为一些习于面向对象的程序员会认为DoD丢失了一些对象间的联系，例如在OOP中 <code>Rocket</code> 和 <code>Emitter</code> 有着清晰的联系，而DoD中这种联系似乎丢失了。对此你怎么看？</p>
+<p>A:仅仅观察数据本身的话，我能get到这个问题点。我想指出虽然我们在示例中使用整型索引进行关联性的表达，但实际也可以使用一些 <code>handle</code> 或强类型定义来使得关联性的表达更清晰。另一方面，我觉得当我们操作数据时，这种联系实际上是变清晰而非减弱，当我们阅读 <code>update</code> 中的循环时，我们不止知道 <code>Emitter</code> 和 <code>Rocket</code> 之间存在联系，还知道这种联系是为了什么、产生了什么作用。因此，在这种视角下我们得大于失。</p>
+<hr>
+<p>Q:你如何比较DoD和OOP二者之间的可测试性（ <em>testability</em> ）？</p>
+<p>A:我认为DoD（给可测试性）带来了一些很好的收益，例如由于我们的一切都只是数据，我们可以很简单地构造、存储、加载不同的测试数据，而OOP相对来说就没有那么简单地能对对象进行序列化/反序列化的操作。然而OOP仍在一些地方表现更好，例如mocking或依赖注入。因此需要将OOP应用在合适的层级（即前面提到的较高的层级）。</p>
+<hr>
+<p>Q:我感觉到似乎批量处理型的任务更能取得DoD的所有益处，你如何看待非批量处理型的任务，例如随机访问或仅处理少数铺展开的实体？</p>
+<p>A:依然取决于你的需求，正如演讲中所说，也有很多非常成功的游戏或应用不必关注这些东西（指DoD）。在运用DoD时，如果你的数据天然是一种图或类似的结构，处理起来就需要更巧妙一些，因为它们不像我们的demo那么简单且符合直觉，但DoD仍然有地方施展身手。例如当你在层序遍历一棵树的时候，节点可能可以组织为一个数组（以得到性能收益），因为遍历的顺序是明确的。我的建议仍然是当性能是一项关键需求，且你希望确保你的架构是高效的，此时应考虑数据访问的方式，并把数据组织为使得缓存命中的几率最大化的形式。</p>
+<hr>
+<p>Q:当你把数据组织为扁平形式，实际上是产生了一些重复数据，而似乎不如简单地继承自基类。此种做法是否有弊端？毕竟后者使得数据没有重复，内存只有一份。</p>
+<p>A:这会取决于你希望表达到多清晰。如果我直接看一个结构，我希望能够直接看到这个东西就有这么多字段，而如果你继承了，阅读代码时就需要再往上翻一层，虽问题不大，毕竟也是一个额外步骤。另一方面是，一旦引入继承关系，就有人可能开始依赖这层关系，使得你对继承体系中的代码修改变得困难，引入了一定的耦合。</p>
+
+</section>
+
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+    </section>
+
+
+    </footer>
+
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="/resources/gitalk.css">
+<script src="/resources/gitalk.min.js"></script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: "60cf432a89bc92763c12",
+        clientSecret: "6725615388bdb06c4050a0f6f3fa47d017fcc8d9",
+        repo: "BlogComments",
+        owner: "SGS4ever",
+        admin: ["SGS4ever"],
+        distractionFreeMode: false, 
+        id: '', 
+    });
+    (function () {
+        if (
+            ["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1
+        ) {
+            document.getElementById("gitalk-container").innerHTML =
+                "Gitalk comments not available by default when the website is previewed locally.";
+            return;
+        }
+        gitalk.render("gitalk-container");
+    })();
+</script>
+
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2025 XR_G&#39;s Blog
+    </section>
+    
+    <section class="powerby">
+        
+            有朋自远方来，不亦说乎？ <br/>
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">目录</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-一个简单的demo">1 一个简单的Demo</a></li>
+    <li><a href="#2-题外话内存和cache">2 题外话：内存和Cache</a></li>
+    <li><a href="#3-oop实现的性能问题分析">3 OOP实现的性能问题分析</a></li>
+    <li><a href="#4-设计哲学的对比">4 设计哲学的对比</a></li>
+    <li><a href="#5-对demo的优化">5 对Demo的优化</a>
+      <ul>
+        <li><a href="#51-优化1">5.1 优化1</a></li>
+        <li><a href="#52-优化2">5.2 优化2</a></li>
+        <li><a href="#53-优化3">5.3 优化3</a></li>
+        <li><a href="#54-one-more-thing">5.4 one more thing</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结">6 总结</a></li>
+    <li><a href="#7-qa">7 Q&amp;A</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+
+            
+            
+            <a id="back-to-top" href="#">
+                <img src="/img/top_hu10958439986251666570.png" />
+            </a>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+    </body>
+</html>
